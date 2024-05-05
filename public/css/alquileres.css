@@ -1,0 +1,69 @@
+.title {
+    /* border: 1px solid red; */
+    display: block;
+    text-align: center;
+    margin: 20px 10px;
+}
+
+.panel-control {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    gap: 10px;
+    margin: 10px auto;
+  }
+  
+  .panel-control input {
+    width: 60%;
+    font-size: 16px;
+    padding-left: 10px;
+    /* border: 1px solid #ddd; */
+    border: none;
+    /* border-radius: 10px; */
+  }
+  
+  .panel-control a {
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    background-color: green;
+    color: #fff;
+    opacity: 0.9;
+    font-weight: bold;
+    /* font-size: 0.8rem; */
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .panel-control a:hover {
+    opacity: 1;
+  }
+
+  .search-bar {
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-radius: 10px;
+    width: 60%;
+  }
+
+  .search-bar input {
+    width: 70%;
+    outline: none;
+  }
+
+  .search-bar select {
+    border: none;
+    outline: none;
+  }
+
+  .search-bar option {
+    line-height: 2rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .panel-control {
+      width: 80%;
+    }
+  }

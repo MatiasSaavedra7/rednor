@@ -1,0 +1,104 @@
+<!-- PLANTILLA PRINCIPAL PARA LA CREACION DE LAS DEMÁS PÁGINAS -->
+<!-- La idea de usar esta plantilla es mantener una coherencia en todas las paginas, mostrando siempre la barra lateral y el header en dispositivos móviles, de esta forma se asegura tambien que cumpla con los requisitos para ser responsive -->
+<!-- Solo debes copiar y pegar el codigo en un archivo nuevo, y a partir de alli empezar a crear el contenido de tu vista dentro del elemento <section> con clase "main-content" -->
+<!-- Dentro de la plantilla head se encuentra enlazada la hoja de estilos main.css, la cual es la hoja de estilos principal que da estilo a los componentes mencionados anteriormente -->
+<!-- Tambien están enlazados los iconos y la fuente de la página -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/tables.css" />
+    <link rel="stylesheet" href="/css/alquileres.css" />
+    <script src="/js/alquileres.js"></script>
+    <title>REDNOR - Alquileres</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <div class="title">
+          <h1>Listado de Alquileres</h1>
+        </div>
+
+        <div class="panel-control">
+          <div class="search-bar">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Buscar..."
+            />
+            <select name="select" id="select">
+              <option value="Cliente">Cliente</option>
+              <option value="Equipo">Equipo</option>
+            </select>
+          </div>
+          <a href="/alquileres/crear">+ CREAR</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Tipo de Cliente</th>
+                <th>Equipo</th>
+                <th>Firma</th>
+                <th>Vencimiento</th>
+                <th>Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nombre 1</td>
+                <td>Particular</td>
+                <td>101</td>
+                <td>Rednor</td>
+                <td>31/12/2024</td>
+                <td><a href="#">Ver más</a></td>
+              </tr>
+              <tr>
+                <td>Nombre 2</td>
+                <td>Gobierno</td>
+                <td>301</td>
+                <td>Servishar</td>
+                <td>10/09/2024</td>
+                <td><a href="#">Ver más</a></td>
+              </tr>
+              <tr>
+                <td>Nombre 3</td>
+                <td>Municipalidad</td>
+                <td>102</td>
+                <td>Servishar</td>
+                <td>11/12/2024</td>
+                <td><a href="#">Ver más</a></td>
+              </tr>
+              <tr>
+                <td>Nombre 4</td>
+                <td>Gobierno</td>
+                <td>202</td>
+                <td>Rednor</td>
+                <td>31/01/2024</td>
+                <td><a href="#">Ver más</a></td>
+              </tr>
+              <tr>
+                <td>Nombre 5</td>
+                <td>Particular</td>
+                <td>201</td>
+                <td>Rednor</td>
+                <td>13/08/2024</td>
+                <td><a href="#">Ver más</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

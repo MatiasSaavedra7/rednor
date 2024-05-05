@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/registerForm.css">
+    <title>REDNOR - Nuevo alquiler</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <h1>REGISTRAR NUEVO ALQUILER</h1>
+        <div class="form-register-container">
+            <form action="">
+                <!-- <h4>Datos personales</h4> -->
+                <div>
+                    <label for="cliente">Cliente</label>
+                    <select name="cliente" id="cliente">
+                        <option value="" selected>Elegir una opcion</option>
+                        <option value="1">Cliente 1</option>
+                        <option value="2">Cliente 2</option>
+                        <option value="3">Cliente 3</option>
+                        <option value="4">Cliente 4</option>
+                        <option value="5">Cliente 5</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="equipo">Equipo</label>
+                    <select name="equipo" id="equipo">
+                        <option value="" selected>Elegir una opcion</option>
+                        <option value="101"> 101</option>
+                        <option value="102"> 102</option>
+                        <option value="201"> 201</option>
+                        <option value="202"> 202</option>
+                        <option value="301"> 301</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="firma">Firma</label>
+                    <select name="firma" id="firma">
+                        <option value="" selected>Elegir una opcion</option>
+                        <option value="Rednor">Rednor</option>
+                        <option value="Servishar">Servishar</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="fecha_vencimiento">Fecha de Vencimiento</label>
+                    <input type="date" name="fecha_vencimiento" id="fecha_vencimiento">
+                </div>
+                
+                <br> <hr>
+                
+                <h4>Datos de contacto</h4>
+
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email">
+                </div>
+
+                <div>
+                    <label for="telefono">Telefono</label>
+                    <input type="number" name="telefono" id="telefono">
+                </div>
+
+                <div>
+                    <label for="ciudad">Ciudad</label>
+                    <input type="text" name="ciudad" id="ciudad">
+                </div>
+
+                <div>
+                    <label for="direccion">Direccion</label>
+                    <input type="text" name="direccion" id="direccion">
+                </div>
+            </form>
+        </div>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

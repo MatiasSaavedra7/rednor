@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/registerForm.css">
+    <title>REDNOR - Registrar nuevo Equipo</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <h1>REGISTRAR EQUIPO</h1>
+        <div class="form-register-container">
+            <form action="">
+                <h4>Datos del equipo</h4>
+                <div>
+                    <label for="num_serie">Numero de Serie</label>
+                    <input type="number" name="num_serie" id="num_serie">
+                </div>
+                
+                <div>
+                    <label for="marca">Marca</label>
+                    <select name="marca" id="marca">
+                        <option value="" selected>Elegir una opcion</option>
+                        <option value="Brother">Brother</option>
+                        <option value="HP">HP</option>
+                        <option value="Pantum">Pantum</option>
+                        <option value="Ricoh">Ricoh</option>
+                        <option value="Samsung">Samsung</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modelo">Modelo</label>
+                    <input type="text" name="modelo" id="modelo">
+                </div>                
+
+                <div>
+                    <label for="precio">Precio</label>
+                    <input type="number" name="precio" id="precio">
+                </div>
+
+                <div>
+                    <label for="min_copias">Minimo de copias</label>
+                    <input type="number" name="min_copias" id="min_copias">
+                </div>
+
+                <div>
+                    <label for="precio_copias">Precio por copias</label>
+                    <input type="number" name="precio_copias" id="precio_copias">
+                </div>
+
+                <div>
+                    <label for="estado">Estado</label>
+                    <select name="estado" id="estado">
+                        <option value="" selected>Elegir una opcion</option>
+                        <option value="Disponible">Disponible</option>
+                        <option value="Alquilado">Alquilado</option>
+                        <option value="Taller">En taller</option>
+                        <option value="Deposito">En deposito</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="fecha_reajuste">Fecha de reajuste</label>
+                    <input type="date" name="fecha_reajuste" id="fecha_reajuste">
+                </div>
+            </form>
+        </div>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

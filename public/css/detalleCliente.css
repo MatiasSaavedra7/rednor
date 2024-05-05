@@ -1,0 +1,43 @@
+.client-container {
+    border: 1px dashed red;
+    width: 80%;
+    padding: 10px;
+    margin: 10px auto;
+}
+
+.client-container__title {
+    font-size: 1rem;
+    text-align: center;
+    padding: 10px 5px;
+    background-color: #3a7bd5;
+    color: #fff;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.client-container__data {
+    border: 1px solid red;
+    padding: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.client-container__data div {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+@media (min-width: 1024px) {
+    .client-container__data {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .client-container__data div {
+        width: 40%;
+    }
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/registerForm.css">
+    <title>REDNOR - Registrar nuevo Cliente</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <h1>REGISTRAR CLIENTE</h1>
+        <div class="form-register-container">
+            <form action="">
+                <h4>Datos personales</h4>
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre">
+                </div>
+
+                <div>
+                    <label for="tipo">Tipo</label>
+                    <select name="tipo" id="tipo">
+                        <option value="" selected>Elegir una opcion</option>
+                        <option value="Particular">Particular</option>
+                        <option value="Gobierno">Gobierno</option>
+                        <option value="Municipalidad">Municipalidad</option>
+                    </select>
+                </div>
+                
+                <br> <hr>
+                
+                <h4>Datos de contacto</h4>
+
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email">
+                </div>
+
+                <div>
+                    <label for="telefono">Telefono</label>
+                    <input type="number" name="telefono" id="telefono">
+                </div>
+
+                <div>
+                    <label for="ciudad">Ciudad</label>
+                    <input type="text" name="ciudad" id="ciudad">
+                </div>
+
+                <div>
+                    <label for="direccion">Direccion</label>
+                    <input type="text" name="direccion" id="direccion">
+                </div>
+            </form>
+        </div>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

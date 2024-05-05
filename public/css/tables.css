@@ -1,0 +1,38 @@
+.table-container {
+  /* border: 1px dashed red; */
+  width: 90%;
+  margin: 10px auto;
+  overflow-x: auto;
+}
+
+.table-container table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px auto;
+}
+
+.table-container td,
+th {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.table-container thead tr {
+    background-color: #3a7bd5;
+    color: white;
+}
+
+.table-container tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table-container tbody tr:hover {
+  background-color: #ddd;
+}
+
+@media (min-width: 1024px) {
+  .table-container {
+    width: 80%;
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/tables.css">
+    <link rel="stylesheet" href="/css/equipos.css">
+    <script src="/js/equipos.js"></script>
+    <title>REDNOR - Listado de Equipos</title>
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+        <!-- ASIDE -->
+        <%- include('../partials/aside.ejs') %>
+        <!-- FIN ASIDE -->
+
+        <!-- CONTENIDO -->
+        <section class="main-content">
+            <div class="title">
+                <h1>Listado de Equipos</h1>
+            </div>
+
+            <div class="panel-control">
+                <input type="text" class="search-input" placeholder="Buscar por numero de serie...">
+                <a href="/equipos/crear">+ CREAR</a>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Num. serie</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td>Marca 1</td>
+                            <td>Modelo A</td>
+                            <td>Alquilado</td>
+                            <td><a href="#">Ver más</a></td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td>Marca 1</td>
+                            <td>Modelo B</td>
+                            <td>En Taller</td>
+                            <td><a href="#">Ver más</a></td>
+                        </tr>
+                        <tr>
+                            <td>201</td>
+                            <td>Marca 2</td>
+                            <td>Modelo A</td>
+                            <td>En Deposito</td>
+                            <td><a href="#">Ver más</a></td>
+                        </tr>
+                        <tr>
+                            <td>202</td>
+                            <td>Marca 2</td>
+                            <td>Modelo B</td>
+                            <td>Disponible</td>
+                            <td><a href="#">Ver más</a></td>
+                        </tr>
+                        <tr>
+                            <td>301</td>
+                            <td>Marca 3</td>
+                            <td>Modelo C</td>
+                            <td>Alquilado</td>
+                            <td><a href="#">Ver más</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </section>
+    </main>
+    
+</body>
+</html>

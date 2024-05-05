@@ -1,0 +1,48 @@
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.metricas-container {
+  border: 1px dashed red;
+  width: 80%;
+  padding: 10px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.metricas-container div {
+  border: 1px solid black;
+  padding: 10px;
+  width: 100%;
+  height: 20vh;
+}
+
+@media (min-width: 768px) {
+  .metricas-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .metricas-container div {
+    margin: auto;
+    width: 40%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .metricas-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .metricas-container div {
+    margin: auto;
+    width: 40%;
+    height: 20vh;
+  }
+}

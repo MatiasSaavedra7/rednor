@@ -1,0 +1,33 @@
+h1 {
+    /* border: 1px dashed black; */
+    text-align: center;
+    margin-top: 20px;
+}
+
+.form-register-container {
+  /* border: 1px dashed red; */
+  width: 90%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+
+.form-register-container label {
+  display: block;
+}
+
+.form-register-container input {
+    width: 100%;
+    padding: 5px 10px;
+    margin: 5px 0;
+}
+
+.form-register-container select {
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+
+@media (min-width: 1024px) {
+  .form-register-container {
+    width: 60%;
+  }
+}
