@@ -1,0 +1,30 @@
+.detalle-alquiler-container {
+  border: 1px dashed red;
+  width: 90%;
+  margin: 10px auto;
+}
+
+.detalle-alquiler-container h3 {
+    font-size: 1rem;
+    text-align: center;
+    padding: 10px 5px;
+    margin: 10px 0 5px;
+    background-color: #3a7bd5;
+    color: #fff;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.detalle-alquiler-container p {
+  padding: 5px 10px;
+}
+
+.detalle-alquiler-container span {
+  font-weight: 900;
+}
+
+@media (min-width: 1024px) {
+  .detalle-alquiler-container {
+    width: 70%;
+  }
+}

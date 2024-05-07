@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/detalleAlquiler.css" />
+    <title>REDNOR - Detalle del Alquiler <%= id %></title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <article class="detalle-alquiler-container">
+          <h3>Datos del Alquiler</h3>
+          <div>
+            <p><span>Firma: </span> Rednor</p>
+            <p><span>Fecha de Vencimiento: </span> 31/12/2024</p>
+          </div>
+
+          <h3>Datos del Cliente</h3>
+          <div>
+            <p><span>Nombre: </span> Jose de San Martin</p>
+            <p><span>Email: </span> jose@sanmartin.com</p>
+            <p><span>Telefono: </span> 385123123</p>
+            <p><span>Ciudad: </span> Santiago del Estero</p>
+            <p><span>Direccion: </span> Av. Belgrano 123</p>
+            <p><span>Tipo: </span> Particular</p>
+          </div>
+
+          <h3>Datos del Equipo</h3>
+          <div>
+            <p><span>Numero de Serie: </span> 987654</p>
+            <p><span>Marca: </span> Brother</p>
+            <p><span>Modelo: </span> ABC-123</p>
+            <p><span>Precio: </span> $19999,99</p>
+            <p><span>Minimo de copias: </span> 1500</p>
+            <p><span>Precio por copias: </span> $30</p>
+            <p><span>Fecha de Reajuste: </span> 31/12/2024</p>
+          </div>
+        </article>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

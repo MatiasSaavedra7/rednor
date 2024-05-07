@@ -1,10 +1,10 @@
-.client-container {
+.equipo-container {
   border: 1px dashed red;
   width: 90%;
   margin: 10px auto;
 }
 
-.client-container h3 {
+.equipo-container h3 {
   font-size: 1rem;
   text-align: center;
   padding: 10px 5px;
@@ -15,16 +15,24 @@
   text-transform: uppercase;
 }
 
-.client-container p {
+.equipo-container p {
   padding: 5px 10px;
 }
 
-.client-container span {
+.equipo-container span {
   font-weight: 900;
 }
 
-@media (min-width: 1024px) {
-  .client-container {
-    width: 70%;
-  }
+.equipo-container ul {
+  padding-left: 80px;
 }
+
+.equipo-container li {
+  padding: 5px 0px;
+}
+
+@media (min-width: 1024px) {
+    .equipo-container {
+      width: 70%;
+    }
+  }
