@@ -1,8 +1,3 @@
-<!-- PLANTILLA PRINCIPAL PARA LA CREACION DE LAS DEMÁS PÁGINAS -->
-<!-- La idea de usar esta plantilla es mantener una coherencia en todas las paginas, mostrando siempre la barra lateral y el header en dispositivos móviles, de esta forma se asegura tambien que cumpla con los requisitos para ser responsive -->
-<!-- Solo debes copiar y pegar el codigo en un archivo nuevo, y a partir de alli empezar a crear el contenido de tu vista dentro del elemento <section> con clase "main-content" -->
-<!-- Dentro de la plantilla head se encuentra enlazada la hoja de estilos main.css, la cual es la hoja de estilos principal que da estilo a los componentes mencionados anteriormente -->
-<!-- Tambien están enlazados los iconos y la fuente de la página -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,11 +23,7 @@
 
         <div class="panel-control">
           <div class="search-bar">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Buscar..."
-            />
+            <input type="text" class="search-input" placeholder="Buscar..." />
             <select name="select" id="select">
               <option value="Cliente">Cliente</option>
               <option value="Equipo">Equipo</option>
@@ -45,23 +36,27 @@
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>Tipo de Cliente</th>
-                <th>Equipo</th>
+                <th>Equipo(Num. serie)</th>
                 <th>Firma</th>
+                <th>Precio</th>
                 <th>Vencimiento</th>
                 <th>Detalles</th>
               </tr>
             </thead>
+            <% alquileres.forEach(alquiler => { %>
+            <tr>
+              <td><%= alquiler.cliente.nombre %></td>
+              <td><%= alquiler.equipo.numero_serie %></td>
+              <td><%= alquiler.firma.nombre %></td>
+              <td>$<%= alquiler.equipo.precio %></td>
+              <td><%= alquiler.fecha_vencimiento %></td>
+              <td>
+                <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
+              </td>
+            </tr>
+            <% }) %>
             <tbody>
-              <tr>
-                <td>Nombre 1</td>
-                <td>Particular</td>
-                <td>101</td>
-                <td>Rednor</td>
-                <td>31/12/2024</td>
-                <td><a href="/alquileres/detalles/1">Ver más</a></td>
-              </tr>
-              <tr>
+              <!-- <tr>
                 <td>Nombre 2</td>
                 <td>Gobierno</td>
                 <td>301</td>
@@ -92,7 +87,7 @@
                 <td>Rednor</td>
                 <td>13/08/2024</td>
                 <td><a href="#">Ver más</a></td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </div>

@@ -8,11 +8,10 @@ window.addEventListener("load", () => {
   let td, tdValue, tdIndex;
 
   searchInput.addEventListener("keyup", () => {
-
-    if (select.value == 'Cliente') {
+    if (select.value == "Cliente") {
       tdIndex = 0;
     } else {
-      tdIndex = 2;
+      tdIndex = 1;
     }
 
     let filter = searchInput.value.toLowerCase();

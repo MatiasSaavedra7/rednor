@@ -3,7 +3,7 @@
   <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/detalleEquipo.css" />
-    <title>REDNOR - Detalle del Equipo <%= id %></title>
+    <title>REDNOR - Detalle del Equipo <%= equipo.numero_serie %></title>
   </head>
   <body>
     <%- include('../partials/header.ejs') %>
@@ -18,13 +18,13 @@
         <div class="equipo-container">
             <h3>Datos del Equipo</h3>
             <div>
-              <p><span>Numero de Serie: </span> 987654</p>
-              <p><span>Marca: </span> Brother</p>
-              <p><span>Modelo: </span> ABC-123</p>
-              <p><span>Precio: </span> $19999,99</p>
-              <p><span>Minimo de copias: </span> 1500</p>
-              <p><span>Precio por copias: </span> $30</p>
-              <p><span>Fecha de Reajuste: </span> 31/12/2024</p>
+              <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
+              <p><span>Marca: </span><%= equipo.marca.nombre %></p>
+              <p><span>Modelo: </span><%= equipo.modelo %></p>
+              <p><span>Precio: </span>$<%= equipo.precio %></p>
+              <p><span>Minimo de copias: </span><%= equipo.minimo_copias %></p>
+              <p><span>Precio por copias: </span><%= equipo.precio_copias %></p>
+              <p><span>Fecha de Reajuste: </span><%= equipo.fecha_reajuste %></p>
               <p>
                 <span>Informes: </span>
                 <ul>
@@ -33,7 +33,7 @@
                   <li><a href="#">15/02/2024</a></li>
                 </ul>
               </p>
-              <p><span>Estado: </span>Disponible</p>
+              <p><span>Estado: </span><%= equipo.estado.nombre %></p>
             </div>
         </div>
       </section>

@@ -34,18 +34,22 @@
                             <th>Marca</th>
                             <th>Modelo</th>
                             <th>Estado</th>
+                            <th>Reajuste</th>
                             <th>Detalles</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>101</td>
-                            <td>Marca 1</td>
-                            <td>Modelo A</td>
-                            <td>Alquilado</td>
-                            <td><a href="/equipos/detalle/1">Ver más</a></td>
-                        </tr>
-                        <tr>
+                        <% equipos.forEach(equipo => { %>
+                            <tr>
+                                <td><%= equipo.numero_serie %></td>
+                                <td><%= equipo.marca.nombre %></td>
+                                <td><%= equipo.modelo %></td>
+                                <td><%= equipo.estado.nombre %></td>
+                                <td><%= equipo.fecha_reajuste %></td>
+                                <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
+                            </tr>
+                        <% }) %>
+                        <!-- <tr>
                             <td>102</td>
                             <td>Marca 1</td>
                             <td>Modelo B</td>
@@ -72,7 +76,7 @@
                             <td>Modelo C</td>
                             <td>Alquilado</td>
                             <td><a href="#">Ver más</a></td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>

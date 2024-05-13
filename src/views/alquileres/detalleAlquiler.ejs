@@ -3,7 +3,7 @@
   <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/detalleAlquiler.css" />
-    <title>REDNOR - Detalle del Alquiler <%= id %></title>
+    <title>REDNOR - Detalle del Alquiler <%= alquiler.id %></title>
   </head>
   <body>
     <%- include('../partials/header.ejs') %>
@@ -18,29 +18,32 @@
         <article class="detalle-alquiler-container">
           <h3>Datos del Alquiler</h3>
           <div>
-            <p><span>Firma: </span> Rednor</p>
-            <p><span>Fecha de Vencimiento: </span> 31/12/2024</p>
+            <p><span>Firma: </span><%= alquiler.firma.nombre %></p>
+            <p>
+              <span>Fecha de Vencimiento: </span><%= alquiler.fecha_vencimiento
+              %>
+            </p>
           </div>
 
           <h3>Datos del Cliente</h3>
           <div>
-            <p><span>Nombre: </span> Jose de San Martin</p>
-            <p><span>Email: </span> jose@sanmartin.com</p>
-            <p><span>Telefono: </span> 385123123</p>
-            <p><span>Ciudad: </span> Santiago del Estero</p>
-            <p><span>Direccion: </span> Av. Belgrano 123</p>
-            <p><span>Tipo: </span> Particular</p>
+            <p><span>Nombre: </span><%= cliente.nombre %></p>
+            <p><span>Email: </span><%= cliente.contacto.email %></p>
+            <p><span>Telefono: </span><%= cliente.contacto.telefono %></p>
+            <p><span>Ciudad: </span><%= cliente.contacto.ciudad %></p>
+            <p><span>Direccion: </span><%= cliente.contacto.direccion %></p>
+            <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
           </div>
 
           <h3>Datos del Equipo</h3>
           <div>
-            <p><span>Numero de Serie: </span> 987654</p>
-            <p><span>Marca: </span> Brother</p>
-            <p><span>Modelo: </span> ABC-123</p>
-            <p><span>Precio: </span> $19999,99</p>
-            <p><span>Minimo de copias: </span> 1500</p>
-            <p><span>Precio por copias: </span> $30</p>
-            <p><span>Fecha de Reajuste: </span> 31/12/2024</p>
+            <p><span>Marca: </span><%= equipo.marca.nombre %></p>
+            <p><span>Modelo: </span><%= equipo.modelo %></p>
+            <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
+            <p><span>Precio: </span>$<%= equipo.precio %></p>
+            <p><span>Minimo de copias: </span><%= equipo.minimo_copias %></p>
+            <p><span>Precio por copias: </span>$<%= equipo.precio_copias %></p>
+            <p><span>Fecha de Reajuste: </span><%= equipo.fecha_reajuste %></p>
           </div>
         </article>
       </section>

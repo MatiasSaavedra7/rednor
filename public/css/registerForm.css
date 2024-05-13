@@ -26,6 +26,12 @@ h1 {
   margin: 5px 0;
 }
 
+.feedback-errors {
+  font-size: 14px;
+  color: red;
+  margin-bottom: 15px;
+}
+
 @media (min-width: 1024px) {
   .form-register-container {
     width: 60%;

@@ -11,6 +11,12 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// CAPTURAR LA INFORMACION
+// Para poder trabajar con los datos que se envian desde el formulario es necesario configurar el entorno de nuestra aplicacion para que sea capaz de capturar esa informacion.
+// De esta forma le estamos aclarando a la aplicacion que todo aquello que llegue desde un formulario, queremos capturarlo en forma de objeto literal, y a su vez, tener la posibilidad de convertir esa informacion en un formato JSON, en caso de ser necesario. 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 // METHOD-OVERRIDE PARA TRABAJAR CON PETICIONES PUT Y DELETE
 app.use(methodOverride('_method'));
 
@@ -18,7 +24,7 @@ app.use(methodOverride('_method'));
 const PORT = 3000;
 
 // REQUERIMIENTO DE LAS RUTAS
-const routes = require('./routes/index');
+const routes = require('./routes/index.routes');
 app.use('/', routes);
 
 // SERVIDOR

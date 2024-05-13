@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const router = Router();
 
-const main = require('./main.js');
-const clientes = require('./clientes.js');
-const equipos = require('./equipos.js');
-const alquileres = require('./alquileres.js');
+const main = require('./main.routes.js');
+const clientes = require('./clientes.routes.js');
+const equipos = require('./equipos.routes.js');
+const alquileres = require('./alquileres.routes.js');
 
 // Main routes
 router.use('/', main);
