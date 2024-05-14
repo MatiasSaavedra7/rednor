@@ -33,27 +33,26 @@ module.exports = {
   },
 
   store: async (req, res) => {
-    let errors = validationResult(req);
+    try {
+      let errors = validationResult(req);
 
-    if (errors.isEmpty()) {
-      try {
+      if (errors.isEmpty()) {
         let contacto = await contactoService.create(req.body);
-        let cliente = await clientesService.create(req.body, contacto.id);
-        //   res.redirect("/clientes");
-        //   Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado
-        if (cliente) {
+        let cliente = await clientesService.create(req.body, contacto.id)
+
+        if(cliente){
           res.redirect(`/clientes/detalle/${cliente.id}`);
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        let tipos = await tiposService.getAll();
+        res.render("clientes/registerFormCliente", {
+          errors: errors.mapped(),
+          old: req.body,
+          tipos
+        })
       }
-    } else {
-      const tipos = await tiposService.getAll();
-      res.render("clientes/registerFormCliente", {
-        errors: errors.mapped(),
-        old: req.body,
-        tipos,
-      });
+    } catch (error) {
+      console.log(error);
     }
   },
 

@@ -3,6 +3,8 @@ const clientesService = require("../database/services/clientesService");
 const equiposService = require("../database/services/equiposService");
 const firmasService = require("../database/services/firmasService");
 
+const { validationResult } = require("express-validator");
+
 module.exports = {
   getAll: async (req, res) => {
     try {
@@ -27,7 +29,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       let clientes = await clientesService.getAll();
-      let equipos = await equiposService.getAll();
+      let equipos = await equiposService.getAllDisponibles();
       let firmas = await firmasService.getAll();
       res.render("alquileres/registerFormAlquiler", {
         clientes,
@@ -42,10 +44,27 @@ module.exports = {
 
   store: async (req, res) => {
     try {
-      let alquiler = await alquileresService.create(req.body);
-      if (alquiler) {
-        res.redirect(`/alquileres/detalles/${alquiler.id}`);
+      let errors = validationResult(req);
+
+      if (errors.isEmpty()) {
+        let alquiler = await alquileresService.create(req.body);
+        if (alquiler) {
+          res.redirect(`/alquileres/detalles/${alquiler.id}`);
+        }
+      } else {
+        let clientes = await clientesService.getAll();
+        let equipos = await equiposService.getAllDisponibles();
+        let firmas = await firmasService.getAll();
+        res.render("alquileres/registerFormAlquiler", {
+          errors: errors.mapped(),
+          old: req.body,
+          clientes,
+          equipos,
+          firmas,
+        });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
 };

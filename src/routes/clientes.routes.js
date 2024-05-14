@@ -3,7 +3,7 @@ const router = Router();
 
 const controller = require("../controllers/clientesController");
 
-const validateMiddleware = require("../middlewares/validateClientesMiddleware");
+const validateMiddleware = require("../middlewares/validateClienteMiddleware");
 
 // LISTADO COMPLETO DE CLIENTES
 router.get("/", controller.clientes);

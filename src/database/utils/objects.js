@@ -20,7 +20,7 @@ function Equipo(data) {
   this.minimo_copias = data.minimo_copias;
   this.precio_copias = data.precio_copias;
   this.fecha_reajuste = data.fecha_reajuste;
-  this.id_estado = data.id_estado;
+  this.id_estado = 1; // Por defecto, al crear un nuevo equipo, este tendra el estado Disponible = 1.
 }
 
 function Alquiler(data) {

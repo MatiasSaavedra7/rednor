@@ -21,8 +21,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       let marcas = await marcasService.getAll();
-      let estados = await estadosService.getAll();
-      res.render("equipos/registerFormEquipo", { marcas, estados });
+      res.render("equipos/registerFormEquipo", { marcas });
     } catch (error) {
       console.log(error);
     }
@@ -32,17 +31,15 @@ module.exports = {
     try {
       let errors = validationResult(req);
       if (errors.isEmpty()) {
-        let equipo = await equiposService.create(req.body);
+        let equipo = await equiposService.create(req.body); // El segundo parametro refiere al estado, por defecto al crear un nuevo equipo el estado inicial es Disponible
         //  Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado
         if (equipo) {
           res.redirect(`/equipos/detalle/${equipo.id}`);
         }
       } else {
         let marcas = await marcasService.getAll();
-        let estados = await estadosService.getAll();
         res.render("equipos/registerFormEquipo", {
           marcas,
-          estados,
           errors: errors.mapped(),
           old: req.body
         });

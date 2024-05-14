@@ -8,5 +8,17 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    getOneByPK: async (id) => {
+        try {
+            return await db.Estado.findOne({
+                where: {
+                    id: id
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
