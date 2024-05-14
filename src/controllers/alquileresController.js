@@ -49,6 +49,7 @@ module.exports = {
       if (errors.isEmpty()) {
         let alquiler = await alquileresService.create(req.body);
         if (alquiler) {
+          await equiposService.setEstadoAlquilado(alquiler.id_equipo);
           res.redirect(`/alquileres/detalles/${alquiler.id}`);
         }
       } else {

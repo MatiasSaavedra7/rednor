@@ -48,4 +48,55 @@ module.exports = {
       console.log(error);
     }
   },
+  // METODO PARA ACTUALIZAR A EL ESTADO DE UN EQUIPO A DISPONIBLE
+  setEstadoDisponible: async (id) => {
+    try {
+      return db.Equipo.update(
+        {
+          id_estado: 1
+        },
+        {
+          where: {
+            id: id
+          }
+        }
+      )
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  // METODO PARA ACTUALIZAR A EL ESTADO DE UN EQUIPO A ALQUILADO
+  setEstadoAlquilado: async (id) => {
+    try {
+      return db.Equipo.update(
+        {
+          id_estado: 2
+        },
+        {
+          where: {
+            id: id
+          }
+        }
+      )
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  // METODO PARA ACTUALIZAR A EL ESTADO DE UN EQUIPO A EN TALLER
+  setEstadoTaller: async (id) => {
+    try {
+      return db.Equipo.update(
+        {
+          id_estado: 3
+        },
+        {
+          where: {
+            id: id
+          }
+        }
+      )
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
