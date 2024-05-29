@@ -23,8 +23,42 @@
   font-weight: 900;
 }
 
+.nuevo-contrato {
+  /* border: 1px dashed red; */
+  padding: 10px 0px;
+  margin-top: 10px;
+}
+
+.nuevo-contrato a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: white;
+  background-color: green;
+  padding: 7px;
+  border-radius: 10px;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+.table-container {
+  /* border: 1px dashed red; */
+  width: 100%;
+  margin-bottom: 40px;
+}
+
 @media (min-width: 1024px) {
   .client-container {
     width: 70%;
+  }
+
+  .table-container {
+    margin-bottom: 0px;
+  }
+
+  .nuevo-contrato a {
+    position: static;
+    float: right;
   }
 }

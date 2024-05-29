@@ -1,34 +1,54 @@
-function Cliente(data, id) {
+function Cliente(data) {
   this.nombre = data.nombre;
-  this.id_contacto = id;
   this.id_tipo = data.id_tipo;
-  this.habilitado = data.habilitado;
-}
-
-function Contacto(data) {
   this.email = data.email;
   this.telefono = data.telefono;
   this.ciudad = data.ciudad;
   this.direccion = data.direccion;
+  this.habilitado = data.habilitado;
 }
 
 function Equipo(data) {
-  this.numero_serie = data.numero_serie;
-  this.id_marca = data.id_marca;
+  this.marca = data.marca;
   this.modelo = data.modelo;
+  this.numero_serie = data.numero_serie;
   this.precio = data.precio;
   this.minimo_copias = data.minimo_copias;
   this.precio_copias = data.precio_copias;
   this.fecha_reajuste = data.fecha_reajuste;
-  this.id_estado = 1; // Por defecto, al crear un nuevo equipo, este tendra el estado Disponible = 1.
+  this.id_estado = data.id_estado;
 }
 
 function Alquiler(data) {
   this.id_cliente = data.id_cliente;
   this.id_equipo = data.id_equipo;
-  this.id_firma = data.id_firma;
+  this.firma = data.firma;
   this.departamento = data.departamento;
-  this.fecha_vencimiento = data.fecha_vencimiento;
+  this.fecha_alta = data.fecha_alta;
+  this.fecha_baja = data.fecha_baja;
+  this.activo = true; // Por defecto, al crear un nuevo alquiler, el valor será true (o 1).
 }
 
-module.exports = { Cliente, Contacto, Equipo, Alquiler };
+function Cartucho(data) {
+  this.nombre = data.nombre;
+  this.etiqueta = data.etiqueta;
+  this.SKU = data.SKU;
+  this.stock = data.stock;
+  this.id_categoria_cartucho = data.categoria;
+}
+
+function Ingreso(data) {
+  this.id_equipo = data.id_equipo;
+  this.fecha_ingreso = data.fecha_ingreso;
+  this.motivo = data.motivo;
+  this.descripcion = data.descripcion;
+}
+
+function Egreso(data) {
+  this.id_ingreso = data.id_ingreso;
+  this.fecha_egreso = data.fecha_egreso;
+  this.detalle_reparacion = data.detalle_reparacion;
+  this.costo = data.costo;
+}
+
+module.exports = { Cliente, Equipo, Alquiler, Cartucho, Ingreso, Egreso };

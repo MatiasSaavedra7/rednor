@@ -1,8 +1,12 @@
 const { check } = require("express-validator");
 
 module.exports = [
-  check("nombre").notEmpty().withMessage("Debes ingresar un nombre"),
-  check("id_tipo").notEmpty().withMessage("Selecciona una opcion"),
+  check("nombre")
+    .notEmpty()
+    .withMessage("Debes ingresar un nombre"),
+  check("id_tipo")
+    .notEmpty()
+    .withMessage("Selecciona una opcion"),
   check("email")
     .notEmpty()
     .withMessage("Debes ingresar un correo")

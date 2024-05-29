@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
@@ -7,7 +8,8 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.Alquiler.findAll({
-        include: ["cliente", "equipo", "firma"],
+        include: ["cliente", "equipo"],
+        order: [["activo", "DESC"]],
       });
     } catch (error) {
       console.log(error);
@@ -18,7 +20,34 @@ module.exports = {
     try {
       return await db.Alquiler.findOne({
         where: { id: id },
-        include: ["cliente", "equipo", "firma"],
+        include: ["cliente", "equipo"],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getByIdCliente: async (id) => {
+    try {
+      return await db.Alquiler.findAll({
+        include: ["cliente", "equipo"],
+        where: {
+          id_cliente: id,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getByIdEquipo: async (id) => {
+    try {
+      return await db.Alquiler.findOne({
+        include: ["cliente", "equipo"],
+        where: { 
+          id_equipo: id,
+          activo: true,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -30,7 +59,14 @@ module.exports = {
       return await db.Alquiler.create(new Alquiler(data));
     } catch (error) {
       console.log(error);
-      res.status(500).send("Something broke");
+    }
+  },
+
+  updateByPK: async (data, id) => {
+    try {
+      return await db.Alquiler.update(data, { where: { id: id } });
+    } catch (error) {
+      console.log(error);
     }
   },
 };

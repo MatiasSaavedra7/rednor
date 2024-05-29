@@ -5,29 +5,29 @@
   overflow-x: auto;
 }
 
-.table-container table {
+table {
   border-collapse: collapse;
   width: 100%;
   margin: 10px auto;
 }
 
-.table-container td,
+table td,
 th {
   border: 1px solid #ddd;
   text-align: left;
   padding: 8px;
 }
 
-.table-container thead tr {
+table thead tr {
     background-color: #3a7bd5;
     color: white;
 }
 
-.table-container tr:nth-child(even) {
+table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-.table-container tbody tr:hover {
+table tbody tr:hover {
   background-color: #ddd;
 }
 

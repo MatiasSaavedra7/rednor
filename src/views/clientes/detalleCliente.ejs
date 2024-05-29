@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/tables.css">
     <link rel="stylesheet" href="/css/detalleCliente.css" />
     <title>REDNOR - Detalle del Cliente <%= cliente.nombre %></title>
   </head>
@@ -19,12 +20,52 @@
           <h3>Informacion del Cliente</h3>
           <div>
             <p><span>Nombre: </span><%= cliente.nombre %></p>
-            <p><span>Email: </span><%= cliente.contacto.email %></p>
-            <p><span>Telefono: </span><%= cliente.contacto.telefono %></p>
-            <p><span>Ciudad: </span><%= cliente.contacto.ciudad %></p>
-            <p><span>Direccion: </span><%= cliente.contacto.direccion %></p>
+            <p><span>Email: </span><%= cliente.email %></p>
+            <p><span>Telefono: </span><%= cliente.telefono %></p>
+            <p><span>Ciudad: </span><%= cliente.ciudad %></p>
+            <p><span>Direccion: </span><%= cliente.direccion %></p>
             <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
           </div>
+          <!-- <br> -->
+          <!-- <hr> -->
+          <% if (alquileres) { %>
+            <h3>Alquileres</h3>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Equipo</th>
+                    <th>Firma</th>
+                    <th>Precio</th>
+                    <th>Detalles</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% alquileres.forEach(alquiler => { %>
+                    <tr>
+                      <td><%= alquiler.cliente.nombre %></td>
+                      <td>
+                        <%= alquiler.equipo.marca %>
+                        <%= alquiler.equipo.modelo %>
+                        <%= alquiler.equipo.numero_serie %>
+                      </td>
+                      <td><%= alquiler.firma %></td>
+                      <td>$<%= alquiler.equipo.precio %></td>
+                      <td>
+                        <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+
+          <div class="nuevo-contrato">
+            <a href="/alquileres/crear?cliente=<%= cliente.id %>">Nuevo Contrato</a>     
+          </div>
+          
         </div>
       </section>
       <!-- FIN CONTENIDO -->

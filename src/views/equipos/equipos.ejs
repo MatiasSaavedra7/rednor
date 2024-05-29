@@ -30,9 +30,9 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Num. serie</th>
                             <th>Marca</th>
                             <th>Modelo</th>
+                            <th>Num. serie</th>
                             <th>Estado</th>
                             <th>Reajuste</th>
                             <th>Detalles</th>
@@ -41,42 +41,14 @@
                     <tbody>
                         <% equipos.forEach(equipo => { %>
                             <tr>
-                                <td><%= equipo.numero_serie %></td>
-                                <td><%= equipo.marca.nombre %></td>
+                                <td><%= equipo.marca %></td>
                                 <td><%= equipo.modelo %></td>
+                                <td><%= equipo.numero_serie %></td>
                                 <td><%= equipo.estado.nombre %></td>
                                 <td><%= equipo.fecha_reajuste %></td>
                                 <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
                             </tr>
                         <% }) %>
-                        <!-- <tr>
-                            <td>102</td>
-                            <td>Marca 1</td>
-                            <td>Modelo B</td>
-                            <td>En Taller</td>
-                            <td><a href="#">Ver más</a></td>
-                        </tr>
-                        <tr>
-                            <td>201</td>
-                            <td>Marca 2</td>
-                            <td>Modelo A</td>
-                            <td>En Deposito</td>
-                            <td><a href="#">Ver más</a></td>
-                        </tr>
-                        <tr>
-                            <td>202</td>
-                            <td>Marca 2</td>
-                            <td>Modelo B</td>
-                            <td>Disponible</td>
-                            <td><a href="#">Ver más</a></td>
-                        </tr>
-                        <tr>
-                            <td>301</td>
-                            <td>Marca 3</td>
-                            <td>Modelo C</td>
-                            <td>Alquilado</td>
-                            <td><a href="#">Ver más</a></td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>

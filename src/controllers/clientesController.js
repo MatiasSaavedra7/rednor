@@ -1,6 +1,6 @@
 const clientesService = require("../database/services/clientesService");
 const tiposService = require("../database/services/tiposService");
-const contactoService = require("../database/services/contactoService");
+const alquileresService = require("../database/services/alquileresService");
 
 const { validationResult } = require("express-validator");
 
@@ -17,7 +17,8 @@ module.exports = {
   detalleCliente: async (req, res) => {
     try {
       const cliente = await clientesService.getOneByPK(req.params.id);
-      res.render("clientes/detalleCliente", { cliente });
+      const alquileres = await alquileresService.getByIdCliente(req.params.id);
+      res.render("clientes/detalleCliente", { cliente, alquileres });
     } catch (error) {
       res.send(error);
     }
@@ -26,7 +27,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       const tipos = await tiposService.getAll();
-      res.render("clientes/registerFormCliente", { tipos });
+      res.render("clientes/registroCliente", { tipos });
     } catch (error) {
       console.log(error);
     }
@@ -34,22 +35,21 @@ module.exports = {
 
   store: async (req, res) => {
     try {
+      
       let errors = validationResult(req);
 
       if (errors.isEmpty()) {
-        let contacto = await contactoService.create(req.body);
-        let cliente = await clientesService.create(req.body, contacto.id)
-
-        if(cliente){
+        let cliente = await clientesService.create(req.body);
+        if (cliente) {
           res.redirect(`/clientes/detalle/${cliente.id}`);
         }
       } else {
         let tipos = await tiposService.getAll();
-        res.render("clientes/registerFormCliente", {
+        res.render("clientes/registroCliente", {
           errors: errors.mapped(),
           old: req.body,
-          tipos
-        })
+          tipos,
+        });
       }
     } catch (error) {
       console.log(error);

@@ -7,7 +7,7 @@ module.exports = {
   getAll: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["marca", "estado"],
+        include: ["estado"],
       });
     } catch (error) {
       console.log(error);
@@ -18,9 +18,77 @@ module.exports = {
   getAllDisponibles: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["marca", "estado"],
+        include: ["estado"],
         where: {
           id_estado: { [Op.eq]: 1 },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getOneDisponible: async (id) => {
+    try {
+      return db.Equipo.findOne({
+        include: ["estado", "ingreso"],
+        where: {
+          id: id,
+          id_estado: { [Op.eq]: 1 },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAllAlquilado: async () => {
+    try {
+      return db.Equipo.findAll({
+        include: ["estado"],
+        where: {
+          id_estado: { [Op.eq]: 2 },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getOneAlquilado: async (id) => {
+    try {
+      return db.Equipo.findOne({
+        include: ["estado", "ingreso"],
+        where: {
+          id: id,
+          id_estado: { [Op.eq]: 2 },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAllTaller: async () => {
+    try {
+      return db.Equipo.findAll({
+        include: ["estado", "ingreso"],
+        where: {
+          id_estado: { [Op.eq]: 3 },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getOneTaller: async (id) => {
+    try {
+      return db.Equipo.findOne({
+        include: ["ingreso", "estado"],
+        where: {
+          id: id,
+          id_estado: { [Op.eq]: 3 },
         },
       });
     } catch (error) {
@@ -31,10 +99,8 @@ module.exports = {
   getOneByPK: async (id) => {
     try {
       return db.Equipo.findOne({
-        where: {
-          id: id,
-        },
-        include: ["marca", "estado"],
+        where: { id: id },
+        include: ["estado"],
       });
     } catch (error) {
       console.log(error);
@@ -53,14 +119,12 @@ module.exports = {
     try {
       return db.Equipo.update(
         {
-          id_estado: 1
+          id_estado: 1,
         },
         {
-          where: {
-            id: id
-          }
+          where: { id: id },
         }
-      )
+      );
     } catch (error) {
       console.log(error);
     }
@@ -70,14 +134,12 @@ module.exports = {
     try {
       return db.Equipo.update(
         {
-          id_estado: 2
+          id_estado: 2,
         },
         {
-          where: {
-            id: id
-          }
+          where: { id: id },
         }
-      )
+      );
     } catch (error) {
       console.log(error);
     }
@@ -87,16 +149,14 @@ module.exports = {
     try {
       return db.Equipo.update(
         {
-          id_estado: 3
+          id_estado: 3,
         },
         {
-          where: {
-            id: id
-          }
+          where: { id: id },
         }
-      )
+      );
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };

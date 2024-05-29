@@ -18,7 +18,7 @@
       <!-- CONTENIDO -->
       <section class="main-content">
         <div class="title">
-          <h1>Listado de Alquileres</h1>
+          <h1>CONTRATOS</h1>
         </div>
 
         <div class="panel-control">
@@ -29,68 +29,42 @@
               <option value="Equipo">Equipo</option>
             </select>
           </div>
-          <a href="/alquileres/crear">+ CREAR</a>
+          <!-- <a href="/alquileres/crear">+ CREAR</a> -->
         </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th>Equipo(Num. serie)</th>
-                <th>Firma</th>
-                <th>Precio</th>
-                <th>Vencimiento</th>
-                <th>Detalles</th>
-              </tr>
-            </thead>
-            <% alquileres.forEach(alquiler => { %>
-            <tr>
-              <td><%= alquiler.cliente.nombre %></td>
-              <td><%= alquiler.equipo.numero_serie %></td>
-              <td><%= alquiler.firma.nombre %></td>
-              <td>$<%= alquiler.equipo.precio %></td>
-              <td><%= alquiler.fecha_vencimiento %></td>
-              <td>
-                <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
-              </td>
-            </tr>
-            <% }) %>
-            <tbody>
-              <!-- <tr>
-                <td>Nombre 2</td>
-                <td>Gobierno</td>
-                <td>301</td>
-                <td>Servishar</td>
-                <td>10/09/2024</td>
-                <td><a href="#">Ver más</a></td>
-              </tr>
-              <tr>
-                <td>Nombre 3</td>
-                <td>Municipalidad</td>
-                <td>102</td>
-                <td>Servishar</td>
-                <td>11/12/2024</td>
-                <td><a href="#">Ver más</a></td>
-              </tr>
-              <tr>
-                <td>Nombre 4</td>
-                <td>Gobierno</td>
-                <td>202</td>
-                <td>Rednor</td>
-                <td>31/01/2024</td>
-                <td><a href="#">Ver más</a></td>
-              </tr>
-              <tr>
-                <td>Nombre 5</td>
-                <td>Particular</td>
-                <td>201</td>
-                <td>Rednor</td>
-                <td>13/08/2024</td>
-                <td><a href="#">Ver más</a></td>
-              </tr> -->
-            </tbody>
-          </table>
-        </div>
+        <% if (alquileres) { %>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Equipo</th>
+                  <th>Firma</th>
+                  <th>Precio</th>
+                  <th>Detalles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% alquileres.forEach(alquiler => { %>
+                <tr>
+                  <td><%= alquiler.cliente.nombre %></td>
+                  <td>
+                    <%= alquiler.equipo.marca %>
+                    <%= alquiler.equipo.modelo %>
+                    <%= alquiler.equipo.numero_serie %>
+                  </td>
+                  <td><%= alquiler.firma %></td>
+                  <td>$<%= alquiler.equipo.precio %></td>
+                  <td>
+                    <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else  { %>
+          <div>Aún no hay contratos...</div>
+          <% } %>
       </section>
       <!-- FIN CONTENIDO -->
     </main>

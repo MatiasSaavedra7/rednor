@@ -21,12 +21,5 @@ module.exports = (sequelize, dataTypes) => {
 
   let Firma = sequelize.define(alias, cols, config);
 
-  Firma.associate = function (models) {
-    Firma.hasMany(models.Alquiler, {
-      as: "alquiler",
-      foreignKey: "id_firma",
-    });
-  };
-
   return Firma;
 };

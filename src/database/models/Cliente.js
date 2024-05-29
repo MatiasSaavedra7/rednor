@@ -12,8 +12,20 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    id_contacto: {
-      type: dataTypes.INTEGER,
+    email: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    telefono: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    ciudad: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    direccion: {
+      type: dataTypes.STRING,
       allowNull: false,
     },
     id_tipo: {
@@ -36,11 +48,6 @@ module.exports = (sequelize, dataTypes) => {
     Cliente.belongsTo(models.Tipo, {
       as: "tipo",
       foreignKey: "id_tipo",
-    });
-
-    Cliente.belongsTo(models.Contacto, {
-      as: "contacto",
-      foreignKey: "id_contacto",
     });
 
     Cliente.hasMany(models.Alquiler, {

@@ -1,0 +1,51 @@
+.form-egreso-container p {
+  text-align: center;
+  font-size: 24px;
+  text-decoration: underline;
+  margin-bottom: 20px;
+}
+
+.form-egreso-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-egreso-container {
+  /* border: 1px dashed red; */
+  width: 90%;
+  padding: 20px 10px;
+  margin: 20px auto;
+}
+
+.form-egreso-container div {
+  margin-bottom: 10px;;
+}
+
+.form-egreso-container label {
+  display: block;
+}
+
+.form-egreso-container input {
+  width: 100%;
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+
+.form-egreso-container textarea {
+  resize: none;
+  width: 100%;
+  height: 150px;
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+
+@media (min-width: 1024px) {
+  .form-egreso-container {
+    width: 60%;
+  }
+
+  .form-egreso-container textarea {
+    height: 200px;
+    padding: 10px;
+  }
+}

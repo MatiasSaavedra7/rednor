@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/tables.css">
+    <link rel="stylesheet" href="/css/cartuchos.css">
+    <script src="/js/cartuchos.js"></script>
+    <title>REDNOR - Cartuchos</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <div class="title">
+          <h1>Listado de Cartuchos</h1>
+      </div>
+
+      <div class="panel-control">
+          <input type="text" class="search-input" placeholder="Buscar...">
+          <a href="/repuestos/crear">+ CREAR</a>
+      </div>
+        <div class="table-container">
+          <table>
+              <thead>
+                  <tr>
+                      <th>Marca</th>
+                      <th>Etiqueta</th>
+                      <th>SKU</th>
+                      <th>Stock</th>
+                      <th>Categoria</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <% cartuchos.forEach(cartucho => { %>
+                      <tr>
+                          <td><%= cartucho.nombre %></td>
+                          <td><%= cartucho.etiqueta %></td>
+                          <td><%= cartucho.SKU %></td>
+                          <td><%= cartucho.stock %></td>
+                          <td><%= cartucho.categoria_cartucho.nombre %></td>
+                      </tr>
+                  <% }) %>
+              </tbody>
+          </table>
+      </div>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

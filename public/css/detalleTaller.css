@@ -1,0 +1,30 @@
+.main-content {
+  width: 90%;
+  margin: 20px auto;
+  padding: 0 10px;
+  /* border: 1px red dashed */
+}
+
+.main-content h1 {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.main-content article {
+  /* border: 1px dashed blue; */
+  margin: 20px 0
+}
+
+.main-content h3 {
+  margin: 5px 0;
+}
+
+.main-content p {
+  line-height: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    width: 60%;
+  }
+}

@@ -18,9 +18,9 @@
         <div class="equipo-container">
             <h3>Datos del Equipo</h3>
             <div>
-              <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
-              <p><span>Marca: </span><%= equipo.marca.nombre %></p>
+              <p><span>Marca: </span><%= equipo.marca %></p>
               <p><span>Modelo: </span><%= equipo.modelo %></p>
+              <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
               <p><span>Precio: </span>$<%= equipo.precio %></p>
               <p><span>Minimo de copias: </span><%= equipo.minimo_copias %></p>
               <p><span>Precio por copias: </span><%= equipo.precio_copias %></p>
@@ -33,8 +33,20 @@
                   <li><a href="#">15/02/2024</a></li>
                 </ul>
               </p>
-              <p><span>Estado: </span><%= equipo.estado.nombre %></p>
+              <p>
+                <span>Estado: </span>
+                <% if (equipo.id_estado == 2) { %>
+                 <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %></a>
+                <% } else { %>
+                  <%= equipo.estado.nombre %>
+                <% } %>
+              </p>
             </div>
+            <% if (equipo.id_estado == 1) { %>
+              <div class="enviar-taller">
+                <a href="/taller/ingreso/<%= equipo.id %>">Enviar al Taller</a>
+              </div>
+            <% } %>
         </div>
       </section>
       <!-- FIN CONTENIDO -->

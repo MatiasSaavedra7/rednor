@@ -17,34 +17,42 @@
       <section class="main-content">
         <article class="detalle-alquiler-container">
           <h3>Datos del Alquiler</h3>
-          <div>
-            <p><span>Firma: </span><%= alquiler.firma.nombre %></p>
-            <p>
-              <span>Fecha de Vencimiento: </span><%= alquiler.fecha_vencimiento
-              %>
-            </p>
-          </div>
+          <p style="text-align: center;"><span>Cliente</span></p>
+          <p><span>Nombre: </span><%= cliente.nombre %></p>
+          <p><span>Email: </span><%= cliente.email %></p>
+          <p><span>Telefono: </span><%= cliente.telefono %></p>
+          <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
+          <p><a href="/clientes/detalle/<%= cliente.id %>">Ir al Cliente</a></p>
+          <br>
+          <hr>
+          <br>
+          <p style="text-align: center;"><span>Equipo</span></p>
+          <p><span>Marca: </span><%= equipo.marca %></p>
+          <p><span>Modelo: </span><%= equipo.modelo %></p>
+          <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
+          <p><span>Precio: </span>$<%= equipo.precio %></p>
+          <p><a href="/equipos/detalle/<%= equipo.id %>">Ir al Equipo</a></p>
+          <br>
+          <hr>
+          <br>
+          <p><span>Firma: </span><%= alquiler.firma %></p>
+          <p><span>Departamento: </span> <%= alquiler.departamento %></p>
+          <p><span>Fecha de Alta del Contrato: </span><%= alquiler.fecha_alta %></p>
+          <% if (alquiler.fecha_baja) { %>
+          <p>
+            <span>Fecha de Vencimiento del Contrato: </span><%= alquiler.fecha_baja %>
+          </p>
+          <% } %>
+          <br>
 
-          <h3>Datos del Cliente</h3>
-          <div>
-            <p><span>Nombre: </span><%= cliente.nombre %></p>
-            <p><span>Email: </span><%= cliente.contacto.email %></p>
-            <p><span>Telefono: </span><%= cliente.contacto.telefono %></p>
-            <p><span>Ciudad: </span><%= cliente.contacto.ciudad %></p>
-            <p><span>Direccion: </span><%= cliente.contacto.direccion %></p>
-            <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
-          </div>
-
-          <h3>Datos del Equipo</h3>
-          <div>
-            <p><span>Marca: </span><%= equipo.marca.nombre %></p>
-            <p><span>Modelo: </span><%= equipo.modelo %></p>
-            <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
-            <p><span>Precio: </span>$<%= equipo.precio %></p>
-            <p><span>Minimo de copias: </span><%= equipo.minimo_copias %></p>
-            <p><span>Precio por copias: </span>$<%= equipo.precio_copias %></p>
-            <p><span>Fecha de Reajuste: </span><%= equipo.fecha_reajuste %></p>
-          </div>
+          <% if (!alquiler.fecha_baja) { %>
+            <form
+              action="/alquileres/finalizar/<%= alquiler.id %>?_method=put"
+              method="POST"
+            >
+              <input type="submit" value="Finalizar contrato" />
+            </form>
+          <% } %>
         </article>
       </section>
       <!-- FIN CONTENIDO -->

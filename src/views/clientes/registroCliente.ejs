@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/registerForm.css" />
+    <link rel="stylesheet" href="/css/formulario.css" />
     <title>REDNOR - Registrar nuevo Cliente</title>
   </head>
   <body>
@@ -16,17 +16,12 @@
       <!-- CONTENIDO -->
       <section class="main-content">
         <h1>REGISTRAR CLIENTE</h1>
-        <div class="form-register-container">
+        <div class="form-container">
           <form action="/clientes/crear" method="post">
             <h4>Datos personales</h4>
             <div>
               <label for="nombre">Nombre</label>
-              <input
-                type="text"
-                name="nombre"
-                id="nombre"
-                value="<%= locals.old && old.nombre ? old.nombre : "" %>"
-              />
+              <input type="text" name="nombre" id="nombre" value="<%= locals.old && old.nombre ? old.nombre : "" %>" /> 
               <% if (locals.errors && errors.nombre) { %>
               <p class="feedback-errors"><%= errors.nombre.msg %></p>
               <% } %>
@@ -43,10 +38,10 @@
                 <% }) %>
               </select>
               <% if (locals.errors && errors.id_tipo) { %>
-                <p class="feedback-errors"><%= errors.id_tipo.msg %></p>
-               <% } %>
+              <p class="feedback-errors"><%= errors.id_tipo.msg %></p>
+              <% } %>
             </div>
-
+            
             <br />
             <hr />
 
@@ -54,12 +49,7 @@
 
             <div>
               <label for="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value="<%= locals.old && old.email ? old.email : "" %>"
-              />
+              <input type="email" name="email" id="email" value="<%= locals.old && old.email ? old.email : "" %>" />
               <% if (locals.errors && errors.email) { %>
                 <p class="feedback-errors"><%= errors.email.msg %></p>
               <% } %>
@@ -67,40 +57,25 @@
 
             <div>
               <label for="telefono">Telefono</label>
-              <input 
-                type="number" 
-                name="telefono" 
-                id="telefono"
-                value="<%= locals.old && old.telefono ? old.telefono : "" %>"
-              />
-              <% if (locals.errors && errors.telefono) { %>
-               <p class="feedback-errors"><%= errors.telefono.msg %></p>
+              <input type="number" name="telefono" id="telefono" value="<%= locals.old && old.telefono ? old.telefono : "" %>" />
+              <% if(locals.errors && errors.telefono) { %>
+                <p class="feedback-errors"><%= errors.telefono.msg %></p>
               <% } %>
             </div>
 
             <div>
               <label for="ciudad">Ciudad</label>
-              <input 
-                type="text" 
-                name="ciudad" 
-                id="ciudad" 
-                value="<%= locals.old && old.ciudad ? old.ciudad : "" %>"
-              />
+              <input type="text" name="ciudad" id="ciudad" value="<%= locals.old && old.ciudad ? old.ciudad : "" %>" />
               <% if (locals.errors && errors.ciudad) { %>
-               <p class="feedback-errors"><%= errors.ciudad.msg %></p>
+                <p class="feedback-errors"><%= errors.ciudad.msg %></p>
               <% } %>
             </div>
 
             <div>
               <label for="direccion">Direccion</label>
-              <input 
-                type="text" 
-                name="direccion" 
-                id="direccion" 
-                value="<%= locals.old && old.direccion ? old.direccion : "" %>"
-              />
-              <% if (locals.errors && errors.direccion) { %>
-               <p class="feedback-errors"><%= errors.direccion.msg %></p>
+              <input type="text" name="direccion" id="direccion" value="<%= locals.old && old.direccion ? old.direccion : "" %>" />
+              <% if(locals.errors && errors.direccion) { %>
+                <p class="feedback-errors"><%= errors.direccion.msg %></p>
               <% } %>
             </div>
 
@@ -114,7 +89,7 @@
                 <option value="false">No</option>
               </select>
               <% if (locals.errors && errors.id_tipo) { %>
-                <p class="feedback-errors"><%= errors.id_tipo.msg %></p>
+              <p class="feedback-errors"><%= errors.id_tipo.msg %></p>
               <% } %>
             </div>
             <br />

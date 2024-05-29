@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/registerForm.css" />
+    <link rel="stylesheet" href="/css/formulario.css" />
+    <link rel="stylesheet" href="/css/registroAlquiler.css">
     <title>REDNOR - Nuevo alquiler</title>
   </head>
   <body>
@@ -15,23 +16,30 @@
 
       <!-- CONTENIDO -->
       <section class="main-content">
-        <h1>REGISTRAR NUEVO ALQUILER</h1>
-        <div class="form-register-container">
-          <form action="/alquileres/crear" method="post">
-            <!-- <h4>Datos personales</h4> -->
+        <div class="form-container">
+          <p id="registro-mensaje">Contrato de Alquiler</p>
+          <h1>
+            <%= cliente.nombre %>
+          </h1>
+          <form action="/alquileres/crear?cliente=<%= cliente.id %>" method="post">
+            <!-- <h4>Datos del Cliente</h4> -->
             <div>
-              <label for="id_cliente">Cliente</label>
+              <!-- <p>Nombre: <%# cliente.nombre %></p>
+              <p>Email: <%# cliente.email %></p>
+              <p>Telefono: <%# cliente.telefono %></p> -->
+              <br> <hr> <br>
+              <!-- <label for="id_cliente">Cliente</label>
               <select name="id_cliente" id="id_cliente">
                 <option value="" selected hidden disabled>
                   Elegir una opcion
                 </option>
-                <% clientes.forEach(cliente => { %>
-                <option value="<%= cliente.id %>"><%= cliente.nombre %></option>
-                <% }) %>
+                <%# clientes.forEach(cliente => { %>
+                <option value="<%# cliente.id %>"><%# cliente.nombre %></option>
+                <%# }) %>
               </select>
-              <% if (locals.errors && errors.id_cliente) { %>
-              <p class="feedback-errors"><%= errors.id_cliente.msg %></p>
-              <% } %>
+              <%# if (locals.errors && errors.id_cliente) { %>
+              <p class="feedback-errors"><%# errors.id_cliente.msg %></p>
+              <%# } %> -->
             </div>
 
             <div>
@@ -42,7 +50,8 @@
                 </option>
                 <% equipos.forEach(equipo => { %>
                 <option value="<%= equipo.id %>">
-                  <%= equipo.marca.nombre%> <%= equipo.numero_serie %>
+                  <%= equipo.marca%> <%= equipo.modelo %> - <%=
+                  equipo.numero_serie %>
                 </option>
                 <% }) %>
               </select>
@@ -52,53 +61,38 @@
             </div>
 
             <div>
-              <label for="id_firma">Firma</label>
-              <select name="id_firma" id="id_firma">
+              <label for="firma">Firma</label>
+              <select name="firma" id="firma">
                 <option value="" selected hidden disabled>
                   Elegir una opcion
                 </option>
                 <% firmas.forEach(firma => { %>
-                <option value="<%= firma.id %>"><%= firma.nombre %></option>
+                <option value="<%= firma.nombre %>"><%= firma.nombre %></option>
                 <% }) %>
               </select>
-              <% if (locals.errors && errors.id_firma) { %>
-              <p class="feedback-errors"><%= errors.id_firma.msg %></p>
+              <% if (locals.errors && errors.firma) { %>
+              <p class="feedback-errors"><%= errors.firma.msg %></p>
               <% } %>
             </div>
 
             <div>
-              <label for="fecha_vencimiento">Fecha de Vencimiento</label>
-              <input
-                type="date"
-                name="fecha_vencimiento"
-                id="fecha_vencimiento"
-              />
-              <% if (locals.errors && errors.fecha_vencimiento) { %>
-              <p class="feedback-errors"><%= errors.fecha_vencimiento.msg %></p>
-              <% } %>
+              <label for="fecha_baja">Fecha de Vencimiento (Opcional):</label>
+              <input type="date" name="fecha_baja" id="fecha_baja">
             </div>
 
             <br />
             <hr />
+            <br />
 
             <h4>Datos adicionales</h4>
             <div>
               <label for="departamento">Departamento</label>
-              <input 
-                type="text" 
-                name="departamento" 
-                id="departamento"
-                value="<%= locals.old && old.departamento ? old.departamento : "" %>"
-              />
-              <% if (locals.errors && errors.departamento) { %>
+              <input type="text" name="departamento" id="departamento"
+              value="<%= locals.old && old.departamento ? old.departamento : ""
+              %>" /> <% if (locals.errors && errors.departamento) { %>
               <p class="feedback-errors"><%= errors.departamento.msg %></p>
               <% } %>
             </div>
-
-            <!-- <div>
-              <label for="direccion">Direccion</label>
-              <input type="text" name="direccion" id="direccion" />
-            </div> -->
             <br />
             <input type="submit" />
           </form>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/registerForm.css" />
+    <link rel="stylesheet" href="/css/formulario.css" />
     <title>REDNOR - Registrar nuevo Equipo</title>
   </head>
   <body>
@@ -16,33 +16,21 @@
       <!-- CONTENIDO -->
       <section class="main-content">
         <h1>REGISTRAR EQUIPO</h1>
-        <div class="form-register-container">
+        <div class="form-container">
           <form action="/equipos/crear" method="post">
             <h4>Datos del equipo</h4>
             <div>
-              <label for="numero_serie">Numero de Serie</label>
-              <input 
-                type="text" 
-                name="numero_serie" 
-                id="numero_serie" 
-                value="<%= locals.old && old.numero_serie ? old.numero_serie : "" %>"/>
-              <% if (locals.errors && errors.numero_serie) { %>
-               <p class="feedback-errors"><%= errors.numero_serie.msg %></p>
-              <% } %>
-            </div>
-
-            <div>
-              <label for="id_marca">Marca</label>
-              <select name="id_marca" id="id_marca">
+              <label for="marca">Marca</label>
+              <select name="marca" id="marca">
                 <option value="" selected disabled hidden>
                   Elegir una opcion
                 </option>
                 <% marcas.forEach(marca => { %>
-                <option value="<%= marca.id %>"><%= marca.nombre %></option>
+                <option value="<%= marca.nombre %>"><%= marca.nombre %></option>
                 <% }) %>
               </select>
-              <% if (locals.errors && errors.id_marca) { %>
-               <p class="feedback-errors"><%= errors.id_marca.msg %></p>
+              <% if (locals.errors && errors.marca) { %>
+               <p class="feedback-errors"><%= errors.marca.msg %></p>
               <% } %>
             </div>
 
@@ -55,6 +43,18 @@
                   value="<%= locals.old && old.modelo ? old.modelo : "" %>"/>
               <% if (locals.errors && errors.modelo) { %>
                <p class="feedback-errors"><%= errors.modelo.msg %></p>
+              <% } %>
+            </div>
+
+            <div>
+              <label for="numero_serie">Numero de Serie</label>
+              <input 
+                type="text" 
+                name="numero_serie" 
+                id="numero_serie" 
+                value="<%= locals.old && old.numero_serie ? old.numero_serie : "" %>"/>
+              <% if (locals.errors && errors.numero_serie) { %>
+               <p class="feedback-errors"><%= errors.numero_serie.msg %></p>
               <% } %>
             </div>
 

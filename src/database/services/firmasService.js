@@ -9,4 +9,14 @@ module.exports = {
       console.log(error);
     }
   },
+
+  getOneByPK: async (id) => {
+    try {
+      return await db.Firma.findOne({
+        where: { id: id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

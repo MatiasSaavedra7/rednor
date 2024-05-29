@@ -16,23 +16,30 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
-    id_firma: {
-      type: dataTypes.INTEGER,
+    firma: {
+      type: dataTypes.STRING,
       allowNull: false,
     },
     departamento: {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    fecha_vencimiento: {
+    fecha_alta: {
       type: dataTypes.DATE,
-      allowNull: false,
+    },
+    fecha_baja: {
+      type: dataTypes.DATE,
+    },
+    activo: {
+      type: dataTypes.BOOLEAN,
+      allowNull: false
     },
   };
 
   let config = {
     tableName: "alquileres",
-    timestamps: false,
+    createdAt: "fecha_alta",
+    updatedAt: false,
   };
 
   let Alquiler = sequelize.define(alias, cols, config);
@@ -46,11 +53,6 @@ module.exports = (sequelize, dataTypes) => {
     Alquiler.belongsTo(models.Equipo, {
       as: "equipo",
       foreignKey: "id_equipo",
-    });
-
-    Alquiler.belongsTo(models.Firma, {
-      as: "firma",
-      foreignKey: "id_firma",
     });
   };
   return Alquiler;

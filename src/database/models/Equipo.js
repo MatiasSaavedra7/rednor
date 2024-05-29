@@ -8,17 +8,17 @@ module.exports = (sequelize, dataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
-    numero_serie: {
+    marca: {
       type: dataTypes.STRING,
-      unique: true,
-      allowNull: false,
-    },
-    id_marca: {
-      type: dataTypes.INTEGER,
       allowNull: false,
     },
     modelo: {
       type: dataTypes.STRING,
+      allowNull: false,
+    },
+    numero_serie: {
+      type: dataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
     precio: {
@@ -51,24 +51,19 @@ module.exports = (sequelize, dataTypes) => {
   let Equipo = sequelize.define(alias, cols, config);
 
   Equipo.associate = function (models) {
-    Equipo.belongsTo(models.Marca, {
-      as: "marca",
-      foreignKey: "id_marca",
-    });
-
     Equipo.belongsTo(models.Estado, {
       as: "estado",
       foreignKey: "id_estado",
     });
 
-    Equipo.hasMany(models.Informe, {
-      as: "informes",
-      foreignKey: "id_equipo",
-    });
-
     Equipo.hasMany(models.Alquiler, {
       as: "alquiler",
       foreignKey: "id_equipo",
+    });
+
+    Equipo.hasMany(models.Ingreso, {
+      as: "ingreso",
+      foreignKey: "id_equipo"
     });
   };
 

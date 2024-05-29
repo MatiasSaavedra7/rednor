@@ -6,10 +6,10 @@ const controller = require("../controllers/equiposController");
 const validateMiddleware = require("../middlewares/validateEquipoMiddleware");
 
 // LISTADO COMPLETO DE EQUIPOS
-router.get("/", controller.getAll);
+router.get("/", controller.equipos);
 
 // DETALLE DE EQUIPO POR CLAVE PRIMARIA
-router.get("/detalle/:id", controller.getOneByPk);
+router.get("/detalle/:id", controller.detalleEquipo);
 
 // FORMULARIO PARA REGISTRAR UN NUEVO EQUIPO
 router.get("/crear", controller.create);
