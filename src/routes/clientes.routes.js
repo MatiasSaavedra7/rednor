@@ -23,4 +23,7 @@ router.get("/editar/:id", controller.edit);
 // RUTA POR PUT PARA PROCESAR LOS DATOS RECIBIDOS
 router.put("/editar/:id", controller.edit);
 
+// RUTA AL FORMULARIO PARA REGISTRAR HABILITADOS
+router.get("/habilitados", controller.registroHabilitado);
+
 module.exports = router;

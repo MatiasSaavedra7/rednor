@@ -5,7 +5,10 @@ function Cliente(data) {
   this.telefono = data.telefono;
   this.ciudad = data.ciudad;
   this.direccion = data.direccion;
-  this.habilitado = data.habilitado;
+  this.cuit = data.cuit;
+  this.condicion_afip = data.condicion_afip;
+  this.inscripcion_afip = data.inscripcion_afip;
+  this.formulario_005 = data.formulario_005;
 }
 
 function Equipo(data) {

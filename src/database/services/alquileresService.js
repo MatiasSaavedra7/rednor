@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
@@ -13,6 +12,20 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  getAllActivos: async () => {
+    try {
+      return await db.Alquiler.findAll({
+        where: {
+          activo: true,
+          fecha_baja: {[Op.ne]: null},
+        },
+        include: ["cliente", "equipo"]
+      })
+    } catch (error) {
+      console.log(error);  
     }
   },
 

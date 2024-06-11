@@ -40,6 +40,7 @@
                   <th>Equipo</th>
                   <th>Firma</th>
                   <th>Precio</th>
+                  <th>Vencimiento</th>
                   <th>Detalles</th>
                 </tr>
               </thead>
@@ -54,6 +55,13 @@
                   </td>
                   <td><%= alquiler.firma %></td>
                   <td>$<%= alquiler.equipo.precio %></td>
+                  <td>
+                    <% if (alquiler.fecha_baja != null) { %>
+                     <%= alquiler.fecha_baja %>
+                    <% } else { %>
+                      -
+                    <% } %>
+                  </td>
                   <td>
                     <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
                   </td>

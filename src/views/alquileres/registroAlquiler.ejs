@@ -22,25 +22,7 @@
             <%= cliente.nombre %>
           </h1>
           <form action="/alquileres/crear?cliente=<%= cliente.id %>" method="post">
-            <!-- <h4>Datos del Cliente</h4> -->
-            <div>
-              <!-- <p>Nombre: <%# cliente.nombre %></p>
-              <p>Email: <%# cliente.email %></p>
-              <p>Telefono: <%# cliente.telefono %></p> -->
-              <br> <hr> <br>
-              <!-- <label for="id_cliente">Cliente</label>
-              <select name="id_cliente" id="id_cliente">
-                <option value="" selected hidden disabled>
-                  Elegir una opcion
-                </option>
-                <%# clientes.forEach(cliente => { %>
-                <option value="<%# cliente.id %>"><%# cliente.nombre %></option>
-                <%# }) %>
-              </select>
-              <%# if (locals.errors && errors.id_cliente) { %>
-              <p class="feedback-errors"><%# errors.id_cliente.msg %></p>
-              <%# } %> -->
-            </div>
+            <br> <hr> <br>
 
             <div>
               <label for="id_equipo">Equipo</label>

@@ -22,4 +22,9 @@ module.exports = [
   check("direccion")
     .notEmpty()
     .withMessage("Debes ingresar la direccion del cliente"),
+  check("cuit")
+    .notEmpty()
+    .withMessage("Debes ingresar el CUIT del cliente")
+    .isLength({ min: 13, max: 13})
+    .withMessage("Formato de CUIT inválido")
 ];

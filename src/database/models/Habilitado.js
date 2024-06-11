@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataTypes) => {
-  let alias = "Cliente";
+  let alias = "Habilitado";
 
   let cols = {
     id: {
@@ -8,11 +8,11 @@ module.exports = (sequelize, dataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
-    nombre: {
-      type: dataTypes.STRING,
+    id_cliente: {
+      type: dataTypes.INTEGER,
       allowNull: false,
     },
-    email: {
+    nombre: {
       type: dataTypes.STRING,
       allowNull: false,
     },
@@ -20,38 +20,26 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    ciudad: {
+    email: {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    direccion: {
+    puesto: {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    id_tipo: {
-      type: dataTypes.INTEGER,
+    ubicacion: {
+      type: dataTypes.STRING,
       allowNull: false,
     },
   };
 
   let config = {
-    tableName: "clientes",
+    tableName: "personas_habilitadas",
     timestamps: false,
   };
 
-  let Cliente = sequelize.define(alias, cols, config);
+  let Habilitado = sequelize.define(alias, cols, config);
 
-  Cliente.associate = function (models) {
-    Cliente.belongsTo(models.Tipo, {
-      as: "tipo",
-      foreignKey: "id_tipo",
-    });
-
-    Cliente.hasMany(models.Alquiler, {
-      as: "alquiler",
-      foreignKey: "id_cliente",
-    });
-  };
-
-  return Cliente;
+  return Habilitado;
 };

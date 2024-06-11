@@ -35,7 +35,6 @@ module.exports = {
 
   store: async (req, res) => {
     try {
-      
       let errors = validationResult(req);
 
       if (errors.isEmpty()) {
@@ -63,4 +62,22 @@ module.exports = {
   update: (req, res) => {
     res.send("ALMACENAR INFORMACION ACTUALIZADA DEL CLIENTE");
   },
+
+  // FORMULARIO PARA REGISTRAR UN HABILITADO AL CLIENTE
+  registroHabilitado: async (req, res) => {
+    try {
+      let cliente = await clientesService.getOneByPK(req.query.cliente)
+      res.render("clientes/registroHabilitados", { cliente });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  almacenarHabilitado: async (req, res) => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 };

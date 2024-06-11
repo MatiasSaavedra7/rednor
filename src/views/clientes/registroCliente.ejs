@@ -3,6 +3,7 @@
   <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/formulario.css" />
+    <script src="/js/registroCliente.js"></script>
     <title>REDNOR - Registrar nuevo Cliente</title>
   </head>
   <body>
@@ -79,7 +80,8 @@
               <% } %>
             </div>
 
-            <div>
+            <!-- Revisar esto!  -->
+            <!-- <div>
               <label for="habilitado">Habilitado</label>
               <select name="habilitado" id="habilitado">
                 <option value="" disabled selected hidden>
@@ -88,9 +90,32 @@
                 <option value="true">Si</option>
                 <option value="false">No</option>
               </select>
-              <% if (locals.errors && errors.id_tipo) { %>
-              <p class="feedback-errors"><%= errors.id_tipo.msg %></p>
+              <%# if (locals.errors && errors.id_tipo) { %>
+              <p class="feedback-errors"><%# errors.id_tipo.msg %></p>
+              <%# } %>
+            </div> -->
+
+            <div>
+              <label for="cuit">CUIT (Sin guiones)</label>
+              <input type="text" name="cuit" id="cuit" value="<%= locals.old && old.cuit ? old.cuit : "" %>">
+              <% if (locals.errors && errors.cuit) { %>
+               <p class="feedback-errors"><%= errors.cuit.msg %></p>
               <% } %>
+            </div>
+
+            <div>
+              <label for="condicion_afip">Condicion AFIP</label>
+              <input type="file" name="condicion_afip" id="condicion_afip">
+            </div>
+
+            <div>
+              <label for="inscripcion_afip">Inscripcion AFIP</label>
+              <input type="file" name="inscripcion_afip" id="inscripcion_afip">
+            </div>
+
+            <div>
+              <label for="formulario_005">Formulario 005</label>
+              <input type="file" name="formulario_005" id="formulario_005">
             </div>
             <br />
             <input type="submit" />

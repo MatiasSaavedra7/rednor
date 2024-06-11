@@ -25,10 +25,10 @@ module.exports = (sequelize, dataTypes) => {
       allowNull: false,
     },
     fecha_alta: {
-      type: dataTypes.DATE,
+      type: dataTypes.DATEONLY,
     },
     fecha_baja: {
-      type: dataTypes.DATE,
+      type: dataTypes.DATEONLY,
     },
     activo: {
       type: dataTypes.BOOLEAN,

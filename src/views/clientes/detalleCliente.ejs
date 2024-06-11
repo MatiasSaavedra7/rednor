@@ -25,10 +25,13 @@
             <p><span>Ciudad: </span><%= cliente.ciudad %></p>
             <p><span>Direccion: </span><%= cliente.direccion %></p>
             <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
+            <div>
+              <a href="/clientes/habilitados?cliente=<%= cliente.id %>">Agregar habilitado</a>
+            </div>
           </div>
           <!-- <br> -->
           <!-- <hr> -->
-          <% if (alquileres) { %>
+          <% if (alquileres.length != 0) { %>
             <h3>Alquileres</h3>
             <div class="table-container">
               <table>

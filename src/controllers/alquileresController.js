@@ -49,9 +49,11 @@ module.exports = {
 
       if (errors.isEmpty()) {
         let id = req.query.cliente;
+        let fechaBaja = req.body.fecha_baja ? req.body.fecha_baja : null;
         let data = {
-          id_cliente: id,
           ...req.body,
+          id_cliente: id,
+          fecha_baja: fechaBaja,
         };
         let alquiler = await alquileresService.create(data);
         if (alquiler) {
