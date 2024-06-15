@@ -7,10 +7,11 @@ module.exports = {
   getAll: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["estado"],
+        include: ["estado", "tipo"],
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
@@ -18,20 +19,21 @@ module.exports = {
   getAllDisponibles: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["estado"],
+        include: ["estado", "tipo"],
         where: {
           id_estado: { [Op.eq]: 1 },
         },
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
   getOneDisponible: async (id) => {
     try {
       return db.Equipo.findOne({
-        include: ["estado", "ingreso"],
+        include: ["estado", "tipo", "ingreso"],
         where: {
           id: id,
           id_estado: { [Op.eq]: 1 },
@@ -39,26 +41,28 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
   getAllAlquilado: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["estado"],
+        include: ["estado", "tipo"],
         where: {
           id_estado: { [Op.eq]: 2 },
         },
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
   getOneAlquilado: async (id) => {
     try {
       return db.Equipo.findOne({
-        include: ["estado", "ingreso"],
+        include: ["estado", "tipo", "ingreso"],
         where: {
           id: id,
           id_estado: { [Op.eq]: 2 },
@@ -66,26 +70,28 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
   getAllTaller: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["estado", "ingreso"],
+        include: ["estado", "tipo", "ingreso"],
         where: {
           id_estado: { [Op.eq]: 3 },
         },
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
   getOneTaller: async (id) => {
     try {
       return db.Equipo.findOne({
-        include: ["ingreso", "estado"],
+        include: ["ingreso", "tipo", "estado"],
         where: {
           id: id,
           id_estado: { [Op.eq]: 3 },
@@ -93,6 +99,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
@@ -100,10 +107,11 @@ module.exports = {
     try {
       return db.Equipo.findOne({
         where: { id: id },
-        include: ["estado"],
+        include: ["estado", "tipo"],
       });
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 
@@ -112,6 +120,7 @@ module.exports = {
       return db.Equipo.create(new Equipo(data));
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
   // METODO PARA ACTUALIZAR A EL ESTADO DE UN EQUIPO A DISPONIBLE

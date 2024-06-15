@@ -11,6 +11,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error.message);
+      return [];
     }
   },
 
@@ -22,6 +23,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error.message);
+      return [];
     }
   },
 
@@ -30,6 +32,7 @@ module.exports = {
       return await db.Cliente.create(new Cliente(data));
     } catch (error) {
       console.log(error);
+      return [];
     }
   },
 };

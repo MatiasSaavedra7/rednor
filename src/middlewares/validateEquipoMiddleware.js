@@ -10,16 +10,7 @@ module.exports = [
   check("numero_serie")
     .notEmpty()
     .withMessage("Debes ingresar el numero de serie"),
-  check("precio")
+  check("id_tipo_equipo")
     .notEmpty()
-    .withMessage("Debes ingresar el precio del equipo"),
-  check("minimo_copias")
-    .notEmpty()
-    .withMessage("Debes ingresar la cantidad minima de copias"),
-  check("precio_copias")
-    .notEmpty()
-    .withMessage("Debes ingresar el precio por cada copia"),
-  check("fecha_reajuste")
-    .notEmpty()
-    .withMessage("Selecciona la fecha para reajuste del equipo"),
+    .withMessage("Selecciona un tipo de las opciones"),
 ];

@@ -12,6 +12,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: false,
     },
+    id_tipo_cliente: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
     email: {
       type: dataTypes.STRING,
       allowNull: false,
@@ -28,9 +32,21 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    id_tipo: {
-      type: dataTypes.INTEGER,
+    cuit: {
+      type: dataTypes.STRING,
       allowNull: false,
+    },
+    inscripcion_afip: {
+      type: dataTypes.STRING,
+      allowNull: true,
+    },
+    condicion_afip: {
+      type: dataTypes.STRING,
+      allowNull: true,
+    },
+    formulario_005: {
+      type: dataTypes.STRING,
+      allowNull: true,
     },
   };
 
@@ -42,9 +58,14 @@ module.exports = (sequelize, dataTypes) => {
   let Cliente = sequelize.define(alias, cols, config);
 
   Cliente.associate = function (models) {
-    Cliente.belongsTo(models.Tipo, {
+    Cliente.belongsTo(models.TipoCliente, {
       as: "tipo",
-      foreignKey: "id_tipo",
+      foreignKey: "id_tipo_cliente",
+    });
+
+    Cliente.hasMany(models.Habilitado, {
+      as: "habilitados",
+      foreignKey: "id_cliente",
     });
 
     Cliente.hasMany(models.Alquiler, {

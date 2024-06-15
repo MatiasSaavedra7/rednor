@@ -26,7 +26,7 @@
             <p><span>Direccion: </span><%= cliente.direccion %></p>
             <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
             <div>
-              <a href="/clientes/habilitados?cliente=<%= cliente.id %>">Agregar habilitado</a>
+              <a href="/habilitados/crear?cliente=<%= cliente.id %>">Agregar habilitado</a>
             </div>
           </div>
           <!-- <br> -->
@@ -54,7 +54,7 @@
                         <%= alquiler.equipo.numero_serie %>
                       </td>
                       <td><%= alquiler.firma %></td>
-                      <td>$<%= alquiler.equipo.precio %></td>
+                      <td>$<%= alquiler.precio %></td>
                       <td>
                         <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
                       </td>

@@ -32,9 +32,9 @@
                         <tr>
                             <th>Marca</th>
                             <th>Modelo</th>
-                            <th>Num. serie</th>
+                            <th>Serie</th>
+                            <th>Tipo</th>
                             <th>Estado</th>
-                            <th>Reajuste</th>
                             <th>Detalles</th>
                         </tr>
                     </thead>
@@ -44,8 +44,8 @@
                                 <td><%= equipo.marca %></td>
                                 <td><%= equipo.modelo %></td>
                                 <td><%= equipo.numero_serie %></td>
+                                <td><%= equipo.tipo.nombre %></td>
                                 <td><%= equipo.estado.nombre %></td>
-                                <td><%= equipo.fecha_reajuste %></td>
                                 <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
                             </tr>
                         <% }) %>

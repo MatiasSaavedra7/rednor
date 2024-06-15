@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataTypes) => {
-    let alias = 'Tipo';
+    let alias = 'TipoCliente';
 
     let cols = {
         id: {
@@ -15,7 +15,7 @@ module.exports = (sequelize, dataTypes) => {
     };
 
     let config = {
-        tableName: 'tipos',
+        tableName: 'tipos_clientes',
         timestamps: false
     };
 
@@ -24,7 +24,7 @@ module.exports = (sequelize, dataTypes) => {
     Tipo.associate = function(models){
         Tipo.hasMany(models.Cliente, {
             as: 'clientes',
-            foreignKey: 'id_tipo'
+            foreignKey: 'id_tipo_cliente'
         });
     }
 

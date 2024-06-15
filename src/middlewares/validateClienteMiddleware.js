@@ -4,7 +4,7 @@ module.exports = [
   check("nombre")
     .notEmpty()
     .withMessage("Debes ingresar un nombre"),
-  check("id_tipo")
+  check("id_tipo_cliente")
     .notEmpty()
     .withMessage("Selecciona una opcion"),
   check("email")

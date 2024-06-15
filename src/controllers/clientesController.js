@@ -1,5 +1,5 @@
 const clientesService = require("../database/services/clientesService");
-const tiposService = require("../database/services/tiposService");
+const tiposClientesService = require("../database/services/tiposClientesService");
 const alquileresService = require("../database/services/alquileresService");
 
 const { validationResult } = require("express-validator");
@@ -20,13 +20,13 @@ module.exports = {
       const alquileres = await alquileresService.getByIdCliente(req.params.id);
       res.render("clientes/detalleCliente", { cliente, alquileres });
     } catch (error) {
-      res.send(error);
+      console.log(error);
     }
   },
 
   create: async (req, res) => {
     try {
-      const tipos = await tiposService.getAll();
+      const tipos = await tiposClientesService.getAll();
       res.render("clientes/registroCliente", { tipos });
     } catch (error) {
       console.log(error);
@@ -43,7 +43,7 @@ module.exports = {
           res.redirect(`/clientes/detalle/${cliente.id}`);
         }
       } else {
-        let tipos = await tiposService.getAll();
+        let tipos = await tiposClientesService.getAll();
         res.render("clientes/registroCliente", {
           errors: errors.mapped(),
           old: req.body,
@@ -62,22 +62,4 @@ module.exports = {
   update: (req, res) => {
     res.send("ALMACENAR INFORMACION ACTUALIZADA DEL CLIENTE");
   },
-
-  // FORMULARIO PARA REGISTRAR UN HABILITADO AL CLIENTE
-  registroHabilitado: async (req, res) => {
-    try {
-      let cliente = await clientesService.getOneByPK(req.query.cliente)
-      res.render("clientes/registroHabilitados", { cliente });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  almacenarHabilitado: async (req, res) => {
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
 };

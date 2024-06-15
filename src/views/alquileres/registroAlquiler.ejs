@@ -43,6 +43,22 @@
             </div>
 
             <div>
+              <label for="minimo_copias">Minimo de Copias</label>
+              <input type="number" name="minimo_copias" id="minimo_copias" value="<%= locals.old && old.minimo_copias ? old.minimo_copias : "" %>">
+              <% if (locals.errors && errors.minimo_copias) { %>
+               <p class="feedback-errors"><%= errors.minimo_copias.msg %></p>
+              <% } %>
+            </div>
+
+            <div>
+              <label for="precio_copias">Precio por Copia</label>
+              <input type="number" name="precio_copias" id="precio_copias" step="any" value="<%= locals.old && old.precio_copias ? old.precio_copias : ""  %>">
+              <% if (locals.errors && errors.precio_copias) { %>
+               <p class="feedback-errors"><%= errors.precio_copias.msg %></p>
+              <% } %>
+            </div>
+
+            <div>
               <label for="firma">Firma</label>
               <select name="firma" id="firma">
                 <option value="" selected hidden disabled>

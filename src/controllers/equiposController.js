@@ -1,6 +1,7 @@
 const equiposService = require("../database/services/equiposService");
 const marcasService = require("../database/services/marcasService");
 const alquileresService = require("../database/services/alquileresService");
+const tiposEquiposService = require("../database/services/tiposEquiposService");
 
 const { validationResult } = require("express-validator");
 
@@ -28,7 +29,8 @@ module.exports = {
   create: async (req, res) => {
     try {
       let marcas = await marcasService.getAll();
-      res.render("equipos/registroEquipo", { marcas });
+      let tipos = await tiposEquiposService.getAll();
+      res.render("equipos/registroEquipo", { marcas, tipos });
     } catch (error) {
       console.log(error);
     }
@@ -39,8 +41,8 @@ module.exports = {
       let errors = validationResult(req);
       if (errors.isEmpty()) {
         let data = {
-          id_estado: 1,
           ...req.body,
+          id_estado: 1,
         };
         let equipo = await equiposService.create(data);
         //  Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado

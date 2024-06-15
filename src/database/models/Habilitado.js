@@ -35,11 +35,18 @@ module.exports = (sequelize, dataTypes) => {
   };
 
   let config = {
-    tableName: "personas_habilitadas",
+    tableName: "habilitados",
     timestamps: false,
   };
 
   let Habilitado = sequelize.define(alias, cols, config);
+
+  Habilitado.associate = function (models) {
+    Habilitado.belongsTo(models.Cliente, {
+      as: "cliente",
+      foreignKey: "id_cliente",
+    });
+  };
 
   return Habilitado;
 };

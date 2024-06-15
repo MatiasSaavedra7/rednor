@@ -35,9 +35,17 @@
   border-radius: 10px;
 }
 
+.detalle-alquiler-container .table-container {
+  width: 100%;
+}
+
 @media (min-width: 1024px) {
   .detalle-alquiler-container {
     width: 50%;
+  }
+
+  #tabla {
+    width: 80%;
   }
 
   .detalle-alquiler-container input {

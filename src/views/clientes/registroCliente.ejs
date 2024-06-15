@@ -29,8 +29,8 @@
             </div>
 
             <div>
-              <label for="id_tipo">Tipo</label>
-              <select name="id_tipo" id="id_tipo">
+              <label for="id_tipo_cliente">Tipo</label>
+              <select name="id_tipo_cliente" id="id_tipo_cliente">
                 <option value="" disabled selected hidden>
                   Selecciona un tipo
                 </option>
@@ -80,21 +80,6 @@
               <% } %>
             </div>
 
-            <!-- Revisar esto!  -->
-            <!-- <div>
-              <label for="habilitado">Habilitado</label>
-              <select name="habilitado" id="habilitado">
-                <option value="" disabled selected hidden>
-                  Selecciona una opcion
-                </option>
-                <option value="true">Si</option>
-                <option value="false">No</option>
-              </select>
-              <%# if (locals.errors && errors.id_tipo) { %>
-              <p class="feedback-errors"><%# errors.id_tipo.msg %></p>
-              <%# } %>
-            </div> -->
-
             <div>
               <label for="cuit">CUIT (Sin guiones)</label>
               <input type="text" name="cuit" id="cuit" value="<%= locals.old && old.cuit ? old.cuit : "" %>">
@@ -102,15 +87,15 @@
                <p class="feedback-errors"><%= errors.cuit.msg %></p>
               <% } %>
             </div>
+            
+            <div>
+              <label for="inscripcion_afip">Inscripcion AFIP</label>
+              <input type="file" name="inscripcion_afip" id="inscripcion_afip">
+            </div>
 
             <div>
               <label for="condicion_afip">Condicion AFIP</label>
               <input type="file" name="condicion_afip" id="condicion_afip">
-            </div>
-
-            <div>
-              <label for="inscripcion_afip">Inscripcion AFIP</label>
-              <input type="file" name="inscripcion_afip" id="inscripcion_afip">
             </div>
 
             <div>

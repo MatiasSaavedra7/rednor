@@ -3,6 +3,7 @@
   <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/detalleAlquiler.css" />
+    <link rel="stylesheet" href="/css/tables.css">
     <title>REDNOR - Detalle del Alquiler <%= alquiler.id %></title>
   </head>
   <body>
@@ -30,12 +31,13 @@
           <p><span>Marca: </span><%= equipo.marca %></p>
           <p><span>Modelo: </span><%= equipo.modelo %></p>
           <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
-          <p><span>Precio: </span>$<%= equipo.precio %></p>
           <p><a href="/equipos/detalle/<%= equipo.id %>">Ir al Equipo</a></p>
           <br>
           <hr>
           <br>
-          <p><span>Firma: </span><%= alquiler.firma %></p>
+          <p><span>Precio: </span>$<%= alquiler.precio %></p>
+          <p><span>Minimo de Copias: </span><%= alquiler.minimo_copias %></p>
+          <p><span>Precio por copias: </span>$<%= alquiler.precio_copias %></p>
           <p><span>Departamento: </span> <%= alquiler.departamento %></p>
           <p><span>Fecha de Alta del Contrato: </span><%= alquiler.fecha_alta %></p>
           <% if (alquiler.fecha_baja) { %>
@@ -44,15 +46,47 @@
             </p>
           <% } %>
           <br>
+          
+          <% if (alquiler.activo == true) { %>
+            <a href="/alquileres/reajuste/<%= alquiler.id %>">Reajustar Contrato</a>
+          <% } %>
 
+          <br>
+          
           <% if (!alquiler.fecha_baja) { %>
             <form
               action="/alquileres/finalizar/<%= alquiler.id %>?_method=put"
               method="POST"
             >
-              <input type="submit" value="Finalizar contrato" />
+              <input type="submit" value="Finalizar Contrato" />
             </form>
           <% } %>
+
+        </article>
+
+        <article class="detalle-alquiler-container" id="tabla">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha de Reajuste</th>
+                  <th>Minimo de Copias</th>
+                  <th>Precio por Copias</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% reajustes.forEach(reajuste => { %>
+                <tr>
+                  <td><%= reajuste.fecha_reajuste %></td>
+                  <td><%= reajuste.minimo_copias %></td>
+                  <td>$<%= reajuste.precio_copias %></td>
+                  <td>$<%= reajuste.precio %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
         </article>
       </section>
       <!-- FIN CONTENIDO -->

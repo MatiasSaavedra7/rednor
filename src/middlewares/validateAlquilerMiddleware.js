@@ -1,12 +1,15 @@
 const { check } = require("express-validator");
 
 module.exports = [
-  // check("id_cliente")
-    // .notEmpty()
-    // .withMessage("Debes seleccionar un cliente"),
   check("id_equipo")
     .notEmpty()
     .withMessage("Debes seleccionar un equipo"),
+  check("minimo_copias")
+    .notEmpty()
+    .withMessage("Ingresa la cantidad minima de copias"),
+  check("precio_copias")
+    .notEmpty()
+    .withMessage("Ingresa el precio por cada copia"),
   check("firma")
     .notEmpty()
     .withMessage("Debes seleccionar una firma"),

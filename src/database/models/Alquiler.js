@@ -16,6 +16,18 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
+    minimo_copias: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
+    precio_copias: {
+      type: dataTypes.DECIMAL,
+      allowNull: false,
+    },
+    precio: {
+      type: dataTypes.DECIMAL,
+      allowNull: false,
+    },
     firma: {
       type: dataTypes.STRING,
       allowNull: false,
@@ -32,14 +44,16 @@ module.exports = (sequelize, dataTypes) => {
     },
     activo: {
       type: dataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: false,
+    },
+    fecha_reajuste: {
+      type: dataTypes.DATEONLY,
     },
   };
 
   let config = {
     tableName: "alquileres",
-    createdAt: "fecha_alta",
-    updatedAt: false,
+    timestamps: false,
   };
 
   let Alquiler = sequelize.define(alias, cols, config);
@@ -53,6 +67,11 @@ module.exports = (sequelize, dataTypes) => {
     Alquiler.belongsTo(models.Equipo, {
       as: "equipo",
       foreignKey: "id_equipo",
+    });
+
+    Alquiler.hasMany(models.Reajuste, {
+      as: "reajuste",
+      foreignKey: "id_alquiler",
     });
   };
   return Alquiler;

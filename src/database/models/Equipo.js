@@ -21,20 +21,8 @@ module.exports = (sequelize, dataTypes) => {
       unique: true,
       allowNull: false,
     },
-    precio: {
-      type: dataTypes.DECIMAL,
-      allowNull: false,
-    },
-    minimo_copias: {
-      type: dataTypes.INTEGER,
-      allowNull: false,
-    },
-    precio_copias: {
-      type: dataTypes.DECIMAL,
-      allowNull: false,
-    },
-    fecha_reajuste: {
-      type: dataTypes.DATE,
+    id_tipo_equipo: {
+      type: dataTypes.STRING,
       allowNull: false,
     },
     id_estado: {
@@ -56,6 +44,11 @@ module.exports = (sequelize, dataTypes) => {
       foreignKey: "id_estado",
     });
 
+    Equipo.belongsTo(models.TipoEquipo, {
+      as: "tipo",
+      foreignKey: "id_tipo_equipo"
+    })
+
     Equipo.hasMany(models.Alquiler, {
       as: "alquiler",
       foreignKey: "id_equipo",
@@ -63,7 +56,7 @@ module.exports = (sequelize, dataTypes) => {
 
     Equipo.hasMany(models.Ingreso, {
       as: "ingreso",
-      foreignKey: "id_equipo"
+      foreignKey: "id_equipo",
     });
   };
 

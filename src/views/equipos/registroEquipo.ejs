@@ -59,54 +59,20 @@
             </div>
 
             <div>
-              <label for="precio">Precio</label>
-              <input 
-                type="number" 
-                name="precio" 
-                id="precio" 
-                step="0.01" value="<%= locals.old && old.precio ? old.precio : "" %>"/>
-              <% if (locals.errors && errors.precio) { %>
-               <p class="feedback-errors"><%= errors.precio.msg %></p>
+              <label for="id_tipo_equipo">Tipo de Equipo</label>
+              <select name="id_tipo_equipo" id="id_tipo_equipo">
+                <option value="" selected disabled hidden>
+                  Elegir una opcion
+                </option>
+                <% tipos.forEach(tipo => { %>
+                <option value="<%= tipo.id %>"><%= tipo.nombre %></option>
+                <% }) %>
+              </select>
+              <% if (locals.errors && errors.id_tipo_equipo) { %>
+               <p class="feedback-errors"><%= errors.id_tipo_equipo.msg %></p>
               <% } %>
             </div>
 
-            <div>
-              <label for="minimo_copias">Minimo de copias</label>
-              <input 
-                type="number" 
-                name="minimo_copias" 
-                id="minimo_copias" 
-                value="<%= locals.old && old.minimo_copias ? old.minimo_copias: "" %>"/>
-              <% if (locals.errors && errors.minimo_copias) { %>
-               <p class="feedback-errors"><%= errors.minimo_copias.msg %></p>
-              <% } %>
-            </div>
-
-            <div>
-              <label for="precio_copias">Precio por copias</label>
-              <input
-                type="number"
-                name="precio_copias"
-                id="precio_copias"
-                step="0.01"
-                value="<%= locals.old && old.precio_copias ? old.precio_copias : "" %>"
-              />
-              <% if (locals.errors && errors.precio_copias) { %>
-               <p class="feedback-errors"><%= errors.precio_copias.msg %></p>
-              <% } %>
-            </div>
-
-            <div>
-              <label for="fecha_reajuste">Fecha de reajuste</label>
-              <input 
-                type="date" 
-                name="fecha_reajuste" 
-                id="fecha_reajuste" 
-              />
-              <% if (locals.errors && errors.fecha_reajuste) { %>
-                <p class="feedback-errors"><%= errors.fecha_reajuste.msg %></p>
-               <% } %>
-            </div>
             <br />
             <input type="submit" />
           </form>
