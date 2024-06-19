@@ -19,12 +19,32 @@
         <div class="client-container">
           <h3>Informacion del Cliente</h3>
           <div>
+            <p>
+              <a href="/clientes/editar/<%= cliente.id %>">Editar informacion</a>
+            </p>
             <p><span>Nombre: </span><%= cliente.nombre %></p>
             <p><span>Email: </span><%= cliente.email %></p>
             <p><span>Telefono: </span><%= cliente.telefono %></p>
             <p><span>Ciudad: </span><%= cliente.ciudad %></p>
             <p><span>Direccion: </span><%= cliente.direccion %></p>
             <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
+            <p><span>Inscripcion AFIP: </span>
+              <a href="/docs/inscripciones/<%= cliente.inscripcion_afip %>" target="_blank">
+                <%= cliente.inscripcion_afip %>
+              </a>
+            </p>
+            <p><span>Condicion AFIP: </span>
+              <a href="/docs/condicion/<%= cliente.condicion_afip %>" target="_blank">
+                <%= cliente.condicion_afip%>
+              </a>
+            </p>
+            <p><span>Formulario 005: </span>
+              <a href="/docs/formulario005/<%= cliente.formulario_005 %>" target="_blank">
+                <%= cliente.formulario_005 %>
+              </a>
+            </p>
+
+            <!-- BOTON PARA AGREGAR UNA PERSONA HABILITADA AL CLIENTE -->
             <div>
               <a href="/habilitados/crear?cliente=<%= cliente.id %>">Agregar habilitado</a>
             </div>

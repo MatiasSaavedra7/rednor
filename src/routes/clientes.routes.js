@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 
 const controller = require("../controllers/clientesController");
+const upload = require("../middlewares/multerMiddleware");
 
 const validateMiddleware = require("../middlewares/validateClienteMiddleware");
 
@@ -15,12 +16,29 @@ router.get("/detalle/:id", controller.detalleCliente);
 router.get("/crear", controller.create);
 
 // RUTA POR POST PARA PROCESAR LOS DATOS RECIBIDOS
-router.post("/crear", validateMiddleware, controller.store);
+router.post(
+  "/crear",
+  upload.fields([
+    { name: "inscripcion_afip", maxCount: 1 },
+    { name: "condicion_afip", maxCount: 1 },
+    { name: "formulario_005", maxCount: 1 },
+  ]),
+  validateMiddleware,
+  controller.store
+);
 
 // FORMULARIO PARA LA EDICION DE UN CLIENTE
 router.get("/editar/:id", controller.edit);
 
 // RUTA POR PUT PARA PROCESAR LOS DATOS RECIBIDOS
-router.put("/editar/:id", controller.edit);
+router.put("/editar/:id",
+  upload.fields([
+  { name: "inscripcion_afip", maxCount: 1 },
+  { name: "condicion_afip", maxCount: 1 },
+  { name: "formulario_005", maxCount: 1 },
+  ]),
+  validateMiddleware,
+  controller.update
+);
 
 module.exports = router;

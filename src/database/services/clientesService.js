@@ -35,4 +35,15 @@ module.exports = {
       return [];
     }
   },
+
+  updateByPK: async (data, id) => {
+    try {
+      return await db.Cliente.update(data, {
+        where: { id: id }
+      })
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
 };

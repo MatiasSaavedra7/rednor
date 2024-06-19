@@ -38,7 +38,17 @@ module.exports = {
       let errors = validationResult(req);
 
       if (errors.isEmpty()) {
-        let cliente = await clientesService.create(req.body);
+        let inscripcion_name = req.files["inscripcion_afip"] ? req.files["inscripcion_afip"][0].filename : null;
+        let condicion_name = req.files["condicion_afip"] ? req.files["condicion_afip"][0].filename : null;
+        let formulario_name = req.files["formulario_005"] ? req.files["formulario_005"][0].filename : null;
+
+        let data = {
+          ...req.body,
+          inscripcion_afip: inscripcion_name,
+          condicion_afip: condicion_name,
+          formulario_005: formulario_name,
+        }
+        let cliente = await clientesService.create(data);
         if (cliente) {
           res.redirect(`/clientes/detalle/${cliente.id}`);
         }
@@ -55,11 +65,47 @@ module.exports = {
     }
   },
 
-  edit: (req, res) => {
-    res.send("FORMULARIO PARA EDITAR LA INFORMACION DE UN CLIENTE");
+  edit: async (req, res) => {
+    try {
+      const cliente = await clientesService.getOneByPK(req.params.id);
+      const tipos = await tiposClientesService.getAll();
+      res.render("clientes/editarCliente", { cliente, tipos });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
-  update: (req, res) => {
-    res.send("ALMACENAR INFORMACION ACTUALIZADA DEL CLIENTE");
+  update: async (req, res) => {
+    try {
+      let errors = validationResult(req);
+
+      if (errors.isEmpty()) {
+        let inscripcion_name = req.files["inscripcion_afip"] ? req.files["inscripcion_afip"][0].filename : null;
+        let condicion_name = req.files["condicion_afip"] ? req.files["condicion_afip"][0].filename : null;
+        let formulario_name = req.files["formulario_005"] ? req.files["formulario_005"][0].filename : null;
+
+        let data = {
+          ...req.body,
+          inscripcion_afip: inscripcion_name,
+          condicion_afip: condicion_name,
+          formulario_005: formulario_name,
+        }
+        let cliente = await clientesService.updateByPK(data, req.params.id);
+        if (cliente) {
+          res.redirect(`/clientes/detalle/${req.params.id}`)
+        }
+      } else {
+        const cliente = await clientesService.getOneByPK(req.params.id);
+        const tipos = await tiposClientesService.getAll();
+        res.render("clientes/editarCliente", {
+          errors: errors.mapped(),
+          old: req.body,
+          cliente,
+          tipos
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
