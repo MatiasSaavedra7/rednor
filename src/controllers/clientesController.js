@@ -80,20 +80,22 @@ module.exports = {
       let errors = validationResult(req);
 
       if (errors.isEmpty()) {
-        let inscripcion_name = req.files["inscripcion_afip"] ? req.files["inscripcion_afip"][0].filename : null;
-        let condicion_name = req.files["condicion_afip"] ? req.files["condicion_afip"][0].filename : null;
-        let formulario_name = req.files["formulario_005"] ? req.files["formulario_005"][0].filename : null;
+        let cliente = await clientesService.getOneByPK(req.params.id);
 
+        let inscripcion_name = req.files["inscripcion_afip"] ? req.files["inscripcion_afip"][0].filename : cliente.inscripcion_afip;
+        let condicion_name = req.files["condicion_afip"] ? req.files["condicion_afip"][0].filename : cliente.condicion_afip;
+        let formulario_name = req.files["formulario_005"] ? req.files["formulario_005"][0].filename : cliente.formulario_005;
+        
         let data = {
           ...req.body,
           inscripcion_afip: inscripcion_name,
           condicion_afip: condicion_name,
           formulario_005: formulario_name,
         }
-        let cliente = await clientesService.updateByPK(data, req.params.id);
-        if (cliente) {
-          res.redirect(`/clientes/detalle/${req.params.id}`)
-        }
+        
+        await clientesService.updateByPK(data, req.params.id);
+
+        res.redirect(`/clientes/detalle/${req.params.id}`)
       } else {
         const cliente = await clientesService.getOneByPK(req.params.id);
         const tipos = await tiposClientesService.getAll();

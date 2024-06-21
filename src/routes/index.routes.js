@@ -8,6 +8,7 @@ const equipos = require("./equipos.routes.js");
 const alquileres = require("./alquileres.routes.js");
 const repuestos = require("./repuestos.routes.js");
 const taller = require("./taller.routes.js");
+const usuarios = require('./usuarios.routes.js');
 
 const pruebas = require("./pruebas.routes.js");
 
@@ -31,6 +32,9 @@ router.use("/repuestos", repuestos);
 
 // Taller routes
 router.use("/taller", taller);
+
+// Usuarios routes
+router.use("/usuarios", usuarios);
 
 // Pruebas routes
 router.use("/pruebas", pruebas);

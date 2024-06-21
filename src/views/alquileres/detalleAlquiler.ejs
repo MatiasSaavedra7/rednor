@@ -65,30 +65,32 @@
 
         </article>
 
-        <article class="detalle-alquiler-container" id="tabla">
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Fecha de Reajuste</th>
-                  <th>Minimo de Copias</th>
-                  <th>Precio por Copias</th>
-                  <th>Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% reajustes.forEach(reajuste => { %>
-                <tr>
-                  <td><%= reajuste.fecha_reajuste %></td>
-                  <td><%= reajuste.minimo_copias %></td>
-                  <td>$<%= reajuste.precio_copias %></td>
-                  <td>$<%= reajuste.precio %></td>
-                </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </article>
+        <% if (reajustes.length != 0) { %>
+          <article class="detalle-alquiler-container" id="tabla">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha de Reajuste</th>
+                    <th>Minimo de Copias</th>
+                    <th>Precio por Copias</th>
+                    <th>Precio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% reajustes.forEach(reajuste => { %>
+                  <tr>
+                    <td><%= reajuste.fecha_reajuste %></td>
+                    <td><%= reajuste.minimo_copias %></td>
+                    <td>$<%= reajuste.precio_copias %></td>
+                    <td>$<%= reajuste.precio %></td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        <% } %>
       </section>
       <!-- FIN CONTENIDO -->
     </main>
