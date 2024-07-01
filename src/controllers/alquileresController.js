@@ -2,7 +2,7 @@ const alquileresService = require("../database/services/alquileresService");
 const clientesService = require("../database/services/clientesService");
 const equiposService = require("../database/services/equiposService");
 const firmasService = require("../database/services/firmasService");
-const marcasService = require("../database/services/marcasService");
+// const marcasService = require("../database/services/marcasService");
 const reajustesService = require("../database/services/reajustesService");
 
 const { validationResult } = require("express-validator");
@@ -10,9 +10,18 @@ const { validationResult } = require("express-validator");
 module.exports = {
   alquileres: async (req, res) => {
     try {
-      let alquileres = await alquileresService.getAll();
-      let marcas = await marcasService.getAll();
-      res.render("alquileres/alquileres", { alquileres, marcas });
+      let alquileres = await alquileresService.getAllActivos();
+      // let marcas = await marcasService.getAll();
+      res.render("alquileres/alquileres", { alquileres });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  finalizados: async (req, res) => {
+    try {
+      let alquileres = await alquileresService.getAllInactivos()
+      res.render("alquileres/finalizados", { alquileres })
     } catch (error) {
       console.log(error);
     }

@@ -1,3 +1,6 @@
+const usuariosService = require("../database/services/usuariosService");
+const bcryptjs = require("bcryptjs");
+
 const { validationResult } = require("express-validator");
 
 module.exports = {
@@ -10,12 +13,25 @@ module.exports = {
     }
   },
 
-  registro: (req, res) => {
+  registro: async (req, res) => {
     try {
       let errors = validationResult(req);
 
       if (errors.isEmpty()) {
-        res.send("Usuario registrado con éxito!");
+        // Elimino del objeto body el atributo rePassword (solo sirve como verificacion de contraseña)
+        delete req.body.rePassword;
+
+        // A través de bcryptjs hasheo la password
+        let password = bcryptjs.hashSync(req.body.password, 10);
+
+        // Creo un objeto data con los valores a almacenar en la base de datos
+        let data = {
+          ...req.body,
+          password,
+          id_rol: 4,
+        };
+        await usuariosService.create(data);
+        res.redirect("/admin/usuarios");
       } else {
         res.render("usuarios/registroUsuario", {
           errors: errors.mapped(),
@@ -36,18 +52,41 @@ module.exports = {
     }
   },
 
-  login: (req, res) => {
+  login: async (req, res) => {
     try {
-      let errors = validationResult(req);
+      let usuario = await usuariosService.getOneByUser(req.body.usuario);
 
-      if (errors.isEmpty()) {
-        res.send("El usuario ha iniciado sesion con éxito!");
+      // Verifico si el usuario existe
+      if (usuario) {
+        // Comparo las contraseñas
+        let checkPassword = bcryptjs.compareSync(
+          req.body.password,
+          usuario.password
+        );
+
+        // Si la contraseña es correcta, logueo al usuario
+        if (checkPassword) {
+          // Guardo al usuario en session
+          req.session.userLogged = usuario;
+
+          // Redirijo a la home
+          return res.redirect("/");
+        } else {
+          res.send("El usuario EXISTE y la contraseña es INCORRECTA!!!");
+        }
       } else {
-        res.render("usuarios/loginUsuario", {
-          errors: errors.mapped(),
-          old: req.body,
-        });
+        res.send("El usuario NO EXISTE");
       }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  logout: async (req, res) => {
+    try {
+      req.session.destroy();
+      res.clearCookie("rednorCookieSession");
+      res.redirect("/usuarios/login") ;
     } catch (error) {
       console.log(error);
     }

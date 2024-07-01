@@ -62,12 +62,38 @@ module.exports = {
     }
   },
 
-  edit: (req, res) => {
-    let id = req.params.id;
-    res.send(`FORMULARIO PARA EDITAR LA INFORMACION DEL EQUIPO ${id}`);
+  edit: async (req, res) => {
+    try {
+      let equipo = await equiposService.getOneByPK(req.params.id);
+      let marcas = await marcasService.getAll();
+      let tipos = await tiposEquiposService.getAll();
+      res.render("equipos/editarEquipo", { equipo, marcas, tipos });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
   },
 
-  update: (req, res) => {
-    res.send("ALMACENAR INFORMACION ACTUALIZADA DEL EQUIPO");
+  update: async (req, res) => {
+    try {
+      let errors = validationResult(req);
+      if (errors.isEmpty()) {
+        await equiposService.updateByPK(req.params.id, req.body);
+        res.redirect(`/equipos/detalle/${req.params.id}`);
+      } else {
+        let equipo = await equiposService.getOneByPK(req.params.id);
+        let marcas = await marcasService.getAll();
+        let tipos = await tiposEquiposService.getAll();
+        res.render("equipos/editarEquipo", {
+          errors: errors.mapped(),
+          old: req.body,
+          equipo,
+          marcas,
+          tipos,
+        });
+      }
+    } catch (error) {
+      res.status(500).send(error)
+    }
   },
 };

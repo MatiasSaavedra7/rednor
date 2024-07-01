@@ -21,6 +21,6 @@ router.post("/crear", validateMiddleware, controller.store);
 router.get("/editar/:id", controller.edit);
 
 // RUTA POR PUT PARA PROCESAR LOS DATOS RECIBIDOS
-router.put("/editar/:id", controller.edit);
+router.put("/editar/:id", validateMiddleware, controller.update);
 
 module.exports = router;

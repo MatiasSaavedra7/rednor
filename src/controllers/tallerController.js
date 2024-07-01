@@ -35,9 +35,9 @@ module.exports = {
   almacenarIngreso: async (req, res) => {
     try {
       let data = {
-        id_equipo: req.params.id,
-        fecha_ingreso: Date.now(),
         ...req.body,
+        id_equipo: req.params.id,
+        fecha_ingreso: new Date(),
       };
 
       let ingreso = await ingresosService.create(data);

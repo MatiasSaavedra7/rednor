@@ -15,7 +15,7 @@ module.exports = {
     }
   },
 
-  getAllActivos: async () => {
+  getAllActivosConVencimiento: async () => {
     try {
       return await db.Alquiler.findAll({
         where: {
@@ -26,6 +26,32 @@ module.exports = {
       })
     } catch (error) {
       console.log(error);  
+    }
+  },
+
+  getAllActivos: async () => {
+    try {
+      return await db.Alquiler.findAll({
+        where: {
+          activo: true
+        },
+        include: ["cliente", "equipo"]
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAllInactivos: async () => {
+    try {
+      return await db.Alquiler.findAll({
+        where: {
+          activo: false
+        },
+        include: ["cliente", "equipo"]
+      })
+    } catch (error) {
+      console.log(error);
     }
   },
 

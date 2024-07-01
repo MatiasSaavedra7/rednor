@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/tables.css" />
+    <link rel="stylesheet" href="/css/alquileres.css" />
+    <script src="/js/alquileres.js"></script>
+    <title>REDNOR - Alquileres</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <div class="title">
+          <h1>CONTRATOS</h1>
+        </div>
+
+        <div class="panel-control">
+          <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Buscar..." />
+            <select name="select" id="select">
+              <option value="Cliente">Cliente</option>
+              <option value="Equipo">Equipo</option>
+            </select>
+          </div>
+          <!-- <a href="/alquileres/crear">+ CREAR</a> -->
+        </div>
+        <% if (alquileres) { %>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Equipo</th>
+                  <th>Firma</th>
+                  <th>Precio</th>
+                  <th>Vencimiento</th>
+                  <th>Detalles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% alquileres.forEach(alquiler => { %>
+                <tr>
+                  <td><%= alquiler.cliente.nombre %></td>
+                  <td>
+                    <%= alquiler.equipo.marca %>
+                    <%= alquiler.equipo.modelo %>
+                    <%= alquiler.equipo.numero_serie %>
+                  </td>
+                  <td><%= alquiler.firma %></td>
+                  <td>$<%= alquiler.precio %></td>
+                  <td>
+                    <% if (alquiler.fecha_baja != null) { %>
+                     <%= alquiler.fecha_baja %>
+                    <% } else { %>
+                      -
+                    <% } %>
+                  </td>
+                  <td>
+                    <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else  { %>
+          <div>Aún no hay contratos...</div>
+          <% } %>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

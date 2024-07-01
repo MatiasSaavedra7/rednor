@@ -3,7 +3,6 @@
   <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/formulario.css" />
-    <script src="/js/registroCliente.js"></script>
     <title>REDNOR - Registrar nuevo Cliente</title>
   </head>
   <body>
@@ -18,7 +17,7 @@
       <section class="main-content">
         <h1>INICIAR SESION</h1>
         <div class="form-container">
-          <form action="/usuarios/login" method="post">
+          <form action="/usuarios/login" method="POST">
             <div>
               <label for="usuario">Nombre de Usuario</label>
               <input type="usuario" name="usuario" id="usuario" value="<%= locals.old && old.usuario ? old.usuario : "" %>" />
@@ -34,6 +33,9 @@
               <p class="feedback-errors"><%= errors.password.msg %></p>
               <% } %>
             </div>
+            <% if (locals.errors && errors.login) { %>
+             <p class="feedback-errors"><%= errors.login.msg %></p>
+            <% } %>
             <br />
             <input type="submit" value="Iniciar Sesion" />
           </form>

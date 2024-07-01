@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: 'Lato', 'Arial', sans-serif;
+  font-family: "Lato", "Arial", sans-serif;
 }
 
 header {
@@ -36,29 +36,20 @@ header {
 }
 
 aside {
-  height: 100%;
+  /* border: 1px dashed red; */
+  height: 100vh;
   width: 80%;
   position: fixed;
-  overflow: auto;
   top: 0;
   left: -100%;
-  z-index: 99;
+  z-index: 1;
   transition: all 0.4s ease-in-out;
-  background: #3a7bd5; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to left,
-    #3a6073,
-    #3a7bd5
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to left,
-    #3a6073,
-    #3a7bd5
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 .logo-navbar-container {
   height: 100%;
+  position: relative;
 }
 
 .aside__logo {
@@ -66,14 +57,18 @@ aside {
 }
 
 .nav-bar {
-  height: 100%;
-  width: 100%;
+  /* border: 3px dashed white; */
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
   list-style: none;
-  /* overflow: auto; */
+  overflow: auto;
+}
+
+.nav-bar li {
+  margin-top: 15px;
 }
 
 .nav-bar a {
@@ -81,7 +76,38 @@ aside {
   font-size: 1.5rem;
   text-transform: uppercase;
   text-decoration: none;
+  text-align: left;
   color: white;
+}
+
+.nav-bar .dropdown-btn {
+  cursor: pointer;
+}
+
+.dropdown-container {
+  display: none;
+}
+
+.dropdown-container a {
+  /* border: 1px dashed red; */
+  font-size: 16px;
+  text-align: left;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.dropdown-container .fa-caret-right {
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+.dropdown-btn .fa-caret-down {
+  float: right;
+  padding-left: 12px;
+}
+
+.fa-caret-right {
+  float: left;
 }
 
 .nav-bar .search-item {
@@ -113,9 +139,53 @@ aside {
   color: #fdfdfd;
 }
 
+.user-info {
+  /* border: 1px dashed red; */
+  position: absolute;
+  width: 100%;
+  bottom: 3rem;
+}
+
+.user-info p, a {
+  /* border: 1px dashed blue; */
+  display: block;
+  color: white;
+  font-size: 1.10rem;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+.user-info i {
+  margin-left: 5px;
+}
+
+.dropdown-btn-logout {
+  position: relative;
+}
+
+.dropdown-logout {
+  display: none;
+  background-color: #3a6073;
+  padding: 5px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+}
+
+.user-info:hover .dropdown-logout {
+  display: block;
+}
+
 .visible {
   left: 0;
   transition: all 0.4s ease-in-out;
+}
+
+.active {
+  background-color: green;
 }
 
 /* MEDIA QUERIES */
@@ -129,9 +199,6 @@ aside {
   }
 
   header {
-    width: 80%;
-    position: fixed;
-    right: 0;
     display: none;
   }
 
@@ -147,22 +214,22 @@ aside {
   }
 
   .logo-navbar-container {
+    /* border: 1px dashed red; */
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
   }
 
   .aside__logo {
+    /* border: 1px dashed red; */
     display: block;
-    width: 100%;
     text-align: center;
+    margin-top: 20px;
   }
 
   .aside__logo a img {
-    width: 80%;
-    margin-top: 20px;
+    width: 70%;
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.6);
@@ -170,21 +237,20 @@ aside {
   }
 
   .nav-bar {
-    justify-content: space-evenly;
-    align-items: start;
+    padding: 0 10px;
+    margin-top: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 
   .nav-bar li {
     width: 100%;
   }
-
+  
   .nav-bar a {
-    text-decoration: none;
-    font-size: 1.5rem;
-    padding: 10px;
-    margin: 0 15px;
+    font-size: 1.25rem;
+    padding: 5px 20px;
     border-radius: 10px;
-    color: white;
   }
 
   .nav-bar .search-item {
@@ -193,7 +259,17 @@ aside {
 
   .nav-bar a:hover {
     background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s;
+  }
+
+  .dropdown-container a {
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .user-info {
+    /* border: 1px dashed red; */
+    padding: 20px;
+    bottom: 15px;
   }
 
   .main-content {

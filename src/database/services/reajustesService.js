@@ -8,6 +8,7 @@ module.exports = {
     try {
       return db.Reajuste.findAll({
         include: ["alquiler"],
+        order: [["id", "DESC"]]
       });
     } catch (error) {
       console.log(error);
@@ -19,6 +20,7 @@ module.exports = {
     try {
       return db.Reajuste.findAll({
         include: ["alquiler"],
+        order: [["id", "DESC"]],
         where: field,
       })
     } catch (error) {

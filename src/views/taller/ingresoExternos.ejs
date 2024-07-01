@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/ingreso.css">
+    <link rel="stylesheet" href="/css/formulario.css" />
+    <title>REDNOR Taller - Informar Ingreso</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <article>
+          <div class="form-ingreso-container">
+            <p>Informe de Ingreso al Taller</p>
+            <h1></h1>
+            <form action="/taller/externos/ingresos" method="post">
+              <div>
+                <label for="marca">Marca</label>
+                <select name="marca" id="marca">
+                  <option value="" selected disabled hidden>
+                    Elegir una opcion
+                  </option>
+                  <% marcas.forEach(marca => { %>
+                    <option value="<%= marca.nombre %>"><%= marca.nombre %></option>
+                    <% }) %>
+                </select>
+              </div>
+
+              <div>
+                <label for="modelo">Modelo</label>
+                <input type="text" name="modelo" id="modelo">
+              </div>
+
+              <div>
+                <label for="numero_serie">Numero de Serie</label>
+                <input type="text" name="numero_serie" id="numero_serie">
+              </div>
+
+              <div>
+                <label for="motivo">Motivo del Ingreso: </label>
+                <input type="text" name="motivo" id="motivo">
+              </div>
+
+              <div>
+                <label for="descripcion">Descripcion: </label>
+                <textarea name="descripcion" id="descripcion"></textarea>
+              </div>
+              <input type="submit" />
+            </form>
+          </div>
+        </article>
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>

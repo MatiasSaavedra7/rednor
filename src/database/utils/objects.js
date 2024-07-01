@@ -1,3 +1,11 @@
+function Usuario(data) {
+  this.nombre = data.nombre;
+  this.apellido = data.apellido;
+  this.usuario = data.usuario;
+  this.password = data.password;
+  this.id_rol = data.id_rol
+}
+
 function Cliente(data) {
   this.nombre = data.nombre;
   this.id_tipo_cliente = data.id_tipo_cliente;
@@ -72,4 +80,20 @@ function Egreso(data) {
   this.costo = data.costo;
 }
 
-module.exports = { Cliente, Habilitado, Equipo, Alquiler, Reajuste, Cartucho, Ingreso, Egreso };
+function IngresoExterno(data) {
+  this.fecha_ingreso = data.fecha_ingreso;
+  this.marca = data.marca;
+  this.modelo = data.modelo;
+  this.numero_serie = data.numero_serie;
+  this.motivo = data.motivo;
+  this.descripcion = data.descripcion;
+}
+
+function EgresoExterno(data) {
+  this.id_ingreso_externo = data.id_ingreso_externo;
+  this.fecha_egreso = data.fecha_egreso;
+  this.detalle_reparacion = data.detalle_reparacion;
+  this.costo = data.costo;
+}
+
+module.exports = { Usuario, Cliente, Habilitado, Equipo, Alquiler, Reajuste, Cartucho, Ingreso, Egreso, IngresoExterno, EgresoExterno };

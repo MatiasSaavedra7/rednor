@@ -4,17 +4,22 @@
     <i class="fa-solid fa-xmark"></i>
   </span>
 
-  <!-- LOGO -->
   <div class="logo-navbar-container">
+    <!-- LOGO -->
     <div class="aside__logo">
       <a href="/">
-        <img src="/images/RednorLogo.png" alt="Logo de Rednor">
+        <img src="/images/RednorLogo.png" alt="Logo de Rednor" />
       </a>
     </div>
     <!-- FIN LOGO -->
 
-    <!-- BARRA DE NAVEGACION -->
+    <!-- MENU DE NAVEGACION -->
     <ul class="nav-bar">
+      <% if (locals.isLogged) { %> <% if (locals.userLogged.id_rol === 1) { %>
+      <li>
+        <a href="/admin/usuarios"><i class="fa-solid fa-user"></i> Admin</a>
+      </li>
+      <% } %> <% } %>
       <li>
         <a href="/clientes"><i class="fa-solid fa-user"></i> Clientes</a>
       </li>
@@ -22,19 +27,54 @@
         <a href="/equipos"><i class="fa-solid fa-print"></i> Equipos</a>
       </li>
       <li>
-        <a href="/alquileres"><i class="fa-solid fa-clipboard"></i> Alquileres</a>
+        <a class="dropdown-btn">
+          <i class="fa-solid fa-clipboard"></i> Alquileres
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container">
+          <a href="/alquileres"><i class="fa fa-caret-right"></i>Vigentes</a>
+          <a href="/alquileres/finalizados"
+            ><i class="fa fa-caret-right"></i>Vencidos</a
+          >
+        </div>
       </li>
       <li>
-        <a href="/repuestos"><i class="fa-solid fa-screwdriver-wrench"></i> Repuestos</a>
+        <a href="/repuestos"
+          ><i class="fa-solid fa-screwdriver-wrench"></i> Repuestos</a
+        >
       </li>
       <li>
-        <a href="/taller"><i class="fa-solid fa-screwdriver-wrench"></i> Taller</a>
+        <a class="dropdown-btn">
+          <i class="fa-solid fa-screwdriver-wrench"></i> Taller
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container">
+          <a href="/taller"
+            ><i class="fa fa-caret-right"></i> Equipos propios</a
+          >
+          <a href="/taller/externos"
+            ><i class="fa fa-caret-right"></i> De terceros</a
+          >
+        </div>
       </li>
       <li>
         <a href="#"><i class="fa-solid fa-circle-info"></i> Otro</a>
       </li>
     </ul>
-    <!-- FIN BARRA DE NAVEGACION -->
+    <!-- FIN MENU DE NAVEGACION -->
+
+    <!-- INFORMACION DE USUARIO -->
+    <% if (locals.isLogged) { %>
+    <div class="user-info">
+      <div class="dropdown-logout">
+        <a href="/usuarios/logout">Logout</a>
+      </div>
+      <p class="dropdown-btn-logout">
+        Bienvenido <%= locals.userLogged.nombre %>!<i class="fa fa-caret-up"></i>
+      </p>
+    </div>
+    <% } %>
+    <!-- FIN INFORMACION DE USUARIO -->
   </div>
 </aside>
 <!-- FIN ASIDE -->

@@ -12,7 +12,7 @@ function stringToDate(dateString) {
 }
 
 async function controlVencimientos(req, res, next) {
-  let alquileres = await alquileresService.getAllActivos();
+  let alquileres = await alquileresService.getAllActivosConVencimiento();
 
   let fechaHoy = new Date();
 
@@ -20,16 +20,18 @@ async function controlVencimientos(req, res, next) {
     // let timestampFechaBaja = Date.parse(alquileres[i].fecha_baja);
     // let dateFechaBaja = new Date(timestampFechaBaja);
 
-    let dateFechaBaja = stringToDate(alquileres[i].fecha_baja)
+    let dateFechaBaja = stringToDate(alquileres[i].fecha_baja);
 
     if (dateFechaBaja < fechaHoy) {
       let data = {
         activo: false,
       };
+
       // Finalizo el alquiler
-      let alquiler = await alquileresService.updateByPK(data, alquileres[i].id);
+      await alquileresService.updateByPK(data, alquileres[i].id);
+
       // Actualizo el estado del equipo a Disponible
-      let equipo = await equiposService.setEstadoDisponible(alquileres[i].id_equipo);
+      await equiposService.setEstadoDisponible(alquileres[i].id_equipo);
     }
   }
 

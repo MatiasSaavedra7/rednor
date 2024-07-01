@@ -6,7 +6,11 @@ const controller = require("../controllers/alquileresController");
 const validateMiddleware = require("../middlewares/validateAlquilerMiddleware");
 const validateReajusteMiddleware = require("../middlewares/validateReajusteAlquiler");
 
+// Listado de alquileres activos
 router.get("/", controller.alquileres);
+
+// Listado de alquileres vencidos
+router.get("/finalizados", controller.finalizados);
 
 router.get("/detalles/:id", controller.detalleAlquiler);
 

@@ -31,7 +31,7 @@
                   Elegir una opcion
                 </option>
                 <% equipos.forEach(equipo => { %>
-                <option value="<%= equipo.id %>">
+                <option value="<%= equipo.id %>" <%= locals.old && old.id_equipo == equipo.id ? "selected" : "" %>>
                   <%= equipo.marca%> <%= equipo.modelo %> - <%=
                   equipo.numero_serie %>
                 </option>
@@ -65,7 +65,9 @@
                   Elegir una opcion
                 </option>
                 <% firmas.forEach(firma => { %>
-                <option value="<%= firma.nombre %>"><%= firma.nombre %></option>
+                <option value="<%= firma.nombre %>" <%= locals.old && old.firma == firma.nombre ? "selected" : "" %>>
+                  <%= firma.nombre %>
+                </option>
                 <% }) %>
               </select>
               <% if (locals.errors && errors.firma) { %>

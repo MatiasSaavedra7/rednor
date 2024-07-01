@@ -168,4 +168,12 @@ module.exports = {
       console.log(error);
     }
   },
+
+  updateByPK: async (id, data) => {
+    try {
+      return db.Equipo.update(new Equipo(data), { where: { id: id } })
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

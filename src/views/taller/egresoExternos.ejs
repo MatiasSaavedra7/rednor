@@ -18,15 +18,11 @@
         <article>
           <div class="form-egreso-container">
             <p>Informe de Egreso</p>
-            <h1>
-              <%= equipo.marca %>
-              <%= equipo.modelo %> - 
-              <%= equipo.numero_serie %>
-            </h1>
-            <form action="/taller/egreso/<%= ingreso.id %>" method="post">
+            <h1></h1>
+            <form action="/taller/externos/egresos/<%= ingreso.id %>" method="post">
               <div>
-                <label for="id_ingreso">ID Ingreso</label>
-                <input type="number" name="id_ingreso" id="id_ingreso" value="<%= ingreso.id %>" disabled>
+                <label for="id_ingreso_externo">ID Ingreso</label>
+                <input type="number" name="id_ingreso_externo" id="id_ingreso_externo" value="<%= ingreso.id %>" disabled>
               </div>
 
               <div>

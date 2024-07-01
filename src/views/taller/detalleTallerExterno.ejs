@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/detalleTaller.css">
+    <title>REDNOR - Detalle</title>
+  </head>
+  <body>
+    <%- include('../partials/header.ejs') %>
+    <!-- MAIN -->
+    <main class="main-container">
+      <!-- ASIDE -->
+      <%- include('../partials/aside.ejs') %>
+      <!-- FIN ASIDE -->
+
+      <!-- CONTENIDO -->
+      <section class="main-content">
+        <h1>
+          <%= ingreso.marca %>
+          <%= ingreso.modelo %>
+          <%= ingreso.numero_serie %>
+        </h1>
+        <article>
+          <h4>Fecha de Ingreso: <%= ingreso.fecha_ingreso %> </h4>
+          <h3><%= ingreso.motivo %></h3>
+          <h3>Descripcion</h3>
+          <p>
+            <%= ingreso.descripcion %>
+          </p>
+        </article>
+        <hr>
+        <% if (egreso) { %>
+          <article>
+            <h4>Fecha de Egreso: <%= egreso.fecha_egreso %></h4>
+            <h3>Detalles de la Reparacion</h3>
+            <p>
+              <%= egreso.detalle_reparacion %>
+            </p>
+            <h3>Costo: $<%= egreso.costo %></h3>
+          </article>
+        <% } %>
+
+        <% if (!egreso) { %>
+          <a href="/taller/externos/egresos/<%= ingreso.id %>">Informar Egreso</a> <br>
+        <% } %>
+        <!-- <a href="#">Volver al Listado</a> -->
+      </section>
+      <!-- FIN CONTENIDO -->
+    </main>
+    <!-- FIN MAIN -->
+  </body>
+</html>
