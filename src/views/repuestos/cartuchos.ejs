@@ -29,21 +29,21 @@
           <table>
               <thead>
                   <tr>
-                      <th>Marca</th>
-                      <th>Etiqueta</th>
+                      <th>Nombre</th>
+                      <th>Precio</th>
                       <th>SKU</th>
                       <th>Stock</th>
-                      <th>Categoria</th>
+                      <th>Detalles</th>
                   </tr>
               </thead>
               <tbody>
-                  <% cartuchos.forEach(cartucho => { %>
+                  <% repuestos.forEach(repuesto => { %>
                       <tr>
-                          <td><%= cartucho.nombre %></td>
-                          <td><%= cartucho.etiqueta %></td>
-                          <td><%= cartucho.SKU %></td>
-                          <td><%= cartucho.stock %></td>
-                          <td><%= cartucho.categoria_cartucho.nombre %></td>
+                          <td><%= repuesto.name %></td>
+                          <td><%= repuesto.price %></td>
+                          <td><%= repuesto.sku %></td>
+                          <td><%= repuesto.stock_quantity %></td>
+                          <td><a href="<%= repuesto.permalink %>" target="_blank">Ver más...</a></td>
                       </tr>
                   <% }) %>
               </tbody>

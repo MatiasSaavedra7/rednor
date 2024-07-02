@@ -58,7 +58,7 @@
         </div>
       </li>
       <li>
-        <a href="#"><i class="fa-solid fa-circle-info"></i> Otro</a>
+        <a href="/usuarios/login"><i class="fa-solid fa-circle-info"></i> Otro</a>
       </li>
     </ul>
     <!-- FIN MENU DE NAVEGACION -->
@@ -66,9 +66,7 @@
     <!-- INFORMACION DE USUARIO -->
     <% if (locals.isLogged) { %>
     <div class="user-info">
-      <div class="dropdown-logout">
-        <a href="/usuarios/logout">Logout</a>
-      </div>
+      <a class="dropdown-logout" href="/usuarios/logout">Logout</a>
       <p class="dropdown-btn-logout">
         Bienvenido <%= locals.userLogged.nombre %>!<i class="fa fa-caret-up"></i>
       </p>

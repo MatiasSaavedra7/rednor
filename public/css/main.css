@@ -58,6 +58,7 @@ aside {
 
 .nav-bar {
   /* border: 3px dashed white; */
+  position: relative;
   margin-top: 30px;
   margin-left: 20px;
   margin-right: 50px;
@@ -80,9 +81,9 @@ aside {
   color: white;
 }
 
-.nav-bar .dropdown-btn {
+/* .nav-bar .dropdown-btn {
   cursor: pointer;
-}
+} */
 
 .dropdown-container {
   display: none;
@@ -144,9 +145,10 @@ aside {
   position: absolute;
   width: 100%;
   bottom: 3rem;
+  transition: 0.5s all;
 }
 
-.user-info p, a {
+.user-info p {
   /* border: 1px dashed blue; */
   display: block;
   color: white;
@@ -166,13 +168,16 @@ aside {
 
 .dropdown-logout {
   display: none;
-  background-color: #3a6073;
-  padding: 5px;
-  border-radius: 10px;
+  background-color: white;
+  color: #3a7bd5;
+  text-decoration: none;
+  text-align: center;
   text-transform: uppercase;
   font-weight: bolder;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 5px;
+  border-radius: 10px;
   margin-bottom: 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
 }
 
 .user-info:hover .dropdown-logout {
