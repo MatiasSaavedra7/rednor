@@ -1,70 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head.ejs') %>
+    <%- include('../partials/AdminLTEHead.ejs') %>
     <link rel="stylesheet" href="/css/formulario.css">
     <title>REDNOR</title>
   </head>
-  <body>
-    <%- include('../partials/header.ejs') %>
-    <!-- MAIN -->
-    <main class="main-container">
-      <!-- ASIDE -->
-      <%- include('../partials/aside.ejs') %>
-      <!-- FIN ASIDE -->
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../partials/navbar.ejs') %>
+    
+      <!-- Main Sidebar -->
+      <%- include('../partials/mainSidebar.ejs') %>
+  
+      <!-- Control Sidebar -->
+       <%- include('../partials/controlSidebar.ejs') %>
+  
+      <!-- MAIN -->
+      <main class="content-wrapper">
+        <!-- CONTENIDO -->
+        <section class="main-content">
+          <div class="form-container">
+            <h1>Registrar persona habilitada al cliente: <%= cliente.nombre %> (ID: <%= cliente.id %>) </h1>
+            <br>
+            <form action="/habilitados/crear?cliente=<%= cliente.id %>" method="post">
+              <div>
+                <label for="nombre">Nombre: </label>
+                <input type="text" name="nombre" id="nombre" value="<%= locals.old && old.nombre ? old.nombre : "" %>">
+                <% if (locals.errors && errors.nombre) { %>
+                 <p class="feedback-errors"><%= errors.nombre.msg %></p>
+                <% } %>
+              </div>
+  
+              <div>
+                <label for="telefono">Telefono: </label>
+                <input type="number" name="telefono" id="telefono" value="<%= locals.old && old.telefono ? old.telefono : "" %>">
+                <% if (locals.errors && errors.telefono) { %>
+                 <p class="feedback-errors"><%= errors.telefono.msg %></p>
+                <% } %>
+              </div>
+  
+              <div>
+                <label for="email">Email: </label>
+                <input type="email" name="email" id="email" value="<%= locals.old && old.email ? old.email : "" %>">
+                <% if (locals.errors && errors.email) { %>
+                 <p class="feedback-errors"><%= errors.email.msg %></p>
+                <% } %>
+              </div>
+  
+              <div>
+                <label for="puesto">Puesto: </label>
+                <input type="text" name="puesto" id="puesto" value="<%= locals.old && old.puesto ? old.puesto : "" %>">
+                <% if (locals.errors && errors.puesto) { %>
+                 <p class="feedback-errors"><%= errors.puesto.msg %></p>
+                <% } %>
+              </div>
+              
+              <div>
+                <label for="ubicacion">Ubicacion: </label>
+                <input type="text" name="ubicacion" id="ubicacion" value="<%= locals.old && old.ubicacion ? old.ubicacion : "" %>">
+                <% if (locals.errors && errors.ubicacion) { %>
+                 <p class="feedback-errors"><%= errors.ubicacion.msg %></p>
+                <% } %>
+              </div>
+              <br> <br>
+              <input type="submit">
+            </form>
+          </div>
+        </section>
+        <!-- FIN CONTENIDO -->
+      </main>
+      <!-- FIN MAIN -->
+    </div>
 
-      <!-- CONTENIDO -->
-      <section class="main-content">
-        <div class="form-container">
-          <h1>Registrar persona habilitada al cliente: <%= cliente.nombre %> (ID: <%= cliente.id %>) </h1>
-          <br>
-          <form action="/habilitados/crear?cliente=<%= cliente.id %>" method="post">
-            <div>
-              <label for="nombre">Nombre: </label>
-              <input type="text" name="nombre" id="nombre" value="<%= locals.old && old.nombre ? old.nombre : "" %>">
-              <% if (locals.errors && errors.nombre) { %>
-               <p class="feedback-errors"><%= errors.nombre.msg %></p>
-              <% } %>
-            </div>
-
-            <div>
-              <label for="telefono">Telefono: </label>
-              <input type="number" name="telefono" id="telefono" value="<%= locals.old && old.telefono ? old.telefono : "" %>">
-              <% if (locals.errors && errors.telefono) { %>
-               <p class="feedback-errors"><%= errors.telefono.msg %></p>
-              <% } %>
-            </div>
-
-            <div>
-              <label for="email">Email: </label>
-              <input type="email" name="email" id="email" value="<%= locals.old && old.email ? old.email : "" %>">
-              <% if (locals.errors && errors.email) { %>
-               <p class="feedback-errors"><%= errors.email.msg %></p>
-              <% } %>
-            </div>
-
-            <div>
-              <label for="puesto">Puesto: </label>
-              <input type="text" name="puesto" id="puesto" value="<%= locals.old && old.puesto ? old.puesto : "" %>">
-              <% if (locals.errors && errors.puesto) { %>
-               <p class="feedback-errors"><%= errors.puesto.msg %></p>
-              <% } %>
-            </div>
-            
-            <div>
-              <label for="ubicacion">Ubicacion: </label>
-              <input type="text" name="ubicacion" id="ubicacion" value="<%= locals.old && old.ubicacion ? old.ubicacion : "" %>">
-              <% if (locals.errors && errors.ubicacion) { %>
-               <p class="feedback-errors"><%= errors.ubicacion.msg %></p>
-              <% } %>
-            </div>
-            <br> <br>
-            <input type="submit">
-          </form>
-        </div>
-      </section>
-      <!-- FIN CONTENIDO -->
-    </main>
-    <!-- FIN MAIN -->
+    <%- include('../partials/AdminLTEScripts.ejs') %>
   </body>
 </html>

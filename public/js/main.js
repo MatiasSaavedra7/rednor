@@ -11,8 +11,10 @@ window.addEventListener("load", () => {
       let dropdownContent = this.nextElementSibling;  
       if (dropdownContent.style.display === "block") {
         dropdownContent.style.display = "none";
+        dropdownContent.classList.toggle("dropdown-visible")
       } else {
         dropdownContent.style.display = "block";
+        dropdownContent.classList.toggle("dropdown-visible")
       }
     });
   }

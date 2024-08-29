@@ -12,20 +12,10 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background: #3a7bd5; */
-  background: -webkit-linear-gradient(
-    to left,
-    #3a6073,
-    #3a7bd5
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to left,
-    #3a6073,
-    #3a7bd5
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-color: #3a7bd5;
 }
 
-.header__logo a img {
+.header-logo a img {
   display: block;
   width: 125px;
   padding: 5px;
@@ -36,40 +26,39 @@ header {
 }
 
 aside {
-  /* border: 1px dashed red; */
-  height: 100vh;
+  /* border: 1px solid red; */
+  height: 100%;
   width: 80%;
+  overflow-y: auto;
   position: fixed;
   top: 0;
   left: -100%;
   z-index: 1;
   transition: all 0.4s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 1);
 }
 
-.logo-navbar-container {
+.logo-navbar-user-container {
   height: 100%;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.aside__logo {
+.logo {
   display: none;
 }
 
 .nav-bar {
-  /* border: 3px dashed white; */
-  position: relative;
-  margin-top: 30px;
-  margin-left: 20px;
-  margin-right: 50px;
-  display: flex;
-  flex-direction: column;
+  /* border: 1px dashed white; */
+  width: 100%;
   list-style: none;
-  overflow: auto;
+  margin-top: 30px;
+  padding: 0px 25px 0px 10px;
 }
 
 .nav-bar li {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .nav-bar a {
@@ -81,12 +70,21 @@ aside {
   color: white;
 }
 
-/* .nav-bar .dropdown-btn {
+.nav-bar .dropdown-btn {
   cursor: pointer;
-} */
+}
 
 .dropdown-container {
   display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.dropdown-container.dropdown-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .dropdown-container a {
@@ -116,8 +114,7 @@ aside {
 }
 
 .open-menu,
-.close-menu,
-.search-icon {
+.close-menu {
   font-size: 1.5rem;
   text-align: center;
   cursor: pointer;
@@ -132,57 +129,52 @@ aside {
   right: 0;
 }
 
-.search-icon {
-  margin: 0;
-}
-
-.search-icon a {
-  color: #fdfdfd;
-}
-
-.user-info {
+.user-dropdown {
   /* border: 1px dashed red; */
-  position: absolute;
-  width: 100%;
-  bottom: 3rem;
-  transition: 0.5s all;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
-.user-info p {
-  /* border: 1px dashed blue; */
-  display: block;
+.user-dropdown button {
+  border: none;
+  background-color: inherit;
   color: white;
-  font-size: 1.10rem;
-  text-decoration: none;
-  text-align: center;
+  font-size: 1.25rem;
+  padding: 10px;
   cursor: pointer;
 }
 
-.user-info i {
-  margin-left: 5px;
-}
-
-.dropdown-btn-logout {
-  position: relative;
-}
-
-.dropdown-logout {
-  display: none;
-  background-color: white;
+.user-dropdown-content {
+  /* border: 1px dashed blue; */
+  width: 80%;
+  margin: 0 auto;
+  background-color: whitesmoke;
   color: #3a7bd5;
-  text-decoration: none;
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: bolder;
-  padding: 5px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+  position: absolute;
+  top: -80px;
+  left: 30px;
+  z-index: 1;
+  display: none;
 }
 
-.user-info:hover .dropdown-logout {
+.user-dropdown-content-logout { top: -40px; }
+
+.user-dropdown-content a {
   display: block;
+  text-decoration: none;
+  padding: 10px;
+  color: black;
+  font-weight: bolder;
 }
+
+.user-dropdown:hover .user-dropdown-content {
+  display: block;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.user-dropdown-content a:hover { background-color: #ddd; }
 
 .visible {
   left: 0;
@@ -218,22 +210,14 @@ aside {
     background-image: url("/images/BlueBackground.webp");
   }
 
-  .logo-navbar-container {
-    /* border: 1px dashed red; */
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .aside__logo {
+  .logo {
     /* border: 1px dashed red; */
     display: block;
     text-align: center;
     margin-top: 20px;
   }
 
-  .aside__logo a img {
+  .logo a img {
     width: 70%;
     padding: 10px;
     border-radius: 10px;
@@ -243,9 +227,7 @@ aside {
 
   .nav-bar {
     padding: 0 10px;
-    margin-top: 10px;
-    margin-left: 0px;
-    margin-right: 0px;
+    margin: 30px 0px 0px 0px;
   }
 
   .nav-bar li {
@@ -269,12 +251,6 @@ aside {
   .dropdown-container a {
     font-size: 16px;
     text-align: left;
-  }
-
-  .user-info {
-    /* border: 1px dashed red; */
-    padding: 20px;
-    bottom: 15px;
   }
 
   .main-content {

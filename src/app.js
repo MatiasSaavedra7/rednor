@@ -35,7 +35,7 @@ app.use(methodOverride("_method"));
 // EXPRESS-SESSION
 app.use(
   session({
-    name: "rednorCookieSession",
+    name: "rednor_secret",
     secret: "rednor secret",
     resave: false,
     saveUninitialized: false,

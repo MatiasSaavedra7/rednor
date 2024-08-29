@@ -1,65 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head.ejs') %>
+    <%- include('../partials/AdminLTEHead.ejs') %>
     <link rel="stylesheet" href="/css/tables.css" />
     <link rel="stylesheet" href="/css/taller.css" />
     <title>REDNOR</title>
   </head>
-  <body>
-    <%- include('../partials/header.ejs') %>
-    <!-- MAIN -->
-    <main class="main-container">
-      <!-- ASIDE -->
-      <%- include('../partials/aside.ejs') %>
-      <!-- FIN ASIDE -->
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../partials/navbar.ejs') %>
+        
+      <!-- Main Sidebar -->
+      <%- include('../partials/mainSidebar.ejs') %>
+  
+      <!-- Control Sidebar -->
+       <%- include('../partials/controlSidebar.ejs') %>
+      <!-- MAIN -->
+      <main class="content-wrapper">
+        <!-- CONTENIDO -->
+        <section class="main-content">
+          <article class="taller">
+            <div class="title">
+              <h2>EQUIPOS EN EL TALLER</h2>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Equipo</th>
+                    <th>Ingreso</th>
+                    <th>Egreso</th>
+                    <th>Detalles</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% ingresos.forEach(ingreso => { %>
+                  <tr>
+                    <td>
+                      <%= ingreso.equipo.marca %>
+                      <%= ingreso.equipo.modelo %>
+                      <%= ingreso.equipo.numero_serie %>
+                    </td>
+                    <td>
+                      <%= ingreso.fecha_ingreso %>
+                    </td>
+                    <td>
+                      <% if (ingreso.egreso) { %>
+                        <%= ingreso.egreso.fecha_egreso %>
+                      <% } else { %>
+                        -
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/taller/detalle/<%= ingreso.id %>">Ver más...</a>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+        <!-- FIN CONTENIDO -->
+      </main>
+      <!-- FIN MAIN -->
+    </div>
 
-      <!-- CONTENIDO -->
-      <section class="main-content">
-        <article class="taller">
-          <div class="title">
-            <h2>EQUIPOS EN EL TALLER</h2>
-          </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Equipo</th>
-                  <th>Ingreso</th>
-                  <th>Egreso</th>
-                  <th>Detalles</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% ingresos.forEach(ingreso => { %>
-                <tr>
-                  <td>
-                    <%= ingreso.equipo.marca %>
-                    <%= ingreso.equipo.modelo %>
-                    <%= ingreso.equipo.numero_serie %>
-                  </td>
-                  <td>
-                    <%= ingreso.fecha_ingreso %>
-                  </td>
-                  <td>
-                    <% if (ingreso.egreso) { %>
-                      <%= ingreso.egreso.fecha_egreso %>
-                    <% } else { %>
-                      -
-                    <% } %>
-                  </td>
-                  <td>
-                    <a href="/taller/detalle/<%= ingreso.id %>">Ver más...</a>
-                  </td>
-                </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-      <!-- FIN CONTENIDO -->
-    </main>
-    <!-- FIN MAIN -->
+    <%- include('../partials/AdminLTEScripts.ejs') %>
   </body>
 </html>

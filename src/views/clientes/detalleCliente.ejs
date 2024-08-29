@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/tables.css">
+    <%- include('../partials/AdminLTEHead.ejs') %>
+    <link rel="stylesheet" href="/css/tables.css" />
     <link rel="stylesheet" href="/css/detalleCliente.css" />
     <title>REDNOR - Detalle del Cliente <%= cliente.nombre %></title>
   </head>
-  <body>
-    <%- include('../partials/header.ejs') %>
-    <!-- MAIN -->
-    <main class="main-container">
-      <!-- ASIDE -->
-      <%- include('../partials/aside.ejs') %>
-      <!-- FIN ASIDE -->
-
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../partials/navbar.ejs') %>
+  
+      <!-- Main Sidebar -->
+      <%- include('../partials/mainSidebar.ejs') %>
+  
+      <!-- Control Sidebar -->
+      <%- include('../partials/controlSidebar.ejs') %>
+  
       <!-- CONTENIDO -->
-      <section class="main-content">
+      <main class="content-wrapper">
         <div class="client-container">
           <h3>Informacion del Cliente</h3>
           <div>
@@ -28,71 +31,86 @@
             <p><span>Ciudad: </span><%= cliente.ciudad %></p>
             <p><span>Direccion: </span><%= cliente.direccion %></p>
             <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
-            <p><span>Inscripcion AFIP: </span>
-              <a href="/docs/inscripciones/<%= cliente.inscripcion_afip %>" target="_blank">
+            <p>
+              <span>Inscripcion AFIP: </span>
+              <a
+                href="/docs/inscripciones/<%= cliente.inscripcion_afip %>"
+                target="_blank"
+              >
                 <%= cliente.inscripcion_afip %>
               </a>
             </p>
-            <p><span>Condicion AFIP: </span>
-              <a href="/docs/condicion/<%= cliente.condicion_afip %>" target="_blank">
+            <p>
+              <span>Condicion AFIP: </span>
+              <a
+                href="/docs/condicion/<%= cliente.condicion_afip %>"
+                target="_blank"
+              >
                 <%= cliente.condicion_afip%>
               </a>
             </p>
-            <p><span>Formulario 005: </span>
-              <a href="/docs/formulario005/<%= cliente.formulario_005 %>" target="_blank">
+            <p>
+              <span>Formulario 005: </span>
+              <a
+                href="/docs/formulario005/<%= cliente.formulario_005 %>"
+                target="_blank"
+              >
                 <%= cliente.formulario_005 %>
               </a>
             </p>
-
+  
             <!-- BOTON PARA AGREGAR UNA PERSONA HABILITADA AL CLIENTE -->
             <div>
-              <a href="/habilitados/crear?cliente=<%= cliente.id %>">Agregar habilitado</a>
+              <a href="/habilitados/crear?cliente=<%= cliente.id %>"
+                >Agregar habilitado</a
+              >
             </div>
           </div>
           <!-- <br> -->
           <!-- <hr> -->
           <% if (alquileres.length != 0) { %>
-            <h3>Alquileres</h3>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Cliente</th>
-                    <th>Equipo</th>
-                    <th>Firma</th>
-                    <th>Precio</th>
-                    <th>Detalles</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% alquileres.forEach(alquiler => { %>
-                    <tr>
-                      <td><%= alquiler.cliente.nombre %></td>
-                      <td>
-                        <%= alquiler.equipo.marca %>
-                        <%= alquiler.equipo.modelo %>
-                        <%= alquiler.equipo.numero_serie %>
-                      </td>
-                      <td><%= alquiler.firma %></td>
-                      <td>$<%= alquiler.precio %></td>
-                      <td>
-                        <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
-                      </td>
-                    </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            </div>
-          <% } %>
-
-          <div class="nuevo-contrato">
-            <a href="/alquileres/crear?cliente=<%= cliente.id %>">Nuevo Contrato</a>     
+          <h3>Alquileres</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Equipo</th>
+                  <th>Firma</th>
+                  <th>Precio</th>
+                  <th>Detalles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% alquileres.forEach(alquiler => { %>
+                <tr>
+                  <td><%= alquiler.cliente.nombre %></td>
+                  <td>
+                    <%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%=
+                    alquiler.equipo.numero_serie %>
+                  </td>
+                  <td><%= alquiler.firma %></td>
+                  <td>$<%= alquiler.precio %></td>
+                  <td>
+                    <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
           </div>
-          
+          <% } %>
+  
+          <div class="nuevo-contrato">
+            <a href="/alquileres/crear?cliente=<%= cliente.id %>"
+              >Nuevo Contrato</a
+            >
+          </div>
         </div>
-      </section>
-      <!-- FIN CONTENIDO -->
-    </main>
+      </main>
+    </div>
+    <!-- FIN CONTENIDO -->
     <!-- FIN MAIN -->
+    <%- include('../partials/AdminLTEScripts.ejs') %>
   </body>
 </html>

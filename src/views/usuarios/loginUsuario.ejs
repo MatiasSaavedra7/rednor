@@ -1,48 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head.ejs') %>
+    <%- include('../partials/AdminLTEHead.ejs') %>
     <link rel="stylesheet" href="/css/formulario.css" />
     <title>REDNOR - Registrar nuevo Cliente</title>
   </head>
-  <body>
-    <%- include('../partials/header.ejs') %>
-    <!-- MAIN -->
-    <main class="main-container">
-      <!-- ASIDE -->
-      <%- include('../partials/aside.ejs') %>
-      <!-- FIN ASIDE -->
-
-      <!-- CONTENIDO -->
-      <section class="main-content">
-        <h1>INICIAR SESION</h1>
-        <div class="form-container">
-          <form action="/usuarios/login" method="POST">
-            <div>
-              <label for="usuario">Nombre de Usuario</label>
-              <input type="usuario" name="usuario" id="usuario" value="<%= locals.old && old.usuario ? old.usuario : "" %>" />
-              <% if (locals.errors && errors.usuario) { %>
-                <p class="feedback-errors"><%= errors.usuario.msg %></p>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../partials/navbar.ejs') %>
+      
+      <!-- Main Sidebar -->
+      <%- include('../partials/mainSidebar.ejs') %>
+  
+      <!-- Control Sidebar -->
+       <%- include('../partials/controlSidebar.ejs') %>
+      <!-- MAIN -->
+      <main class="content-wrapper">
+        <!-- CONTENIDO -->
+        <section class="main-content">
+          <h1>INICIAR SESION</h1>
+          <div class="form-container">
+            <form action="/usuarios/login" method="POST">
+              <div>
+                <label for="usuario">Nombre de Usuario</label>
+                <input type="usuario" name="usuario" id="usuario" value="<%= locals.old && old.usuario ? old.usuario : "" %>" />
+                <% if (locals.errors && errors.usuario) { %>
+                  <p class="feedback-errors"><%= errors.usuario.msg %></p>
+                <% } %>
+              </div>
+  
+              <div>
+                <label for="password">Contraseña</label>
+                <input type="password" name="password" id="password" value="<%= locals.old && old.password ? old.password : "" %>" /> 
+                <% if (locals.errors && errors.password) { %>
+                <p class="feedback-errors"><%= errors.password.msg %></p>
+                <% } %>
+              </div>
+              <% if (locals.errors && errors.login) { %>
+              <p class="feedback-errors"><%= errors.login.msg %></p>
               <% } %>
-            </div>
+              <br />
+              <input type="submit" value="Iniciar Sesion" />
+            </form>
+          </div>
+        </section>
+        <!-- FIN CONTENIDO -->
+      </main>
+      <!-- FIN MAIN -->
+    </div>
 
-            <div>
-              <label for="password">Contraseña</label>
-              <input type="password" name="password" id="password" value="<%= locals.old && old.password ? old.password : "" %>" /> 
-              <% if (locals.errors && errors.password) { %>
-              <p class="feedback-errors"><%= errors.password.msg %></p>
-              <% } %>
-            </div>
-            <% if (locals.errors && errors.login) { %>
-             <p class="feedback-errors"><%= errors.login.msg %></p>
-            <% } %>
-            <br />
-            <input type="submit" value="Iniciar Sesion" />
-          </form>
-        </div>
-      </section>
-      <!-- FIN CONTENIDO -->
-    </main>
-    <!-- FIN MAIN -->
+    <%- include('../partials/AdminLTEScripts.ejs') %>
   </body>
 </html>

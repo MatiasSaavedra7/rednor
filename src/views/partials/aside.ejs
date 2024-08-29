@@ -4,74 +4,90 @@
     <i class="fa-solid fa-xmark"></i>
   </span>
 
-  <div class="logo-navbar-container">
-    <!-- LOGO -->
-    <div class="aside__logo">
-      <a href="/">
-        <img src="/images/RednorLogo.png" alt="Logo de Rednor" />
-      </a>
+  <div class="logo-navbar-user-container">
+    <div class="logo-navbar-container">
+      <!-- LOGO -->
+      <div class="logo">
+        <a href="/">
+          <img src="/images/RednorLogo.png" alt="Logo de Rednor" />
+        </a>
+      </div>
+      <!-- FIN LOGO -->
+  
+      <!-- MENU DE NAVEGACION -->
+      <ul class="nav-bar">
+        <% if (locals.isLogged) { %> <% if (locals.userLogged.id_rol === 1) { %>
+        <li>
+          <a href="/admin/usuarios"><i class="fa-solid fa-user"></i> Admin</a>
+        </li>
+        <% } %> <% } %>
+        <li>
+          <a href="/clientes"><i class="fa-solid fa-user"></i> Clientes</a>
+        </li>
+        <li>
+          <a href="/equipos"><i class="fa-solid fa-print"></i> Equipos</a>
+        </li>
+        <li>
+          <a class="dropdown-btn">
+            <i class="fa-solid fa-clipboard"></i> Alquileres
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+            <a href="/alquileres"><i class="fa fa-caret-right"></i>Vigentes</a>
+            <a href="/alquileres/finalizados"
+              ><i class="fa fa-caret-right"></i>Vencidos</a
+            >
+          </div>
+        </li>
+        <li>
+          <a href="/repuestos"
+            ><i class="fa-solid fa-screwdriver-wrench"></i> Repuestos</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-btn">
+            <i class="fa-solid fa-screwdriver-wrench"></i> Taller
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+            <a href="/taller"
+              ><i class="fa fa-caret-right"></i> Equipos propios</a
+            >
+            <a href="/taller/externos"
+              ><i class="fa fa-caret-right"></i> De terceros</a
+            >
+          </div>
+        </li>
+        <li>
+          <a href="/usuarios/login"
+            ><i class="fa-solid fa-circle-info"></i> Otro</a
+          >
+        </li>
+      </ul>
+      <!-- FIN MENU DE NAVEGACION -->
     </div>
-    <!-- FIN LOGO -->
-
-    <!-- MENU DE NAVEGACION -->
-    <ul class="nav-bar">
-      <% if (locals.isLogged) { %> <% if (locals.userLogged.id_rol === 1) { %>
-      <li>
-        <a href="/admin/usuarios"><i class="fa-solid fa-user"></i> Admin</a>
-      </li>
-      <% } %> <% } %>
-      <li>
-        <a href="/clientes"><i class="fa-solid fa-user"></i> Clientes</a>
-      </li>
-      <li>
-        <a href="/equipos"><i class="fa-solid fa-print"></i> Equipos</a>
-      </li>
-      <li>
-        <a class="dropdown-btn">
-          <i class="fa-solid fa-clipboard"></i> Alquileres
-          <i class="fa fa-caret-down"></i>
-        </a>
-        <div class="dropdown-container">
-          <a href="/alquileres"><i class="fa fa-caret-right"></i>Vigentes</a>
-          <a href="/alquileres/finalizados"
-            ><i class="fa fa-caret-right"></i>Vencidos</a
-          >
-        </div>
-      </li>
-      <li>
-        <a href="/repuestos"
-          ><i class="fa-solid fa-screwdriver-wrench"></i> Repuestos</a
-        >
-      </li>
-      <li>
-        <a class="dropdown-btn">
-          <i class="fa-solid fa-screwdriver-wrench"></i> Taller
-          <i class="fa fa-caret-down"></i>
-        </a>
-        <div class="dropdown-container">
-          <a href="/taller"
-            ><i class="fa fa-caret-right"></i> Equipos propios</a
-          >
-          <a href="/taller/externos"
-            ><i class="fa fa-caret-right"></i> De terceros</a
-          >
-        </div>
-      </li>
-      <li>
-        <a href="/usuarios/login"><i class="fa-solid fa-circle-info"></i> Otro</a>
-      </li>
-    </ul>
-    <!-- FIN MENU DE NAVEGACION -->
-
+  
     <!-- INFORMACION DE USUARIO -->
-    <% if (locals.isLogged) { %>
-    <div class="user-info">
-      <a class="dropdown-logout" href="/usuarios/logout">Logout</a>
-      <p class="dropdown-btn-logout">
-        Bienvenido <%= locals.userLogged.nombre %>!<i class="fa fa-caret-up"></i>
-      </p>
+    <div class="user-dropdown">
+      <button class="user-dropdown-btn">
+        <i class="fa-solid fa-user-tie"></i> <%= locals.isLogged ? locals.userLogged.nombre : "Usuario" %>
+      </button>
+      <% if (locals.isLogged) { %>
+        <div class="user-dropdown-content user-dropdown-content-logout">
+          <a href="/usuarios/logout">CERRAR SESION</a>
+        </div>
+      <% } else { %>
+        <div class="user-dropdown-content">
+          <a href="/usuarios/login">INICIAR SESION</a>
+          <a href="/usuarios/registro">REGISTRARSE</a>
+        </div>
+      <% } %>
+      <%# if (locals.isLogged) { %>
+      <!-- <p class="dropdown-btn-logout"> -->
+        <!-- Bienvenido <%# locals.userLogged.nombre %>!<i class="fa fa-caret-up"></i> -->
+      <!-- </p> -->
+      <%# } %>
     </div>
-    <% } %>
     <!-- FIN INFORMACION DE USUARIO -->
   </div>
 </aside>
