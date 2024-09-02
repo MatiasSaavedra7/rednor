@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/AdminLTEHead.ejs') %>
-    <link rel="stylesheet" href="/css/ingreso.css" />
+    <!-- <link rel="stylesheet" href="/css/ingreso.css" /> -->
     <title>REDNOR Taller - Informar Ingreso</title>
   </head>
   <body class="hold-transition sidebar-mini">
@@ -17,42 +17,55 @@
       <%- include('../partials/controlSidebar.ejs') %>
       <!-- MAIN -->
       <main class="content-wrapper">
-        <!-- CONTENIDO -->
-        <section class="main-content">
-          <article>
-            <div class="form-ingreso-container">
-              <p>Informe de Ingreso al Taller</p>
-              <h1>
-                <%= equipo.marca %> <%= equipo.modelo %> - Serie: <%=
-                equipo.numero_serie %>
-              </h1>
-              <form action="/taller/ingreso/<%= equipo.id %>" method="post">
-                <div>
-                  <label for="id_equipo">ID Equipo</label>
-                  <input
-                    type="number"
-                    name="id_equipo"
-                    id="id_equipo"
-                    value="<%= equipo.id %>"
-                    disabled
-                  />
-                </div>
-
-                <div>
-                  <label for="motivo">Motivo del Ingreso: </label>
-                  <input type="text" name="motivo" id="motivo" />
-                </div>
-
-                <div>
-                  <label for="descripcion">Descripcion: </label>
-                  <textarea name="descripcion" id="descripcion"></textarea>
-                </div>
-                <input type="submit" />
-              </form>
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col text-center">
+                <h1>
+                  <%= equipo.marca %> <%= equipo.modelo %> <%= equipo.numero_serie %>
+                </h1>
+              </div>
             </div>
-          </article>
+          </div>
         </section>
-        <!-- FIN CONTENIDO -->
+        <section class="content pt-3">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-8 m-auto">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Informe de Ingreso al Taller</h3>
+                  </div>
+                  <div class="card-body">
+                    <form action="/taller/ingreso/<%= equipo.id %>" method="post">
+                      <div class="form-group">
+                        <label for="id_equipo">ID Equipo</label>
+                        <input
+                          type="number"
+                          name="id_equipo"
+                          id="id_equipo"
+                          class="form-control"
+                          value="<%= equipo.id %>"
+                          disabled
+                        />
+                      </div>
+            
+                      <div class="form-group">
+                        <label for="motivo">Motivo del Ingreso: </label>
+                        <input type="text" name="motivo" id="motivo" class="form-control" />
+                      </div>
+            
+                      <div class="form-group">
+                        <label for="descripcion">Descripcion: </label>
+                        <textarea name="descripcion" id="descripcion" class="form-control"></textarea>
+                      </div>
+                      <input type="submit" class="btn btn-primary w-100" />
+                    </form>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <!-- FIN MAIN -->
     </div>

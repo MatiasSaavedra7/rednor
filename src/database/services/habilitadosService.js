@@ -28,6 +28,17 @@ module.exports = {
     }
   },
 
+  getAllByPK: async (id) => {
+    try {
+      return db.Habilitado.findAll({
+        where: { id_cliente: id },
+        include: ["cliente"],
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   create: async (data) => {
     try {
       return db.Habilitado.create(new Habilitado(data))

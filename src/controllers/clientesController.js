@@ -1,6 +1,7 @@
 const clientesService = require("../database/services/clientesService");
 const tiposClientesService = require("../database/services/tiposClientesService");
 const alquileresService = require("../database/services/alquileresService");
+const habilitadosService = require("../database/services/habilitadosService");
 
 const { validationResult } = require("express-validator");
 
@@ -18,7 +19,8 @@ module.exports = {
     try {
       const cliente = await clientesService.getOneByPK(req.params.id);
       const alquileres = await alquileresService.getByIdCliente(req.params.id);
-      res.render("clientes/detalleCliente", { cliente, alquileres });
+      const habilitados = await habilitadosService.getAllByPK(req.params.id);
+      res.render("clientes/detalleCliente", { cliente, alquileres, habilitados });
     } catch (error) {
       console.log(error);
     }

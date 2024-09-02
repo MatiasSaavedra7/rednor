@@ -1,66 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <%- include('../partials/AdminLTEHead.ejs') %>
-    <link rel="stylesheet" href="/css/tables.css">
-    <link rel="stylesheet" href="/css/equipos.css">
-    <script src="/js/equipos.js"></script>
-    <title>REDNOR - Listado de Equipos</title>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+  <%- include('../partials/AdminLTEHeadTables.ejs') %>
+  <!-- <link rel="stylesheet" href="/css/tables.css"> -->
+  <!-- <link rel="stylesheet" href="/css/equipos.css"> -->
+  <script src="/js/equipos.js"></script>
+  <title>REDNOR - Listado de Equipos</title>
 </head>
+
 <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        <!-- Navbar -->
-        <%- include('../partials/navbar.ejs') %>
-      
-        <!-- Main Sidebar -->
-        <%- include('../partials/mainSidebar.ejs') %>
-    
-        <!-- Control Sidebar -->
-         <%- include('../partials/controlSidebar.ejs') %>
-        <!-- MAIN -->
-        <main class="content-wrapper">
-            <!-- CONTENIDO -->
-            <section class="main-content">
-                <div class="title">
-                    <h1>Listado de Equipos</h1>
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+      <section class="content mt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Equipos</h3>
+                  <a href="/equipos/crear" class="float-right">Crear</a>
                 </div>
-    
-                <div class="panel-control">
-                    <input type="text" class="search-input" placeholder="Buscar por numero de serie...">
-                    <a href="/equipos/crear">+ CREAR</a>
+                <div class="card-body">
+                  <table id="equipos" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Estado</th>
+                        <th>Serie</th>
+                        <th>Tipo</th>
+                        <th>Detalles</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% equipos.forEach(equipo=> { %>
+                        <tr>
+                          <td>
+                            <%= equipo.marca %>
+                          </td>
+                          <td>
+                            <%= equipo.modelo %>
+                          </td>
+                          <td>
+                            <%= equipo.estado.nombre %>
+                          </td>
+                          <td>
+                            <%= equipo.numero_serie %>
+                          </td>
+                          <td>
+                            <%= equipo.tipo.nombre %>
+                          </td>
+                          <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                  </table>
                 </div>
-    
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Serie</th>
-                                <th>Tipo</th>
-                                <th>Estado</th>
-                                <th>Detalles</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% equipos.forEach(equipo => { %>
-                                <tr>
-                                    <td><%= equipo.marca %></td>
-                                    <td><%= equipo.modelo %></td>
-                                    <td><%= equipo.numero_serie %></td>
-                                    <td><%= equipo.tipo.nombre %></td>
-                                    <td><%= equipo.estado.nombre %></td>
-                                    <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
-                                </tr>
-                            <% }) %>
-                        </tbody>
-                    </table>
-                </div>
-                
-            </section>
-        </main>
-    </div>
-    
-    <%- include('../partials/AdminLTEScripts.ejs') %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+    <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+      <script>
+        $(function () {
+          $("#equipos").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+          }).buttons().container().appendTo('#equipos_wrapper .col-md-6:eq(0)');
+        });
+      </script>
 </body>
+
 </html>

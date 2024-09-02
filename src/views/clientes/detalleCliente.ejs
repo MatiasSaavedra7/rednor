@@ -1,116 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('../partials/AdminLTEHead.ejs') %>
-    <link rel="stylesheet" href="/css/tables.css" />
-    <link rel="stylesheet" href="/css/detalleCliente.css" />
-    <title>REDNOR - Detalle del Cliente <%= cliente.nombre %></title>
-  </head>
-  <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-      <!-- Navbar -->
-      <%- include('../partials/navbar.ejs') %>
-  
-      <!-- Main Sidebar -->
-      <%- include('../partials/mainSidebar.ejs') %>
-  
-      <!-- Control Sidebar -->
-      <%- include('../partials/controlSidebar.ejs') %>
-  
-      <!-- CONTENIDO -->
-      <main class="content-wrapper">
-        <div class="client-container">
-          <h3>Informacion del Cliente</h3>
-          <div>
-            <p>
-              <a href="/clientes/editar/<%= cliente.id %>">Editar informacion</a>
-            </p>
-            <p><span>Nombre: </span><%= cliente.nombre %></p>
-            <p><span>Email: </span><%= cliente.email %></p>
-            <p><span>Telefono: </span><%= cliente.telefono %></p>
-            <p><span>Ciudad: </span><%= cliente.ciudad %></p>
-            <p><span>Direccion: </span><%= cliente.direccion %></p>
-            <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
-            <p>
-              <span>Inscripcion AFIP: </span>
-              <a
-                href="/docs/inscripciones/<%= cliente.inscripcion_afip %>"
-                target="_blank"
-              >
-                <%= cliente.inscripcion_afip %>
-              </a>
-            </p>
-            <p>
-              <span>Condicion AFIP: </span>
-              <a
-                href="/docs/condicion/<%= cliente.condicion_afip %>"
-                target="_blank"
-              >
-                <%= cliente.condicion_afip%>
-              </a>
-            </p>
-            <p>
-              <span>Formulario 005: </span>
-              <a
-                href="/docs/formulario005/<%= cliente.formulario_005 %>"
-                target="_blank"
-              >
-                <%= cliente.formulario_005 %>
-              </a>
-            </p>
-  
-            <!-- BOTON PARA AGREGAR UNA PERSONA HABILITADA AL CLIENTE -->
-            <div>
-              <a href="/habilitados/crear?cliente=<%= cliente.id %>"
-                >Agregar habilitado</a
-              >
+<head>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+  <%- include('../partials/AdminLTEHeadTables.ejs') %>
+  <!-- <link rel="stylesheet" href="/css/tables.css" /> -->
+  <!-- <link rel="stylesheet" href="/css/detalleCliente.css" /> -->
+  <title>REDNOR - <%= cliente.nombre %></title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+
+    <!-- CONTENIDO -->
+    <main class="content-wrapper">
+      <section class="content pt-4 m-auto">
+        <div class="container-fluid m-auto">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Informacion del Cliente</h3>
+                  <div class="dropdown float-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="/habilitados/crear?cliente=<%= cliente.id %>" class="dropdown-item">Agregar Habilitado</a>
+                      <a href="/alquileres/crear?cliente=<%= cliente.id %>" class="dropdown-item">Nuevo Contrato</a>
+                      <div class="dropdown-divider"></div>
+                      <a href="/clientes/editar/<%= cliente.id %>" class="dropdown-item">Editar Informacion</a>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="card-body">
+                  <dl>
+                    <!-- Nombre y Apellido -->
+                    <dt>Nombre</dt>
+                    <dd><%= cliente.nombre %></dd>
+
+                    <!-- Email -->
+                    <dt>Email</dt>
+                    <dd><%= cliente.email %></dd>
+
+                    <!-- Telefono -->
+                    <dt>Telefono</dt>
+                    <dd><%= cliente.telefono %></dd>
+
+                    <!-- Ciudad -->
+                    <dt>Ciudad</dt>
+                    <dd><%= cliente.ciudad %></dd>
+
+                    <!-- Direccion -->
+                    <dt>Direccion</dt>
+                    <dd><%= cliente.direccion %></dd>
+
+                    <!-- Tipo de Cliente -->
+                    <dt>Tipo</dt>
+                    <dd><%= cliente.tipo.nombre %></dd>
+
+                    <!-- Inscripcion AFIP -->
+                    <dt>Inscripcion AFIP</dt>
+                    <dd>
+                      <a href="/docs/inscripciones/<%= cliente.inscripcion_afip %>" target="_blank">
+                        <%= cliente.inscripcion_afip %>
+                      </a>
+                    </dd>
+
+                    <!-- Condicion AFIP -->
+                    <dt>Condicion AFIP</dt>
+                    <dd>
+                      <a href="/docs/condicion/<%= cliente.condicion_afip %>" target="_blank">
+                        <%= cliente.condicion_afip %>
+                      </a>
+                    </dd>
+
+                    <!-- Formulario 005 -->
+                    <dt>Formulario 005</dt>
+                    <dd>
+                      <a href="/docs/formulario005/<%= cliente.formulario_005 %>" target="_blank">
+                        <%= cliente.formulario_005 %>
+                      </a>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Contratos</h3>
+                </div>
+                <div class="card-body">
+                  <table id="alquileres" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Equipo</th>
+                        <th>Firma</th>
+                        <th>Precio</th>
+                        <th>Detalles</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% alquileres.forEach(alquiler => { %>
+                      <tr>
+                        <td><%= alquiler.cliente.nombre %></td>
+                        <td><%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%= alquiler.equipo.numero_serie %></td>
+                        <td><%= alquiler.firma %></td>
+                        <td>$<%= alquiler.precio %></td>
+                        <td>
+                          <a href="/alquileres/detalles/<%= alquiler.id %>">
+                            Detalles
+                          </a>
+                        </td>
+                      </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-          <!-- <br> -->
-          <!-- <hr> -->
-          <% if (alquileres.length != 0) { %>
-          <h3>Alquileres</h3>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Cliente</th>
-                  <th>Equipo</th>
-                  <th>Firma</th>
-                  <th>Precio</th>
-                  <th>Detalles</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% alquileres.forEach(alquiler => { %>
-                <tr>
-                  <td><%= alquiler.cliente.nombre %></td>
-                  <td>
-                    <%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%=
-                    alquiler.equipo.numero_serie %>
-                  </td>
-                  <td><%= alquiler.firma %></td>
-                  <td>$<%= alquiler.precio %></td>
-                  <td>
-                    <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
-                  </td>
-                </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-          <% } %>
-  
-          <div class="nuevo-contrato">
-            <a href="/alquileres/crear?cliente=<%= cliente.id %>"
-              >Nuevo Contrato</a
-            >
-          </div>
+          <% if (habilitados.length != 0) { %>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <div class="card-header p-0 border-bottom 0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <% habilitados.forEach((habilitado, index) => { %>
+                                    <li class="nav-item">
+                                        <a class="nav-link <%= index === 0 ? 'active' : '' %>" id="custom-tabs-<%= index %>-tab" data-toggle="pill" href="#custom-tabs-<%= index %>" role="tab" aria-controls="custom-tabs-<%= index %>" aria-selected="<%= index === 0 ? 'true' : 'false' %>"><%= habilitado.nombre %></a>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <% habilitados.forEach((habilitado, index) => { %>
+                                    <div class="tab-pane fade <%= index === 0 ? 'show active' : '' %>" id="custom-tabs-<%= index %>" role="tabpanel" aria-labelledby="custom-tabs-<%= index %>-tab">
+                                      <!-- Nombre de la Persona Habilitada -->
+                                      <dt>Nombre</dt>
+                                      <dd><%= habilitado.nombre %></dd>
+
+                                      <!-- Telefono de la Persona Habilitada -->
+                                      <dt>Telefono</dt>
+                                      <dd><%= habilitado.telefono %></dd>
+
+                                      <!-- Email de la Persona Habilitada -->
+                                      <dt>Email</dt>
+                                      <dd><%= habilitado.email %></dd>
+
+                                      <!-- Puesto de la Persona Habilitada -->
+                                      <dt>Puesto</dt>
+                                      <dd><%= habilitado.puesto %></dd>
+
+                                      <!-- Ubicacion de la Persona Habilitada -->
+                                      <dt>Ubicacion</dt>
+                                      <dd><%= habilitado.ubicacion %></dd>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
         </div>
-      </main>
-    </div>
-    <!-- FIN CONTENIDO -->
-    <!-- FIN MAIN -->
-    <%- include('../partials/AdminLTEScripts.ejs') %>
-  </body>
+      </section>
+    </main>
+  </div>
+  <!-- FIN CONTENIDO -->
+  <!-- FIN MAIN -->
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+  <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+  <script>
+    $(function () {
+      $("#alquileres").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#alquileres_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+</body>
 </html>

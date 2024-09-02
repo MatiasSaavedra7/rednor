@@ -7,15 +7,15 @@ module.exports = [
   check("id_tipo_cliente")
     .notEmpty()
     .withMessage("Selecciona una opcion"),
-  check("email")
-    .notEmpty()
-    .withMessage("Debes ingresar un correo")
-    .bail()
-    .isEmail()
-    .withMessage("Ingresa un formato de correo válido"),
-  check("telefono")
-    .notEmpty()
-    .withMessage("Debes ingresar un número de teléfono"),
+  // check("email")
+  //   .notEmpty()
+  //   .withMessage("Debes ingresar un correo")
+  //   .bail()
+  //   .isEmail()
+  //   .withMessage("Ingresa un formato de correo válido"),
+  // check("telefono")
+  //   .notEmpty()
+  //   .withMessage("Debes ingresar un número de teléfono"),
   check("ciudad")
     .notEmpty()
     .withMessage("Debes ingresar la ciudad del cliente"),

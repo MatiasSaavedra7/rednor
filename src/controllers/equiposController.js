@@ -51,8 +51,10 @@ module.exports = {
         }
       } else {
         let marcas = await marcasService.getAll();
+        let tipos = await tiposEquiposService.getAll();
         res.render("equipos/registroEquipo", {
           marcas,
+          tipos,
           errors: errors.mapped(),
           old: req.body,
         });

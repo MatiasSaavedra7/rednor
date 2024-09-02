@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/AdminLTEHead.ejs') %>
-    <link rel="stylesheet" href="/css/formulario.css">
+    <!-- <link rel="stylesheet" href="/css/formulario.css"> -->
     <title>REDNOR</title>
   </head>
   <body class="hold-transition sidebar-mini">
@@ -18,57 +18,63 @@
   
       <!-- MAIN -->
       <main class="content-wrapper">
-        <!-- CONTENIDO -->
-        <section class="main-content">
-          <div class="form-container">
-            <h1>Registrar persona habilitada al cliente: <%= cliente.nombre %> (ID: <%= cliente.id %>) </h1>
-            <br>
-            <form action="/habilitados/crear?cliente=<%= cliente.id %>" method="post">
-              <div>
-                <label for="nombre">Nombre: </label>
-                <input type="text" name="nombre" id="nombre" value="<%= locals.old && old.nombre ? old.nombre : "" %>">
-                <% if (locals.errors && errors.nombre) { %>
-                 <p class="feedback-errors"><%= errors.nombre.msg %></p>
-                <% } %>
+        <section class="content pt-3">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-8 m-auto">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Nuevo Habilitado al Cliente <%= cliente.nombre %></h3>
+                  </div>
+                  <div class="card-body">
+                    <form action="/habilitados/crear?cliente=<%= cliente.id %>" method="post">
+                      <div class="form-group">
+                        <label for="nombre">Nombre: </label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" value="<%= locals.old && old.nombre ? old.nombre : "" %>">
+                        <% if (locals.errors && errors.nombre) { %>
+                         <p class="text-danger"><%= errors.nombre.msg %></p>
+                        <% } %>
+                      </div>
+            
+                      <div class="form-group">
+                        <label for="telefono">Telefono: </label>
+                        <input type="number" name="telefono" id="telefono" class="form-control" value="<%= locals.old && old.telefono ? old.telefono : "" %>">
+                        <% if (locals.errors && errors.telefono) { %>
+                         <p class="text-danger"><%= errors.telefono.msg %></p>
+                        <% } %>
+                      </div>
+            
+                      <div class="form-group">
+                        <label for="email">Email: </label>
+                        <input type="email" name="email" id="email" class="form-control" value="<%= locals.old && old.email ? old.email : "" %>">
+                        <% if (locals.errors && errors.email) { %>
+                         <p class="text-danger"><%= errors.email.msg %></p>
+                        <% } %>
+                      </div>
+            
+                      <div class="form-group">
+                        <label for="puesto">Puesto: </label>
+                        <input type="text" name="puesto" id="puesto" class="form-control" value="<%= locals.old && old.puesto ? old.puesto : "" %>">
+                        <% if (locals.errors && errors.puesto) { %>
+                         <p class="text-danger"><%= errors.puesto.msg %></p>
+                        <% } %>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="ubicacion">Ubicacion: </label>
+                        <input type="text" name="ubicacion" id="ubicacion" class="form-control" value="<%= locals.old && old.ubicacion ? old.ubicacion : "" %>">
+                        <% if (locals.errors && errors.ubicacion) { %>
+                         <p class="text-danger"><%= errors.ubicacion.msg %></p>
+                        <% } %>
+                      </div>
+                      <input type="submit" class="btn btn-primary w-100">
+                    </form>
+                  </div>
+                </div>
               </div>
-  
-              <div>
-                <label for="telefono">Telefono: </label>
-                <input type="number" name="telefono" id="telefono" value="<%= locals.old && old.telefono ? old.telefono : "" %>">
-                <% if (locals.errors && errors.telefono) { %>
-                 <p class="feedback-errors"><%= errors.telefono.msg %></p>
-                <% } %>
-              </div>
-  
-              <div>
-                <label for="email">Email: </label>
-                <input type="email" name="email" id="email" value="<%= locals.old && old.email ? old.email : "" %>">
-                <% if (locals.errors && errors.email) { %>
-                 <p class="feedback-errors"><%= errors.email.msg %></p>
-                <% } %>
-              </div>
-  
-              <div>
-                <label for="puesto">Puesto: </label>
-                <input type="text" name="puesto" id="puesto" value="<%= locals.old && old.puesto ? old.puesto : "" %>">
-                <% if (locals.errors && errors.puesto) { %>
-                 <p class="feedback-errors"><%= errors.puesto.msg %></p>
-                <% } %>
-              </div>
-              
-              <div>
-                <label for="ubicacion">Ubicacion: </label>
-                <input type="text" name="ubicacion" id="ubicacion" value="<%= locals.old && old.ubicacion ? old.ubicacion : "" %>">
-                <% if (locals.errors && errors.ubicacion) { %>
-                 <p class="feedback-errors"><%= errors.ubicacion.msg %></p>
-                <% } %>
-              </div>
-              <br> <br>
-              <input type="submit">
-            </form>
+            </div>
           </div>
         </section>
-        <!-- FIN CONTENIDO -->
       </main>
       <!-- FIN MAIN -->
     </div>

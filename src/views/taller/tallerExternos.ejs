@@ -2,8 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/AdminLTEHead.ejs') %>
-    <link rel="stylesheet" href="/css/tables.css" />
-    <link rel="stylesheet" href="/css/taller.css" />
+    <%- include('../partials/AdminLTEHeadTables.ejs') %>
     <title>REDNOR</title>
   </head>
   <body class="hold-transition sidebar-mini">
@@ -18,58 +17,69 @@
        <%- include('../partials/controlSidebar.ejs') %>
       <!-- MAIN -->
       <main class="content-wrapper">
-        <!-- CONTENIDO -->
-        <section class="main-content">
-          <article class="taller">
-            <div class="title">
-              <h2>EQUIPOS EN EL TALLER</h2>
+        <section class="content mt-3">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Taller de Equipos Externos</h3>
+                    <a href="/taller/externos/ingresos" class="btn btn-outline-primary float-right">Nuevo</a>
+                  </div>
+                  <div class="card-body">
+                    <table id="taller" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Equipo</th>
+                          <th>Ingreso</th>
+                          <th>Egreso</th>
+                          <th>Detalles</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% ingresos.forEach(ingreso => { %>
+                        <tr>
+                          <td>
+                            <%= ingreso.marca %>
+                            <%= ingreso.modelo %>
+                            <%= ingreso.numero_serie %>
+                          </td>
+                          <td>
+                            <%= ingreso.fecha_ingreso %>
+                          </td>
+                          <td>
+                            <% if (ingreso.egreso) { %>
+                              <%= ingreso.egreso.fecha_egreso %>
+                            <% } else { %>
+                              -
+                            <% } %>
+                          </td>
+                          <td>
+                            <a href="/taller/externos/detalle/<%= ingreso.id %>">Detalles</a>
+                          </td>
+                        </tr>
+                        <% }); %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <a href="/taller/externos/ingresos">Informar un Ingreso</a>
-            </div>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Equipo</th>
-                    <th>Ingreso</th>
-                    <th>Egreso</th>
-                    <th>Detalles</th>
-                  </tr>
-                </thead>
-                <% ingresos.forEach(ingreso => { %>
-                <tbody>
-                  <tr>
-                    <td>
-                      <%= ingreso.marca %>
-                      <%= ingreso.modelo %>
-                      <%= ingreso.numero_serie %>
-                    </td>
-                    <td>
-                      <%= ingreso.fecha_ingreso %>
-                    </td>
-                    <td>
-                      <% if (ingreso.egreso) { %>
-                        <%= ingreso.egreso.fecha_egreso %>
-                      <% } else { %>
-                        -
-                      <% } %>
-                    </td>
-                    <td>
-                      <a href="/taller/externos/detalle/<%= ingreso.id %>">Ver más...</a>
-                    </td>
-                  </tr>
-                </tbody>
-                <% }) %>
-              </table>
-            </div>
-          </article>
+          </div>
         </section>
-        <!-- FIN CONTENIDO -->
       </main>
       <!-- FIN MAIN -->
     </div>
 
     <%- include('../partials/AdminLTEScripts.ejs') %>
+    <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+    <script>
+      $(function () {
+        $("#taller").DataTable({
+          "responsive": true, "lengthChange": false, "autoWidth": false,
+          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#taller_wrapper .col-md-6:eq(0)');
+      });
+    </script>
   </body>
 </html>
