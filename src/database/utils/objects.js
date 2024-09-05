@@ -71,6 +71,7 @@ function Ingreso(data) {
   this.fecha_ingreso = data.fecha_ingreso;
   this.motivo = data.motivo;
   this.descripcion = data.descripcion;
+  this.id_estado = data.id_estado;
 }
 
 function Egreso(data) {
@@ -87,6 +88,7 @@ function IngresoExterno(data) {
   this.numero_serie = data.numero_serie;
   this.motivo = data.motivo;
   this.descripcion = data.descripcion;
+  this.id_estado = data.id_estado;
 }
 
 function EgresoExterno(data) {
@@ -96,4 +98,16 @@ function EgresoExterno(data) {
   this.costo = data.costo;
 }
 
-module.exports = { Usuario, Cliente, Habilitado, Equipo, Alquiler, Reajuste, Cartucho, Ingreso, Egreso, IngresoExterno, EgresoExterno };
+function Informe(data) {
+  this.id_ingreso = data.id_ingreso;
+  this.detalle = data.detalle;
+  this.fecha = data.fecha;
+}
+
+function InformeExterno(data) {
+  this.id_ingreso_externo = data.id_ingreso_externo;
+  this.detalle = data.detalle;
+  this.fecha = data.fecha;
+}
+
+module.exports = { Usuario, Cliente, Habilitado, Equipo, Alquiler, Reajuste, Cartucho, Ingreso, Egreso, IngresoExterno, EgresoExterno, Informe, InformeExterno };

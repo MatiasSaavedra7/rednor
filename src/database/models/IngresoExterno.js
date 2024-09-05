@@ -32,6 +32,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: false,
     },
+    id_estado: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    }
   };
 
   let config = {
@@ -45,8 +49,18 @@ module.exports = (sequelize, dataTypes) => {
   IngresoExterno.associate = function (models) {
     IngresoExterno.hasOne(models.EgresoExterno, {
       as: "egreso",
-      foreignKey: "id_ingreso_externo"
-    })
+      foreignKey: "id_ingreso_externo",
+    });
+
+    IngresoExterno.hasMany(models.InformeExterno, {
+      as: "informe",
+      foreignKey: "id_ingreso_externo",
+    });
+
+    IngresoExterno.belongsTo(models.EstadoTaller, {
+      as: "estado",
+      foreignKey: "id_estado",
+    });
   };
 
   return IngresoExterno;

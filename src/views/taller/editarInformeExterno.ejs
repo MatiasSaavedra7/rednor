@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR - Detalle</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+  
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+      <!-- Content Header -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col text-center">
+              <h1>Editar Informe del Equipo</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- / Content header -->
+      
+      <!-- Content -->
+      <section class="content mt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-8 m-auto">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <%= ingreso.marca %> <%= ingreso.modelo %> <%= ingreso.numero_serie %>
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <dl>
+                    <dt>Descripcion</dt>
+                    <dd><%= ingreso.descripcion %></dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 m-auto">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Informe</h3>
+                </div>
+                <div class="card-body">
+                  <form action="/taller/externos/informe/<%= informe.id %>/editar?_method=PUT" method="post">
+                    <div class="form-group">
+                      <label for="id_ingreso_externo">ID Ingreso Externo</label>
+                      <input
+                        type="number"
+                        name="id_ingreso_externo"
+                        id="id_ingreso_externo"
+                        class="form-control"
+                        value="<%= ingreso.id %>"
+                        disabled
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="detalle">Detalle</label>
+                      <textarea name="detalle" id="detalle" class="form-control"><%= informe.detalle %></textarea>
+                    </div>
+
+                    <input type="submit" value="Editar" class="btn btn-block btn-primary" />
+                  </form>
+                  <a href="/taller/externos/detalle/<%= ingreso.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver atras</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+</body>
+</html>

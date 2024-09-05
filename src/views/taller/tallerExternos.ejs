@@ -26,42 +26,46 @@
                     <h3 class="card-title">Taller de Equipos Externos</h3>
                     <a href="/taller/externos/ingresos" class="btn btn-outline-primary float-right">Nuevo</a>
                   </div>
-                  <div class="card-body">
-                    <table id="taller" class="table table-bordered table-hover">
-                      <thead>
-                        <tr>
-                          <th>Equipo</th>
-                          <th>Ingreso</th>
-                          <th>Egreso</th>
-                          <th>Detalles</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% ingresos.forEach(ingreso => { %>
-                        <tr>
-                          <td>
-                            <%= ingreso.marca %>
-                            <%= ingreso.modelo %>
-                            <%= ingreso.numero_serie %>
-                          </td>
-                          <td>
-                            <%= ingreso.fecha_ingreso %>
-                          </td>
-                          <td>
-                            <% if (ingreso.egreso) { %>
-                              <%= ingreso.egreso.fecha_egreso %>
-                            <% } else { %>
-                              -
-                            <% } %>
-                          </td>
-                          <td>
-                            <a href="/taller/externos/detalle/<%= ingreso.id %>">Detalles</a>
-                          </td>
-                        </tr>
-                        <% }); %>
-                      </tbody>
-                    </table>
-                  </div>
+                  <% if (ingresos) { %>
+                    <div class="card-body">
+                      <table id="taller" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Equipo</th>
+                            <th>Ingreso</th>
+                            <th>Egreso</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% ingresos.forEach(ingreso => { %>
+                          <tr>
+                            <td>
+                              <%= ingreso.marca %>
+                              <%= ingreso.modelo %>
+                              <%= ingreso.numero_serie %>
+                            </td>
+                            <td>
+                              <%= ingreso.fecha_ingreso %>
+                            </td>
+                            <td>
+                              <% if (ingreso.egreso) { %>
+                                <%= ingreso.egreso.fecha_egreso %>
+                              <% } else { %>
+                                -
+                              <% } %>
+                            </td>
+                            <td><%= ingreso.estado.nombre %></td>
+                            <td>
+                              <a href="/taller/externos/detalle/<%= ingreso.id %>">Detalles</a>
+                            </td>
+                          </tr>
+                          <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
+                  <% } %>
                 </div>
               </div>
             </div>

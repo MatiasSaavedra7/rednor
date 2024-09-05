@@ -17,6 +17,53 @@
        <%- include('../partials/controlSidebar.ejs') %>
       <!-- MAIN -->
       <main class="content-wrapper">
+        <section class="content pt-4">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-8 m-auto">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Informacion del Equipo</h3>
+                    <div class="dropdown float-right">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" class="dropdown-item">Nuevo Contrato</a>
+                        <% if (equipo.id_estado == 1) { %>
+                          <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
+                        <% } %>
+                        <div class="dropdown-divider"></div>
+                        <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
+                      </div>
+  
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <dl>
+                      <dt>Marca</dt>
+                      <dd><%= equipo.marca %></dd>
+
+                      <dt>Modelo</dt>
+                      <dd><%= equipo.modelo %></dd>
+
+                      <dt>Numero de Serie</dt>
+                      <dd><%= equipo.numero_serie %></dd>
+
+                      <dt>Tipo</dt>
+                      <dd><%= equipo.tipo.nombre %></dd>
+
+                      <dt>Estado</dt>
+                      <% if (equipo.id_estado == 2) { %>
+                        <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
+                      <% } else { %>
+                        <%= equipo.estado.nombre %>
+                      <% } %>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         <!-- CONTENIDO -->
         <section class="main-content">
           <div class="equipo-container">

@@ -15,4 +15,8 @@ router.get("/egreso/:id", controller.egreso);
 
 router.post("/egreso/:id", controller.almacenarEgreso);
 
+router.get("/informe/:id", controller.informe);
+
+router.post("/informe/:id", controller.almacenarInforme);
+
 module.exports = router;

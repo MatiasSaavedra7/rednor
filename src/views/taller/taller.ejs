@@ -32,6 +32,7 @@
                         <th>Equipo</th>
                         <th>Ingreso</th>
                         <th>Egreso</th>
+                        <th>Estado</th>
                         <th>Detalles</th>
                       </tr>
                     </thead>
@@ -53,6 +54,7 @@
                               -
                             <% } %>
                           </td>
+                          <td><%= ingreso.estado.nombre %></td>
                           <td>
                             <a href="/taller/detalle/<%= ingreso.id %>">Ver más...</a>
                           </td>

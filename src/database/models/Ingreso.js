@@ -24,6 +24,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: false,
     },
+    id_estado: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
   };
 
   let config = {
@@ -37,13 +41,23 @@ module.exports = (sequelize, dataTypes) => {
   Ingreso.associate = function (models) {
     Ingreso.belongsTo(models.Equipo, {
       as: "equipo",
-      foreignKey: "id_equipo"
+      foreignKey: "id_equipo",
+    });
+
+    Ingreso.belongsTo(models.EstadoTaller, {
+      as: "estado",
+      foreignKey: "id_estado",
+    });
+
+    Ingreso.hasMany(models.Informe, {
+      as: "informes",
+      foreignKey: "id_ingreso",
     });
 
     Ingreso.hasOne(models.Egreso, {
       as: "egreso",
-      foreignKey: "id_ingreso"
-    })
+      foreignKey: "id_ingreso",
+    });
   };
 
   return Ingreso;

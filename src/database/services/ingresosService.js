@@ -7,7 +7,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.Ingreso.findAll({
-        include: ["equipo", "egreso"],
+        include: ["equipo", "egreso", "estado"],
       });
     } catch (error) {
       console.log(error);
@@ -18,7 +18,7 @@ module.exports = {
     try {
       return await db.Ingreso.findOne({
         where: { id: id },
-        include: ["equipo", "egreso"],
+        include: ["equipo", "egreso", "estado"],
       });
     } catch (error) {
       console.log(error);

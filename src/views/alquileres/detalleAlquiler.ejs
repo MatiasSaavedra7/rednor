@@ -1,106 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('../partials/AdminLTEHead.ejs') %>
-    <link rel="stylesheet" href="/css/detalleAlquiler.css" />
-    <link rel="stylesheet" href="/css/tables.css">
-    <title>REDNOR - Detalle del Alquiler <%= alquiler.id %></title>
-  </head>
-  <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-      <!-- Navbar -->
-      <%- include('../partials/navbar.ejs') %>
-        
-      <!-- Main Sidebar -->
-      <%- include('../partials/mainSidebar.ejs') %>
-  
-      <!-- Control Sidebar -->
-       <%- include('../partials/controlSidebar.ejs') %>
-      <!-- MAIN -->
-      <main class="content-wrapper">
-        <!-- CONTENIDO -->
-        <section class="main-content">
-          <article class="detalle-alquiler-container">
-            <h3>Datos del Alquiler</h3>
-            <p style="text-align: center;"><span>Cliente</span></p>
-            <p><span>Nombre: </span><%= cliente.nombre %></p>
-            <p><span>Email: </span><%= cliente.email %></p>
-            <p><span>Telefono: </span><%= cliente.telefono %></p>
-            <p><span>Tipo: </span><%= cliente.tipo.nombre %></p>
-            <p><a href="/clientes/detalle/<%= cliente.id %>">Ir al Cliente</a></p>
-            <br>
-            <hr>
-            <br>
-            <p style="text-align: center;"><span>Equipo</span></p>
-            <p><span>Marca: </span><%= equipo.marca %></p>
-            <p><span>Modelo: </span><%= equipo.modelo %></p>
-            <p><span>Numero de Serie: </span><%= equipo.numero_serie %></p>
-            <p><a href="/equipos/detalle/<%= equipo.id %>">Ir al Equipo</a></p>
-            <br>
-            <hr>
-            <br>
-            <p><span>Precio: </span>$<%= alquiler.precio %></p>
-            <p><span>Minimo de Copias: </span><%= alquiler.minimo_copias %></p>
-            <p><span>Precio por copias: </span>$<%= alquiler.precio_copias %></p>
-            <p><span>Departamento: </span> <%= alquiler.departamento %></p>
-            <p><span>Fecha de Alta del Contrato: </span><%= alquiler.fecha_alta %></p>
-            <% if (alquiler.fecha_baja) { %>
-              <p>
-                <span>Fecha de Vencimiento del Contrato: </span><%= alquiler.fecha_baja %>
-              </p>
-            <% } %>
-            <p><span>Ultimo Reajuste: </span><%= alquiler.fecha_reajuste %></p>
-            <br>
-            
-            <% if (alquiler.activo == true) { %>
-              <a href="/alquileres/reajuste/<%= alquiler.id %>">Reajustar Contrato</a>
-            <% } %>
-  
-            <br>
-            
-            <% if (!alquiler.fecha_baja) { %>
-              <form
-                action="/alquileres/finalizar/<%= alquiler.id %>?_method=put"
-                method="POST"
-              >
-                <input type="submit" value="Finalizar Contrato" />
-              </form>
-            <% } %>
-  
-          </article>
-  
-          <% if (reajustes.length != 0) { %>
-            <article class="detalle-alquiler-container" id="tabla">
-              <div class="table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Fecha de Reajuste</th>
-                      <th>Minimo de Copias</th>
-                      <th>Precio por Copias</th>
-                      <th>Precio</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% reajustes.forEach(reajuste => { %>
-                    <tr>
-                      <td><%= reajuste.fecha_reajuste %></td>
-                      <td><%= reajuste.minimo_copias %></td>
-                      <td>$<%= reajuste.precio_copias %></td>
-                      <td>$<%= reajuste.precio %></td>
-                    </tr>
-                    <% }) %>
-                  </tbody>
-                </table>
-              </div>
-            </article>
-          <% } %>
-        </section>
-        <!-- FIN CONTENIDO -->
-      </main>
-      <!-- FIN MAIN -->
-    </div>
+<head>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+  <%- include('../partials/AdminLTEHeadTables') %>
+  <!-- <link rel="stylesheet" href="/css/detalleAlquiler.css" /> -->
+  <!-- <link rel="stylesheet" href="/css/tables.css"> -->
+  <title>REDNOR - Detalle del Alquiler <%= alquiler.id %></title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+      
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
 
-    <%- include('../partials/AdminLTEScripts.ejs') %>
-  </body>
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+      <section class="content pt-4">
+        <div class="container-fluid m-auto">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card card-secondary card-tabs">
+                <div class="card-header p-0 pt-1">
+                  <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="custom-tabs-one-contrato-tab" data-toggle="pill" href="#custom-tabs-one-contrato" role="tab" aria-controls="custom-tabs-one-contrato" aria-selected="true">Contrato</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="custom-tabs-one-cliente-tab" data-toggle="pill" href="#custom-tabs-one-cliente" role="tab" aria-controls="custom-tabs-one-cliente" aria-selected="false">Cliente</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="custom-tabs-one-equipo-tab" data-toggle="pill" href="#custom-tabs-one-equipo" role="tab" aria-controls="custom-tabs-one-equipo" aria-selected="false">Equipo</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-one-contrato" role="tabpanel" aria-labelledby="custom-tabs-one-contrato-tab">
+                      <dl>
+                        <dt>Minimo de Copias</dt>
+                        <dd><%= alquiler.minimo_copias %></dd>
+                        
+                        <dt>Precio por Copias</dt>
+                        <dd>$<%= alquiler.precio_copias %></dd>
+                        
+                        <dt>Precio Final</dt>
+                        <dd>$<%= alquiler.precio %></dd>
+
+                        <dt>Departamento</dt>
+                        <dd><%= alquiler.departamento %></dd>
+
+                        <dt>Fecha de Alta del Contrato</dt>
+                        <dd><%= alquiler.fecha_alta %></dd>
+
+                        <% if (alquiler.fecha_baja) { %>
+                          <dt>Fecha de Baja del Contrato</dt>
+                          <dd><%= alquiler.fecha_baja %></dd>
+                        <% } %>
+
+                        <dt>Ultimo Reajuste</dt>
+                        <dd><%= alquiler.fecha_reajuste %></dd>
+                      </dl>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-cliente" role="tabpanel" aria-labelledby="custom-tabs-one-cliente-tab">
+                      <dl>
+                        <!-- Nombre del Cliente -->
+                        <dt>Nombre</dt>
+                        <dd>
+                          <a href="/clientes/detalle/<%= cliente.id %>" target="_blank"><%= cliente.nombre %> <i class="fas fa-external-link-alt"></i></a>
+                        </dd>
+  
+                        <!-- Tipo de Cliente -->
+                        <dt>Tipo</dt>
+                        <dd><%= cliente.tipo.nombre %></dd>
+                        
+                        <!-- Telefono del Cliente -->
+                        <dt>Telefono</dt>
+                        <dd><%= cliente.telefono %></dd>
+  
+                        <!-- Email del Cliente -->
+                        <dt>Email</dt>
+                        <dd><%= cliente.email %></dd>
+                      </dl>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-equipo" role="tabpanel" aria-labelledby="custom-tabs-one-equipo-tab">
+                      <dl>
+                        <!-- Numero de Serie -->
+                        <dt>Numero de Serie</dt>
+                        <dd>
+                          <a href="/equipos/detalle/<%= equipo.id %>" target="_blank"><%= equipo.numero_serie %> <i class="fas fa-external-link-alt"></i></a>
+                        </dd>
+  
+                        <!-- Marca -->
+                        <dt>Marca</dt>
+                        <dd><%= equipo.marca %></dd>
+  
+                        <!-- Modelo -->
+                        <dt>Modelo</dt>
+                        <dd><%= equipo.modelo %></dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Reajustes</h3>
+                  <% if (alquiler.activo) { %>
+                    <div class="dropdown float-right">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a href="/alquileres/reajuste/<%= alquiler.id %>" class="dropdown-item">Reajustar</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="btn" data-toggle="modal" data-target="#modal-default">
+                          Finalizar Contrato
+                        </a>
+                      </div>
+                    </div>
+                  <% } %>
+                  </div>
+                <div class="card-body">
+                  <table id="alquiler" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Fecha de Reajuste</th>
+                        <th>Minimo de Copias</th>
+                        <th>Precio por Copias</th>
+                        <th>Precio Final</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% reajustes.forEach(reajuste => { %>
+                        <tr>
+                        <td><%= reajuste.fecha_reajuste %></td>
+                        <td><%= reajuste.minimo_copias %></td>
+                        <td>$<%= reajuste.precio_copias %></td>
+                        <td>$<%= reajuste.precio %></td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Finalizar Contrato</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>¿Estas seguro que deseas finalizar el contrato?</p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                  <% if (!alquiler.fecha_baja) { %>
+                    <form action="/alquileres/finalizar/<%= alquiler.id %>?_method=put" method="POST">
+                      <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+  <%- include('../partials/AdminLTEScriptsTables') %>
+  <script>
+    $(function () {
+      $("#alquiler").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#alquiler_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+</body>
 </html>

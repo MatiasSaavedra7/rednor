@@ -16,7 +16,7 @@
       <!-- Control Sidebar -->
        <%- include('../partials/controlSidebar.ejs') %>
       <!-- MAIN -->
-      <main class="content-wrapper">
+      <main class="content-wrapper pb-5">
         <!-- Content Header -->
         <section class="content-header">
           <div class="container-fluid">
@@ -36,9 +36,11 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-lg-8 m-auto">
+                <!-- Detalles del Ingreso -->
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Detalles del Ingreso</h3>
+                    <a href="/taller/externos/<%= ingreso.id %>/editar" class="btn btn-outline-primary btn-sm float-right">Editar</a>
                   </div>
                   <div class="card-body">
                     <!-- Fecha de Ingreso -->
@@ -54,28 +56,50 @@
                     <dd><%= ingreso.descripcion %></dd>
                   </div>
                 </div>
+
+                <!-- Informes -->
+                 <% informes.forEach((informe, index) => { %>
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Informe <%= index + 1 %></h3>
+                      <a href="/taller/externos/informe/<%= informe.id %>/editar" class="btn btn-outline-secondary float-right btn-sm">Editar</a>
+                    </div>
+                    <div class="card-body">
+                      <dl>
+                        <dt>Fecha</dt>
+                        <dd><%= informe.fecha.toLocaleString() %></dd>
+
+                        <dt>Detalle</dt>
+                        <dd><%= informe.detalle %></dd>
+                      </dl>
+                    </div>
+                  </div>
+                 <% }) %>
+
                 <% if (egreso) { %>
-                 <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Detalles del Egreso</h3>
-                  </div>
-                  <div class="card-body">
-                    <!-- Fecha de Egreso -->
-                    <dt>Fecha de Egreso</dt>
-                    <dd><%= egreso.fecha_egreso %></dd>
+                  <!-- Detalles del Egreso -->
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Detalles del Egreso</h3>
+                    </div>
+                    <div class="card-body">
+                      <!-- Fecha de Egreso -->
+                      <dt>Fecha de Egreso</dt>
+                      <dd><%= egreso.fecha_egreso %></dd>
 
-                    <!-- Detalles de la Reparacion -->
-                    <dt>Detalles de la Reparacion</dt>
-                    <dd><%= egreso.detalle_reparacion %></dd>
+                      <!-- Detalles de la Reparacion -->
+                      <dt>Detalles de la Reparacion</dt>
+                      <dd><%= egreso.detalle_reparacion %></dd>
 
-                    <!-- Costo -->
-                    <dt>Costo</dt>
-                    <dd>$<%= egreso.costo %></dd>
+                      <!-- Costo -->
+                      <dt>Costo</dt>
+                      <dd>$<%= egreso.costo %></dd>
+                    </div>
                   </div>
-                 </div>
                 <% } %>
                 <% if (!egreso) { %>
-                  <a href="/taller/externos/egresos/<%= ingreso.id %>" class="btn btn-outline-success">Informar Egreso</a>
+                  <a href="/taller/externos/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
+                  <a href="/taller/externos/egresos/<%= ingreso.id %>" class="btn btn-outline-success float-right">Informar Egreso</a>
                 <% } %>
               </div>
             </div>

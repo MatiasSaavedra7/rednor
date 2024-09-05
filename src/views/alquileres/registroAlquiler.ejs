@@ -1,111 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('../partials/AdminLTEHead.ejs') %>
-    <!-- <link rel="stylesheet" href="/css/formulario.css" /> -->
-    <!-- <link rel="stylesheet" href="/css/registroAlquiler.css"> -->
-    <title>REDNOR - Nuevo alquiler</title>
-  </head>
-  <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-      <!-- Navbar -->
-      <%- include('../partials/navbar.ejs') %>
-      
-      <!-- Main Sidebar -->
-      <%- include('../partials/mainSidebar.ejs') %>
-  
-      <!-- Control Sidebar -->
-       <%- include('../partials/controlSidebar.ejs') %>
-       <!-- MAIN -->
-       <main class="content-wrapper">
-        <section class="content pt-3">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-lg-8 m-auto">
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Nuevo Contrato - <%= cliente.nombre %></h3>
+<head>
+  <%- include('../partials/Select2Head.ejs') %>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR - Nuevo alquiler</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+    
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+    <section class="content pt-3">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-8 m-auto">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Nuevo Contrato - <%= cliente.nombre %></h3>
+              </div>
+              <div class="card-body">
+                <form action="/alquileres/crear?cliente=<%= cliente.id %>" method="post">
+                  <div class="form-group">
+                    <label for="id_equipo">Equipo</label>
+                    <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%;" >
+                      <% equipos.forEach(equipo => { %>
+                        <option value="<%= equipo.id %>" <%= locals.old && old.id_equipo == equipo.id ? "selected" : "" %>>
+                          <%= equipo.marca%> <%= equipo.modelo %> - <%=
+                        equipo.numero_serie %>
+                      </option>
+                      <% }) %>
+                    </select>
+                    <% if (locals.errors && errors.id_equipo) { %>
+                    <p class="text-danger"><%= errors.id_equipo.msg %></p>
+                    <% } %>
                   </div>
-                  <div class="card-body">
-                    <form action="/alquileres/crear?cliente=<%= cliente.id %>" method="post">
-                      <div class="form-group">
-                        <label for="id_equipo">Equipo</label>
-                        <select name="id_equipo" id="id_equipo" class="form-control">
-                          <option value="" selected hidden disabled>
-                            Elegir una opcion
-                          </option>
-                          <% equipos.forEach(equipo => { %>
-                          <option value="<%= equipo.id %>" <%= locals.old && old.id_equipo == equipo.id ? "selected" : "" %>>
-                            <%= equipo.marca%> <%= equipo.modelo %> - <%=
-                            equipo.numero_serie %>
-                          </option>
-                          <% }) %>
-                        </select>
-                        <% if (locals.errors && errors.id_equipo) { %>
-                        <p class="text-danger"><%= errors.id_equipo.msg %></p>
-                        <% } %>
-                      </div>
-            
-                      <div class="form-group">
-                        <label for="minimo_copias">Minimo de Copias</label>
-                        <input type="number" name="minimo_copias" id="minimo_copias" class="form-control" value="<%= locals.old && old.minimo_copias ? old.minimo_copias : "" %>">
-                        <% if (locals.errors && errors.minimo_copias) { %>
-                         <p class="text-danger"><%= errors.minimo_copias.msg %></p>
-                        <% } %>
-                      </div>
-            
-                      <div class="form-group">
-                        <label for="precio_copias">Precio por Copia</label>
-                        <input type="number" name="precio_copias" id="precio_copias" class="form-control" step="any" value="<%= locals.old && old.precio_copias ? old.precio_copias : ""  %>">
-                        <% if (locals.errors && errors.precio_copias) { %>
-                         <p class="text-danger"><%= errors.precio_copias.msg %></p>
-                        <% } %>
-                      </div>
-            
-                      <div class="form-group">
-                        <label for="firma">Firma</label>
-                        <select name="firma" id="firma" class="form-control">
-                          <option value="" selected hidden disabled>
-                            Elegir una opcion
-                          </option>
-                          <% firmas.forEach(firma => { %>
-                          <option value="<%= firma.nombre %>" <%= locals.old && old.firma == firma.nombre ? "selected" : "" %>>
-                            <%= firma.nombre %>
-                          </option>
-                          <% }) %>
-                        </select>
-                        <% if (locals.errors && errors.firma) { %>
-                        <p class="text-danger"><%= errors.firma.msg %></p>
-                        <% } %>
-                      </div>
-            
-                      <div class="form-group">
-                        <label for="fecha_baja">Fecha de Vencimiento (Opcional):</label>
-                        <input type="date" name="fecha_baja" id="fecha_baja" class="form-control">
-                      </div> 
-                      <hr />
-                      <h5>Datos adicionales</h5>
-                      <div class="form-group">
-                        <label for="departamento">Departamento</label>
-                        <input type="text" name="departamento" id="departamento" class="form-control"
-                        value="<%= locals.old && old.departamento ? old.departamento : ""
-                        %>" /> <% if (locals.errors && errors.departamento) { %>
-                        <p class="text-danger"><%= errors.departamento.msg %></p>
-                        <% } %>
-                      </div>
-                      <br />
-                      <input type="submit" class="btn btn-primary w-100" />
-                    </form>
+        
+                  <div class="form-group">
+                    <label for="minimo_copias">Minimo de Copias</label>
+                    <input type="number" name="minimo_copias" id="minimo_copias" class="form-control" value="<%= locals.old && old.minimo_copias ? old.minimo_copias : "" %>">
+                    <% if (locals.errors && errors.minimo_copias) { %>
+                      <p class="text-danger"><%= errors.minimo_copias.msg %></p>
+                    <% } %>
                   </div>
-                </div>
+        
+                  <div class="form-group">
+                    <label for="precio_copias">Precio por Copia</label>
+                    <input type="number" name="precio_copias" id="precio_copias" class="form-control" step="any" value="<%= locals.old && old.precio_copias ? old.precio_copias : ""  %>">
+                    <% if (locals.errors && errors.precio_copias) { %>
+                      <p class="text-danger"><%= errors.precio_copias.msg %></p>
+                    <% } %>
+                  </div>
+        
+                  <div class="form-group">
+                    <label for="firma">Firma</label>
+                    <select name="firma" id="firma" class="form-control">
+                      <option value="" selected hidden disabled>
+                        Elegir una opcion
+                      </option>
+                      <% firmas.forEach(firma => { %>
+                      <option value="<%= firma.nombre %>" <%= locals.old && old.firma == firma.nombre ? "selected" : "" %>>
+                        <%= firma.nombre %>
+                      </option>
+                      <% }) %>
+                    </select>
+                    <% if (locals.errors && errors.firma) { %>
+                    <p class="text-danger"><%= errors.firma.msg %></p>
+                    <% } %>
+                  </div>
+        
+                  <div class="form-group">
+                    <label for="fecha_baja">Fecha de Vencimiento (Opcional):</label>
+                    <input type="date" name="fecha_baja" id="fecha_baja" class="form-control">
+                  </div> 
+                  <hr />
+                  <h5>Datos adicionales</h5>
+                  <div class="form-group">
+                    <label for="departamento">Departamento</label>
+                    <input type="text" name="departamento" id="departamento" class="form-control"
+                    value="<%= locals.old && old.departamento ? old.departamento : ""
+                    %>" /> <% if (locals.errors && errors.departamento) { %>
+                    <p class="text-danger"><%= errors.departamento.msg %></p>
+                    <% } %>
+                  </div>
+                  <br />
+                  <input type="submit" class="btn btn-primary w-100" />
+                </form>
               </div>
             </div>
           </div>
-        </section>
-       </main>
-       <!-- FIN MAIN -->
-    </div>
+        </div>
+      </div>
+    </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
 
-    <%- include('../partials/AdminLTEScripts.ejs') %>
-  </body>
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+  <%- include('../partials/Select2Scripts.ejs') %>
+</body>
 </html>

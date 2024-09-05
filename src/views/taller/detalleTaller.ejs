@@ -14,9 +14,9 @@
     <%- include('../partials/mainSidebar.ejs') %>
 
     <!-- Control Sidebar -->
-      <%- include('../partials/controlSidebar.ejs') %>
+    <%- include('../partials/controlSidebar.ejs') %>
     <!-- MAIN -->
-    <main class="content-wrapper">
+    <main class="content-wrapper pb-5">
       <!-- Content Header -->
       <section class="content-header">
         <div class="container-fluid">
@@ -32,10 +32,11 @@
       <!-- / Content header -->
       
       <!-- Content -->
-      <section class="content mt-3">
+      <section class="content mt-2">
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-8 m-auto">
+              <!-- Detalles del Ingreso -->
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Detalles del Ingreso</h3>
@@ -54,6 +55,25 @@
                   <dd><%= ingreso.descripcion %></dd>
                 </div>
               </div>
+
+              <!-- Informes -->
+              <% informes.forEach((informe, index) => { %>
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Informe <%= index + 1 %></h3>
+                  </div>
+                  <div class="card-body">
+                    <dl>
+                      <dt>Fecha de Informe</dt>
+                      <dd><%= informe.fecha %></dd>
+  
+                      <dt>Detalle</dt>
+                      <dd><%= informe.detalle %></dd>
+                    </dl>
+                  </div>
+                </div>
+              <% }) %>
+              <!-- Detalles del Egreso -->
               <% if (egreso) { %>
                <div class="card">
                 <div class="card-header">
@@ -74,9 +94,21 @@
                 </div>
                </div>
               <% } %>
-              <% if (!egreso) { %>
-                <a href="/taller/egreso/<%= ingreso.id %>" class="btn btn-outline-success">Informar Egreso</a> <br>
-              <% } %>
+              <div class="row">
+                <div class="col-12 d-flex justify-content-between">
+                  <% if (!egreso) { %>
+                    <div>
+                      <a href="/taller/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
+                    </div>
+                  <% } %>
+                  
+                  <% if (!egreso) { %>
+                    <div>
+                      <a href="/taller/egreso/<%= ingreso.id %>" class="btn btn-outline-success float-right">Informar Egreso</a> <br>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
             </div>
           </div>
         </div>

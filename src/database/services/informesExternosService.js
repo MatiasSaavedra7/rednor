@@ -1,14 +1,13 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { EgresoExterno } = require("../utils/objects");
+const { InformeExterno } = require("../utils/objects");
 
 module.exports = {
   getAll: async () => {
     try {
-      return await db.EgresoExterno.findAll({
+      return await db.InformeExterno.findAll({
         include: ["ingreso"],
-        order: [["id", "DESC"]],
       });
     } catch (error) {
       console.log(error);
@@ -17,19 +16,8 @@ module.exports = {
 
   getOneByPK: async (id) => {
     try {
-      return await db.EgresoExterno.findOne({
+      return await db.InformeExterno.findOne({
         where: { id: id },
-        include: ["ingreso"],
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  getOneByIdIngreso: async (id) => {
-    try {
-      return await db.EgresoExterno.findOne({
-        where: { id_ingreso_externo: id },
         include: ["ingreso"],
       });
     } catch (error) {
@@ -39,7 +27,29 @@ module.exports = {
 
   create: async (data) => {
     try {
-      return await db.EgresoExterno.create(new EgresoExterno(data));
+      return await db.InformeExterno.create(new InformeExterno(data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAllByIdIngreso: async (id) => {
+    try {
+      return await db.InformeExterno.findAll({
+        where: { id_ingreso_externo: id },
+        include: ["ingreso"],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  updateByPK: async (id, data) => {
+    try {
+      return await db.InformeExterno.update(data, {
+        where: { id: id },
+        include: ["ingreso"],
+      });
     } catch (error) {
       console.log(error);
     }
