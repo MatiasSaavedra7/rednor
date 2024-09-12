@@ -14,6 +14,17 @@ module.exports = {
     }
   },
 
+  getAllByIdIngreso: async (id) => {
+    try {
+      return await db.Informe.findAll({
+        include: ["ingreso"],
+        where: { id_ingreso: id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   getOneByPK: async (id) => {
     try {
       return await db.Informe.findOne({
@@ -33,14 +44,14 @@ module.exports = {
     }
   },
 
-  getAllByIdIngreso: async (id) => {
+  updateByPK: async (data, id) => {
     try {
-      return await db.Informe.findAll({
-        include: ["ingreso"],
-        where: { id_ingreso: id },
-      });
+      return await db.Informe.update(data, {
+        where: { id: id },
+      })
     } catch (error) {
       console.log(error);
+      
     }
-  },
+  }
 };

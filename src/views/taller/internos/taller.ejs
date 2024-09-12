@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <%- include('../../partials/AdminLTEHeadTables.ejs') %>
+  <title>REDNOR</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+      
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+      <%- include('../../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+      <section class="content mt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <ul class="nav nav-pills ml-auto p-2">
+                    <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">En Taller</a></li>
+                    <!--  <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">En Espera de Insumos </a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Historial</a></li>
+                  </ul>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                      <table id="ingresosEnTaller" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Equipo</th>
+                            <th>Ingreso</th>
+                            <th>Egreso</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% ingresosEnTaller.forEach(ingresoEnTaller => { %>
+                            <tr>
+                              <td><%= ingresoEnTaller.id %></td>
+                              <td>
+                                <%= ingresoEnTaller.equipo.marca %>
+                                <%= ingresoEnTaller.equipo.modelo %>
+                                <%= ingresoEnTaller.equipo.numero_serie %>
+                              </td>
+                              <td>
+                                <%= ingresoEnTaller.fecha_ingreso.toLocaleString() %>
+                              </td>
+                              <td>
+                                <% if (ingresoEnTaller.egreso) { %>
+                                  <%= ingresoEnTaller.egreso.fecha_egreso.toLocaleString() %>
+                                <% } else { %>
+                                  -
+                                <% } %>
+                              </td>
+                              <td><%= ingresoEnTaller.estado.nombre %></td>
+                              <td>
+                                <a href="/taller/detalle/<%= ingresoEnTaller.id %>">Ver más...</a>
+                              </td>
+                            </tr>
+                          <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.tab-pane -->
+                    <!-- <div class="tab-pane" id="tab_2">
+                      <table id="ingresosEnEspera" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Equipo</th>
+                            <th>Ingreso</th>
+                            <th>Egreso</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <%# ingresosEnEspera.forEach(ingresoEnEspera => { %>
+                            <tr>
+                              <td><%# ingresoEnEspera.id %></td>
+                              <td>
+                                <%# ingresoEnEspera.equipo.marca %>
+                                <%# ingresoEnEspera.equipo.modelo %>
+                                <%# ingresoEnEspera.equipo.numero_serie %>
+                              </td>
+                              <td>
+                                <%# ingresoEnEspera.fecha_ingreso.toLocaleString() %>
+                              </td>
+                              <td>
+                                <%# if (ingresoEnEspera.egreso) { %>
+                                  <%# ingresoEnEspera.egreso.fecha_egreso.toLocaleString() %>
+                                <%# } else { %>
+                                  -
+                                <%# } %>
+                              </td>
+                              <td><%# ingresoEnEspera.estado.nombre %></td>
+                              <td>
+                                <a href="/taller/detalle/<%# ingresoEnEspera.id %>">Ver más...</a>
+                              </td>
+                            </tr>
+                          <%# }); %>
+                        </tbody>
+                      </table>
+                    </div> -->
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_3">
+                      <table id="ingresosEntregados" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Equipo</th>
+                            <th>Ingreso</th>
+                            <th>Egreso</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% ingresosHistorial.forEach(ingresoHistorial => { %>
+                            <tr>
+                              <td><%= ingresoHistorial.id %></td>
+                              <td>
+                                <%= ingresoHistorial.equipo.marca %>
+                                <%= ingresoHistorial.equipo.modelo %>
+                                <%= ingresoHistorial.equipo.numero_serie %>
+                              </td>
+                              <td>
+                                <%= ingresoHistorial.fecha_ingreso.toLocaleString() %>
+                              </td>
+                              <td>
+                                <% if (ingresoHistorial.egreso) { %>
+                                  <%= ingresoHistorial.egreso.fecha_egreso.toLocaleString() %>
+                                <% } else { %>
+                                  -
+                                <% } %>
+                              </td>
+                              <td><%= ingresoHistorial.estado.nombre %></td>
+                              <td>
+                                <a href="/taller/detalle/<%= ingresoHistorial.id %>">Ver más...</a>
+                              </td>
+                            </tr>
+                          <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.tab-pane -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <%- include('../../partials/AdminLTEScriptsTables') %>
+  <script>
+    $(function () {
+      $("#ingresosEnTaller").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#ingresosEnTaller_wrapper .col-md-6:eq(0)');
+    });
+    // $(function () {
+    //   $("#ingresosEnEspera").DataTable({
+    //     "responsive": true, "lengthChange": false, "autoWidth": false,
+    //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    //   }).buttons().container().appendTo('#ingresosEnEspera_wrapper .col-md-6:eq(0)');
+    // });
+    $(function () {
+      $("#ingresosEntregados").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#ingresosEntregados_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+</body>
+</html>

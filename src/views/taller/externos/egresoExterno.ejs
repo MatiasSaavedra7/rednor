@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/AdminLTEHead.ejs') %>
-  <!-- <link rel="stylesheet" href="/css/egreso.css"> -->
+  <%- include('../../partials/AdminLTEHead.ejs') %>
   <title>REDNOR Taller - Egreso de Equipo</title>
 </head>
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
-    <%- include('../partials/navbar.ejs') %>
+    <%- include('../../partials/navbar.ejs') %>
       
     <!-- Main Sidebar -->
-    <%- include('../partials/mainSidebar.ejs') %>
+    <%- include('../../partials/mainSidebar.ejs') %>
 
     <!-- Control Sidebar -->
-    <%- include('../partials/controlSidebar.ejs') %>
+    <%- include('../../partials/controlSidebar.ejs') %>
     <!-- MAIN -->
     <main class="content-wrapper">
       <section class="content pt-3">
@@ -33,17 +32,35 @@
                     </div>
           
                     <div class="form-group">
-                      <label for="detalle_reparacion">Detalles de la Reparacion: </label>
-                      <textarea name="detalle_reparacion" id="detalle_reparacion" class="form-control"></textarea>
+                      <label for="detalle">Detalles de la Reparacion: </label>
+                      <textarea name="detalle" id="detalle" class="form-control" rows="5"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="observacion">Observacion</label>
+                      <textarea name="observacion" id="observacion" class="form-control" rows="5"></textarea>
                     </div>
           
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label for="costo">Costo</label>
                       <input type="number" name="costo" id="costo" class="form-control">
+                    </div> -->
+                    
+                    <div class="form-group clearfix"></div>
+                      <div class="icheck-primary d-block">
+                        <input type="radio" id="radioPrimary1" name="estado" value="Disponible">
+                        <label for="radioPrimary1">Disponible</label>
+                      </div>
+
+                      <div class="icheck-primary d-block pt-2">
+                        <input type="radio" id="radioPrimary2" name="estado" value="Sin arreglo">
+                        <label for="radioPrimary2">Sin Arreglo</label>
+                      </div>
                     </div>
-  
+                    
                     <input type="submit" class="btn btn-primary w-100" />
                   </form>
+                  <a class="btn btn-block btn-outline-secondary mt-4" id="volverAtras">Volver Atrás</a>
                 </div>
               </div>
             </div>
@@ -53,6 +70,6 @@
     </main>
   </div>
 
-  <%- include('../partials/AdminLTEScripts.ejs') %>
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
 </body>
 </html>

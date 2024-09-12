@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR - Detalle</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+  
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper pb-5">
+      <!-- Content Header -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col text-center">
+              <h1>
+                <a href="/equipos/detalle/<%= ingreso.id_equipo %>">
+                  <%= ingreso.equipo.marca %> <%= ingreso.equipo.modelo %> <%= ingreso.equipo.numero_serie %>
+                </a>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- / Content header -->
+      
+      <!-- Content -->
+      <section class="content mt-2">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-8 m-auto">
+              <!-- Detalles del Ingreso -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Detalles del Ingreso</h3>
+                  <% if (ingreso.id_estado == 2) { %>
+                    <button type="button" class="btn btn-outline-info btn-sm float-right" id="insumosButton" data-toggle="modal" data-target="#modal-insumos">
+                      Insumos
+                    </button>
+                  <% } %>
+                </div>
+                <div class="card-body">
+                  <!-- Fecha de Ingreso -->
+                  <dt>Fecha de Ingreso</dt>
+                  <dd><%= ingreso.fecha_ingreso.toLocaleString() %></dd>
+                  
+                  <!-- Informacion del Equipo -->
+                  <p class="lead mb-1">Informacion del Equipo</p>
+
+                  <dt>Marca</dt>
+                  <dd><%= ingreso.equipo.marca %></dd>
+
+                  <dt>Modelo</dt>
+                  <dd><%= ingreso.equipo.modelo %></dd>
+
+                  <dt>Numero de Serie</dt>
+                  <dd><%= ingreso.equipo.numero_serie %></dd>
+
+                  <!-- Motivo del Ingreso -->
+                  <dt>Motivo</dt>
+                  <dd><%= ingreso.motivo %></dd>
+
+                  <!-- Detalle del Ingreso -->
+                  <dt>Detalle</dt>
+                  <dd><%= ingreso.detalle %></dd>
+                </div>
+              </div>
+
+              <!-- Informes -->
+              <div class="row">
+                <div class="col">
+                  <div class="timeline">
+                    <div class="time-label">
+                      <!-- <span class="bg-red">
+                        <%# ingreso.fecha_ingreso.toLocaleDateString() %>
+                      </span> -->
+                    </div>
+                    <% informes.forEach(informe => { %>
+                     <div>
+                      <i class="fas fa-comments bg-yellow"></i>
+                      <div class="timeline-item">
+                        <span class="time">
+                          <i class="fas fa-clock"></i>
+                          <%= informe.fecha_informe.toLocaleString() %>
+                        </span>
+                        <h3 class="timeline-header"><a href="#">Usuario</a></h3>
+                        <div class="timeline-body">
+                          <%= informe.detalle %>
+                        </div>
+                        <div class="timeline-footer">
+                          <% if (!egreso) { %>
+                           <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                           <a href="#" class="btn btn-danger btn-sm">Borrar</a>
+                          <% } %>
+                        </div>
+                      </div>
+                     </div>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detalles del Egreso -->
+              <% if (egreso) { %>
+               <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Detalles del Egreso</h3>
+                </div>
+                <div class="card-body">
+                  <!-- Fecha de Egreso -->
+                  <dt>Fecha de Egreso</dt>
+                  <dd><%= egreso.fecha_egreso.toLocaleString() %></dd>
+
+                  <!-- Detalles de la Reparacion -->
+                  <dt>Detalles de la Reparacion</dt>
+                  <dd><%= egreso.detalle %></dd>
+
+                  <!-- Costo -->
+                  <dt>Costo</dt>
+                  <dd>$<%= egreso.costo %></dd>
+                </div>
+               </div>
+              <% } %>
+              <div class="row">
+                <div class="col-12 d-flex justify-content-between">
+                  <% if (!egreso) { %>
+                    <div>
+                      <a href="/taller/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
+                    </div>
+                  <% } %>
+                  
+                  <% if (!egreso) { %>
+                    <div>
+                      <a href="/taller/egreso/<%= ingreso.id %>" class="btn btn-outline-success float-right">Informar Egreso</a> <br>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script>
+    let insumosButton = document.getElementById('insumosButton');
+
+    insumosButton.addEventListener('click', () => {
+      let a = prompt('Ingresar tu nombre');
+
+      if (a.length > 3) {
+        console.log(a);
+      }
+    });
+  </script>
+</body>
+</html>

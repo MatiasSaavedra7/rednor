@@ -20,7 +20,7 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    descripcion: {
+    detalle: {
       type: dataTypes.TEXT,
       allowNull: false,
     },
@@ -32,8 +32,7 @@ module.exports = (sequelize, dataTypes) => {
 
   let config = {
     tableName: "ingresos",
-    createdAt: "fecha_ingreso",
-    updatedAt: false,
+    timestamps: false,
   };
 
   const Ingreso = sequelize.define(alias, cols, config);

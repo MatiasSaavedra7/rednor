@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <%- include('../../partials/AdminLTEHeadTables.ejs') %>
+  <title>REDNOR - Pagos</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+      
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+      <%- include('../../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-8 m-auto">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Nuevo Cheque</h3>
+                </div>
+                <div class="card-body">
+                  <form action="/pagos/cheques/registro" method="post" id="form">
+                    <div class="form-group">
+                      <label for="fecha_cheque">Fecha del Cheque</label>
+                      <input type="date" name="fecha_cheque" id="fecha_cheque" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="a_nombre_de">A nombre de</label>
+                      <input type="text" name="a_nombre_de" id="a_nombre_de" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="nro_cheque">Numero de Cheque</label>
+                      <input type="number" name="nro_cheque" id="nro_cheque" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="monto">Monto</label>
+                      <input type="number" name="monto" id="monto" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="fecha_retiro">Fecha de retiro</label>
+                      <input type="date" name="fecha_cheque" id="fecha_cheque" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="quien_retiro">Quien lo retiró</label>
+                      <input type="text" name="quien_retiro" id="quien_retiro" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="fecha_cobro">Fecha de cobro</label>
+                      <input type="date" name="fecha_cobro" id="fecha_cobro" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="quien_cobro">Quien lo cobró</label>
+                      <input type="text" name="quien_cobro" id="quien_cobro" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="destino">Destino</label>
+                      <input type="text" name="destino" id="destino" class="form-control">
+                    </div>
+
+                    <input type="submit" value="Enviar" class="btn btn-block btn-outline-primary">
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <%- include('../../partials/AdminLTEScriptsTables') %>
+
+  <script>
+    let form = document.getElementById("form");
+    // let form = document.querySelector("form");
+    console.log(form);
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Estas seguro?")
+    })
+  </script>
+</body>
+</html>

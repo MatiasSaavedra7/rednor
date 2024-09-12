@@ -2,10 +2,16 @@ const { Router } = require("express");
 const router = Router();
 
 const controller = require("../controllers/tallerExternosController");
+const validateMiddleware = require('../middlewares/validateEquipoMiddleware');
 
 router.get("/", controller.taller);
 
 router.get("/detalle/:id", controller.detalle);
+
+// CREAR EQUIPO
+router.get("/equipos/crear", controller.crearEquipo);
+
+router.post("/equipos/crear", validateMiddleware, controller.guardarEquipo);
 
 // GUARDAR UN INGRESO
 router.get("/ingresos", controller.ingreso);
@@ -31,5 +37,8 @@ router.post("/informe/:id", controller.almacenarInforme);
 router.get("/informe/:id/editar", controller.editarInforme);
 
 router.put("/informe/:id/editar", controller.actualizarInforme);
+
+// INFORMAR EL COBRO DE UN ARREGLO
+router.put("/informar-cobro/:idIngreso", controller.informarCobro);
 
 module.exports = router;

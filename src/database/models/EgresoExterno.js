@@ -12,16 +12,16 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
-    fecha_egreso: {
-      type: dataTypes.DATE,
-      allowNull: false,
-    },
-    detalle_reparacion: {
+    detalle: {
       type: dataTypes.TEXT,
       allowNull: false,
     },
     costo: {
       type: dataTypes.DECIMAL,
+    },
+    fecha_egreso: {
+      type: dataTypes.DATE,
+      allowNull: false,
     },
   };
 

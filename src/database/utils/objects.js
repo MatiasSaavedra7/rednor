@@ -3,7 +3,7 @@ function Usuario(data) {
   this.apellido = data.apellido;
   this.usuario = data.usuario;
   this.password = data.password;
-  this.id_rol = data.id_rol
+  this.id_rol = data.id_rol;
 }
 
 function Cliente(data) {
@@ -70,44 +70,70 @@ function Ingreso(data) {
   this.id_equipo = data.id_equipo;
   this.fecha_ingreso = data.fecha_ingreso;
   this.motivo = data.motivo;
-  this.descripcion = data.descripcion;
+  this.detalle = data.detalle;
   this.id_estado = data.id_estado;
 }
 
 function Egreso(data) {
   this.id_ingreso = data.id_ingreso;
   this.fecha_egreso = data.fecha_egreso;
-  this.detalle_reparacion = data.detalle_reparacion;
+  this.detalle = data.detalle;
+  this.observacion = data.observacion;
   this.costo = data.costo;
 }
 
 function IngresoExterno(data) {
-  this.fecha_ingreso = data.fecha_ingreso;
-  this.marca = data.marca;
-  this.modelo = data.modelo;
-  this.numero_serie = data.numero_serie;
+  this.id_equipo = data.id_equipo;
   this.motivo = data.motivo;
-  this.descripcion = data.descripcion;
+  this.detalle = data.detalle;
   this.id_estado = data.id_estado;
+  this.fecha_ingreso = data.fecha_ingreso;
+  this.nombre_cliente = data.nombre_cliente;
+  this.telefono_cliente = data.telefono_cliente;
+  this.ciudad_cliente = data.ciudad_cliente;
+  this.direccion_cliente = data.direccion_cliente;
 }
 
 function EgresoExterno(data) {
   this.id_ingreso_externo = data.id_ingreso_externo;
   this.fecha_egreso = data.fecha_egreso;
-  this.detalle_reparacion = data.detalle_reparacion;
+  this.detalle = data.detalle;
   this.costo = data.costo;
+  this.fecha_egreso = data.fecha_egreso;
 }
 
 function Informe(data) {
   this.id_ingreso = data.id_ingreso;
   this.detalle = data.detalle;
-  this.fecha = data.fecha;
+  this.fecha_informe = data.fecha_informe;
 }
 
 function InformeExterno(data) {
   this.id_ingreso_externo = data.id_ingreso_externo;
   this.detalle = data.detalle;
-  this.fecha = data.fecha;
+  this.fecha_informe = data.fecha_informe;
 }
 
-module.exports = { Usuario, Cliente, Habilitado, Equipo, Alquiler, Reajuste, Cartucho, Ingreso, Egreso, IngresoExterno, EgresoExterno, Informe, InformeExterno };
+function EquipoExterno(data) {
+  this.marca = data.marca;
+  this.modelo = data.modelo;
+  this.numero_serie = data.numero_serie;
+  this.id_tipo_equipo = data.id_tipo_equipo;
+}
+
+module.exports = {
+  Usuario,
+  Cliente,
+  Habilitado,
+  Equipo,
+  Alquiler,
+  Reajuste,
+  Cartucho,
+  Ingreso,
+  Egreso,
+  IngresoExterno,
+  EgresoExterno,
+  Informe,
+  InformeExterno,
+  EquipoExterno,
+};

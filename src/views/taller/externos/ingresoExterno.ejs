@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/Select2Head.ejs') %>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR Taller - Informar Ingreso</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+      
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-8 m-auto">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Informe de Ingreso al Taller</h3>
+                </div>
+                <div class="card-body">
+                  <form action="/taller/externos/ingresos" method="post">
+
+                    <div class="form-group">
+                      <label for="id_equipo">Equipo</label>
+                      <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%;">
+                        <option value="" selected hidden disabled>
+                          Elegir una opcion
+                        </option>
+                        <% equipos.forEach(equipo => { %>
+                          <option value="<%= equipo.id %>"><%= equipo.marca %> <%= equipo.modelo %> <%= equipo.numero_serie %></option>
+                        <% }) %>
+                      </select>
+                      <p class="mt-1">¿No encuentra el equipo? Registrarlo <a href="/taller/externos/equipos/crear">aquí.</a></p>
+                    </div>
+                    
+                    <p class="lead">Informacion del Cliente</p>
+                    <hr>
+                    
+                    <div class="form-group">
+                      <label for="nombre_cliente">Nombre y Apellido</label>
+                      <input type="text" name="nombre_cliente" id="nombre_cliente" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="telefono_cliente">Telefono</label>
+                      <input type="tel" name="telefono_cliente" id="telefono_cliente" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="ciudad_cliente">Ciudad</label>
+                      <input type="text" name="ciudad_cliente" id="ciudad_cliente" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="direccion_cliente">Direccion</label>
+                      <input type="text" name="direccion_cliente" id="direccion_cliente" class="form-control">
+                    </div>
+
+                    
+
+                    <hr>
+            
+                    <div class="form-group">
+                      <label for="motivo">Motivo del Ingreso: </label>
+                      <input type="text" name="motivo" id="motivo" class="form-control">
+                    </div>
+            
+                    <div class="form-group">
+                      <label for="detalle">Descripcion: </label>
+                      <textarea name="detalle" id="detalle" class="form-control" rows="10"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-primary w-100"/>
+                  </form>
+                  <a class="btn btn-block btn-outline-secondary mt-3" id="volverAtras">Volver Atrás</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <%- include('../../partials/Select2Scripts.ejs') %>
+  <script>
+    let queryString = window.location.search;
+    
+    let urlParams = new URLSearchParams(queryString);
+    
+    let equipoExterno = urlParams.get("equipo-externo");
+
+    if(equipoExterno) {
+      let selectElement = document.getElementById("id_equipo");
+      selectElement.value = equipoExterno;
+    }
+  </script>
+</body>
+</html>

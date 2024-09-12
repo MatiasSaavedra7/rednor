@@ -16,15 +16,15 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: false,
     },
-    fecha: {
+    fecha_informe: {
       type: dataTypes.DATE,
+      allowNull: false,
     },
   };
 
   let config = {
     tableName: "informes",
-    createdAt: "fecha",
-    updatedAt: false,
+    timestamps: false,
   };
 
   let Informe = sequelize.define(alias, cols, config);

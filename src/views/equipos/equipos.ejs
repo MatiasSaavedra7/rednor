@@ -38,9 +38,9 @@
                       <tr>
                         <th>Marca</th>
                         <th>Modelo</th>
-                        <th>Estado</th>
                         <th>Serie</th>
                         <th>Tipo</th>
+                        <th>Estado</th>
                         <th>Detalles</th>
                       </tr>
                     </thead>
@@ -54,13 +54,13 @@
                             <%= equipo.modelo %>
                           </td>
                           <td>
-                            <%= equipo.estado.nombre %>
-                          </td>
-                          <td>
                             <%= equipo.numero_serie %>
                           </td>
                           <td>
                             <%= equipo.tipo.nombre %>
+                          </td>
+                          <td>
+                            <%= equipo.estado.nombre %>
                           </td>
                           <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
                         </tr>

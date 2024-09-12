@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR Taller - Informar Ingreso</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+      
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+      <%- include('../../partials/controlSidebar.ejs') %>
+    <!-- MAIN -->
+    <main class="content-wrapper">
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-8 m-auto">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Editar informe de Ingreso al Taller</h3>
+                </div>
+                <div class="card-body">
+                  <form action="/taller/externos/<%= ingreso.id %>/editar?_method=PUT" method="post">
+            
+                    <div class="form-group">
+                      <label for="motivo">Motivo del Ingreso: </label>
+                      <input type="text" name="motivo" id="motivo" value="<%= ingreso.motivo %>" class="form-control">
+                    </div>
+            
+                    <div class="form-group">
+                      <label for="detalle">Descripcion: </label>
+                      <textarea name="detalle" id="detalle" class="form-control" rows="10"><%= ingreso.detalle %></textarea>
+                    </div>
+                    <input type="submit" value="Editar" class="btn btn-block btn-primary"/>
+                  </form>
+                  <a class="btn btn-block btn-outline-secondary mt-3" id="volverAtras">Volver Atrás</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FIN MAIN -->
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+</body>
+</html>

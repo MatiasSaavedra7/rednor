@@ -8,45 +8,57 @@ module.exports = (sequelize, dataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
-    fecha_ingreso: {
-      type: dataTypes.DATE,
-      allowNull: false,
-    },
-    marca: {
-      type: dataTypes.STRING,
-      allowNull: false,
-    },
-    modelo: {
-      type: dataTypes.STRING,
-      allowNull: false,
-    },
-    numero_serie: {
-      type: dataTypes.STRING,
+    id_equipo: {
+      type: dataTypes.INTEGER,
       allowNull: false,
     },
     motivo: {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    descripcion: {
+    detalle: {
       type: dataTypes.TEXT,
       allowNull: false,
     },
     id_estado: {
       type: dataTypes.INTEGER,
       allowNull: false,
+    },
+    fecha_ingreso: {
+      type: dataTypes.DATE,
+      allowNull: false,
+    },
+    nombre_cliente: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    telefono_cliente: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    ciudad_cliente: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    direccion_cliente: {
+      type: dataTypes.STRING,
+      allowNull: false,
     }
   };
 
   let config = {
     tableName: "ingresos_externos",
-    createdAt: "fecha_ingreso",
-    updatedAt: false,
+    timestamps: false,
   };
 
   const IngresoExterno = sequelize.define(alias, cols, config);
 
   IngresoExterno.associate = function (models) {
+    IngresoExterno.belongsTo(models.EquipoExterno, {
+      as: "equipo",
+      foreignKey: "id_equipo",
+    });
+    
     IngresoExterno.hasOne(models.EgresoExterno, {
       as: "egreso",
       foreignKey: "id_ingreso_externo",

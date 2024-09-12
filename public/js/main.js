@@ -1,29 +1,9 @@
 window.addEventListener("load", () => {
   console.log("CONECTADO!");
 
-  const open = document.querySelector(".open-menu");
-  const close = document.querySelector(".close-menu");
-  const aside = document.querySelector(".aside-menu");
-  const dropdown = document.querySelectorAll(".dropdown-btn");
+  let volverAtrasButton = document.getElementById("volverAtras");
 
-  for (let i = 0; i < dropdown.length; i++) {
-    dropdown[i].addEventListener("click", function () {
-      let dropdownContent = this.nextElementSibling;  
-      if (dropdownContent.style.display === "block") {
-        dropdownContent.style.display = "none";
-        dropdownContent.classList.toggle("dropdown-visible")
-      } else {
-        dropdownContent.style.display = "block";
-        dropdownContent.classList.toggle("dropdown-visible")
-      }
-    });
-  }
-
-  open.addEventListener("click", () => {
-    aside.classList.toggle("visible");
-  });
-
-  close.addEventListener("click", () => {
-    aside.classList.toggle("visible");
+  volverAtrasButton.addEventListener("click", () => {
+    history.back();
   });
 });

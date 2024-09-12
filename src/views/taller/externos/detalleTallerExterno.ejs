@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR - Detalle</title>
+</head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+    <!-- Main -->
+    <main class="content-wrapper pb-5">
+      <!-- Content Header -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col text-center">
+              <h1>
+                <%= ingreso.marca %>
+                <%= ingreso.modelo %>
+                <%= ingreso.numero_serie %>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- / Content header -->
+
+      <!-- Content Body -->
+      <section class="content mt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-8 m-auto">
+              <!-- Detalles del Ingreso -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Detalles del Ingreso</h3>
+                  <% if (ingreso.id_estado == 3) { %>
+                    <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-cobro">
+                      Informar Cobro
+                    </button>
+                  <% } %>
+                  <% if (ingreso.id_estado == 1 || ingreso.id_estado == 2) { %>
+                    <a href="/taller/externos/<%= ingreso.id %>/editar" class="btn btn-outline-primary btn-sm float-right">Editar</a>
+                  <% } %>
+                </div>
+                <div class="card-body">
+                  <!-- Fecha de Ingreso -->
+                  <dt>Fecha de Ingreso</dt>
+                  <dd>
+                    <%= ingreso.fecha_ingreso.toLocaleString() %>
+                  </dd>
+
+                  <!-- Info del Cliente -->
+                  <p class="lead mb-1">Informacion del Cliente</p>
+                  <dt>Nombre</dt>
+                  <dd><%= ingreso.nombre_cliente %></dd>
+
+                  <dt>Telefono</dt>
+                  <dd><%= ingreso.telefono_cliente %></dd>
+
+                  <dt>Ciudad</dt>
+                  <dd><%= ingreso.ciudad_cliente %></dd>
+
+                  <dt>Direccion</dt>
+                  <dd><%= ingreso.direccion_cliente %></dd>
+
+                  <!-- Informacion del Equipo -->
+                  <p class="lead mb-1">Informacion del Equipo</p>
+                  <dt>Marca</dt>
+                  <dd><%= ingreso.equipo.marca %></dd>
+
+                  <dt>Modelo</dt>
+                  <dd><%= ingreso.equipo.modelo %></dd>
+
+                  <dt>Numero de Serie</dt>
+                  <dd><%= ingreso.equipo.numero_serie %></dd>
+
+                  <!-- Motivo del Ingreso -->
+                  <dt>Motivo de Ingreso</dt>
+                  <dd>
+                    <%= ingreso.motivo %>
+                  </dd>
+
+                  <!-- Descripcion -->
+                  <dt>Detalle</dt>
+                  <dd>
+                    <%= ingreso.detalle %>
+                  </dd>
+                </div>
+              </div> 
+          <!-- Timeline -->
+          <div class="row">
+            <div class="col">
+              <div class="timeline">
+                <div class="time-label">
+                  <!-- <span class="bg-red">
+                    <%# ingreso.fecha_ingreso.toLocaleDateString() %>
+                  </span> -->
+                </div>
+                
+                <!-- Informes -->
+                <% informes.forEach(informe=> { %>
+                  <div>
+                    <i class="fas fa-comments bg-yellow"></i>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fas fa-clock"></i>
+                        <%= informe.fecha_informe.toLocaleString() %>
+                      </span>
+                      <h3 class="timeline-header"><a href="#">Usuario</a></h3>
+
+                      <div class="timeline-body">
+                        <%= informe.detalle %>
+                      </div>
+                      <div class="timeline-footer">
+                        <% if (!egreso) { %>
+                          <a href="/taller/externos/informe/<%= informe.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
+                          <a class="btn btn-danger btn-sm">Borrar</a>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+              </div>
+            </div>
+          </div>
+                
+
+                  <% if (egreso) { %>
+                    <!-- Detalles del Egreso -->
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Detalles del Egreso</h3>
+                      </div>
+                      <div class="card-body">
+                        <!-- Fecha de Egreso -->
+                        <dt>Fecha de Egreso</dt>
+                        <dd>
+                          <%= egreso.fecha_egreso.toLocaleString() %>
+                        </dd>
+
+                        <!-- Detalles de la Reparacion -->
+                        <dt>Detalles de la Reparacion</dt>
+                        <dd>
+                          <%= egreso.detalle %>
+                        </dd>
+
+                        <!-- Costo -->
+                        <dt>Costo</dt>
+                        <dd>$<%= egreso.costo %>
+                        </dd>
+                      </div>
+                    </div>
+                    <% } %>
+                      <% if (!egreso) { %>
+                        <a href="/taller/externos/informe/<%= ingreso.id %>"
+                          class="btn btn-outline-primary">Agregar Informe</a>
+                        <a href="/taller/externos/egresos/<%= ingreso.id %>"
+                          class="btn btn-outline-success float-right">Informar Egreso</a>
+                        <% } %>
+        <a class="btn btn-block btn-outline-secondary mt-4" id="volverAtras">Volver Atrás</a>
+
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Modal de cobro -->
+      <% if (egreso) { %>
+        <div class="modal fade" id="modal-cobro">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="/taller/externos/informar-cobro/<%= ingreso.id %>?_method=PUT" method="post">
+                <div class="modal-header">
+                  <h4 class="modal-title">Informar Cobro</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>¿Estas seguro que deseas confirmar el cobro?</p>
+                  <dl>
+                    <dt>Monto</dt>
+                    <dd>$<%= egreso.costo %></dd>
+                  </dl>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Aceptar</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+      <% } %>
+    </main>
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+</body>
+
+</html>

@@ -16,9 +16,13 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.DATE,
       allowNull: false,
     },
-    detalle_reparacion: {
+    detalle: {
       type: dataTypes.TEXT,
       allowNull: false,
+    },
+    observacion: {
+      type: dataTypes.TEXT,
+      allowNull: true,
     },
     costo: {
       type: dataTypes.DECIMAL,
@@ -27,8 +31,7 @@ module.exports = (sequelize, dataTypes) => {
 
   let config = {
     tableName: "egresos",
-    createdAt: "fecha_egreso",
-    updatedAt: false,
+    timestamps: false,
   };
 
   const Egreso = sequelize.define(alias, cols, config);

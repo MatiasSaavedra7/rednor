@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/AdminLTEHead.ejs') %>
+    <%- include('../../partials/AdminLTEHead.ejs') %>
     <!-- <link rel="stylesheet" href="/css/ingreso.css" /> -->
     <title>REDNOR Taller - Informar Ingreso</title>
   </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
       <!-- Navbar -->
-      <%- include('../partials/navbar.ejs') %>
+      <%- include('../../partials/navbar.ejs') %>
 
       <!-- Main Sidebar -->
-      <%- include('../partials/mainSidebar.ejs') %>
+      <%- include('../../partials/mainSidebar.ejs') %>
 
       <!-- Control Sidebar -->
-      <%- include('../partials/controlSidebar.ejs') %>
+      <%- include('../../partials/controlSidebar.ejs') %>
       <!-- MAIN -->
       <main class="content-wrapper">
         <section class="content-header">
@@ -56,10 +56,10 @@
                       </div>
             
                       <div class="form-group">
-                        <label for="descripcion">Descripcion: </label>
-                        <textarea name="descripcion" id="descripcion" class="form-control"></textarea>
+                        <label for="detalle">Descripcion: </label>
+                        <textarea name="detalle" id="detalle" class="form-control" rows="10"></textarea>
                       </div>
-                      <input type="submit" class="btn btn-primary w-100" />
+                      <input type="submit" class="btn btn-block btn-primary" />
                     </form>
                   </div>
               </div>
@@ -70,6 +70,6 @@
       <!-- FIN MAIN -->
     </div>
 
-    <%- include('../partials/AdminLTEScripts.ejs') %>
+    <%- include('../../partials/AdminLTEScripts.ejs') %>
   </body>
 </html>
