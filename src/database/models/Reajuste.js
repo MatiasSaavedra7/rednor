@@ -25,7 +25,7 @@ module.exports = (sequelize, dataTypes) => {
       allowNull: false,
     },
     fecha_reajuste: {
-      type: dataTypes.DATEONLY,
+      type: dataTypes.DATE,
     },
   };
 

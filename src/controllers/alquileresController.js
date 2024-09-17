@@ -32,7 +32,7 @@ module.exports = {
       let alquiler = await alquileresService.getOneByPK(req.params.id);
       let cliente = await clientesService.getOneByPK(alquiler.cliente.id);
       let equipo = await equiposService.getOneByPK(alquiler.equipo.id);
-      let reajustes = await reajustesService.getAllByField({id_alquiler: req.params.id})
+      let reajustes = await reajustesService.getAllByIdAlquiler(req.params.id)
       res.render("alquileres/detalleAlquiler", { alquiler, cliente, equipo, reajustes });
     } catch (error) {
       console.log(error);
@@ -60,29 +60,35 @@ module.exports = {
 
       if (errors.isEmpty()) {
         // Capturo el id del cliente desde el query params.
-        let id = req.query.cliente;
+        // let id = req.query.cliente;
+
         // Verifico si se ingreso una fecha de vencimiento.
         let fechaBaja = req.body.fecha_baja ? req.body.fecha_baja : null;
-        // Obtengo la fecha actual y la convierto a formato ISO.
+
+        // Obtengo la fecha actual.
         let fechaAlta = new Date();
-        let fechaAltaISO = fechaAlta.toISOString().split("T")[0];
+
 
         // Calculo el precio multiplicando el minimo de copias por el precio de cada una.
         let precio = req.body.minimo_copias * req.body.precio_copias;
 
         let data = {
           ...req.body,
-          id_cliente: id,
-          precio: precio,
-          fecha_alta: fechaAltaISO,
-          fecha_baja: fechaBaja,
-          fecha_reajuste: fechaAltaISO,
+          id_cliente: req.query.cliente,
+          precio: req.body.minimo_copias * req.body.precio_copias,
+          fecha_alta: new Date(),
+          fecha_baja: req.body.fecha_baja ? req.body.fecha_baja : null,
+          fecha_reajuste: new Date(),
           activo: true,
         };
 
         let alquiler = await alquileresService.create(data);
         if (alquiler) {
-          await equiposService.setEstadoAlquilado(alquiler.id_equipo);
+          // Actualizo el estado del equipo a 'Alquilado'
+          // await equiposService.setEstadoAlquilado(alquiler.id_equipo);
+          await equiposService.updateByPK({id_estado: 3}, alquiler.id_equipo);
+
+          // Redirigir al usuario al detalle del alquiler
           res.redirect(`/alquileres/detalles/${alquiler.id}`);
         }
       } else {
@@ -106,17 +112,17 @@ module.exports = {
     try {
       // Capturo el ID del contrato que viene por parametro.
       let alquiler = await alquileresService.getOneByPK(req.params.id);
-      // Obtengo la fecha actual y la convierto a formato ISO.
-      let fechaBaja = new Date();
-      let fechaBajaISO = fechaBaja.toISOString().split("T")[0];
-      // Envio un objeto con la siguiente informacion, fecha_baja para informar la fecha en la que finalizo el contrato y 'activo: false' para poder agrupar los contratos finalizados.
+
       let data = {
-        activo: false,
-        fecha_baja: fechaBajaISO,
+        fecha_baja: new Date(),   // Envio la fecha actual
+        activo: false,            // Cambio el valor de activo a false
       };
-      await alquileresService.updateByPK(data, alquiler.id);
+
+      await alquileresService.updateByPK(data, req.params.id);
+
       // Actualizo el estado del equipo a Disponible.
-      await equiposService.setEstadoDisponible(alquiler.equipo.id);
+      await equiposService.updateByPK(alquiler.id_equipo, {id_estado: 1});
+
       // Redirigir al usuario a la pagina de alquileres
       res.redirect("/alquileres");
     } catch (error) {
@@ -135,8 +141,12 @@ module.exports = {
 
   actualizarContrato: async (req, res) => {
     try {
+      // Obtengo la informacion del alquiler a traves del id
       let alquiler = await alquileresService.getOneByPK(req.params.id);
+
+      // Guardo los resultados de la validacion en errors
       let errors = validationResult(req);
+
       if (errors.isEmpty()) {
         // Primero tengo que crear un nuevo registro en la tabla de reajustes con los valores del alquiler antes de ser actualizados
         let dataReajuste = {
@@ -146,27 +156,23 @@ module.exports = {
           precio: alquiler.precio,
           fecha_reajuste: alquiler.fecha_reajuste,
         };
+
+        // Creo el registro en la tabla de reajustes.
         await reajustesService.create(dataReajuste);
 
         // Luego, se procede a actualizar los datos del alquiler.
-        // Obtengo la fecha actual
-        let fechaReajuste = new Date();
-        let fechaReajusteISO = fechaReajuste.toISOString().split("T")[0];
-        // Calculo el nuevo precio
-        let precio = req.body.minimo_copias * req.body.precio_copias;
         // Armo un objeto que sera pasado como argumento.
         let dataToUpdate = {
           ...req.body,
-          precio: precio,
-          fecha_reajuste: fechaReajusteISO,
+          precio: req.body.minimo_copias * req.body.precio_copias,  //  Nuevo precio
+          fecha_reajuste: new Date(),                               //  Fecha actual
         };
-        let alquilerUpdated = await alquileresService.updateByPK(
-          dataToUpdate,
-          req.params.id
-        );
-        if (alquilerUpdated) {
-          res.redirect(`/alquileres/detalles/${alquiler.id}`);
-        }
+
+        // Actualizo los datos del alquiler en la base de datos
+        await alquileresService.updateByPK(dataToUpdate, req.params.id);
+
+        //  Redirigir al usuario al detalle del alquiler
+        res.redirect(`/alquileres/detalles/${alquiler.id}`);
       } else {
         let alquiler = await alquileresService.getOneByPK(req.params.id);
         res.render("alquileres/reajusteAlquiler", {

@@ -21,7 +21,7 @@ module.exports = {
       return db.Equipo.findAll({
         include: ["estado", "tipo"],
         where: {
-          id_estado: { [Op.eq]: 1 },
+          id_estado: { [Op.in]: [1, 2] },
         },
       });
     } catch (error) {
@@ -169,7 +169,7 @@ module.exports = {
     }
   },
 
-  updateByPK: async (id, data) => {
+  updateByPK: async (data, id) => {
     try {
       return db.Equipo.update(new Equipo(data), { where: { id: id } })
     } catch (error) {

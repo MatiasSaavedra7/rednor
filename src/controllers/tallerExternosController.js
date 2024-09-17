@@ -1,9 +1,10 @@
 const marcasService = require("../database/services/marcasService");
-const tiposService = require('../database/services/tiposEquiposService');
-const equiposExternosService = require('../database/services/equiposExternosService');
+const tiposService = require("../database/services/tiposEquiposService");
+const equiposExternosService = require("../database/services/equiposExternosService");
 const ingresosExternosService = require("../database/services/ingresosExternosService");
 const egresosExternosService = require("../database/services/egresoExternoService");
 const informesExternosService = require("../database/services/informesExternosService");
+const insumosExternosService = require('../database/services/insumosExternosService');
 
 const { validationResult } = require("express-validator");
 
@@ -25,7 +26,9 @@ module.exports = {
         let equipoExterno = await equiposExternosService.create(req.body);
         //  Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado
         if (equipoExterno) {
-          res.redirect(`/taller/externos/ingresos?equipo-externo=${equipoExterno.id}`);
+          res.redirect(
+            `/taller/externos/ingresos?equipo-externo=${equipoExterno.id}`
+          );
         }
       } else {
         let marcas = await marcasService.getAll();
@@ -47,11 +50,22 @@ module.exports = {
       let ingresos = await ingresosExternosService.getAll();
 
       // Filtrar los ingresos según el estado
-      let ingresosEnTaller = ingresos.filter(ingreso => ingreso.id_estado === 1 || ingreso.id_estado === 3);
-      let ingresosEnEspera = ingresos.filter(ingreso => ingreso.id_estado === 2);
-      let ingresosCobrados = ingresos.filter(ingreso => ingreso.id_estado === 4);
-      
-      res.render("taller/externos/tallerExterno", { ingresos, ingresosEnTaller, ingresosEnEspera, ingresosCobrados});
+      let ingresosEnTaller = ingresos.filter(
+        (ingreso) =>
+          ingreso.id_estado === 1 ||
+          ingreso.id_estado === 2 ||
+          ingreso.id_estado === 3
+      );
+      // let ingresosEnEspera = ingresos.filter(ingreso => ingreso.id_estado === 2);
+      let ingresosHistorial = ingresos.filter(
+        (ingreso) => ingreso.id_estado === 4 || ingreso.id_estado == 6
+      );
+
+      res.render("taller/externos/tallerExterno", {
+        ingresos,
+        ingresosEnTaller,
+        /* ingresosEnEspera,*/ ingresosHistorial,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -62,10 +76,36 @@ module.exports = {
       let ingreso = await ingresosExternosService.getOneByPK(req.params.id);
       let egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id);
       let informes = await informesExternosService.getAllByIdIngreso(ingreso.id);
+      let insumos = await insumosExternosService.getAllByIdIngreso(ingreso.id);
+
+      // Combinacion de informes
+      const combinedData = [
+        ...informes.map(informe => ({
+          type: 'informe',
+          fecha: informe.fecha_informe,
+          detalle: informe.detalle,
+          id: informe.id
+        })),
+        ...insumos.map(insumo => ({
+          type: 'insumo',
+          fecha: insumo.fecha_entrega,
+          observacion: insumo.observacion,
+          nro_remito: insumo.nro_remito,
+          id: insumo.id,
+        }))
+      ];
+      
+      // Ordenar los datos por fecha (de más antiguo a más reciente)
+      combinedData.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+      
+      let todos = [...insumos, ...informes];
       res.render("taller/externos/detalleTallerExterno", {
         ingreso,
         egreso,
         informes,
+        insumos,
+        combinedData,
       });
     } catch (error) {
       console.log(error);
@@ -125,8 +165,14 @@ module.exports = {
       // Almaceno en la base de datos.
       await egresosExternosService.create(data);
 
-      // Actualizo el estado del equipo a 'Listo para retirar'.
-      await ingresosExternosService.updateByPK(ingreso.id, { id_estado: 3 });
+      // Analizo si el estado del equipo
+      if (req.body.estado == "Listo para retirar") {
+        // Actualizo el estado del equipo a 'Listo para retirar'.
+        await ingresosExternosService.updateByPK(ingreso.id, { id_estado: 3 });
+      } else {
+        // Actualizo el estado del equipo a 'Sin arreglo'
+        await ingresosExternosService.updateByPK(ingreso.id, { id_estado: 6 });
+      }
 
       // Redirecciono al usuario a la pagina de detalle del ingreso.
       res.redirect(`/taller/externos/detalle/${ingreso.id}`);
@@ -234,6 +280,41 @@ module.exports = {
 
       // Redirecciono al usuario a la lista de ingresos
       res.redirect("/taller/externos");
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  insumos: async (req, res) => {
+    try {
+      let ingreso = await ingresosExternosService.getOneByPK(
+        req.params.idIngreso
+      );
+      res.render("taller/externos/insumosExternos", { ingreso });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  almacenarInsumos: async (req, res) => {
+    try {
+      let ingreso = await ingresosExternosService.getOneByPK(req.params.idIngreso);
+
+      // Creo un objeto 'data' con la informacion para almacenar en los informes de insumos
+      let data = {
+        ...req.body,
+        id_ingreso_externo: ingreso.id,
+        fecha_entrega: new Date(),
+      };
+
+      // Almaceno en la base de datos los insumos
+      await insumosExternosService.create(data);
+
+      // Actualizo el estado del ingreso a 'En Taller'
+      await ingresosExternosService.updateByPK(req.params.idIngreso, {id_estado: 1});
+
+      // Redirecciono al usuario al detalle del ingresos
+      res.redirect(`/taller/externos/detalle/${ingreso.id}`);
     } catch (error) {
       console.log(error);
     }

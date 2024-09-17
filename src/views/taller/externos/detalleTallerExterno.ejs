@@ -38,6 +38,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-8 m-auto">
+
               <!-- Detalles del Ingreso -->
               <div class="card">
                 <div class="card-header">
@@ -57,6 +58,9 @@
                   <dd>
                     <%= ingreso.fecha_ingreso.toLocaleString() %>
                   </dd>
+
+                  <dt>Estado</dt>
+                  <dd><%= ingreso.estado.nombre %></dd>
 
                   <!-- Info del Cliente -->
                   <p class="lead mb-1">Informacion del Cliente</p>
@@ -95,82 +99,109 @@
                     <%= ingreso.detalle %>
                   </dd>
                 </div>
-              </div> 
-          <!-- Timeline -->
-          <div class="row">
-            <div class="col">
-              <div class="timeline">
-                <div class="time-label">
-                  <!-- <span class="bg-red">
-                    <%# ingreso.fecha_ingreso.toLocaleDateString() %>
-                  </span> -->
-                </div>
-                
-                <!-- Informes -->
-                <% informes.forEach(informe=> { %>
-                  <div>
-                    <i class="fas fa-comments bg-yellow"></i>
-                    <div class="timeline-item">
-                      <span class="time"><i class="fas fa-clock"></i>
-                        <%= informe.fecha_informe.toLocaleString() %>
-                      </span>
-                      <h3 class="timeline-header"><a href="#">Usuario</a></h3>
-
-                      <div class="timeline-body">
-                        <%= informe.detalle %>
-                      </div>
-                      <div class="timeline-footer">
-                        <% if (!egreso) { %>
-                          <a href="/taller/externos/informe/<%= informe.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
-                          <a class="btn btn-danger btn-sm">Borrar</a>
-                        <% } %>
-                      </div>
-                    </div>
-                  </div>
-                  <% }) %>
               </div>
-            </div>
-          </div>
-                
+              <!-- /Detalles del Ingreso -->
 
-                  <% if (egreso) { %>
-                    <!-- Detalles del Egreso -->
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Detalles del Egreso</h3>
-                      </div>
-                      <div class="card-body">
-                        <!-- Fecha de Egreso -->
-                        <dt>Fecha de Egreso</dt>
-                        <dd>
-                          <%= egreso.fecha_egreso.toLocaleString() %>
-                        </dd>
-
-                        <!-- Detalles de la Reparacion -->
-                        <dt>Detalles de la Reparacion</dt>
-                        <dd>
-                          <%= egreso.detalle %>
-                        </dd>
-
-                        <!-- Costo -->
-                        <dt>Costo</dt>
-                        <dd>$<%= egreso.costo %>
-                        </dd>
-                      </div>
+              <!-- Timeline -->
+              <div class="row">
+                <div class="col">
+                  <div class="timeline">
+                    <div class="time-label">
+                      <span class="bg-red">
+                        <%= ingreso.fecha_ingreso.toLocaleDateString() %>
+                      </span>
                     </div>
-                    <% } %>
-                      <% if (!egreso) { %>
-                        <a href="/taller/externos/informe/<%= ingreso.id %>"
-                          class="btn btn-outline-primary">Agregar Informe</a>
-                        <a href="/taller/externos/egresos/<%= ingreso.id %>"
-                          class="btn btn-outline-success float-right">Informar Egreso</a>
+              
+                    <!-- Recorremos los datos combinados -->
+                    <% combinedData.forEach(item => { %>
+                      <div>
+                        <% if (item.type === "informe") { %>
+                          <i class="fas fa-file-alt bg-yellow"></i>
+                        <% } else if (item.type === "insumo"){ %>
+                          <i class="fas fa-box bg-green"></i>
                         <% } %>
-        <a class="btn btn-block btn-outline-secondary mt-4" id="volverAtras">Volver Atrás</a>
+                        <div class="timeline-item">
+                          <span class="time"><i class="fas fa-clock"></i> 
+                            <%= new Date(item.fecha).toLocaleString() %>
+                          </span>
+                          <% if (item.type === 'informe') { %>
+                            <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                            <div class="timeline-body">
+                              <%= item.detalle %>
+                              <%# item.id %>
+                            </div>
+                            <div class="timeline-footer">
+                              <% if (!egreso) { %>
+                                <a href="/taller/externos/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
+                                <a class="btn btn-danger btn-sm">Borrar</a>
+                              <% } %>
+                            </div>
+                          <% } else if (item.type === 'insumo') { %>
+                            <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                            <div class="timeline-body">
+                              <%= item.observacion %>
+                            </div>
+                            <div class="timeline-footer">
+                              <p class="text-info">Nro de Remito: <%= item.nro_remito %></p>
+                            </div>
+                          <% } %>
+                        </div>
+                      </div>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+              <!-- /Timeline -->
+          
+              <% if (egreso) { %>
+                <!-- Detalles del Egreso -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Detalles del Egreso</h3>
+                  </div>
+                  <div class="card-body">
+                    <!-- Fecha de Egreso -->
+                    <dt>Fecha de Egreso</dt>
+                    <dd>
+                      <%= egreso.fecha_egreso.toLocaleString() %>
+                    </dd>
 
+                    <!-- Detalles de la Reparacion -->
+                    <dt>Detalles de la Reparacion</dt>
+                    <dd>
+                      <%= egreso.detalle %>
+                    </dd>
+
+                    <!-- Costo -->
+                    <dt>Costo</dt>
+                    <dd>$<%= egreso.costo %>
+                    </dd>
+                  </div>
+                </div>
+                <!-- /Detalles del Egreso -->
+              <% } %>
+
+              <!-- Botones -->
+              <% if (!egreso) { %>
+                <div class="d-flex justify-content-between">
+                  <!-- Boton Agregar Informe -->
+                  <a href="/taller/externos/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
+                  
+                  <% if (ingreso.id_estado == 2) { %>
+                    <!-- Boton para Entregar Insumos -->
+                    <a href="/taller/externos/<%= ingreso.id %>/insumos/crear" class="btn btn-outline-info float-middle">Entregar Insumos</a>
+                  <% } %>
+
+                  <!-- Boton para informar Egreso -->
+                  <a href="/taller/externos/egresos/<%= ingreso.id %>" class="btn btn-outline-success float-right">Informar Egreso</a>
+                </div>
+              <% } %>
+              <a href="/taller/externos" class="btn btn-block btn-outline-secondary mt-4">Volver Atrás</a>
             </div>
           </div>
         </div>
       </section>
+      <!-- /Content Body -->
       
       <!-- Modal de cobro -->
       <% if (egreso) { %>
@@ -202,6 +233,7 @@
           <!-- /.modal-dialog -->
         </div>
       <% } %>
+      <!-- /Modal de cobro -->
     </main>
   </div>
 

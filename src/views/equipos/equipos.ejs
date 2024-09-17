@@ -36,6 +36,7 @@
                   <table id="equipos" class="table table-bordered table-hover">
                     <thead>
                       <tr>
+                        <th>ID</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>Serie</th>
@@ -47,6 +48,9 @@
                     <tbody>
                       <% equipos.forEach(equipo=> { %>
                         <tr>
+                          <td>
+                            <%= equipo.id %>
+                          </td>
                           <td>
                             <%= equipo.marca %>
                           </td>

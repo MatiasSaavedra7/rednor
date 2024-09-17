@@ -41,4 +41,9 @@ router.put("/informe/:id/editar", controller.actualizarInforme);
 // INFORMAR EL COBRO DE UN ARREGLO
 router.put("/informar-cobro/:idIngreso", controller.informarCobro);
 
+// ENTREGA DE INSUMOS
+router.get("/:idIngreso/insumos/crear", controller.insumos);
+
+router.post("/:idIngreso/insumos/crear", controller.almacenarInsumos);
+
 module.exports = router;

@@ -26,7 +26,7 @@
                     <a href="/taller/externos/ingresos" class="btn btn-outline-primary float-right">Nuevo</a>
                     <ul class="nav nav-pills ml-auto p-2">
                       <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">En Taller</a></li>
-                      <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">En Espera de Insumos </a></li>
+                      <!-- <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">En Espera de Insumos </a></li> -->
                       <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Historial</a></li>
                     </ul>
                   </div>
@@ -74,7 +74,7 @@
                           </table>
                         </div>
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_2">
+                        <!-- <div class="tab-pane" id="tab_2">
                           <table id="ingresosEnEspera" class="table table-bordered table-hover">
                             <thead>
                               <tr>
@@ -87,36 +87,36 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <% ingresosEnEspera.forEach(ingresoEnEspera => { %>
+                              <%# ingresosEnEspera.forEach(ingresoEnEspera => { %>
                               <tr>
-                                <td><%= ingresoEnEspera.id %></td>
+                                <td><%# ingresoEnEspera.id %></td>
                                 <td>
-                                  <%= ingresoEnEspera.equipo.marca %>
-                                  <%= ingresoEnEspera.equipo.modelo %>
-                                  <%= ingresoEnEspera.equipo.numero_serie %>
+                                  <%# ingresoEnEspera.equipo.marca %>
+                                  <%# ingresoEnEspera.equipo.modelo %>
+                                  <%# ingresoEnEspera.equipo.numero_serie %>
                                 </td>
                                 <td>
-                                  <%= ingresoEnEspera.fecha_ingreso.toLocaleString() %>
+                                  <%# ingresoEnEspera.fecha_ingreso.toLocaleString() %>
                                 </td>
                                 <td>
-                                  <% if (ingresoEnEspera.egreso) { %>
-                                    <%= ingresoEnEspera.egreso.fecha_egreso.toLocaleString() %>
-                                  <% } else { %>
+                                  <%# if (ingresoEnEspera.egreso) { %>
+                                    <%# ingresoEnEspera.egreso.fecha_egreso.toLocaleString() %>
+                                  <%# } else { %>
                                     -
-                                  <% } %>
+                                  <%# } %>
                                 </td>
-                                <td><%= ingresoEnEspera.estado.nombre %></td>
+                                <td><%# ingresoEnEspera.estado.nombre %></td>
                                 <td>
-                                  <a href="/taller/externos/detalle/<%= ingresoEnEspera.id %>">Detalles</a>
+                                  <a href="/taller/externos/detalle/<%# ingresoEnEspera.id %>">Detalles</a>
                                 </td>
                               </tr>
-                              <% }); %>
+                              <%# }); %>
                             </tbody>
                           </table>
-                        </div>
+                        </div> -->
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="tab_3">
-                          <table id="ingresosCobrados" class="table table-bordered table-hover">
+                          <table id="ingresosHistorial" class="table table-bordered table-hover">
                             <thead>
                               <tr>
                                 <th>ID</th>
@@ -128,27 +128,27 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <% ingresosCobrados.forEach(ingresoCobrado => { %>
+                              <% ingresosHistorial.forEach(ingresoHistorial => { %>
                               <tr>
-                                <td><%= ingresoCobrado.id %></td>
+                                <td><%= ingresoHistorial.id %></td>
                                 <td>
-                                  <%= ingresoCobrado.equipo.marca %>
-                                  <%= ingresoCobrado.equipo.modelo %>
-                                  <%= ingresoCobrado.equipo.numero_serie %>
+                                  <%= ingresoHistorial.equipo.marca %>
+                                  <%= ingresoHistorial.equipo.modelo %>
+                                  <%= ingresoHistorial.equipo.numero_serie %>
                                 </td>
                                 <td>
-                                  <%= ingresoCobrado.fecha_ingreso.toLocaleString() %>
+                                  <%= ingresoHistorial.fecha_ingreso.toLocaleString() %>
                                 </td>
                                 <td>
-                                  <% if (ingresoCobrado.egreso) { %>
-                                    <%= ingresoCobrado.egreso.fecha_egreso.toLocaleString() %>
+                                  <% if (ingresoHistorial.egreso) { %>
+                                    <%= ingresoHistorial.egreso.fecha_egreso.toLocaleString() %>
                                   <% } else { %>
                                     -
                                   <% } %>
                                 </td>
-                                <td><%= ingresoCobrado.estado.nombre %></td>
+                                <td><%= ingresoHistorial.estado.nombre %></td>
                                 <td>
-                                  <a href="/taller/externos/detalle/<%= ingresoCobrado.id %>">Detalles</a>
+                                  <a href="/taller/externos/detalle/<%= ingresoHistorial.id %>">Detalles</a>
                                 </td>
                               </tr>
                               <% }); %>
@@ -184,10 +184,10 @@
         }).buttons().container().appendTo('#ingresosEnEspera_wrapper .col-md-6:eq(0)');
       });
       $(function () {
-        $("#ingresosCobrados").DataTable({
+        $("#ingresosHistorial").DataTable({
           "responsive": true, "lengthChange": false, "autoWidth": false,
           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#ingresosCobrados_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#ingresosHistorial_wrapper .col-md-6:eq(0)');
       });
     </script>
   </body>

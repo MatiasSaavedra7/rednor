@@ -80,7 +80,7 @@ module.exports = {
     try {
       let errors = validationResult(req);
       if (errors.isEmpty()) {
-        await equiposService.updateByPK(req.params.id, req.body);
+        await equiposService.updateByPK(req.body, req.params.id);
         res.redirect(`/equipos/detalle/${req.params.id}`);
       } else {
         let equipo = await equiposService.getOneByPK(req.params.id);

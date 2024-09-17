@@ -16,19 +16,26 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: false,
     },
-    costo: {
-      type: dataTypes.DECIMAL,
-    },
     fecha_egreso: {
       type: dataTypes.DATE,
       allowNull: false,
     },
+    precio: {
+      type: dataTypes.DECIMAL,
+    },
+    id_forma_pago: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
+    fecha_cobro: {
+      type: dataTypes.DATE,
+      allowNull: true,
+    }
   };
 
   let config = {
     tableName: "egresos_externos",
-    createdAt: "fecha_egreso",
-    updatedAt: false,
+    timestamps: false,
   };
 
   const EgresoExterno = sequelize.define(alias, cols, config);
@@ -37,6 +44,11 @@ module.exports = (sequelize, dataTypes) => {
     EgresoExterno.belongsTo(models.IngresoExterno, {
       as: "ingreso",
       foreignKey: "id_ingreso_externo"
+    });
+
+    EgresoExterno.belongsTo(models.FormaPago, {
+      as: "forma_pago",
+      foreignKey: "id_forma_pago"
     });
   };
 

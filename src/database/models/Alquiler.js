@@ -37,17 +37,17 @@ module.exports = (sequelize, dataTypes) => {
       allowNull: false,
     },
     fecha_alta: {
-      type: dataTypes.DATEONLY,
+      type: dataTypes.DATE,
     },
     fecha_baja: {
-      type: dataTypes.DATEONLY,
+      type: dataTypes.DATE,
     },
     activo: {
       type: dataTypes.BOOLEAN,
       allowNull: false,
     },
     fecha_reajuste: {
-      type: dataTypes.DATEONLY,
+      type: dataTypes.DATE,
     },
   };
 

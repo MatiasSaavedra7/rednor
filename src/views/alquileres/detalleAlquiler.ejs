@@ -54,15 +54,15 @@
                         <dd><%= alquiler.departamento %></dd>
 
                         <dt>Fecha de Alta del Contrato</dt>
-                        <dd><%= alquiler.fecha_alta %></dd>
+                        <dd><%= alquiler.fecha_alta.toLocaleString() %></dd>
 
                         <% if (alquiler.fecha_baja) { %>
                           <dt>Fecha de Baja del Contrato</dt>
-                          <dd><%= alquiler.fecha_baja %></dd>
+                          <dd><%= alquiler.fecha_baja.toLocaleString() %></dd>
                         <% } %>
 
                         <dt>Ultimo Reajuste</dt>
-                        <dd><%= alquiler.fecha_reajuste %></dd>
+                        <dd><%= alquiler.fecha_reajuste.toLocaleString() %></dd>
                       </dl>
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-one-cliente" role="tabpanel" aria-labelledby="custom-tabs-one-cliente-tab">
@@ -139,7 +139,7 @@
                     <tbody>
                       <% reajustes.forEach(reajuste => { %>
                         <tr>
-                        <td><%= reajuste.fecha_reajuste %></td>
+                        <td><%= reajuste.fecha_reajuste.toLocaleString() %></td>
                         <td><%= reajuste.minimo_copias %></td>
                         <td>$<%= reajuste.precio_copias %></td>
                         <td>$<%= reajuste.precio %></td>

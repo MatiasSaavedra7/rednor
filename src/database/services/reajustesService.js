@@ -16,12 +16,12 @@ module.exports = {
     }
   },
 
-  getAllByField: async (field) => {
+  getAllByIdAlquiler: async (id) => {
     try {
       return db.Reajuste.findAll({
         include: ["alquiler"],
         order: [["id", "DESC"]],
-        where: field,
+        where: { id_alquiler: id },
       })
     } catch (error) {
       console.log(error);

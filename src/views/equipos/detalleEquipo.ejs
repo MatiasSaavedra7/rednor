@@ -52,11 +52,13 @@
                       <dd><%= equipo.tipo.nombre %></dd>
 
                       <dt>Estado</dt>
-                      <% if (equipo.id_estado == 2) { %>
-                        <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
-                      <% } else { %>
-                        <%= equipo.estado.nombre %>
-                      <% } %>
+                      <dd>
+                        <% if (equipo.id_estado == 3) { %>
+                          <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
+                        <% } else { %>
+                          <%= equipo.estado.nombre %>
+                        <% } %>
+                      </dd>
 
                       <dt>Informes Taller</dt>
                       <dd>Mostrar historial del taller aqui</dd>

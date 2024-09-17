@@ -24,9 +24,17 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: true,
     },
-    costo: {
+    precio: {
       type: dataTypes.DECIMAL,
     },
+    id_forma_pago: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
+    fecha_cobro: {
+      type: dataTypes.DATE,
+      allowNull: true,
+    }
   };
 
   let config = {
@@ -41,6 +49,12 @@ module.exports = (sequelize, dataTypes) => {
       as: "ingreso",
       foreignKey: "id_ingreso"
     });
+
+    Egreso.belongsTo(models.FormaPago, {
+      as: "forma_pago",
+      foreignKey: "id_forma_pago"
+    });
+
   };
 
   return Egreso;

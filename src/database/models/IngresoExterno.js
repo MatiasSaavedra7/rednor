@@ -73,6 +73,11 @@ module.exports = (sequelize, dataTypes) => {
       as: "estado",
       foreignKey: "id_estado",
     });
+
+    IngresoExterno.hasMany(models.InsumoExterno, {
+      as: "insumo",
+      foreignKey: "id_ingreso_externo",
+    });
   };
 
   return IngresoExterno;

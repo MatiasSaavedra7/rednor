@@ -8,15 +8,11 @@ module.exports = {
     try {
       let ingresos = await ingresosService.getAll();
 
-      let ingresosEnTaller = ingresos.filter(
-        (ingreso) => ingreso.id_estado == 1 || ingreso.id_estado == 2
-      );
+      let ingresosEnTaller = ingresos.filter((ingreso) => ingreso.id_estado == 1 || ingreso.id_estado == 2 || ingreso.id_estado == 3);
       // let ingresosEnEspera = ingresos.filter(
       //   (ingreso) => ingreso.id_estado == 2
       // );
-      let ingresosHistorial = ingresos.filter(
-        (ingreso) => ingreso.id_estado == 3 || ingreso.id_estado == 4 || ingreso.id_estado == 5 || ingreso.id_estado == 6
-      );
+      let ingresosHistorial = ingresos.filter((ingreso) => ingreso.id_estado == 4 || ingreso.id_estado == 5 || ingreso.id_estado == 6 || ingreso.id_estado == 7);
       res.render("taller/internos/taller", {
         ingresos,
         ingresosEnTaller,
@@ -69,7 +65,7 @@ module.exports = {
 
       if (ingreso) {
         // Actualizo el estado del Equipo a 'En Taller'
-        await equiposService.updateByPK(ingreso.id_equipo, { id_estado: 4});
+        await equiposService.updateByPK({ id_estado: 4}, ingreso.id_equipo);
 
         // Redirigir al usuario al detalle del ingreso
         res.redirect(`/taller/detalle/${ingreso.id}`);
@@ -97,31 +93,36 @@ module.exports = {
         fecha_egreso: new Date(),
       };
 
-      console.log("_________");
-      
-      console.log(req.body);
-
       let egreso = await egresosService.create(data);
 
       if (egreso) {
         let ingreso = await ingresosService.getOneByPK(req.params.id);
 
         // Analizo el estado seleccionado desde los radio inputs
-        if (req.body.estado == "Disponible") {
-          //  Actualizo el estadoe del Ingreso a 'Listo para retirar'
-          await ingresosService.updateByPK({ id_estado: 3 }, ingreso.id);
+        if (req.body.estado == "Sin arreglo") {
+          // Actualizo el estado del Ingreso a 'Sin arreglo'
+          await ingresosService.updateByPK({ id_estado: 6}, ingreso.id);
+
+          // Actualizo el estado del Equipo a 'Sin Arreglo'
+          await equiposService.updateByPK({ id_estado: 5}, ingreso.id_equipo);
+        }
+
+        if (req.body.estado == "Disponible" && req.body.observacion != "") {
+          // Actualizo el estado del Ingreso a 'Disponible c/ obs.'
+          await ingresosService.updateByPK({ id_estado: 7}, ingreso.id);
+
+          // Actualizo el estado del Equipo a 'Disponible c/ obs.'
+          await equiposService.updateByPK({id_estado: 2}, ingreso.id_equipo);
+        }
+
+        if (req.body.estado == "Disponible" && req.body.observacion == "") {
+          //  Actualizo el estado del Ingreso a 'Disponible'
+          await ingresosService.updateByPK({ id_estado: 5 }, ingreso.id);
           
           // Actualizo el estado del Equipo a 'Disponible'
-          // await equiposService.setEstadoDisponible(ingreso.id_equipo);
-          await equiposService.updateByPK(ingreso.id_equipo, {id_estado: 1});
-        } else {
-          // Si es falso, entonces actualizo el estado del ingreso a 'Sin Arreglo'
-          await ingresosService.updateByPK({ id_estado: 6 }, ingreso.id);
-
-          // Actualizo el estado del Equipo a 'Sin Arreglo0
-          await equiposService.updateByPK(ingreso.id_equipo, { id_estado: 5});
+          await equiposService.updateByPK({id_estado: 1}, ingreso.id_equipo);
         }
-        
+
         // Redirigir al usuario a la pagina de detalle del ingreso
         res.redirect(`/taller/detalle/${egreso.id_ingreso}`);
       }

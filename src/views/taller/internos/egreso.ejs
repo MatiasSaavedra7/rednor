@@ -50,13 +50,13 @@
 
                     <div class="form-group clearfix">
                       <div class="icheck-primary d-block">
-                        <input type="radio" id="radioPrimary1" name="estado" value="Disponible">
-                        <label for="radioPrimary1">Disponible</label>
+                        <input type="radio" id="Disponible" name="estado" value="Disponible" required>
+                        <label for="Disponible">Disponible</label>
                       </div>
 
                       <div class="icheck-primary d-block pt-2">
-                        <input type="radio" id="radioPrimary2" name="estado" value="Sin arreglo">
-                        <label for="radioPrimary2">Sin Arreglo</label>
+                        <input type="radio" id="Sin Arreglo" name="estado" value="Sin arreglo">
+                        <label for="Sin Arreglo">Sin Arreglo</label>
                       </div>
                     </div>
                     <input type="submit" class="btn btn-block btn-primary" />
@@ -72,5 +72,9 @@
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script>
+    console.log("conectado");
+    
+  </script>
 </body>
 </html>

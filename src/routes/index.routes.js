@@ -12,6 +12,7 @@ const repuestos = require("./repuestos.routes.js");
 const taller = require("./taller.routes.js");
 const pagos = require("./pagos.routes.js");
 const externos = require('./taller.externo.routes.js');
+const gastos = require('./gastos.routes.js');
 
 const pruebas = require("./pruebas.routes.js");
 
@@ -50,5 +51,8 @@ router.use("/pruebas", pruebas);
 
 // Pagos routes
 router.use("/pagos", pagos);
+
+// Gastos routes
+router.use("/gastos", gastos);
 
 module.exports = router;

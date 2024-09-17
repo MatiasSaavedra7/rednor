@@ -51,6 +51,9 @@
                   <!-- Fecha de Ingreso -->
                   <dt>Fecha de Ingreso</dt>
                   <dd><%= ingreso.fecha_ingreso.toLocaleString() %></dd>
+
+                  <dt>Estado</dt>
+                  <dd><%= ingreso.estado.nombre %></dd>
                   
                   <!-- Informacion del Equipo -->
                   <p class="lead mb-1">Informacion del Equipo</p>
@@ -122,6 +125,12 @@
                   <!-- Detalles de la Reparacion -->
                   <dt>Detalles de la Reparacion</dt>
                   <dd><%= egreso.detalle %></dd>
+
+                  <!-- Observaciones -->
+                  <% if (egreso.observacion) { %>
+                   <dt>Observaciones</dt>
+                   <dd><%= egreso.observacion %></dd>
+                  <% } %>
 
                   <!-- Costo -->
                   <dt>Costo</dt>
