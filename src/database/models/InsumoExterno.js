@@ -12,6 +12,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
+    id_informe_externo: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
     nro_remito: {
       type: dataTypes.INTEGER,
       allowNull: false,
@@ -37,6 +41,11 @@ module.exports = (sequelize, dataTypes) => {
     InsumoExterno.belongsTo(models.IngresoExterno, {
       as: "ingreso",
       foreignKey: "id_ingreso_externo",
+    });
+
+    InsumoExterno.belongsTo(models.InformeExterno, {
+      as: "informe",
+      foreignKey: "id_informe_externo",
     });
   };
 

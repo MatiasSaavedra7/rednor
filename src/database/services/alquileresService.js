@@ -79,6 +79,20 @@ module.exports = {
     }
   },
 
+  getActiveByIdCliente: async (id) => {
+    try {
+      return await db.Alquiler.findAll({
+        include: ["cliente", "equipo"],
+        where: {
+          id_cliente: id,
+          activo: true,
+        },
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   getByIdEquipo: async (id) => {
     try {
       return await db.Alquiler.findOne({

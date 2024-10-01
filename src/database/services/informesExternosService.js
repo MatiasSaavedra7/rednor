@@ -48,7 +48,7 @@ module.exports = {
     try {
       return await db.InformeExterno.update(data, {
         where: { id: id },
-        include: ["ingreso"],
+        // include: ["ingreso"],
       });
     } catch (error) {
       console.log(error);

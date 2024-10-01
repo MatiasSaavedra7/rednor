@@ -4,9 +4,9 @@ module.exports = [
   check("nombre")
     .notEmpty()
     .withMessage("Debes ingresar un nombre"),
-  check("id_tipo_cliente")
-    .notEmpty()
-    .withMessage("Selecciona una opcion"),
+  // check("id_tipo_cliente")
+  //   .notEmpty()
+  //   .withMessage("Selecciona una opcion"),
   // check("email")
   //   .notEmpty()
   //   .withMessage("Debes ingresar un correo")
@@ -19,12 +19,12 @@ module.exports = [
   check("ciudad")
     .notEmpty()
     .withMessage("Debes ingresar la ciudad del cliente"),
-  check("direccion")
-    .notEmpty()
-    .withMessage("Debes ingresar la direccion del cliente"),
-  check("cuit")
-    .notEmpty()
-    .withMessage("Debes ingresar el CUIT del cliente")
-    .isLength({ min: 13, max: 13})
-    .withMessage("Formato de CUIT inválido")
+  // check("direccion")
+  //   .notEmpty()
+  //   .withMessage("Debes ingresar la direccion del cliente"),
+  // check("cuit")
+  //   .notEmpty()
+  //   .withMessage("Debes ingresar el CUIT del cliente")
+  //   .isLength({ min: 13, max: 13})
+  //   .withMessage("Formato de CUIT inválido")
 ];

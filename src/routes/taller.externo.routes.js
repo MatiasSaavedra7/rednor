@@ -39,11 +39,11 @@ router.get("/informe/:id/editar", controller.editarInforme);
 router.put("/informe/:id/editar", controller.actualizarInforme);
 
 // INFORMAR EL COBRO DE UN ARREGLO
-router.put("/informar-cobro/:idIngreso", controller.informarCobro);
+router.put("/informar-cobro/:idEgreso", controller.informarCobro);
 
 // ENTREGA DE INSUMOS
-router.get("/:idIngreso/insumos/crear", controller.insumos);
+router.get("/:idInforme/insumos/crear", controller.insumos);
 
-router.post("/:idIngreso/insumos/crear", controller.almacenarInsumos);
+router.post("/:idInforme/insumos/crear", controller.almacenarInsumos);
 
 module.exports = router;

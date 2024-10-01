@@ -23,4 +23,7 @@ router.get("/editar/:id", controller.edit);
 // RUTA POR PUT PARA PROCESAR LOS DATOS RECIBIDOS
 router.put("/editar/:id", validateMiddleware, controller.update);
 
+// RUTA POR DELETE PARA ELIMINAR UN EQUIPO
+router.delete("/eliminar/:id", controller.delete);
+
 module.exports = router;

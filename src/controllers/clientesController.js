@@ -18,7 +18,8 @@ module.exports = {
   detalleCliente: async (req, res) => {
     try {
       const cliente = await clientesService.getOneByPK(req.params.id);
-      const alquileres = await alquileresService.getByIdCliente(req.params.id);
+      // const alquileres = await alquileresService.getByIdCliente(req.params.id);
+      const alquileres = await alquileresService.getActiveByIdCliente(req.params.id)
       const habilitados = await habilitadosService.getAllByPK(req.params.id);
       res.render("clientes/detalleCliente", { cliente, alquileres, habilitados });
     } catch (error) {

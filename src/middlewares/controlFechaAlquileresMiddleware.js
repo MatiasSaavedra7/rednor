@@ -1,41 +1,34 @@
 const alquileresService = require("../database/services/alquileresService");
 const equiposService = require("../database/services/equiposService");
 
-function stringToDate(dateString) {
-  let year = parseInt(dateString.substring(0, 4));
-  let month = parseInt(dateString.substring(5, 7));
-  let day = parseInt(dateString.substring(8, 10));
-
-  let date = new Date(year, month - 1, day);
-
-  return date;
-}
-
 async function controlVencimientos(req, res, next) {
-  let alquileres = await alquileresService.getAllActivosConVencimiento();
+  try {
+    // Traigo todos los registros con fecha de vencimiento
+    let alquileres = await alquileresService.getAllActivosConVencimiento();
+  
+    // Obtengo la fecha actual (hoy)
+    let fechaHoy = new Date();
+  
+    for (const alquiler of alquileres) {
+      // Convertir directamente a objeto Date
+      const fechaBaja = new Date(alquiler.fecha_baja);
+  
+      if (fechaBaja < fechaHoy) {
+        // Si fechaBaja es menor a fechaHoy, actualizar el estado del alquiler y el equipo
 
-  let fechaHoy = new Date();
-
-  for (let i = 0; i < alquileres.length; i++) {
-    // let timestampFechaBaja = Date.parse(alquileres[i].fecha_baja);
-    // let dateFechaBaja = new Date(timestampFechaBaja);
-
-    let dateFechaBaja = stringToDate(alquileres[i].fecha_baja);
-
-    if (dateFechaBaja < fechaHoy) {
-      let data = {
-        activo: false,
-      };
-
-      // Finalizo el alquiler
-      await alquileresService.updateByPK(data, alquileres[i].id);
-
-      // Actualizo el estado del equipo a Disponible
-      await equiposService.setEstadoDisponible(alquileres[i].id_equipo);
+        // Finalizar el alquiler (cambiar el valor del campo activo a false)
+        await alquileresService.updateByPK({ activo: false }, alquiler.id);
+  
+        // Cambiar el estado del equipo a Disponible
+        await equiposService.updateByPK({id_estado: 1}, alquiler.id_equipo);
+      }
     }
+  
+    next();
+  } catch (error) {
+    console.log("Error controlando vencimientos: " + error);
+    res.status(500).send("Error controlando vencimientos: " + error);
   }
-
-  next();
 }
 
 module.exports = controlVencimientos;

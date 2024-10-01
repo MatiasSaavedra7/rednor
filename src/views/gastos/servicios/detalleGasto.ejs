@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <title>REDNOR - Perfil del Servicio</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+    
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+
+    <main class="content-wrapper">
+      <!-- Main content -->
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title"><%= gasto.nombre %></h3>
+        
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                  <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
+                    Pagar Servicio
+                  </button> -->
+                </div>
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                      <div class="row">
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Estimated budget</span>
+                              <span class="info-box-number text-center text-muted mb-0">2300</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Total amount spent</span>
+                              <span class="info-box-number text-center text-muted mb-0">2000</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Estimated project duration</span>
+                              <span class="info-box-number text-center text-muted mb-0">20</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Pagination Month -->
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="container">
+                            <div class="card">
+                              <div class="card-header">
+                                <h3 class="card-title">Pagination Month</h3>
+                              </div>
+                              <div class="card-body">
+                                <ul class="pagination pagination-month justify-content-center">
+                                  <li class="page-item"><a class="page-link" href="#">«</a></li>
+                                  <% pagos.forEach(pago => { %>
+                                    <li class="page-item">
+                                      <a href="#" class="page-link pago-mes" data-pago-id="<%= pago.id %>">
+                                        <p class="page-month"><%= pago.fecha_pago.getMonth() + 1 %></p>
+                                        <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
+                                      </a>
+                                    </li>
+                                  <% }) %>
+                                  <li class="page-item"><a class="page-link" href="#">»</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+    
+                      </div>
+    
+                      <!-- Informacion del pago -->
+                      <div class="col-12">
+                        <div class="card">
+                          <div class="card-header">
+                            <h3 class="card-title">Pagos</h3>
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestiae perferendis cumque illo recusandae ducimus voluptatibus quae, nam natus molestias quod mollitia. Ipsum perferendis sed ex similique modi illum a error.</p>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <!-- Datos del Pago -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Datos para el pago</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <dt>Forma de Pago</dt>
+                              <dd>xxxxxx></dd>
+        
+                              <dt>CBU</dt>
+                              <dd>xxxxxxxxx</dd>
+        
+                              <dt>CUIT</dt>
+                              <dd>xxxxxxxxx</dd>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <!-- Alertas -->
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Alertas</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <div class="callout callout-success">
+                                <h5>WhatsApp</h5>
+                                <p>xx xxx xxxx</p>
+                                <p>
+                                  There is a problem that we need to fix. A wonderful serenity has taken possession of my entire
+                                  soul,
+                                  like these sweet mornings of spring which I enjoy with my whole heart.
+                                </p>
+                              </div>
+        
+                              <div class="callout callout-info">
+                                <h5>Mensaje de Correo</h5>
+                                <p>correo@email.com</p>
+                                <p>
+                                  This is a warning message. It indicates a potential issue that may need to be addressed.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- pruebas -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Pruebas</h3>
+                            </div>
+                            <div class="card-body">
+                              <% pagos.forEach(pago => { %>
+                               <p><%= pago.monto %></p>
+                              <% }) %>
+                              <hr>
+                              <ul>
+                                <li><%= gasto.id %></li>
+                                <li><%= gasto.id_categoria %> / <%= gasto.categoria.nombre %></li>
+                                <li><%= gasto.nombre%></li>
+                                <li><%= gasto.descripcion %></li>
+                                <li><%= gasto.condiciones %></li>
+                                <li><%= gasto.dia_vencimiento %></li>
+                                <li><%= gasto.frecuencia %></li>
+                                <% let longitud = pagos.length %>
+                                
+                                <li>Longitud de pagos: <%= longitud %></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                      <h3 class="text-primary"><i class="fas fa-paint-brush"></i><%= gasto.nombre %></h3>
+                      <p class="text-muted"><%= gasto.descripcion %></p>
+                      <br>
+                      <div class="text-muted">
+                        <p class="text-sm">Condiciones
+                          <b class="d-block"><%= gasto.condiciones %></b>
+                        </p>
+                        <p class="text-sm">Fecha de Vencimiento
+                          <b class="d-block"></b>
+                        </p>
+                      </div>
+        
+                      <h5 class="mt-5 text-muted">Project files</h5>
+                      <ul class="list-unstyled">
+                        <li>
+                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Functional-requirements.docx</a>
+                        </li>
+                        <li>
+                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
+                        </li>
+                        <li>
+                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Email-from-flatbal.mln</a>
+                        </li>
+                        <li>
+                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-image "></i> Logo.png</a>
+                        </li>
+                        <li>
+                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Contract-10_12_2014.docx</a>
+                        </li>
+                      </ul>
+                      <div class="text-center mt-5 mb-3">
+                        <a href="#" class="btn btn-sm btn-primary">Add files</a>
+                        <a href="#" class="btn btn-sm btn-warning">Report contact</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Modal -->
+      <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Pagar Servicio</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="">Forma de Pago</label>
+                <select name="" id="" class="form-control">
+                  <option value="">forma 1</option>
+                  <option value="">forma 2</option>
+                  <option value="">forma 3</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="">Divisa</label>
+                <select name="" id="" class="form-control">
+                  <option value="">ARS</option>
+                  <option value="">USD</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="" class="">Monto</label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    </main>
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+</body>
+</html>

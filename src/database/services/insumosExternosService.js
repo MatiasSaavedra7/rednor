@@ -3,6 +3,7 @@ const Op = db.Sequelize.Op;
 
 function InsumoExterno(data) {
   this.id_ingreso_externo = data.id_ingreso_externo;
+  this.id_informe_externo = data.id_informe_externo;
   this.nro_remito = data.nro_remito;
   this.observacion = data.observacion;
   this.fecha_entrega = data.fecha_entrega;
@@ -13,7 +14,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.InsumoExterno.findAll({
-        include: ["ingreso"]
+        include: ["informe"]
       });
     } catch (error) {
       console.log(error);
@@ -25,7 +26,7 @@ module.exports = {
     try {
       return await db.InsumoExterno.findOne({
         where: { id: id },
-        include: ["ingreso"]
+        include: ["informe"]
       })
     } catch (error) {
       console.log(error);
@@ -37,7 +38,7 @@ module.exports = {
     try {
       return await db.InsumoExterno.findAll({
         where: { id_ingreso_externo: id },
-        include: ["ingreso"]
+        include: ["informe"]
       })
     } catch (error) {
       console.log(error);

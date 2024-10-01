@@ -7,7 +7,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.Ingreso.findAll({
-        include: ["equipo", "egreso", "estado"],
+        include: ["equipo", "egreso", "estado", "informes", "insumos"],
         // group: ["id_equipo"]
       });
     } catch (error) {
@@ -19,7 +19,7 @@ module.exports = {
     try {
       return await db.Ingreso.findOne({
         where: { id: id },
-        include: ["equipo", "egreso", "estado"],
+        include: ["equipo", "egreso", "estado", "informes", "insumos"],
       });
     } catch (error) {
       console.log(error);
@@ -30,7 +30,7 @@ module.exports = {
     try {
       return await db.Ingreso.findAll({
         where: { id_equipo: id },
-        include: ["equipo", "egreso", "estado"],
+        include: ["equipo", "egreso", "estado", "informes", "insumos"],
       })
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ module.exports = {
     }
   },
 
-  updateByPK: async (data, id) => {
+  updateByPK: async (id, data) => {
     try {
       return await db.Ingreso.update(data, {
         where: { id: id },

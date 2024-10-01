@@ -8,6 +8,10 @@ module.exports = (sequelize, dataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
+    id_ingreso: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
     id_informe: {
       type: dataTypes.INTEGER,
       allowNull: false,
@@ -38,6 +42,11 @@ module.exports = (sequelize, dataTypes) => {
       as: "informe",
       foreignKey: "id_informe",
     });
+
+    Insumo.belongsTo(models.Ingreso, {
+      as: "ingreso",
+      foreignKey: "id_ingreso",
+    })
   };
 
   return Insumo;

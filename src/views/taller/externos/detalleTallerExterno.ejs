@@ -103,54 +103,61 @@
               <!-- /Detalles del Ingreso -->
 
               <!-- Timeline -->
-              <div class="row">
-                <div class="col">
-                  <div class="timeline">
-                    <div class="time-label">
-                      <span class="bg-red">
-                        <%= ingreso.fecha_ingreso.toLocaleDateString() %>
-                      </span>
-                    </div>
-              
-                    <!-- Recorremos los datos combinados -->
-                    <% combinedData.forEach(item => { %>
-                      <div>
-                        <% if (item.type === "informe") { %>
-                          <i class="fas fa-file-alt bg-yellow"></i>
-                        <% } else if (item.type === "insumo"){ %>
-                          <i class="fas fa-box bg-green"></i>
-                        <% } %>
-                        <div class="timeline-item">
-                          <span class="time"><i class="fas fa-clock"></i> 
-                            <%= new Date(item.fecha).toLocaleString() %>
-                          </span>
-                          <% if (item.type === 'informe') { %>
-                            <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
-                            <div class="timeline-body">
-                              <%= item.detalle %>
-                              <%# item.id %>
-                            </div>
-                            <div class="timeline-footer">
-                              <% if (!egreso) { %>
-                                <a href="/taller/externos/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
-                                <a class="btn btn-danger btn-sm">Borrar</a>
-                              <% } %>
-                            </div>
-                          <% } else if (item.type === 'insumo') { %>
-                            <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
-                            <div class="timeline-body">
-                              <%= item.observacion %>
-                            </div>
-                            <div class="timeline-footer">
-                              <p class="text-info">Nro de Remito: <%= item.nro_remito %></p>
-                            </div>
-                          <% } %>
-                        </div>
+              <% if (combinedData.length > 0) { %>
+                <div class="row">
+                  <div class="col">
+                    <div class="timeline">
+                      <div class="time-label">
+                        <span class="bg-red">
+                          <%= ingreso.fecha_ingreso.toLocaleDateString() %>
+                        </span>
                       </div>
-                    <% }) %>
+                      
+                      <!-- Recorremos los datos combinados -->
+                      <% combinedData.forEach(item => { %>
+  
+                        <div>
+                          <% if (item.type === "informe") { %>
+                            <i class="fas fa-file-alt bg-yellow"></i>
+                          <% } else if (item.type === "insumo"){ %>
+                            <i class="fas fa-box bg-green"></i>
+                          <% } %>
+                          <div class="timeline-item">
+                            <span class="time"><i class="fas fa-clock"></i> 
+                              <%= new Date(item.fecha).toLocaleString() %>
+                            </span>
+                            <% if (item.type === 'informe') { %>
+                              <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                              <div class="timeline-body">
+                                <%= item.detalle %>
+                              </div>
+                              <div class="timeline-footer">
+                                <% if (!egreso) { %>
+                                  <a href="/taller/externos/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
+                                  <a class="btn btn-danger btn-sm">Borrar</a>
+                                  <% if (item.type == "informe") { %>
+                                   <% if (item.pedido_insumos === true && ingreso.id_estado === 2) { %>
+                                    <a href="/taller/externos/<%= item.id %>/insumos/crear" class="btn btn-info btn-sm float-right">Entregar Insumos</a>
+                                   <% } %>
+                                  <% } %>
+                                <% } %>
+                              </div>
+                            <% } else if (item.type === 'insumo') { %>
+                              <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                              <div class="timeline-body">
+                                <%= item.observacion %>
+                              </div>
+                              <div class="timeline-footer">
+                                <p class="text-info">Nro de Remito: <%= item.nro_remito %></p>
+                              </div>
+                            <% } %>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
                   </div>
                 </div>
-              </div>
+              <% } %>
               <!-- /Timeline -->
           
               <% if (egreso) { %>
@@ -172,10 +179,29 @@
                       <%= egreso.detalle %>
                     </dd>
 
-                    <!-- Costo -->
-                    <dt>Costo</dt>
-                    <dd>$<%= egreso.costo %>
-                    </dd>
+                    <!-- Precio -->
+                    <% if (egreso.precio) { %>
+                      <dt>Precio</dt>
+                      <dd>
+                        $<%= egreso.precio %>
+                      </dd>
+                    <% } %>
+
+                    <!-- Forma de Pago -->
+                    <% if (egreso.id_forma_pago) { %>
+                      <dt>Forma de Pago</dt>
+                      <dd>
+                        <%= egreso.forma_pago.nombre %>
+                      </dd>
+                    <% } %>
+                    
+                    <!-- Fecha de Cobro -->
+                    <% if (egreso.fecha_cobro) { %>
+                      <dt>Fecha de Cobro</dt>
+                      <dd>
+                        <%= egreso.fecha_cobro.toLocaleString() %>
+                      </dd>
+                    <% } %>
                   </div>
                 </div>
                 <!-- /Detalles del Egreso -->
@@ -187,10 +213,10 @@
                   <!-- Boton Agregar Informe -->
                   <a href="/taller/externos/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
                   
-                  <% if (ingreso.id_estado == 2) { %>
+                  <%# if (ingreso.id_estado == 2) { %>
                     <!-- Boton para Entregar Insumos -->
-                    <a href="/taller/externos/<%= ingreso.id %>/insumos/crear" class="btn btn-outline-info float-middle">Entregar Insumos</a>
-                  <% } %>
+                    <!-- <a href="/taller/externos/<%# ingreso.id %>/insumos/crear" class="btn btn-outline-info float-middle">Entregar Insumos</a> -->
+                  <%# } %>
 
                   <!-- Boton para informar Egreso -->
                   <a href="/taller/externos/egresos/<%= ingreso.id %>" class="btn btn-outline-success float-right">Informar Egreso</a>
@@ -208,25 +234,36 @@
         <div class="modal fade" id="modal-cobro">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form action="/taller/externos/informar-cobro/<%= ingreso.id %>?_method=PUT" method="post">
-                <div class="modal-header">
-                  <h4 class="modal-title">Informar Cobro</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
+              <div class="modal-header">
+                <h4 class="modal-title">Informar Cobro</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <!-- Formulario -->
+              <form action="/taller/externos/informar-cobro/<%= egreso.id %>?_method=PUT" method="post">
                 <div class="modal-body">
-                  <p>¿Estas seguro que deseas confirmar el cobro?</p>
-                  <dl>
-                    <dt>Monto</dt>
-                    <dd>$<%= egreso.costo %></dd>
-                  </dl>
+                  <div class="form-group">
+                    <label for="id_forma_pago">Forma de Pago</label>
+                    <select name="id_forma_pago" id="id_forma_pago" class="form-control">
+                      <option value="" disabled hidden>Seleccione una opcion</option>
+                      <% formasPago.forEach(formaPago => { %>
+                        <option value="<%= formaPago.id %>"><%= formaPago.nombre %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" name="precio" id="precio" class="form-control" placeholder="ARS">
+                  </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                   <button type="submit" class="btn btn-primary">Aceptar</button>
                 </div>
               </form>
+              <!-- /Formulario -->
             </div>
             <!-- /.modal-content -->
           </div>

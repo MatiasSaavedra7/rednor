@@ -98,4 +98,13 @@ module.exports = {
       res.status(500).send(error)
     }
   },
+
+  delete: async (req, res) => {
+    try {
+      await equiposService.deleteByPK(req.params.id);
+      res.redirect("/equipos")
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

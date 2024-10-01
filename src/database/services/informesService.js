@@ -44,7 +44,7 @@ module.exports = {
     }
   },
 
-  updateByPK: async (data, id) => {
+  updateByPK: async (id, data) => {
     try {
       return await db.Informe.update(data, {
         where: { id: id },

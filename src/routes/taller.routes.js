@@ -19,4 +19,8 @@ router.get("/informe/:id", controller.informe);
 
 router.post("/informe/:id", controller.almacenarInforme);
 
+router.get("/:idInforme/insumos/crear", controller.insumos);
+
+router.post("/:idInforme/insumos/crear", controller.almacenarInsumos);
+
 module.exports = router;

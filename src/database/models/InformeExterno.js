@@ -16,6 +16,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: false,
     },
+    pedido_insumos: {
+      type: dataTypes.BOOLEAN,
+      allowNull: false,
+    },
     fecha_informe: {
       type: dataTypes.DATE,
       allowNull: false,
@@ -33,6 +37,11 @@ module.exports = (sequelize, dataTypes) => {
     InformeExterno.belongsTo(models.IngresoExterno, {
       as: "ingreso",
       foreignKey: "id_ingreso_externo",
+    });
+
+    InformeExterno.hasOne(models.InsumoExterno, {
+      as: "insumos",
+      foreignKey: "id_informe_externo"
     });
   };
 

@@ -68,7 +68,7 @@
                   <dd><%= ingreso.equipo.numero_serie %></dd>
 
                   <!-- Motivo del Ingreso -->
-                  <dt>Motivo</dt>
+                  <dt>Motivo de Ingreso</dt>
                   <dd><%= ingreso.motivo %></dd>
 
                   <!-- Detalle del Ingreso -->
@@ -76,40 +76,65 @@
                   <dd><%= ingreso.detalle %></dd>
                 </div>
               </div>
+              <!-- /Detalles del Ingreso -->
 
-              <!-- Informes -->
-              <div class="row">
-                <div class="col">
-                  <div class="timeline">
-                    <div class="time-label">
-                      <!-- <span class="bg-red">
-                        <%# ingreso.fecha_ingreso.toLocaleDateString() %>
-                      </span> -->
-                    </div>
-                    <% informes.forEach(informe => { %>
-                     <div>
-                      <i class="fas fa-comments bg-yellow"></i>
-                      <div class="timeline-item">
-                        <span class="time">
-                          <i class="fas fa-clock"></i>
-                          <%= informe.fecha_informe.toLocaleString() %>
+              <!-- Timeline -->
+              <% if (combinedData.length > 0) { %>
+                <div class="row">
+                  <div class="col">
+                    <div class="timeline">
+                      <div class="time-label">
+                        <span class="bg-red">
+                          <%= ingreso.fecha_ingreso.toLocaleDateString() %>
                         </span>
-                        <h3 class="timeline-header"><a href="#">Usuario</a></h3>
-                        <div class="timeline-body">
-                          <%= informe.detalle %>
-                        </div>
-                        <div class="timeline-footer">
-                          <% if (!egreso) { %>
-                           <a href="#" class="btn btn-primary btn-sm">Editar</a>
-                           <a href="#" class="btn btn-danger btn-sm">Borrar</a>
-                          <% } %>
-                        </div>
                       </div>
-                     </div>
-                    <% }) %>
+                      
+                      <!-- Recorremos los datos combinados -->
+                      <% combinedData.forEach(item => { %>
+  
+                        <div>
+                          <% if (item.type === "informe") { %>
+                            <i class="fas fa-file-alt bg-yellow"></i>
+                          <% } else if (item.type === "insumo"){ %>
+                            <i class="fas fa-box bg-green"></i>
+                          <% } %>
+                          <div class="timeline-item">
+                            <span class="time"><i class="fas fa-clock"></i> 
+                              <%= new Date(item.fecha).toLocaleString() %>
+                            </span>
+                            <% if (item.type === 'informe') { %>
+                              <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                              <div class="timeline-body">
+                                <%= item.detalle %>
+                              </div>
+                              <div class="timeline-footer">
+                                <% if (!egreso) { %>
+                                  <a href="/taller/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
+                                  <a class="btn btn-danger btn-sm">Borrar</a>
+                                  <% if (item.type == "informe") { %>
+                                   <% if (item.pedido_insumos === true && ingreso.id_estado === 2) { %>
+                                    <a href="/taller/<%= item.id %>/insumos/crear" class="btn btn-info btn-sm float-right">Entregar Insumos</a>
+                                   <% } %>
+                                  <% } %>
+                                <% } %>
+                              </div>
+                            <% } else if (item.type == 'insumo') { %>
+                              <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                              <div class="timeline-body">
+                                <%= item.observacion %>
+                              </div>
+                              <div class="timeline-footer">
+                                <p class="text-info">Nro de Remito: <%= item.nro_remito %></p>
+                              </div>
+                            <% } %>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
                   </div>
                 </div>
-              </div>
+              <% } %>
+              <!-- /Timeline -->
 
               <!-- Detalles del Egreso -->
               <% if (egreso) { %>
@@ -138,21 +163,17 @@
                 </div>
                </div>
               <% } %>
-              <div class="row">
-                <div class="col-12 d-flex justify-content-between">
-                  <% if (!egreso) { %>
-                    <div>
-                      <a href="/taller/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
-                    </div>
-                  <% } %>
-                  
-                  <% if (!egreso) { %>
-                    <div>
-                      <a href="/taller/egreso/<%= ingreso.id %>" class="btn btn-outline-success float-right">Informar Egreso</a> <br>
-                    </div>
-                  <% } %>
-                </div>
-              </div>
+
+              <!-- Botones -->
+              <% if (!egreso) { %>
+               <div class="d-flex justify-content-between">
+                <!-- Boton Agregar Informe -->
+                <a href="/taller/informe/<%= ingreso.id %>" class="btn btn-outline-primary">Agregar Informe</a>
+
+                <a href="/taller/egreso/<%= ingreso.id %>" class="btn btn-outline-success">Informar Egreso</a>
+               </div>
+              <% } %>
+              <!-- /Botones -->
             </div>
           </div>
         </div>

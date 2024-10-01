@@ -96,21 +96,24 @@ function IngresoExterno(data) {
 
 function EgresoExterno(data) {
   this.id_ingreso_externo = data.id_ingreso_externo;
-  this.fecha_egreso = data.fecha_egreso;
   this.detalle = data.detalle;
-  this.costo = data.costo;
+  this.precio = data.precio;
+  this.id_forma_pago = data.id_forma_pago;
+  this.fecha_cobro = data.fecha_cobro;
   this.fecha_egreso = data.fecha_egreso;
 }
 
 function Informe(data) {
   this.id_ingreso = data.id_ingreso;
   this.detalle = data.detalle;
+  this.pedido_insumos = data.pedido_insumos;
   this.fecha_informe = data.fecha_informe;
 }
 
 function InformeExterno(data) {
   this.id_ingreso_externo = data.id_ingreso_externo;
   this.detalle = data.detalle;
+  this.pedido_insumos = data.pedido_insumos;
   this.fecha_informe = data.fecha_informe;
 }
 

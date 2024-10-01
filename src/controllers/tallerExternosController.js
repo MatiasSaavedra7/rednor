@@ -5,6 +5,7 @@ const ingresosExternosService = require("../database/services/ingresosExternosSe
 const egresosExternosService = require("../database/services/egresoExternoService");
 const informesExternosService = require("../database/services/informesExternosService");
 const insumosExternosService = require('../database/services/insumosExternosService');
+const formasPagoService = require("../database/services/formasPagoService");
 
 const { validationResult } = require("express-validator");
 
@@ -77,13 +78,15 @@ module.exports = {
       let egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id);
       let informes = await informesExternosService.getAllByIdIngreso(ingreso.id);
       let insumos = await insumosExternosService.getAllByIdIngreso(ingreso.id);
+      let formasPago = await formasPagoService.getAll();
 
-      // Combinacion de informes
+      // Combinacion de informes e insumos en un solo array
       const combinedData = [
         ...informes.map(informe => ({
           type: 'informe',
           fecha: informe.fecha_informe,
           detalle: informe.detalle,
+          pedido_insumos: informe.pedido_insumos,
           id: informe.id
         })),
         ...insumos.map(insumo => ({
@@ -98,13 +101,12 @@ module.exports = {
       // Ordenar los datos por fecha (de más antiguo a más reciente)
       combinedData.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
 
-      
-      let todos = [...insumos, ...informes];
       res.render("taller/externos/detalleTallerExterno", {
         ingreso,
         egreso,
         informes,
         insumos,
+        formasPago,
         combinedData,
       });
     } catch (error) {
@@ -158,6 +160,7 @@ module.exports = {
       // Creo el objeto con la informacion para guardar en el registro de egresos.
       let data = {
         ...req.body,
+        id_forma_pago: null,
         id_ingreso_externo: ingreso.id,
         fecha_egreso: new Date(),
       };
@@ -196,6 +199,7 @@ module.exports = {
       let data = {
         ...req.body,
         id_ingreso_externo: req.params.id,
+        pedido_insumos: req.body.pedido_insumos ? true : false,
         fecha_informe: new Date(),
       };
 
@@ -203,11 +207,9 @@ module.exports = {
       await informesExternosService.create(data);
 
       // Analizo si se hizo un pedido de insumos
-      if (req.body.pedidoInsumos) {
+      if (req.body.pedido_insumos) {
         // Si es verdadero, entonces actualizo el estado del ingreso a 'En espera de insumos'
-        await ingresosExternosService.updateByPK(req.params.id, {
-          id_estado: 2,
-        });
+        await ingresosExternosService.updateByPK(req.params.id, { id_estado: 2 });
       }
 
       res.redirect(`/taller/externos/detalle/${req.params.id}`);
@@ -272,11 +274,21 @@ module.exports = {
 
   informarCobro: async (req, res) => {
     try {
-      // Capturo el id del ingreso
-      let id = req.params.idIngreso;
+      // Traigo la informacion del egreso desde la base de datos
+      let egreso = await egresosExternosService.getOneByPK(req.params.idEgreso);
+
+      // Creo un objeto data con la informacion a actualizar
+      let data = {
+        id_forma_pago: req.body.id_forma_pago,
+        precio: req.body.precio,
+        fecha_cobro: new Date(),
+      }
+
+      // Actualizo los nuevos datos
+      await egresosExternosService.updateByPK(egreso.id, data)
 
       // Actualizo el estado del ingreso a 'Cobrado'
-      await ingresosExternosService.updateByPK(id, { id_estado: 4 });
+      await ingresosExternosService.updateByPK(egreso.id_ingreso_externo, { id_estado: 4 });
 
       // Redirecciono al usuario a la lista de ingresos
       res.redirect("/taller/externos");
@@ -287,10 +299,9 @@ module.exports = {
 
   insumos: async (req, res) => {
     try {
-      let ingreso = await ingresosExternosService.getOneByPK(
-        req.params.idIngreso
-      );
-      res.render("taller/externos/insumosExternos", { ingreso });
+      let informe = await informesExternosService.getOneByPK(req.params.idInforme);
+      let ingreso = await ingresosExternosService.getOneByPK(informe.id_ingreso_externo);
+      res.render("taller/externos/insumosExternos", { informe, ingreso });
     } catch (error) {
       console.log(error);
     }
@@ -298,12 +309,15 @@ module.exports = {
 
   almacenarInsumos: async (req, res) => {
     try {
-      let ingreso = await ingresosExternosService.getOneByPK(req.params.idIngreso);
+      let informe = await informesExternosService.getOneByPK(req.params.idInforme);
+      // console.log(informe);
+      // let ingreso = await ingresosExternosService.getOneByPK(informe.id_ingreso_externo);
 
       // Creo un objeto 'data' con la informacion para almacenar en los informes de insumos
       let data = {
         ...req.body,
-        id_ingreso_externo: ingreso.id,
+        id_informe_externo: informe.id,
+        id_ingreso_externo: informe.id_ingreso_externo,
         fecha_entrega: new Date(),
       };
 
@@ -311,10 +325,13 @@ module.exports = {
       await insumosExternosService.create(data);
 
       // Actualizo el estado del ingreso a 'En Taller'
-      await ingresosExternosService.updateByPK(req.params.idIngreso, {id_estado: 1});
+      await ingresosExternosService.updateByPK(informe.id_ingreso_externo, { id_estado: 1 });
+
+      // Actualizo el valor de pedido_insumos de la tabla ingresos a false
+      await informesExternosService.updateByPK(informe.id, { pedido_insumos: false });
 
       // Redirecciono al usuario al detalle del ingresos
-      res.redirect(`/taller/externos/detalle/${ingreso.id}`);
+      res.redirect(`/taller/externos/detalle/${informe.id_ingreso_externo}`);
     } catch (error) {
       console.log(error);
     }

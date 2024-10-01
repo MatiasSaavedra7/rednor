@@ -7,7 +7,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.EgresoExterno.findAll({
-        include: ["ingreso"],
+        include: ["ingreso", "forma_pago"],
         order: [["id", "DESC"]],
       });
     } catch (error) {
@@ -19,7 +19,7 @@ module.exports = {
     try {
       return await db.EgresoExterno.findOne({
         where: { id: id },
-        include: ["ingreso"],
+        include: ["ingreso", "forma_pago"],
       });
     } catch (error) {
       console.log(error);
@@ -30,7 +30,7 @@ module.exports = {
     try {
       return await db.EgresoExterno.findOne({
         where: { id_ingreso_externo: id },
-        include: ["ingreso"],
+        include: ["ingreso", "forma_pago"],
       });
     } catch (error) {
       console.log(error);
@@ -40,6 +40,16 @@ module.exports = {
   create: async (data) => {
     try {
       return await db.EgresoExterno.create(new EgresoExterno(data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  updateByPK: async (id, data) => {
+    try {
+      return await db.EgresoExterno.update(data, {
+        where: { id: id },
+      });
     } catch (error) {
       console.log(error);
     }

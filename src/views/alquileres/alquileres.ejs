@@ -59,7 +59,7 @@
                           </td>
                           <td>
                             <% if (alquiler.fecha_baja !=null) { %>
-                              <%= alquiler.fecha_baja %>
+                              <%= alquiler.fecha_baja.toLocaleString() %>
                               <% } else { %>
                                 -
                               <% } %>

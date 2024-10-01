@@ -63,14 +63,14 @@ module.exports = {
         // let id = req.query.cliente;
 
         // Verifico si se ingreso una fecha de vencimiento.
-        let fechaBaja = req.body.fecha_baja ? req.body.fecha_baja : null;
+        // let fechaBaja = req.body.fecha_baja ? req.body.fecha_baja : null;
 
         // Obtengo la fecha actual.
-        let fechaAlta = new Date();
+        // let fechaAlta = new Date();
 
 
         // Calculo el precio multiplicando el minimo de copias por el precio de cada una.
-        let precio = req.body.minimo_copias * req.body.precio_copias;
+        // let precio = req.body.minimo_copias * req.body.precio_copias;
 
         let data = {
           ...req.body,
@@ -121,7 +121,7 @@ module.exports = {
       await alquileresService.updateByPK(data, req.params.id);
 
       // Actualizo el estado del equipo a Disponible.
-      await equiposService.updateByPK(alquiler.id_equipo, {id_estado: 1});
+      await equiposService.updateByPK({id_estado: 1}, alquiler.id_equipo);
 
       // Redirigir al usuario a la pagina de alquileres
       res.redirect("/alquileres");

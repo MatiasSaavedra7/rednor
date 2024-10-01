@@ -12,10 +12,6 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
-    fecha_egreso: {
-      type: dataTypes.DATE,
-      allowNull: false,
-    },
     detalle: {
       type: dataTypes.TEXT,
       allowNull: false,
@@ -24,12 +20,17 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.TEXT,
       allowNull: true,
     },
-    precio: {
-      type: dataTypes.DECIMAL,
+    fecha_egreso: {
+      type: dataTypes.DATE,
+      allowNull: false,
     },
     id_forma_pago: {
       type: dataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+    },
+    precio: {
+      type: dataTypes.DECIMAL,
+      allowNull: true,
     },
     fecha_cobro: {
       type: dataTypes.DATE,

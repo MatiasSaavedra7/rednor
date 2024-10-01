@@ -2,6 +2,7 @@ const db = require("../models");
 const Op = db.Sequelize.Op;
 
 function Insumo(data) {
+  this.id_ingreso = data.id_ingreso;
   this.id_informe = data.id_informe;
   this.nro_remito = data.nro_remito;
   this.observacion = data.observacion;
@@ -13,7 +14,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.Insumo.findAll({
-        include: ["informe"]
+        include: ["informe", "ingreso"]
       });
     } catch (error) {
       console.log(error);
@@ -25,7 +26,7 @@ module.exports = {
     try {
       return await db.Insumo.findOne({
         where: { id: id },
-        include: ["informe"]
+        include: ["informe", "ingreso"]
       })
     } catch (error) {
       console.log(error);
@@ -37,7 +38,20 @@ module.exports = {
     try {
       return await db.Insumo.findAll({
         where: { id_informe: id },
-        include: ["informe"]
+        include: ["informe", "ingreso"]
+      })
+    } catch (error) {
+      console.log(error);
+    }
+
+  },
+
+  // Metodo para traer todos los informes de insumos a traves de su id_ingreso
+  getAllByIdIngreso: async (idIngreso) => {
+    try {
+      return await db.Insumo.findAll({
+        where: { id_ingreso: idIngreso },
+        include: ["informe", "ingreso"]
       })
     } catch (error) {
       console.log(error);

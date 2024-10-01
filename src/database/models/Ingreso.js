@@ -53,6 +53,11 @@ module.exports = (sequelize, dataTypes) => {
       foreignKey: "id_ingreso",
     });
 
+    Ingreso.hasMany(models.Insumo, {
+      as: "insumos",
+      foreignKey: "id_ingreso",
+    })
+
     Ingreso.hasOne(models.Egreso, {
       as: "egreso",
       foreignKey: "id_ingreso",

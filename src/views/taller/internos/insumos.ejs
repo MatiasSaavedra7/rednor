@@ -26,9 +26,7 @@
                   <h3 class="card-title">Detalles del Informe (id: <%= informe.id %>)</h3>
                 </div>
                 <div class="card-body">
-                  <p>
-                    <%= informe.detalle %>
-                  </p>
+                  <%= informe.detalle %>
                 </div>
               </div>
               <div class="card">
@@ -36,10 +34,10 @@
                   <h3 class="card-title">Entrega de Insumos</h3>
                 </div>
                 <div class="card-body">
-                  <form action="/taller/externos/<%= informe.id %>/insumos/crear" method="post">
+                  <form action="/taller/<%= informe.id %>/insumos/crear" method="post">
 
                     <div class="form-group">
-                      <label for="id_ingreso_externo">ID de Ingreso Externo</label>  
+                      <label for="id_ingreso_externo">ID de Ingreso</label>  
                       <input type="number" name="id_ingreso_externo" id="id_ingreso_externo" value="<%= ingreso.id %>" class="form-control" disabled>
                     </div>
                     
@@ -54,7 +52,7 @@
                     </div>
                     <input type="submit" class="btn btn-primary w-100"/>
                   </form>
-                  <!-- <a class="btn btn-block btn-outline-secondary mt-3" id="volverAtras">Volver Atrás</a> -->
+                  <a href="/taller" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás</a>
                 </div>
               </div>
             </div>
