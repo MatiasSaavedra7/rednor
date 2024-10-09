@@ -1,7 +1,13 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Usuario } = require("../utils/objects");
+function Usuario(data) {
+  this.nombre = data.nombre;
+  this.apellido = data.apellido;
+  this.email = data.email;
+  this.password = data.password;
+  this.id_rol = data.id_rol;
+}
 
 module.exports = {
   getAll: async () => {
@@ -25,11 +31,11 @@ module.exports = {
     }
   },
 
-  getOneByUser: async (user) => {
+  getOneByEmail: async (unEmail) => {
     try {
       return db.Usuario.findOne({
         where: {
-          usuario: user
+          email: unEmail
         }
       })
     } catch (error) {
@@ -40,6 +46,26 @@ module.exports = {
   create: async (data) => {
     try {
       return db.Usuario.create(new Usuario(data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  updateByPK: async (id, data) => {
+    try {
+      return db.Usuario.update(data, {
+        where: { id: id },
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  deleteByPK: async (id) => {
+    try {
+      return db.Usuario.destroy({
+        where: { id: id },
+      });
     } catch (error) {
       console.log(error);
     }

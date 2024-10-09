@@ -107,6 +107,7 @@
                     <thead>
                       <tr>
                         <th>Cliente</th>
+                        <th>Departamento</th>
                         <th>Equipo</th>
                         <th>Firma</th>
                         <th>Precio</th>
@@ -117,6 +118,7 @@
                       <% alquileres.forEach(alquiler => { %>
                       <tr>
                         <td><%= alquiler.cliente.nombre %></td>
+                        <td><%= alquiler.departamento %></td>
                         <td><%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%= alquiler.equipo.numero_serie %></td>
                         <td><%= alquiler.firma %></td>
                         <td>$<%= alquiler.precio %></td>

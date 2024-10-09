@@ -59,19 +59,6 @@ module.exports = {
       let errors = validationResult(req);
 
       if (errors.isEmpty()) {
-        // Capturo el id del cliente desde el query params.
-        // let id = req.query.cliente;
-
-        // Verifico si se ingreso una fecha de vencimiento.
-        // let fechaBaja = req.body.fecha_baja ? req.body.fecha_baja : null;
-
-        // Obtengo la fecha actual.
-        // let fechaAlta = new Date();
-
-
-        // Calculo el precio multiplicando el minimo de copias por el precio de cada una.
-        // let precio = req.body.minimo_copias * req.body.precio_copias;
-
         let data = {
           ...req.body,
           id_cliente: req.query.cliente,
@@ -130,6 +117,8 @@ module.exports = {
     }
   },
 
+
+  //  Vista para reajustar el contrato
   reajuste: async (req, res) => {
     try {
       let alquiler = await alquileresService.getOneByPK(req.params.id);
@@ -139,6 +128,7 @@ module.exports = {
     }
   },
 
+  //  Accion para actualizar el contrato reajustado
   actualizarContrato: async (req, res) => {
     try {
       // Obtengo la informacion del alquiler a traves del id
@@ -185,4 +175,47 @@ module.exports = {
       console.log(error);
     }
   },
+
+  //  Editar info de contrato
+  edit: async (req, res) => {
+    try {
+      let alquiler = await alquileresService.getOneByPK(req.params.id);
+      let firmas = await firmasService.getAll();
+      res.render("alquileres/editarAlquiler", { alquiler, firmas });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  update: async (req, res) => {
+    try {
+      let errors = validationResult(req);
+
+      console.log(errors);
+      
+      console.log(req.body);
+
+      if(errors.isEmpty()){
+        let dataToUpdate = {
+         ...req.body,
+          precio: req.body.minimo_copias * req.body.precio_copias,
+        };
+
+        await alquileresService.updateByPK(dataToUpdate, req.params.id);
+
+        res.redirect(`/alquileres/detalles/${req.params.id}`);
+      } else {
+        let alquiler = await alquileresService.getOneByPK(req.params.id);
+        let firmas = await firmasService.getAll();
+        res.render("alquileres/editarAlquiler", {
+          errors: errors.mapped(),
+          old: req.body,
+          alquiler,
+          firmas,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rednor - Autorización Pendiente</title>
+  <%- include('../partials/AdminLTEHead') %>
+</head>
+<body class="hold-transition lockscreen dark-mode">
+  <div class="lockscreen-wrapper">
+    <div class="lockscreen-logo">
+      <a href="/"><b>Rednor</b> Dashboard</a>
+    </div>
+    <div class="lockscreen-name">Acceso Restringido</div>
+    
+    <div class="lockscreen-name"><%= user.nombre %> <%= user.apellido %></div>
+
+    <div class="lockscreen-item">
+      <div class="lockscreen-image">
+        <img src="/img/avatar5.png" alt="User Image">
+      </div>
+
+      <div class="lockscreen-credentials">
+        <div class="input-group">
+          <p class="form-control text-center">
+            <%= user.email %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-block text-center">
+      <a href="/usuarios/logout" class="btn btn-danger mb-2"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+    </div>
+    
+    <div class="help-block text-center">
+      Espera a ser autorizado. Contacta a un administrador para más información.
+    </div>
+    <div class="lockscreen-footer text-center">
+      <strong>&copy; 2024 <a href="/">Rednor</a>.</strong> Todos los derechos reservados.
+    </div>
+  </div>
+
+  <%- include('../partials/AdminLTEScripts') %>
+</body>
+</html>

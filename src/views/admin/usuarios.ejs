@@ -1,45 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/tables.css" />
-    <title>REDNOR - Panel de Usuarios</title>
-  </head>
-  <body>
-    <%- include('../partials/header.ejs') %>
-    <!-- MAIN -->
-    <main class="main-container">
-      <!-- ASIDE -->
-      <%- include('../partials/aside.ejs') %>
-      <!-- FIN ASIDE -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <%- include('../partials/AdminLTEHead') %>
+  <%- include('../partials/AdminLTEHeadTables') %>
+</head>
+<body class="hold-transition sidebar-mini dark-mode">
+  <div class="wrapper">
 
-      <!-- CONTENIDO -->
-      <section class="main-content">
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% usuarios.forEach(usuario => { %>
-              <tr>
-                <td><%= usuario.id %></td>
-                <td><%= usuario.nombre %></td>
-                <td><%= usuario.apellido %></td>
-                <td><%= usuario.usuario %></td>
-                <td><%= usuario.rol.nombre %></td>
-              </tr>
-              <% }); %>
-            </tbody>
-          </table>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <!-- Sidebar -->
+    <%- include('../partials/mainSidebar') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar') %>
+
+    <div class="content-wrapper">
+      <!-- Header -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <h1 class="title">Panel de Usuarios</h1>
+            </div>
+          </div>
         </div>
-      </section>
-    </main>
-  </body>
-</html>
+      </div>
+      <!-- /Header -->
+      
+      <!-- Content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Tabla de Usuarios</h3>
+                </div>
+                <div class="card-body">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre y Apellido</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% usuarios.forEach(usuario => { %>
+                        <tr>
+                          <td><%= usuario.id %></td>
+                          <td><%= usuario.nombre %> <%= usuario.apellido %></td>
+                          <td><%= usuario.email %></td>
+                          <td>
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-default"><%= usuario.rol.nombre %></button>
+                              <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#roleModal" data-userid="<%= usuario.id %>" data-username="<%= usuario.nombre %> <%= usuario.apellido %>">Editar Rol</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Role Modal -->
+    <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="roleModalLabel">Asignar Rol a <span id="modalUsername"></span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="/admin/usuarios/asignarRol?_method=PUT" method="post">
+            <div class="modal-body">
+              <input type="hidden" name="userId" id="modalUserId">
+              <div class="form-group">
+                <label for="id_rol">Nuevo Rol</label>
+                <select name="id_rol" id="id_rol" class="form-control">
+                  <% roles.forEach(rol => { %>
+                  <option value="<%= rol.id %>"><%= rol.nombre %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <%- include('../partials/AdminLTEScripts') %>
+  <%- include('../partials/AdminLTEScriptsTables') %>
+  <script>
+    $('#roleModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var userId = button.data('userid');
+      var username = button.data('username');
+      var modal = $(this);
+      modal.find('#modalUsername').text(username);
+      modal.find('#modalUserId').val(userId);
+    });
+  </script>  
+</body>

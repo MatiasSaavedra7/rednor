@@ -72,5 +72,17 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getLastByIdGasto: async (id) => {
+    try {
+      return await db.Pago.findOne({
+        where: { id_gasto: id },
+        order: [["id", "DESC"]],
+        include: ["gasto", "forma_pago"],
+      })
+    } catch (error) {
+      
+    }
   }
 }

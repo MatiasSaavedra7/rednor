@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
+//  Rutas
 const main = require("./main.routes.js");
 const admin = require('./admin.routes.js');
 const usuarios = require('./usuarios.routes.js');
@@ -14,34 +15,39 @@ const pagos = require("./pagos.routes.js");
 const externos = require('./taller.externo.routes.js');
 const gastos = require('./gastos.routes.js');
 
+//  Rutas para pruebas
 const pruebas = require("./pruebas.routes.js");
+
+//  Middlewares
+const adminMiddleware = require("../middlewares/adminMiddleware.js");
+const authMiddleware = require("../middlewares/authMiddleware.js");
 
 // Main routes
 router.use("/", main);
 
 // Admin routes
-router.use("/admin", admin);
+router.use("/admin", authMiddleware, adminMiddleware, admin);
 
 // Clientes routes
-router.use("/clientes", clientes);
+router.use("/clientes", authMiddleware, clientes);
 
 // Personas habilitadas routes
-router.use("/habilitados", habilitados);
+router.use("/habilitados", authMiddleware, habilitados);
 
 // Equipos routes
-router.use("/equipos", equipos);
+router.use("/equipos", authMiddleware, equipos);
 
 // Alquileres routes
-router.use("/alquileres", alquileres);
+router.use("/alquileres", authMiddleware, alquileres);
 
 // Repuesto routes
-router.use("/repuestos", repuestos);
+router.use("/repuestos", authMiddleware, repuestos);
 
 // Taller routes
-router.use("/taller", taller);
+router.use("/taller", authMiddleware, taller);
 
 // Taller externos routes
-router.use("/taller/externos", externos);
+router.use("/taller/externos", authMiddleware, externos);
 
 // Usuarios routes
 router.use("/usuarios", usuarios);
@@ -50,9 +56,9 @@ router.use("/usuarios", usuarios);
 router.use("/pruebas", pruebas);
 
 // Pagos routes
-router.use("/pagos", pagos);
+router.use("/pagos", authMiddleware, pagos);
 
 // Gastos routes
-router.use("/gastos", gastos);
+router.use("/gastos", authMiddleware, gastos);
 
 module.exports = router;

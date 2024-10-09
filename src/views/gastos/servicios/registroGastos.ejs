@@ -118,10 +118,10 @@
                       </div> -->
 
                       <div class="form-group">
-                        <label for="tipo_divisa">Tipo de Divisa</label>
-                        <select name="tipo_divisa" id="tipo_divisa" class="form-control">
-                          <option value="">ARS</option>
-                          <option value="">USD</option>
+                        <label for="divisa">Tipo de Divisa</label>
+                        <select name="divisa" id="divisa" class="form-control">
+                          <option value="ARS">ARS</option>
+                          <option value="USD">USD</option>
                         </select>
                       </div>
 
@@ -142,7 +142,7 @@
                       <input type="submit" class="btn btn-block btn-primary" />
 
                       <!-- Boton Volver atras -->
-                      <a href="/gastos/servicios/<%= categoria.id %>/detalle" class="btn btn-block btn-secondary mt-3">Volver Atrás...</a>
+                      <a href="/gastos/<%= categoria.id %>/detalle" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás...</a>
                   </form>
                 </div>
               </div>

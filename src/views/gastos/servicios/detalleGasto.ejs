@@ -25,14 +25,14 @@
                 <div class="card-header">
                   <h3 class="card-title"><%= gasto.nombre %></h3>
         
-                  <div class="card-tools">
+                  <!-- <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                       <i class="fas fa-minus"></i>
                     </button>
-                  </div>
-                  <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
+                  </div> -->
+                  <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#modal-lg">
                     Pagar Servicio
-                  </button> -->
+                  </button>
                 </div>
                 
                 <div class="card-body">
@@ -65,76 +65,67 @@
                         </div>
                       </div>
                       
-                      <!-- Pagination Month -->
+                      <!-- Paginación por meses de los pagos -->
                       <div class="row">
                         <div class="col-12">
                           <div class="container">
                             <div class="card">
                               <div class="card-header">
-                                <h3 class="card-title">Pagination Month</h3>
+                                <h3 class="card-title">Paginación Mensual</h3>
                               </div>
                               <div class="card-body">
                                 <ul class="pagination pagination-month justify-content-center">
-                                  <li class="page-item"><a class="page-link" href="#">«</a></li>
+                                  <li class="page-item"><a class="page-link" href="#" id="prev-month">«</a></li>
                                   <% pagos.forEach(pago => { %>
-                                    <li class="page-item">
-                                      <a href="#" class="page-link pago-mes" data-pago-id="<%= pago.id %>">
-                                        <p class="page-month"><%= pago.fecha_pago.getMonth() + 1 %></p>
+                                    <% const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
+                                    <li class="page-item <%= ultimoPago && ultimoPago.id == pago.id ? "active" : "" %>">
+                                      <a href="#" class="page-link pago-mes"  data-pago-id="<%= pago.id %>">
+                                        <p class="page-month"><%= meses[pago.fecha_pago.getMonth()] %></p>
                                         <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
                                       </a>
                                     </li>
                                   <% }) %>
-                                  <li class="page-item"><a class="page-link" href="#">»</a></li>
+                                  <li class="page-item"><a class="page-link" href="#" id="next-month">»</a></li>
                                 </ul>
                               </div>
                             </div>
                           </div>
                         </div>
-    
                       </div>
-    
-                      <!-- Informacion del pago -->
-                      <div class="col-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <h3 class="card-title">Pagos</h3>
-                            <div class="card-tools">
-                              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                              </button>
-                            </div>
-                          </div>
-                          <div class="card-body">
-                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestiae perferendis cumque illo recusandae ducimus voluptatibus quae, nam natus molestias quod mollitia. Ipsum perferendis sed ex similique modi illum a error.</p>
-                          </div>
-                        </div>
-                      </div>
+                      <!-- /Paginación por meses de los pagos -->
     
                       <!-- Datos del Pago -->
                       <div class="row">
                         <div class="col">
                           <div class="card">
                             <div class="card-header">
-                              <h3 class="card-title">Datos para el pago</h3>
+                              <h3 class="card-title">Datos del Pago</h3>
                               <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                   <i class="fas fa-minus"></i>
                                 </button>
                               </div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" id="datos-pago">
                               <dt>Forma de Pago</dt>
-                              <dd>xxxxxx></dd>
-        
+                              <dd id="forma-pago"><%= ultimoPago ? ultimoPago.forma_pago : "No hay pagos registrados" %></dd>
+
                               <dt>CBU</dt>
-                              <dd>xxxxxxxxx</dd>
-        
+                              <dd id="cbu"><%= ultimoPago ? ultimoPago.cbu : '-' %></dd>
+
                               <dt>CUIT</dt>
-                              <dd>xxxxxxxxx</dd>
+                              <dd id="cuit"><%= ultimoPago ? ultimoPago.cuit : '-' %></dd>
+
+                              <dt>Divisa</dt>
+                              <dd id="divisa"><%= ultimoPago ? ultimoPago.divisa : '-' %></dd>
+
+                              <dt>Monto</dt>
+                              <dd id="monto"><%= ultimoPago ? ultimoPago.monto : '-' %></dd>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <!-- /Datos del Pago -->
     
                       <!-- Alertas -->
                       <div class="row">
@@ -170,37 +161,10 @@
                           </div>
                         </div>
                       </div>
-
-                      <!-- pruebas -->
-                      <div class="row">
-                        <div class="col">
-                          <div class="card">
-                            <div class="card-header">
-                              <h3 class="card-title">Pruebas</h3>
-                            </div>
-                            <div class="card-body">
-                              <% pagos.forEach(pago => { %>
-                               <p><%= pago.monto %></p>
-                              <% }) %>
-                              <hr>
-                              <ul>
-                                <li><%= gasto.id %></li>
-                                <li><%= gasto.id_categoria %> / <%= gasto.categoria.nombre %></li>
-                                <li><%= gasto.nombre%></li>
-                                <li><%= gasto.descripcion %></li>
-                                <li><%= gasto.condiciones %></li>
-                                <li><%= gasto.dia_vencimiento %></li>
-                                <li><%= gasto.frecuencia %></li>
-                                <% let longitud = pagos.length %>
-                                
-                                <li>Longitud de pagos: <%= longitud %></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <!-- /Alertas -->
                     </div>
-    
+                    
+                     <!-- Informacion del gasto/servicio -->
                     <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
                       <h3 class="text-primary"><i class="fas fa-paint-brush"></i><%= gasto.nombre %></h3>
                       <p class="text-muted"><%= gasto.descripcion %></p>
@@ -209,8 +173,8 @@
                         <p class="text-sm">Condiciones
                           <b class="d-block"><%= gasto.condiciones %></b>
                         </p>
-                        <p class="text-sm">Fecha de Vencimiento
-                          <b class="d-block"></b>
+                        <p class="text-sm">Dia de Vencimiento
+                          <b class="d-block"><%= gasto.dia_vencimiento %> de cada mes</b>
                         </p>
                       </div>
         
@@ -237,15 +201,12 @@
                         <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                       </div>
                     </div>
+                    <!-- /Informacion del gasto/servicio -->
                   </div>
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
       </section>
 
@@ -295,5 +256,71 @@
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cargar los detalles del último pago automáticamente
+      const ultimoPagoId = "<%= ultimoPago ? ultimoPago.id : 'null' %>";
+      
+      // Variable para almacenar el índice del último pago
+      let currentIndex = null;
+      
+      if (ultimoPagoId) {
+        fetch(`/gastos/pago/${ultimoPagoId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al obtener los detalles del último pago');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Mostrar los datos del último pago en los elementos correspondientes
+            document.getElementById('forma-pago').textContent = data.forma_pago.nombre;
+            document.getElementById('cbu').textContent = data.cbu || '-';
+            document.getElementById('cuit').textContent = data.cuit || '-';
+            document.getElementById('divisa').textContent = data.divisa || '-';
+            document.getElementById('monto').textContent = data.monto || '-';
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Agregar un evento de clic a todos los elementos con la clase 'pago-mes'
+      const pagosLinks = document.querySelectorAll('.pago-mes');
+      pagosLinks.forEach((link, index) => {
+        link.addEventListener('click', event => {
+          event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+  
+          // Remover la clase active de todos los elementos
+          pagosLinks.forEach(el => el.parentNode.classList.remove('active'));
+          
+          // Agregar la clase active al elemento clicado
+          link.parentNode.classList.add('active'); // Cambiado a `link.parentNode`
+  
+          const pagoId = link.getAttribute('data-pago-id');
+  
+          fetch(`/gastos/pago/${pagoId}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al obtener los detalles del pago');
+              }
+              return response.json();
+            })
+            .then(data => {
+              // Mostrar los datos del pago en los elementos correspondientes
+              document.getElementById('forma-pago').textContent = data.forma_pago.nombre;
+              document.getElementById('cbu').textContent = data.cbu || '-';
+              document.getElementById('cuit').textContent = data.cuit || '-';
+              document.getElementById('divisa').textContent = data.divisa || '-';
+              document.getElementById('monto').textContent = data.monto || '-';
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        });
+      });
+    });
+  </script>
+  
 </body>
 </html>

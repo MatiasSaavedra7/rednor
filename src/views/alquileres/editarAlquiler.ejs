@@ -23,29 +23,14 @@
           <div class="col-lg-8 m-auto">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Nuevo Contrato - <%= cliente.nombre %></h3>
+                <h3 class="card-title">Editar Contrato (id:<%= alquiler.id %>) / <%= alquiler.cliente.nombre %> / <%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%= alquiler.equipo.numero_serie %></h3>
               </div>
               <div class="card-body">
-                <form action="/alquileres/crear?cliente=<%= cliente.id %>" method="post">
-                  
-                  <div class="form-group">
-                    <label for="id_equipo">Equipo</label>
-                    <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%;" >
-                      <% equipos.forEach(equipo => { %>
-                        <option value="<%= equipo.id %>" <%= locals.old && old.id_equipo == equipo.id ? "selected" : "" %>>
-                          <%= equipo.marca%> <%= equipo.modelo %> - <%=
-                        equipo.numero_serie %>
-                      </option>
-                      <% }) %>
-                    </select>
-                    <% if (locals.errors && errors.id_equipo) { %>
-                    <p class="text-danger"><%= errors.id_equipo.msg %></p>
-                    <% } %>
-                  </div>
+                <form action="/alquileres/editar/<%= alquiler.id %>?_method=PUT" method="post">
         
                   <div class="form-group">
                     <label for="minimo_copias">Minimo de Copias</label>
-                    <input type="number" name="minimo_copias" id="minimo_copias" class="form-control" value="<%= locals.old && old.minimo_copias ? old.minimo_copias : "" %>">
+                    <input type="number" name="minimo_copias" id="minimo_copias" class="form-control" value="<%= locals.errors && errors.minimo_copias ? "" : (locals.old && old.numero_copias ? old.numero_copias : alquiler.minimo_copias) %>">
                     <% if (locals.errors && errors.minimo_copias) { %>
                       <p class="text-danger"><%= errors.minimo_copias.msg %></p>
                     <% } %>
@@ -53,7 +38,7 @@
         
                   <div class="form-group">
                     <label for="precio_copias">Precio por Copia</label>
-                    <input type="number" name="precio_copias" id="precio_copias" class="form-control" step="any" value="<%= locals.old && old.precio_copias ? old.precio_copias : ""  %>">
+                    <input type="number" name="precio_copias" id="precio_copias" class="form-control" step="any" value="<%= locals.errors && errors.precio_copias ? "" : (locals.old && old.precio_copias ? old.precio_copias : alquiler.precio_copias) %>">
                     <% if (locals.errors && errors.precio_copias) { %>
                       <p class="text-danger"><%= errors.precio_copias.msg %></p>
                     <% } %>
@@ -66,7 +51,7 @@
                         Elegir una opcion
                       </option>
                       <% firmas.forEach(firma => { %>
-                      <option value="<%= firma.nombre %>" <%= locals.old && old.firma == firma.nombre ? "selected" : "" %>>
+                      <option value="<%= firma.nombre %>" <%= alquiler.firma == firma.nombre ? "selected" : "" %>>
                         <%= firma.nombre %>
                       </option>
                       <% }) %>
@@ -75,31 +60,28 @@
                     <p class="text-danger"><%= errors.firma.msg %></p>
                     <% } %>
                   </div>
-        
-                  <div class="form-group">
-                    <label for="fecha_baja">Fecha de Vencimiento (Opcional):</label>
-                    <input type="date" name="fecha_baja" id="fecha_baja" class="form-control">
-                  </div> 
+
                   <hr />
+
                   <h5>Datos adicionales</h5>
                   <div class="form-group">
-                    <label for="numero_facturacion">Codigo de Facturacion</label>
-                    <input type="number" name="numero_facturacion" id="numero_facturacion" value="<%= locals.old && old.numero_facturacion ? old.numero_facturacion : "" %>" class="form-control">
+                    <label for="numero_facturacion">Numero de Facturacion</label>
+                    <input type="number" name="numero_facturacion" id="numero_facturacion" value="<%= locals.errors && errors.numero_facturacion ? "" : (locals.old && old.numero_facturacion ? old.numero_facturacion : alquiler.numero_facturacion) %>" class="form-control">
+                    <% if (locals.errors && errors.numero_facturacion) { %>
+                     <p class="text-danger"><%= errors.numero_facturacion.msg %></p>
+                    <% } %>
                   </div>
-                  <% if (locals.errors && errors.numero_facturacion) { %>
-                   <p class="text-danger"><%= errors.numero_facturacion.msg %></p>
-                  <% } %>
 
                   <div class="form-group">
                     <label for="departamento">Departamento</label>
-                    <input type="text" name="departamento" id="departamento" class="form-control"
-                    value="<%= locals.old && old.departamento ? old.departamento : ""
-                    %>" /> <% if (locals.errors && errors.departamento) { %>
-                    <p class="text-danger"><%= errors.departamento.msg %></p>
+                    <input type="text" name="departamento" id="departamento" class="form-control" value="<%= alquiler.departamento %>" />
+                    <% if (locals.errors && errors.departamento) { %>
+                      <p class="text-danger"><%= errors.departamento.msg %></p>
                     <% } %>
                   </div>
                   <br />
                   <input type="submit" class="btn btn-primary w-100" />
+                  <a href="/alquileres/detalles/<%= alquiler.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás</a>
                 </form>
               </div>
             </div>

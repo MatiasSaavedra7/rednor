@@ -43,7 +43,7 @@
                       </thead>
                       <tbody>
                         <% clientes.forEach(cliente => { %>
-                          <tr>
+                          <tr class="clickable-row" data-href="/clientes/detalle/<%= cliente.id %>">
                             <td><%= cliente.id %></td>
                             <td><%= cliente.nombre %></td>
                             <td><%# cliente.tipo.nombre %></td>
@@ -71,5 +71,15 @@
         }).buttons().container().appendTo('#clientes_wrapper .col-md-6:eq(0)');
       });
     </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.clickable-row').forEach(row => {
+          row.addEventListener('click', () => {
+            window.location.href = row.getAttribute('data-href');
+          });
+        });
+      });
+    </script>
+    
   </body>
 </html>

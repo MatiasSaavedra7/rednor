@@ -1,11 +1,3 @@
-function Usuario(data) {
-  this.nombre = data.nombre;
-  this.apellido = data.apellido;
-  this.usuario = data.usuario;
-  this.password = data.password;
-  this.id_rol = data.id_rol;
-}
-
 function Cliente(data) {
   this.nombre = data.nombre;
   this.id_tipo_cliente = data.id_tipo_cliente;
@@ -43,6 +35,7 @@ function Alquiler(data) {
   this.precio_copias = data.precio_copias;
   this.precio = data.precio;
   this.firma = data.firma;
+  this.numero_facturacion = data.numero_facturacion;
   this.departamento = data.departamento;
   this.fecha_alta = data.fecha_alta;
   this.fecha_baja = data.fecha_baja;
@@ -125,7 +118,6 @@ function EquipoExterno(data) {
 }
 
 module.exports = {
-  Usuario,
   Cliente,
   Habilitado,
   Equipo,

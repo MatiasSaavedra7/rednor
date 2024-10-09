@@ -1,4 +1,5 @@
 const { check } = require("express-validator");
+const usuariosService = require("../database/services/usuariosService");
 
 module.exports = [
   check("nombre")
@@ -7,9 +8,17 @@ module.exports = [
   check("apellido")
     .notEmpty()
     .withMessage("Debes ingresar tu apellido"),
-  check("usuario")
+  check("email")
     .notEmpty()
-    .withMessage("Debes ingresar un nombre de usuario, con el cual vas a iniciar sesion"),
+    .withMessage("Debes ingresar un correo")
+    .isEmail()
+    .withMessage("El correo ingresado no es válido")
+    .custom(async (email) => {
+      const usuario = await usuariosService.getOneByEmail(email);
+      if (usuario) {
+        throw new Error("El correo ingresado ya está en uso");
+      }
+    }),
   check('password')
     .notEmpty()
     .withMessage('Debes ingresar una contraseña').bail()
@@ -21,7 +30,7 @@ module.exports = [
         let { rePassword, password } = req.body;
 
         if (rePassword !== password) {
-            throw new Error("Las contraseñas no coinciden")
+          throw new Error("Las contraseñas no coinciden")
         }
 
         return true;

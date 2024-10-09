@@ -42,7 +42,6 @@ module.exports = {
 
   almacenarGastos: async (req, res) => {
     try {
-      console.log(req.body);
       let fechaActual = new Date()
 
       let dataGasto = {
@@ -79,23 +78,45 @@ module.exports = {
   // Pagina para ver el detalle de un gasto
   detalleGasto: async (req, res) => {
     try {
-      // Traer informacion de la categoria
+      // Traer la información de la categoría
       let categoria = await categoriasService.getOneByPK(req.params.idCategoria);
-
-      // Traer informacion del gasto
+  
+      // Traer la información del gasto
       let gasto = await gastosService.getOneByPK(req.params.idServicio);
-      console.log(gasto);
+  
+      // Traer la información de los pagos
+      let pagos = await pagosService.getAllByIdGasto(req.params.idServicio);
+
+      // Ordenar los pagos por fecha (del más reciente al más antiguo)
+      // pagos.sort((a, b) => new Date(b.id) - new Date(a.id));
+      
+      // Obtener el último pago
+      let ultimoPago = pagos.length > 0 ? pagos[pagos.length - 1] : null;
+
+      console.log("ULTIMO PAGO: ", ultimoPago);
       
 
-      // Traer informacion del pago
-      let pagos = await pagosService.getOneByPK(req.params.idPago);
-      console.log(pagos);
-      
-      
-      res.render("gastos/servicios/detalleGasto", { categoria, gasto, pagos });
+      console.log("Pagos: ", pagos);
+  
+      res.render('gastos/servicios/detalleGasto', { categoria, gasto, pagos, ultimoPago});
     } catch (error) {
       console.log(error);
     }
   },
+
+  detallePago: async (req, res) => {
+    try {
+      //  Traer informacion del pago
+      let pago = await pagosService.getOneByPK(req.params.idPago);
+
+      if(!pago) {
+        return res.status(404).json({ error: "Pago no encontrado" });
+      }
+
+      res.json(pago);
+    } catch (error) {
+      res.status(500).json({ error: "Error al obtener los detalles del pago"});
+    }
+  }
   
 };

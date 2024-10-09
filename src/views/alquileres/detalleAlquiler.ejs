@@ -45,24 +45,34 @@
                         <dd><%= alquiler.minimo_copias %></dd>
                         
                         <dt>Precio por Copias</dt>
-                        <dd>$<%= alquiler.precio_copias %></dd>
+                        <dd id="precio-copias">$<%= alquiler.precio_copias %></dd>
                         
                         <dt>Precio Final</dt>
-                        <dd>$<%= alquiler.precio %></dd>
+                        <dd id="precio-final">$<%= alquiler.precio %></dd>
+
+                        <dt>Numero de Facturacion</dt>
+                        <dd><%= alquiler.numero_facturacion %></dd>
 
                         <dt>Departamento</dt>
                         <dd><%= alquiler.departamento %></dd>
 
+                        <dt>Firma</dt>
+                        <dd><%= alquiler.firma %></dd>
+
                         <dt>Fecha de Alta del Contrato</dt>
-                        <dd><%= alquiler.fecha_alta.toLocaleString() %></dd>
+                        <dd><%= alquiler.fecha_alta.toLocaleString('es-ES', {hour12: false}) %></dd>
 
                         <% if (alquiler.fecha_baja) { %>
                           <dt>Fecha de Baja del Contrato</dt>
-                          <dd><%= alquiler.fecha_baja.toLocaleString() %></dd>
+                          <dd><%= alquiler.fecha_baja.toLocaleString('es-ES', {hour12: false}) %></dd>
+                        <% } %>
+                        
+                        <% if (alquiler.fecha_alta.toLocaleString() != alquiler.fecha_reajuste.toLocaleString()) { %>
+                          <dt>Ultimo Reajuste</dt>
+                          <dd><%= alquiler.fecha_reajuste.toLocaleString('es-ES', {hour12: false}) %></dd>
                         <% } %>
 
-                        <dt>Ultimo Reajuste</dt>
-                        <dd><%= alquiler.fecha_reajuste.toLocaleString() %></dd>
+                        <a href="/alquileres/editar/<%= alquiler.id %>" class="btn btn-block btn-outline-primary mt-3">Editar Info</a>
                       </dl>
                     </div>
                     <div class="tab-pane fade" id="custom-tabs-one-cliente" role="tabpanel" aria-labelledby="custom-tabs-one-cliente-tab">
@@ -139,10 +149,10 @@
                     <tbody>
                       <% reajustes.forEach(reajuste => { %>
                         <tr>
-                        <td><%= reajuste.fecha_reajuste.toLocaleString() %></td>
+                        <td><%= reajuste.fecha_reajuste.toLocaleString('es-ES', {hour12: false}) %></td>
                         <td><%= reajuste.minimo_copias %></td>
-                        <td>$<%= reajuste.precio_copias %></td>
-                        <td>$<%= reajuste.precio %></td>
+                        <td id="reajuste-precio-copias">$<%= reajuste.precio_copias %></td>
+                        <td id="reajuste-precio">$<%= reajuste.precio %></td>
                         </tr>
                       <% }) %>
                     </tbody>
@@ -192,5 +202,19 @@
       }).buttons().container().appendTo('#alquiler_wrapper .col-md-6:eq(0)');
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const precioCopias = document.getElementById('precio-copias');
+      const precioFinal = document.getElementById('precio-final');
+      const reajustePrecioCopias = document.getElementById('reajuste-precio-copias');
+      const reajustePrecio = document.getElementById('reajuste-precio');
+
+      precioCopias.textContent = '$' + formatearPrecio(parseFloat(precioCopias.textContent.replace('$', '')));
+      precioFinal.textContent = '$' + formatearPrecio(parseFloat(precioFinal.textContent.replace('$', '')));
+      reajustePrecioCopias.textContent = '$' + formatearPrecio(parseFloat(reajustePrecioCopias.textContent.replace('$', '')));
+      reajustePrecio.textContent = '$' + formatearPrecio(parseFloat(reajustePrecio.textContent.replace('$', '')));
+
+    });
+</script>
 </body>
 </html>

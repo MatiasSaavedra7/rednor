@@ -5,14 +5,16 @@ const controller = require("../controllers/usuariosController");
 const validateRegistroMiddleware = require("../middlewares/validateUsuarioMiddleware");
 // const validateLoginMiddleware = require('../middlewares/validateLoginMiddleware');
 
-router.get("/registro", controller.formRegistro);
+router.get("/registro", controller.mostrarRegistro);
 
-router.post("/registro", validateRegistroMiddleware, controller.registro);
+router.post("/registro", validateRegistroMiddleware, controller.registrarUsuario);
 
-router.get("/login", controller.formLogin);
+router.get("/verificar/:token", controller.verificarUsuario);
 
-router.post("/login", controller.login);
+router.get("/login", controller.mostrarLogin);
 
-router.get("/logout", controller.logout);  
+router.post("/login", controller.logUsuario);
+
+router.get("/logout", controller.cerrarSesion);  
 
 module.exports = router;

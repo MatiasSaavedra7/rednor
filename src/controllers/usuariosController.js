@@ -1,10 +1,18 @@
+require("dotenv").config();
+
 const usuariosService = require("../database/services/usuariosService");
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 const { validationResult } = require("express-validator");
 
+const SECRET_KEY = process.env.SECRET_KEY;
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
+
 module.exports = {
-  formRegistro: (req, res) => {
+  mostrarRegistro: (req, res) => {
     try {
       res.render("usuarios/registroUsuario");
     } catch (error) {
@@ -13,38 +21,87 @@ module.exports = {
     }
   },
 
-  registro: async (req, res) => {
+  registrarUsuario: async (req, res) => {
     try {
-      let errors = validationResult(req);
+      const errors = validationResult(req);
 
-      if (errors.isEmpty()) {
-        // Elimino del objeto body el atributo rePassword (solo sirve como verificacion de contraseña)
-        delete req.body.rePassword;
-
-        // A través de bcryptjs hasheo la password
-        let password = bcryptjs.hashSync(req.body.password, 10);
-
-        // Creo un objeto data con los valores a almacenar en la base de datos
-        let data = {
-          ...req.body,
-          password,
-          id_rol: 4,
-        };
-        await usuariosService.create(data);
-        res.redirect("/admin/usuarios");
-      } else {
-        res.render("usuarios/registroUsuario", {
+      if (!errors.isEmpty()) {
+        return res.render("usuarios/registroUsuario", {
           errors: errors.mapped(),
           old: req.body,
         });
       }
+
+      //  Elimino el campo rePassword del formulario
+      delete req.body.rePassword;
+
+      //  Encriptar la contraseña
+      const password = await bcryptjs.hash(req.body.password, 10);
+
+      //  Crear un objeto data con toda la informacion del nuevo usuario  
+      const data = {
+        ...req.body,
+        password,
+        id_rol: 4,
+        verified: false,
+      };
+
+      //  Almaceno el nuevo usuario en la base de datos
+      const newUser = await usuariosService.create(data);
+
+      //  Token
+      const token = jwt.sign({ id: newUser.id }, SECRET_KEY, { expiresIn: "1h"});
+
+      let transporter = nodemailer.createTransport({
+        host: "vps-2689092-x.dattaweb.com",
+        port: 465,
+        secure: true, // true para puerto 465, false para otros puertos
+        auth: {
+          user: process.env.EMAIL_USER, // tu usuario
+          pass: process.env.EMAIL_PASS, // tu contraseña
+        },
+      });
+
+      let mailOptions = {
+        from: EMAIL_USER,
+        to: newUser.email,
+        subject: "Verificacion de cuenta",
+        text: `Haz clic en el siguiente enlace para verificar tu cuenta: http://localhost:3000/usuarios/verificar/${token}`,
+      }
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          return res.status(500).send("Error al enviar el correo");
+        }
+        res.send("Correo de verificacion enviado");
+      })
+
+      
     } catch (error) {
-      res.send(error);
       console.log(error);
     }
   },
 
-  formLogin: (req, res) => {
+  verificarUsuario: async (req, res) => {
+    try {
+      //  Capturo el token de los params
+      const token = req.params.token;
+
+      //  Verifico el token con el secret key
+      const decoded = jwt.verify(token, SECRET_KEY);
+
+      //  Actualizo el campo 'verified' de la tabla 'usuarios' a true para indicar que la cuenta esta verificada
+      await usuariosService.updateByPK(decoded.id, { verified: true });
+
+      //  Envio un mensaje para confirmar que la cuenta ha sido verificada
+      res.send("Cuenta verificada");
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  mostrarLogin: (req, res) => {
     try {
       res.render("usuarios/loginUsuario");
     } catch (error) {
@@ -52,37 +109,42 @@ module.exports = {
     }
   },
 
-  login: async (req, res) => {
+  logUsuario: async (req, res) => {
     try {
-      let usuario = await usuariosService.getOneByUser(req.body.usuario);
+      const { email, password } = req.body;
 
-      // Verifico si el usuario existe
+      const usuario = await usuariosService.getOneByEmail(email);
+
+      //  Si el usuario existe
       if (usuario) {
-        // Comparo las contraseñas
-        let checkPassword = bcryptjs.compareSync(
-          req.body.password,
-          usuario.password
-        );
-
-        // Si la contraseña es correcta, logueo al usuario
-        if (checkPassword) {
-          // Guardo al usuario en session
+        const checkPassword = await bcryptjs.compare(password, usuario.password);
+        if (checkPassword && usuario.verified) {
           req.session.userLogged = usuario;
-
-          // Redirijo a la home
           return res.redirect("/");
+        } else if (!usuario.verified) {
+          return res.status(401).render("usuarios/loginUsuario", {
+            errors: { login: { msg: "Cuenta no verificada. Por favor, verifica tu email." } },
+            old: req.body,
+          });
         } else {
-          res.send("El usuario EXISTE y la contraseña es INCORRECTA!!!");
+          return res.status(401).render("usuarios/loginUsuario", {
+            errors: { login: { msg: "Contraseña incorrecta" } },
+            old: req.body,
+          });
         }
       } else {
-        res.send("El usuario NO EXISTE");
+        return res.status(404).render("usuarios/loginUsuario", {
+          errors: { email: { msg: "Correo no válido" } },
+          old: req.body,
+        });
       }
+
     } catch (error) {
-      console.log(error);
+     console.log(error);
     }
   },
 
-  logout: async (req, res) => {
+  cerrarSesion: async (req, res) => {
     try {
       req.session.destroy();
       res.clearCookie("rednorCookieSession");

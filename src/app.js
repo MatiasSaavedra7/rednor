@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 // MIDDLEWARES
 const controlVencimientos = require("../src/middlewares/controlFechaAlquileresMiddleware");
 const userLogged = require("../src/middlewares/userLoggedMiddleware");
+// const authMiddleware = require("../src/middlewares/authMiddleware");
 
 // RUTAS
 const routes = require("./routes/index.routes");
@@ -50,6 +51,13 @@ app.use(controlVencimientos);
 
 // MIDDLEWARE PARA CONTROL DEL USUARIO LOGEADO
 app.use(userLogged);
+
+// app.use((req, res, next) => {
+//   if (req.path.startsWith("/usuarios") || req.path === "/" || req.path === "/autorizacio-pendiente") {
+//     return next();
+//   }
+//   authMiddleware(req, res, next);
+// })
 
 // RUTAS
 app.use("/", routes);
