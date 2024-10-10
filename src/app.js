@@ -1,3 +1,4 @@
+require("dotenv").config();
 // MODULOS
 const express = require("express");
 const session = require("express-session");
@@ -8,6 +9,12 @@ const methodOverride = require("method-override");
 const controlVencimientos = require("../src/middlewares/controlFechaAlquileresMiddleware");
 const userLogged = require("../src/middlewares/userLoggedMiddleware");
 // const authMiddleware = require("../src/middlewares/authMiddleware");
+
+//  Verificar que las variables de entorno se carguen correctamente
+console.log("DB_USER", process.env.DB_USER);
+console.log("DB_PASS", process.env.DB_PASS);
+console.log("DB_NAME", process.env.DB_NAME);
+
 
 // RUTAS
 const routes = require("./routes/index.routes");
