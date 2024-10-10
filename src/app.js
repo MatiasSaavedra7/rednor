@@ -63,6 +63,6 @@ app.use(userLogged);
 app.use("/", routes);
 
 // SERVIDOR
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo http://localhost:${PORT}/`);
+app.listen(PORT, "0.0.0.0" ,() => {
+  console.log(`Servidor corriendo http://0.0.0.0:${PORT}/`);
 });
