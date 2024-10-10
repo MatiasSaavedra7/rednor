@@ -11,7 +11,7 @@ const userLogged = require("../src/middlewares/userLoggedMiddleware");
 
 //  Verificar que las variables de entorno se carguen correctamente
 console.log("DB_USER", process.env.DB_USER);
-console.log("DB_PASS", process.env.DB_PASS);
+console.log("DB_PASS", process.env.DB_PASSWORD);
 console.log("DB_NAME", process.env.DB_NAME);
 
 
@@ -22,7 +22,7 @@ const app = express();
 
 // DEFINICION DEL PUERTO
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "localhost";
+const HOST = process.env.HOST || "0.0.0.0";
 
 // RECURSOS ESTÁTICOS.
 app.use(express.static(path.join(__dirname, "../public")));
