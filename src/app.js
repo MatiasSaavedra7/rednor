@@ -8,7 +8,6 @@ const methodOverride = require("method-override");
 // MIDDLEWARES
 const controlVencimientos = require("../src/middlewares/controlFechaAlquileresMiddleware");
 const userLogged = require("../src/middlewares/userLoggedMiddleware");
-// const authMiddleware = require("../src/middlewares/authMiddleware");
 
 //  Verificar que las variables de entorno se carguen correctamente
 console.log("DB_USER", process.env.DB_USER);
@@ -22,7 +21,8 @@ const routes = require("./routes/index.routes");
 const app = express();
 
 // DEFINICION DEL PUERTO
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || "localhost";
 
 // RECURSOS ESTÁTICOS.
 app.use(express.static(path.join(__dirname, "../public")));
@@ -70,6 +70,6 @@ app.use(userLogged);
 app.use("/", routes);
 
 // SERVIDOR
-app.listen(PORT, "0.0.0.0" ,() => {
-  console.log(`Servidor corriendo http://0.0.0.0:${PORT}/`);
+app.listen(PORT, HOST ,() => {
+  console.log(`Servidor corriendo http://${HOST}:${PORT}/`);
 });
