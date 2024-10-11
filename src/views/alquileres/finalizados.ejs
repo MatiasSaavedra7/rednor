@@ -31,6 +31,7 @@
                     <thead>
                       <tr>
                         <th>Cliente</th>
+                        <th>Departamento</th>
                         <th>Equipo</th>
                         <th>Firma</th>
                         <th>Precio</th>
@@ -42,13 +43,14 @@
                       <% alquileres.forEach(alquiler => { %>
                         <tr>
                           <td><%= alquiler.cliente.nombre %></td>
+                          <td><%= alquiler.departamento %></td>
                           <td>
                             <%= alquiler.equipo.marca %>
                             <%= alquiler.equipo.modelo %>
                             <%= alquiler.equipo.numero_serie %>
                           </td>
                           <td><%= alquiler.firma %></td>
-                          <td>$<%= alquiler.precio %></td>
+                          <td class="precios"><%= alquiler.precio %></td>
                           <td>
                             <% if (alquiler.fecha_baja != null) { %>
                               <%= alquiler.fecha_baja.toLocaleString() %>
@@ -82,6 +84,16 @@
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#alquileres_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const precios = document.querySelectorAll(".precios");
+      
+      precios.forEach(precio => {
+        const valor = parseFloat(precio.textContent);
+        precio.textContent = '$' + formatearPrecio(valor);
+      });
     });
   </script>
 </body>

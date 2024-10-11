@@ -9,11 +9,6 @@ const methodOverride = require("method-override");
 const controlVencimientos = require("../src/middlewares/controlFechaAlquileresMiddleware");
 const userLogged = require("../src/middlewares/userLoggedMiddleware");
 
-//  Verificar que las variables de entorno se carguen correctamente
-console.log("DB_USER", process.env.DB_USER);
-console.log("DB_PASS", process.env.DB_PASSWORD);
-console.log("DB_NAME", process.env.DB_NAME);
-
 
 // RUTAS
 const routes = require("./routes/index.routes");
@@ -54,17 +49,10 @@ app.use(
 );
 
 // MIDDLEWARE PARA EL CONTROL DE LAS FECHAS DE VENCIMIENTO
-// app.use(controlVencimientos);
+app.use(controlVencimientos);
 
 // MIDDLEWARE PARA CONTROL DEL USUARIO LOGEADO
 app.use(userLogged);
-
-// app.use((req, res, next) => {
-//   if (req.path.startsWith("/usuarios") || req.path === "/" || req.path === "/autorizacio-pendiente") {
-//     return next();
-//   }
-//   authMiddleware(req, res, next);
-// })
 
 // RUTAS
 app.use("/", routes);

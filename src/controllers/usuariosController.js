@@ -66,7 +66,7 @@ module.exports = {
         from: EMAIL_USER,
         to: newUser.email,
         subject: "Verificacion de cuenta",
-        text: `Haz clic en el siguiente enlace para verificar tu cuenta: http://localhost:3000/usuarios/verificar/${token}`,
+        text: `Haz clic en el siguiente enlace para verificar tu cuenta: http://179.43.127.183:3000/usuarios/verificar/${token}`,
       }
 
       transporter.sendMail(mailOptions, (error, info) => {

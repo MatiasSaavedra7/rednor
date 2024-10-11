@@ -3,8 +3,6 @@
 <head>
   <%- include('../partials/AdminLTEHead.ejs') %>
   <%- include('../partials/AdminLTEHeadTables') %>
-  <!-- <link rel="stylesheet" href="/css/detalleAlquiler.css" /> -->
-  <!-- <link rel="stylesheet" href="/css/tables.css"> -->
   <title>REDNOR - Detalle del Alquiler <%= alquiler.id %></title>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -45,10 +43,10 @@
                         <dd><%= alquiler.minimo_copias %></dd>
                         
                         <dt>Precio por Copias</dt>
-                        <dd id="precio-copias">$<%= alquiler.precio_copias %></dd>
+                        <dd class="precios"><%= alquiler.precio_copias %></dd>
                         
                         <dt>Precio Final</dt>
-                        <dd id="precio-final">$<%= alquiler.precio %></dd>
+                        <dd class="precios"><%= alquiler.precio %></dd>
 
                         <dt>Numero de Facturacion</dt>
                         <dd><%= alquiler.numero_facturacion %></dd>
@@ -151,8 +149,8 @@
                         <tr>
                         <td><%= reajuste.fecha_reajuste.toLocaleString('es-ES', {hour12: false}) %></td>
                         <td><%= reajuste.minimo_copias %></td>
-                        <td id="reajuste-precio-copias">$<%= reajuste.precio_copias %></td>
-                        <td id="reajuste-precio">$<%= reajuste.precio %></td>
+                        <td class="precios"><%= reajuste.precio_copias %></td>
+                        <td class="precios"><%= reajuste.precio %></td>
                         </tr>
                       <% }) %>
                     </tbody>
@@ -204,17 +202,13 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function(){
-      const precioCopias = document.getElementById('precio-copias');
-      const precioFinal = document.getElementById('precio-final');
-      const reajustePrecioCopias = document.getElementById('reajuste-precio-copias');
-      const reajustePrecio = document.getElementById('reajuste-precio');
+      const precios = document.querySelectorAll(".precios");
 
-      precioCopias.textContent = '$' + formatearPrecio(parseFloat(precioCopias.textContent.replace('$', '')));
-      precioFinal.textContent = '$' + formatearPrecio(parseFloat(precioFinal.textContent.replace('$', '')));
-      reajustePrecioCopias.textContent = '$' + formatearPrecio(parseFloat(reajustePrecioCopias.textContent.replace('$', '')));
-      reajustePrecio.textContent = '$' + formatearPrecio(parseFloat(reajustePrecio.textContent.replace('$', '')));
-
+      precios.forEach(precio => {
+        const valor = parseFloat(precio.textContent);
+        precio.textContent = "$" + formatearPrecio(valor);
+      })
     });
-</script>
+  </script>
 </body>
 </html>
