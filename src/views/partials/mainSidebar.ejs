@@ -101,49 +101,61 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="/repuestos" class="nav-link">
-              <i class="nav-icon fas fa-wrench"></i>
-              <p>
-                Repuestos
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-cogs"></i>
-              <p>
-                Taller
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
+          <% if (locals.isLogged) { %>
+            <% if (locals.userLogged.id_rol != 2) { %>
               <li class="nav-item">
-                <a href="/taller" class="nav-link">
-                  <i class="nav-icon far fa-circle nav-icon"></i>
+                <a href="/repuestos" class="nav-link">
+                  <i class="nav-icon fas fa-wrench"></i>
                   <p>
-                    Equipos Propios
+                    Repuestos
                   </p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="/taller/externos" class="nav-link">
-                  <i class="nav-icon far fa-circle nav-icon"></i>
-                  <p>
-                    Equipos de Terceros
-                  </p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="/gastos" class="nav-link">
-              <i class="nav-icon fas fa-dollar-sign"></i>
-              <p>
-                Gastos
-              </p>
-            </a>
-          </li>
+            <% } %>
+          <% } %>
+          <% if (locals.isLogged) { %>
+           <% if (locals.userLogged.id_rol != 2) { %>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-cogs"></i>
+                <p>
+                  Taller
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/taller" class="nav-link">
+                    <i class="nav-icon far fa-circle nav-icon"></i>
+                    <p>
+                      Equipos Propios
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/taller/externos" class="nav-link">
+                    <i class="nav-icon far fa-circle nav-icon"></i>
+                    <p>
+                      Equipos de Terceros
+                    </p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+           <% } %>
+          <% } %>
+          <% if (locals.isLogged) { %>
+           <% if (locals.userLogged.id_rol != 2) { %>
+            <li class="nav-item">
+              <a href="/gastos" class="nav-link">
+                <i class="nav-icon fas fa-dollar-sign"></i>
+                <p>
+                  Gastos
+                </p>
+              </a>
+            </li>
+           <% } %>
+          <% } %>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
