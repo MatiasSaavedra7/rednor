@@ -57,6 +57,14 @@ app.use(userLogged);
 // RUTAS
 app.use("/", routes);
 
+app.use((req, res, next) => {
+	res.status(404).render("errors/error404.ejs");
+});
+
+app.use((req, res, next) => {
+	res.status(500).render("errors/error500.ejs");
+});
+
 // SERVIDOR
 app.listen(PORT, HOST ,() => {
   console.log(`Servidor corriendo http://${HOST}:${PORT}/`);

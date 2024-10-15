@@ -42,12 +42,12 @@
                         <th>Serie</th>
                         <th>Tipo</th>
                         <th>Estado</th>
-                        <th>Detalles</th>
+                        <!-- <th>Detalles</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <% equipos.forEach(equipo=> { %>
-                        <tr>
+                        <tr class="clickable-row" data-href="/equipos/detalle/<%= equipo.id %>">
                           <td>
                             <%= equipo.id %>
                           </td>
@@ -66,7 +66,7 @@
                           <td>
                             <%= equipo.estado.nombre %>
                           </td>
-                          <td><a href="/equipos/detalle/<%= equipo.id %>">Ver más</a></td>
+                          <!-- <td><a href="/equipos/detalle/<%# equipo.id %>">Ver más</a></td> -->
                         </tr>
                         <% }) %>
                     </tbody>
@@ -81,15 +81,25 @@
   </div>
 
   <%- include('../partials/AdminLTEScripts.ejs') %>
-    <%- include('../partials/AdminLTEScriptsTables.ejs') %>
-      <script>
-        $(function () {
-          $("#equipos").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-          }).buttons().container().appendTo('#equipos_wrapper .col-md-6:eq(0)');
+  <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+  <script>
+    $(function () {
+      $("#equipos").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#equipos_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      document.querySelectorAll('.clickable-row').forEach(row => {
+        row.style.cursor = "pointer";
+        row.addEventListener('click', () => {
+          window.location.href = row.getAttribute('data-href');
         });
-      </script>
+      });
+    });
+  </script>
 </body>
 
 </html>

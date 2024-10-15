@@ -19,46 +19,47 @@ const gastos = require('./gastos.routes.js');
 const pruebas = require("./pruebas.routes.js");
 
 //  Middlewares
-const adminMiddleware = require("../middlewares/adminMiddleware.js");
 const authMiddleware = require("../middlewares/authMiddleware.js");
+//  Middleware para controlar el acceso a rutas segun el rol (1- Admin, 2 - Moderador, 3 - Tecnico, 4 - Invitado)
+const roleMiddleware = require("../middlewares/roleMiddleware.js");
 
 // Main routes
 router.use("/", main);
 
 // Admin routes
-router.use("/admin", authMiddleware, adminMiddleware, admin);
+router.use("/admin", authMiddleware, roleMiddleware([1]), admin);
 
 // Clientes routes
-router.use("/clientes", authMiddleware, clientes);
+router.use("/clientes", authMiddleware, roleMiddleware([1, 2]), clientes);
 
 // Personas habilitadas routes
-router.use("/habilitados", authMiddleware, habilitados);
+router.use("/habilitados", authMiddleware, roleMiddleware([1, 2]), habilitados);
 
 // Equipos routes
-router.use("/equipos", authMiddleware, equipos);
+router.use("/equipos", authMiddleware, roleMiddleware([1, 2]), equipos);
 
 // Alquileres routes
-router.use("/alquileres", authMiddleware, alquileres);
+router.use("/alquileres", authMiddleware, roleMiddleware([1, 2]), alquileres);
 
 // Repuesto routes
-router.use("/repuestos", authMiddleware, repuestos);
+router.use("/repuestos", authMiddleware, roleMiddleware([1]), repuestos);
 
 // Taller routes
-router.use("/taller", authMiddleware, taller);
+router.use("/taller", authMiddleware, roleMiddleware([1]), taller);
 
 // Taller externos routes
-router.use("/taller/externos", authMiddleware, externos);
+router.use("/taller/externos", authMiddleware, roleMiddleware([1]), externos);
+
+// Pruebas routes
+router.use("/pruebas", roleMiddleware([1]), pruebas);
+
+// Pagos routes
+router.use("/pagos", authMiddleware, roleMiddleware([1]), pagos);
+
+// Gastos routes
+router.use("/gastos", authMiddleware, roleMiddleware([1]), gastos);
 
 // Usuarios routes
 router.use("/usuarios", usuarios);
-
-// Pruebas routes
-router.use("/pruebas", pruebas);
-
-// Pagos routes
-router.use("/pagos", authMiddleware, pagos);
-
-// Gastos routes
-router.use("/gastos", authMiddleware, gastos);
 
 module.exports = router;

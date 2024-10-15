@@ -108,6 +108,7 @@ module.exports = {
     try {
       //  Traer informacion del pago
       let pago = await pagosService.getOneByPK(req.params.idPago);
+      let formas_pago = await formasPagoService.getAll();
 
       if(!pago) {
         return res.status(404).json({ error: "Pago no encontrado" });
