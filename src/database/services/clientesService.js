@@ -45,5 +45,13 @@ module.exports = {
       console.log(error);
       return [];
     }
+  },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.Cliente.destroy({ where : { id: id } });
+    } catch (error) {
+      console.log(error);
+    }
   }
 };

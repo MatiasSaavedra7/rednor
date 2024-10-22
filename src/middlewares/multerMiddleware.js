@@ -8,11 +8,14 @@ const storage = multer.diskStorage({
       case "inscripcion_afip":
         path = "./public/docs/inscripciones";
         break;
-      case "condicion_afip":
-        path = "./public/docs/condicion";
-        break;
       case "formulario_005":
         path = "./public/docs/formulario005";
+        break;
+      case "archivos_pagos":
+        path = "./public/docs/pagos";
+        break;
+      default:
+        path = "./public/docs/default"; //  Default path
         break;
     }
     cb(null, path);
@@ -25,13 +28,3 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 module.exports = upload;
-
-// Ruta para manejar la carga de archivos
-// app.post('/upload', upload.fields([
-//   { name: 'inscripcion_afip', maxCount: 1 },
-//   { name: 'condicion_afip', maxCount: 1 },
-//   { name: 'formulario_005', maxCount: 1 }
-// ]), (req, res) => {
-// Aquí puedes manejar los archivos cargados como prefieras
-//   res.send('Archivos cargados con éxito');
-// });

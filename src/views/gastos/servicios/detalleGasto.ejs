@@ -2,7 +2,62 @@
 <html lang="en">
 <head>
   <%- include('../../partials/AdminLTEHead.ejs') %>
+  <script src="/js/cuit.js"></script>
+  <script src="/js/detalleGasto.js"></script>
   <title>REDNOR - Perfil del Servicio</title>
+  <style>
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pagination {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      margin: 0 10px;
+      padding: 10px 0;
+      list-style-type: none;
+    }
+
+    .page-item {
+      margin: 0 5px;
+    }
+
+    .page-link {
+      display: block;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .page-link:hover {
+      background-color: #e0e0e0;
+      cursor: pointer;
+    }
+
+    .active .page-link {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .pagination-btn {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
@@ -25,14 +80,10 @@
                 <div class="card-header">
                   <h3 class="card-title"><%= gasto.nombre %></h3>
         
-                  <!-- <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                  </div> -->
                   <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#modal-lg">
                     Pagar Servicio
                   </button>
+
                 </div>
                 
                 <div class="card-body">
@@ -68,30 +119,31 @@
                       <!-- Paginación por meses de los pagos -->
                       <div class="row">
                         <div class="col-12">
-                          <div class="container">
-                            <div class="card">
-                              <div class="card-header">
-                                <h3 class="card-title">Paginación Mensual</h3>
-                              </div>
-                              <div class="card-body">
-                                <ul class="pagination pagination-month justify-content-center">
-                                  <li class="page-item"><a class="page-link" href="#" id="prev-month">«</a></li>
-                                  <% pagos.forEach(pago => { %>
-                                    <% const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
-                                    <li class="page-item <%= ultimoPago && ultimoPago.id == pago.id ? "active" : "" %>">
-                                      <a href="#" class="page-link pago-mes"  data-pago-id="<%= pago.id %>">
-                                        <p class="page-month"><%= meses[pago.fecha_pago.getMonth()] %></p>
-                                        <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
-                                      </a>
-                                    </li>
-                                  <% }) %>
-                                  <li class="page-item"><a class="page-link" href="#" id="next-month">»</a></li>
-                                </ul>
-                              </div>
+                          <div class="card">
+
+                            <div class="card-header">
+                              <h3 class="card-title">Paginación Mensual</h3>
                             </div>
+
+                            <div class="card-body pagination-container">
+                              <button class="pagination-btn" id="prev-month">«</button>
+                              <ul class="pagination pagination-month justify-content-center">
+                                <% pagos.forEach(pago => { %>
+                                  <% const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
+                                  <li class="page-item <%= ultimoPago && ultimoPago.id == pago.id ? "active" : "" %>">
+                                    <a href="#" class="page-link pago-mes" data-pago-id="<%= pago.id %>">
+                                      <p class="page-month"><%= meses[pago.fecha_pago.getMonth()] %></p>
+                                      <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
+                                    </a>
+                                  </li>
+                                <% }) %>
+                              </ul>
+                              <button class="pagination-btn" id="next-month">»</button>
+                            </div>
+
                           </div>
                         </div>
-                      </div>
+                      </div>                      
                       <!-- /Paginación por meses de los pagos -->
     
                       <!-- Datos del Pago -->
@@ -108,19 +160,22 @@
                             </div>
                             <div class="card-body" id="datos-pago">
                               <dt>Forma de Pago</dt>
-                              <dd id="forma-pago"><%= ultimoPago ? ultimoPago.forma_pago : "No hay pagos registrados" %></dd>
+                              <dd id="forma_pago"></dd>
 
+                              <dt>Entidad Bancaria</dt>
+                              <dd id="entidad_bancaria"></dd>
+                              
                               <dt>CBU</dt>
-                              <dd id="cbu"><%= ultimoPago ? ultimoPago.cbu : '-' %></dd>
+                              <dd id="cbu"></dd>
 
                               <dt>CUIT</dt>
-                              <dd id="cuit"><%= ultimoPago ? ultimoPago.cuit : '-' %></dd>
+                              <dd id="cuit"></dd>
 
                               <dt>Divisa</dt>
-                              <dd id="divisa"><%= ultimoPago ? ultimoPago.divisa : '-' %></dd>
+                              <dd id="divisa"></dd>
 
                               <dt>Monto</dt>
-                              <dd id="monto"><%= ultimoPago ? ultimoPago.monto : '-' %></dd>
+                              <dd id="monto" class="precio"></dd>
                             </div>
                           </div>
                         </div>
@@ -179,25 +234,11 @@
                       </div>
         
                       <h5 class="mt-5 text-muted">Project files</h5>
-                      <ul class="list-unstyled">
-                        <li>
-                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Functional-requirements.docx</a>
-                        </li>
-                        <li>
-                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
-                        </li>
-                        <li>
-                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Email-from-flatbal.mln</a>
-                        </li>
-                        <li>
-                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-image "></i> Logo.png</a>
-                        </li>
-                        <li>
-                          <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Contract-10_12_2014.docx</a>
-                        </li>
+                      <ul class="list-unstyled" id="archivos-list">
+                        <!-- Listado de archivos pertenecientes al pago -->
                       </ul>
                       <div class="text-center mt-5 mb-3">
-                        <a href="#" class="btn btn-sm btn-primary">Add files</a>
+                        <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-agregar-archivos">Add files</a>
                         <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                       </div>
                     </div>
@@ -210,7 +251,7 @@
         </div>
       </section>
 
-      <!-- Modal -->
+      <!-- Modal de Pago -->
       <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -220,33 +261,102 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <label for="">Forma de Pago</label>
-                <select name="" id="" class="form-control">
-                  <option value="">forma 1</option>
-                  <option value="">forma 2</option>
-                  <option value="">forma 3</option>
-                </select>
+
+            <!-- Formulario para registrar nuevo pago -->
+            <form action="/gastos/<%= gasto.id_categoria %>/servicio/<%= gasto.id %>/nuevo-pago" method="post">
+              <!-- Modal Body -->
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="id_forma_pago">Forma de Pago</label>
+                  <select name="id_forma_pago" id="id_forma_pago" class="form-control">
+                    <% formas_pago.forEach(forma_pago => { %>
+                     <option value="<%= forma_pago.id %>"><%= forma_pago.nombre %></option>
+                    <% }) %>
+                  </select>
+                </div>
+
+                <div class="form-group" id="entidad_bancaria_modal" style="display: none;">
+                  <label for="entidad_bancaria">Entidad Bancaria</label>
+                  <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control"> <!--  Longitud 22 caracteres exactos -->
+                </div>
+
+                <div class="form-group" id="cbu_modal" style="display: none;">
+                  <label for="cbu">CBU/CVU</label>
+                  <input type="text" name="cbu" id="cbu" class="form-control"> <!--  Longitud 22 caracteres exactos -->
+                </div>
+
+                <div class="form-group" id="cuit_modal" style="display: none;">
+                  <label for="cuit">CUIT/CUIL (Sin guiones)</label>
+                  <input type="text" name="cuit" id="cuit" class="form-control">
+                </div>
+
+                <div class="form-group">
+                  <label for="divisa">Divisa</label>
+                  <select name="divisa" id="divisa" class="form-control">
+                    <option value="ARS">ARS</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="monto">Monto</label>
+                  <input type="text" name="monto" id="monto" class="form-control">
+                </div>
+              </div>
+              
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Pagar</button>
+              </div>
+            </form>
+            <!-- Fin Formulario -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- Modal Agregar Archivos -->
+      <div class="modal fade" id="modal-agregar-archivos">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Agregar Archivos</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="/gastos/<%= gasto.id_categoria %>/servicio/<%= gasto.id %>/pagos/almacenar-archivos" method="post" enctype="multipart/form-data">
+
+              <!-- Modal Body -->
+              <div class="modal-body">
+
+                <div class="form-group">
+                  <label for="id_pago">ID del Pago</label>
+                  <input type="number" name="id_pago" id="id_pago" value="" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_pagos">Subir Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="archivos_pagos" class="custom-file-input" id="archivos_pagos" multiple>
+                      <label for="archivos_pagos" class="custom-file-label">Elegir un archivo...</label>
+                    </div>
+                    <div class="input-group-append">
+                      <!-- <span class="input-group-text">Subir</span> -->
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-              <div class="form-group">
-                <label for="">Divisa</label>
-                <select name="" id="" class="form-control">
-                  <option value="">ARS</option>
-                  <option value="">USD</option>
-                </select>
+              <!-- Modal Footer -->
+              <div class="modal-footer justify-content-between">
+                <button type="reset" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
               </div>
-
-              <div class="form-group">
-                <label for="" class="">Monto</label>
-                <input type="text" class="form-control">
-              </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            </form>
           </div>
           <!-- /.modal-content -->
         </div>
@@ -256,15 +366,90 @@
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script src="/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+  </script>
+  <!-- Script Principal -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Función para mostrar los detalles del pago
+      const mostrarDetallesPago = (data) => {
+        document.getElementById('forma_pago').textContent = data.forma_pago.nombre || '-';
+        document.getElementById('entidad_bancaria').textContent = data.entidad_bancaria || '-';
+        document.getElementById('cbu').textContent = data.cbu || '-';
+        document.getElementById('cuit').textContent = data.cuit || '-';
+        document.getElementById('divisa').textContent = data.divisa || '-';
+        document.getElementById('monto').textContent = data.monto || '-';
+
+        const archivosList = document.getElementById("archivos-list");
+        archivosList.innerHTML = ""; // Limpiar la lista de archivos
+
+        if (data.archivos_pagos && data.archivos_pagos.length > 0) {
+          data.archivos_pagos.forEach(archivo => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `/docs/pagos/${archivo.nombre}`;
+            a.textContent = archivo.nombre;
+            a.target = "_blank";
+            a.className = "btn-link text-secondary";
+            const icon = document.createElement("i");
+            icon.className = "far fa-fw fa-file-pdf";
+            a.prepend(icon);
+            li.appendChild(a);
+            // archivosList.appendChild(li);
+
+            // Boton para eliminar el archivo
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Eliminar";
+            deleteButton.className = "btn btn-danger btn-xs ml-2";
+            deleteButton.addEventListener("click", () => eliminarArchivo(archivo.id, li));
+            li.appendChild(deleteButton);
+
+            archivosList.appendChild(li);
+          })
+        } else {
+          const li = document.createElement("li");
+          li.textContent = "No hay archivos asociados a este pago";
+          archivosList.appendChild(li);
+        }
+      };
+
+      // Función para eliminar un archivo
+      const eliminarArchivo = (archivoId, listItem) => {
+        if (confirm("Estás seguro que deseas eliminar este archivo?")) {
+          fetch(`/gastos/pagos/eliminar-archivo/${archivoId}`, {
+            method: "DELETE",
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al eliminar el archivo');
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.error) {
+                throw new Error(data.message);
+              }
+              alert(data.message);
+              // listItem.remove();  // Eliminar el elemento de la lista
+              window.location.reload();  // Refrescar/recargar la página
+            })
+            .catch(error => {
+              console.error("Error: ", error);
+            })
+        }
+      }
+
       // Cargar los detalles del último pago automáticamente
       const ultimoPagoId = "<%= ultimoPago ? ultimoPago.id : 'null' %>";
       
-      // Variable para almacenar el índice del último pago
-      let currentIndex = null;
-      
-      if (ultimoPagoId) {
+      if (ultimoPagoId !== 'null') {
+        const idPagoInput = document.getElementById("id_pago");
+        idPagoInput.value = ultimoPagoId;
+
         fetch(`/gastos/pago/${ultimoPagoId}`)
           .then(response => {
             if (!response.ok) {
@@ -273,32 +458,35 @@
             return response.json();
           })
           .then(data => {
-            // Mostrar los datos del último pago en los elementos correspondientes
-            document.getElementById('forma-pago').textContent = data.forma_pago.nombre;
-            document.getElementById('cbu').textContent = data.cbu || '-';
-            document.getElementById('cuit').textContent = data.cuit || '-';
-            document.getElementById('divisa').textContent = data.divisa || '-';
-            document.getElementById('monto').textContent = data.monto || '-';
+            mostrarDetallesPago(data);
           })
           .catch(error => {
             console.error('Error:', error);
           });
       }
-      
-      // Agregar un evento de clic a todos los elementos con la clase 'pago-mes'
+
+      // Evento de clic en los meses para mostrar detalles del pago seleccionado
       const pagosLinks = document.querySelectorAll('.pago-mes');
-      pagosLinks.forEach((link, index) => {
+
+      pagosLinks.forEach(link => {
         link.addEventListener('click', event => {
-          event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-  
-          // Remover la clase active de todos los elementos
+          // Prevenir el comportamiento predeterminado del enlace
+          event.preventDefault();
+          
+          // Quitar la clase 'active' de todos los elementos
           pagosLinks.forEach(el => el.parentNode.classList.remove('active'));
           
-          // Agregar la clase active al elemento clicado
-          link.parentNode.classList.add('active'); // Cambiado a `link.parentNode`
-  
+          // Añadir la clase 'active' al pago seleccionado
+          link.parentNode.classList.add('active');
+
+          // Obtener el ID del pago seleccionado
           const pagoId = link.getAttribute('data-pago-id');
-  
+
+          // Actualizar el valor del input 'id_pago' con el ID del pago seleccionado
+          const idPagoInput = document.getElementById("id_pago");
+          idPagoInput.value = pagoId;
+
+          // Obtener los detalles del pago seleccionado
           fetch(`/gastos/pago/${pagoId}`)
             .then(response => {
               if (!response.ok) {
@@ -307,22 +495,16 @@
               return response.json();
             })
             .then(data => {
-              // Mostrar los datos del pago en los elementos correspondientes
-              document.getElementById('forma-pago').textContent = data.forma_pago.nombre;
-              document.getElementById('cbu').textContent = data.cbu || '-';
-              document.getElementById('cuit').textContent = data.cuit || '-';
-              document.getElementById('divisa').textContent = data.divisa || '-';
-              document.getElementById('monto').textContent = data.monto || '-';
+              mostrarDetallesPago(data);
             })
             .catch(error => {
               console.error('Error:', error);
             });
         });
       });
-
-      
     });
   </script>
-  
+
+
 </body>
 </html>

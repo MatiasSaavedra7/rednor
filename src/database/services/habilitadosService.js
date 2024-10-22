@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
@@ -45,6 +46,24 @@ module.exports = {
     } catch (error) {
       console.log();
       return [];
+    }
+  },
+
+  updateByPK: async (id, data) => {
+    try {
+      return await db.Habilitado.update(data, {
+        where: { id: id },
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.Habilitado.destroy({ where: { id: id } });
+    } catch (error) {
+      console.log(error);
     }
   }
 };

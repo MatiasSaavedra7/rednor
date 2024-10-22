@@ -20,12 +20,24 @@ router.post(
   "/crear",
   upload.fields([
     { name: "inscripcion_afip", maxCount: 1 },
-    { name: "condicion_afip", maxCount: 1 },
+    // { name: "condicion_afip", maxCount: 1 }, //  Borrar esta opcion, condicion_afip no es un archivo.
     { name: "formulario_005", maxCount: 1 },
   ]),
   validateMiddleware,
   controller.store
 );
+
+// Ruta para subir archivo Inscripcion AFIP
+router.post("/detalle/:id/subir-inscripcion-afip", upload.single("inscripcion_afip"), controller.subirInscripcionAFIP);
+
+// Ruta para eliminar archivo Inscripcion AFIP
+router.delete("/detalle/:id/eliminar-inscripcion-afip", controller.eliminarInscripcionAFIP);
+
+// Ruta para subir archivo Formulario 005
+router.post("/detalle/:id/subir-formulario-005", upload.single("formulario_005"), controller.subirFormulario005);
+
+// Ruta para eliminar archivo Formulario 005
+router.delete("/detalle/:id/eliminar-formulario-005", controller.eliminarFormulario005);
 
 // FORMULARIO PARA LA EDICION DE UN CLIENTE
 router.get("/editar/:id", controller.edit);

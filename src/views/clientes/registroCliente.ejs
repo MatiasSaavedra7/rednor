@@ -2,8 +2,7 @@
 <html lang="en">
   <head>
     <%- include('../partials/AdminLTEHead.ejs') %>
-    <!-- <link rel="stylesheet" href="/css/formulario.css" /> -->
-    <script src="/js/registroCliente.js"></script>
+    <script src="/js/cuit.js"></script>
     <title>REDNOR - Nuevo Habilitado</title>
   </head>
   <body class="hold-transition sidebar-mini">
@@ -51,11 +50,6 @@
                         <p class="text-danger"><%= errors.id_tipo_cliente.msg %></p>
                         <% } %>
                       </div>
-                      
-                      <br />
-                      <hr />
-          
-                      <h4>Datos de contacto</h4>
           
                       <div class="form-group">
                         <label for="email">Email</label>
@@ -96,6 +90,17 @@
                          <p class="text-danger"><%= errors.cuit.msg %></p>
                         <% } %>
                       </div>
+
+                      <div class="form-group">
+                        <label for="condicion_afip">Condicion AFIP</label>
+                        <select name="condicion_afip" id="condicion" class="form-control">
+                          <option value="" selected disabled hidden>Elegir una opcion...</option>
+                          <option value="Consumidor Final">Consumidor Final</option>
+                          <option value="Monotributo">Monotributo</option>
+                          <option value="Responsable Inscripto">Responsable Inscripto</option>
+                          <option value="IVA Sujeto Exento">IVA Sujeto Exento</option>
+                        </select>
+                      </div>
                       
                       <div class="form-group">
                         <label for="inscripcion_afip">Inscripcion AFIP</label>
@@ -118,7 +123,7 @@
                       </div>
 
                       <input type="submit" class="btn btn-primary w-100" />
-                      <a href="/clientes" class="btn btn-outline-secondary w-50 mt-3">Volver Atrás...</a>
+                      <a href="/clientes" class="btn btn-outline-secondary btn-block btn-sm mt-3">Volver Atrás...</a>
                     </form>
                   </div>
                 </div>
@@ -137,6 +142,18 @@
       $(function () {
         bsCustomFileInput.init();
       });
-      </script>
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const cuit = document.getElementById("cuit");
+
+        cuit.addEventListener("input", (event) => {
+          event.target.value = patternMatch({
+            input: event.target.value,
+            template: "xx-xxxxxxxx-x",
+          })
+        })
+      })
+    </script>
   </body>
 </html>

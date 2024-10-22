@@ -10,4 +10,10 @@ router.get("/crear", controller.create);
 
 router.post("/crear", validateMiddleware, controller.store);
 
+router.get("/editar/:id", controller.edit);
+
+router.put("/editar/:id", validateMiddleware, controller.update);
+
+router.delete("/eliminar/:id", controller.delete);
+
 module.exports = router;

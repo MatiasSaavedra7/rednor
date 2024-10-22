@@ -4,6 +4,7 @@ const Op = db.Sequelize.Op;
 function Pago(data) {
   this.id_gasto = data.id_gasto;
   this.id_forma_pago = data.id_forma_pago;
+  this.entidad_bancaria = data.entidad_bancaria;
   this.cbu = data.cbu;
   this.cuit = data.cuit;
   this.divisa = data.divisa;
@@ -16,7 +17,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.Pago.findAll({
-        include: ["gasto", "forma_pago"]
+        include: ["gasto", "forma_pago", "archivos_pagos"]
       });
     } catch (error) {
       console.log(error);
@@ -27,7 +28,7 @@ module.exports = {
     try {
       return await db.Pago.findOne({
         where: { id: id },
-        include: ["gasto", "forma_pago"]
+        include: ["gasto", "forma_pago", "archivos_pagos"]
       });
     } catch (error) {
       console.log(error);
@@ -38,7 +39,7 @@ module.exports = {
     try {
       return await db.Pago.update(data, {
         where: { id: id },
-        include: ["gasto", "forma_pago"]
+        include: ["gasto", "forma_pago", "archivos_pagos"]
       })
     } catch (error) {
       console.log(error);
@@ -67,7 +68,7 @@ module.exports = {
     try {
       return await db.Pago.findAll({
         where: { id_gasto: id },
-        include: ["gasto", "forma_pago"],
+        include: ["gasto", "forma_pago", "archivos_pagos"],
       })
     } catch (error) {
       console.log(error);
@@ -79,7 +80,7 @@ module.exports = {
       return await db.Pago.findOne({
         where: { id_gasto: id },
         order: [["id", "DESC"]],
-        include: ["gasto", "forma_pago"],
+        include: ["gasto", "forma_pago", "archivos_pagos"],
       })
     } catch (error) {
       

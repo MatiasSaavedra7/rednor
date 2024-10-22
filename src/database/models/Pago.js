@@ -63,6 +63,11 @@ module.exports = (sequelize, dataTypes) => {
       as: "forma_pago",
       foreignKey: "id_forma_pago",
     });
+
+    Pago.hasMany(models.ArchivoPago, {
+      as: "archivos_pagos",
+      foreignKey: "id_pago"
+    })
   };
 
   return Pago;

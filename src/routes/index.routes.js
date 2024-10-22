@@ -14,6 +14,7 @@ const taller = require("./taller.routes.js");
 const pagos = require("./pagos.routes.js");
 const externos = require('./taller.externo.routes.js');
 const gastos = require('./gastos.routes.js');
+// const archivosPagos = require("./archivosPagos.routes.js");
 
 //  Rutas para pruebas
 const pruebas = require("./pruebas.routes.js");
@@ -61,5 +62,8 @@ router.use("/gastos", authMiddleware, roleMiddleware([1]), gastos);
 
 // Usuarios routes
 router.use("/usuarios", usuarios);
+
+// Archivo de pagos routes
+// router.use("/archivos", archivosPagos);
 
 module.exports = router;
