@@ -20,6 +20,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING(50),
       allowNull: true,
     },
+    nro_tarjeta: {
+      type: dataTypes.STRING(16),
+      allowNull: true,
+    },
     cbu: {
       type: dataTypes.STRING(22),
       allowNull: true,
@@ -35,6 +39,10 @@ module.exports = (sequelize, dataTypes) => {
     monto: {
       type: dataTypes.DECIMAL(10, 2),
       allowNull: false,
+    },
+    mes: {
+      type: dataTypes.STRING(10),
+      allowNull: true,
     },
     fecha_pago: {
       type: dataTypes.DATE,

@@ -12,10 +12,6 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING(30),
       allowNull: false,
     },
-    dia_vencimiento: {
-      type: dataTypes.STRING(2),
-      allowNull: false,
-    },
     descripcion: {
       type: dataTypes.TEXT,
       allowNull: true,

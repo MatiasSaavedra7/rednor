@@ -5,10 +5,12 @@ function Pago(data) {
   this.id_gasto = data.id_gasto;
   this.id_forma_pago = data.id_forma_pago;
   this.entidad_bancaria = data.entidad_bancaria;
+  this.nro_tarjeta = data.nro_tarjeta;
   this.cbu = data.cbu;
   this.cuit = data.cuit;
   this.divisa = data.divisa;
   this.monto = data.monto;
+  this.mes = data.mes;
   this.fecha_pago = data.fecha_pago;
   this.fecha_vencimiento = data.fecha_vencimiento;
 }

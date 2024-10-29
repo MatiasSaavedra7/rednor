@@ -24,7 +24,10 @@ router.get("/pago/:idPago", controller.detallePago);
 router.post("/:idCategoria/servicio/:idServicio/nuevo-pago", controller.nuevoPago);
 
 //  Almacenar archivos de un pago
-router.post("/:idCategoria/servicio/:idServicio/pagos/almacenar-archivos", upload.array("archivos_pagos", 10), archivosController.almacenarArchivos);
+// router.post("/:idCategoria/servicio/:idServicio/pagos/almacenar-archivos", upload.array("archivos_pagos", 10), archivosController.almacenarArchivos);
+
+// Almacenar archivos de un pago
+router.post("/pagos/almacenar-archivos", upload.array("archivos_pagos", 10), archivosController.almacenarArchivos);
 
 //  Eliminar un archivo de un pago
 router.delete("/pagos/eliminar-archivo/:id", archivosController.eliminarArchivo);

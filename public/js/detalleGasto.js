@@ -1,8 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("detalleGasto.js Conectado!");
+  
   // Obtener los elementos del DOM
-  const prevBtn = document.getElementById('prev-month');
-  const nextBtn = document.getElementById('next-month');
+  // const prevBtn = document.getElementById('prev-month');
+  // const nextBtn = document.getElementById('next-month');
   const paginationContainer = document.querySelector('.pagination');
+
+  const entidadBancariaModal = document.getElementById("entidad_bancaria_modal");
+  const cbuModal = document.getElementById("cbu_modal");
+  const cuitModal = document.getElementById("cuit_modal");
+  const nroTarjetaModal = document.getElementById("nro_tarjeta_modal");
+  const mesModal = document.getElementById("mes_modal");
+  const mesSelect = mesModal.querySelector("select");
+
+  const formaPago = document.getElementById("id_forma_pago");
+
+  const formularioPago = document.getElementById("form-pagar-servicio");
+
+  function toggleFieldsModal() {
+    if (formaPago.value == 2) {
+      entidadBancariaModal.style.display = "block";
+      cbuModal.style.display = "block";
+      cuitModal.style.display = "block";
+      nroTarjetaModal.style.display = "block";
+      mesModal.style.display = "block";
+    } else {
+      entidadBancariaModal.style.display = "none";
+      cbuModal.style.display = "none";
+      cuitModal.style.display = "none";
+      nroTarjetaModal.style.display = "none";
+      mesSelect.removeAttribute("required");
+      mesModal.style.display = "none";
+    }
+  }
+
+  toggleFieldsModal();
+
+  formaPago.addEventListener("change", toggleFieldsModal);
+
+  formularioPago.addEventListener("submit", (event) => {
+    if (formaPago.value != 2) {
+      entidadBancariaModal.querySelector("input").remove();
+      cbuModal.querySelector("input").remove();
+      cuitModal.querySelector("input").remove();
+      nroTarjetaModal.querySelector("input").remove();
+      mesModal.querySelector("select").removeAttribute("required");
+      mesModal.querySelector("input").remove();
+    }
+    
+  })
 
   // Función para desplazar la paginación
   const scrollPagination = (direction) => {
@@ -15,28 +61,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Eventos de clic para los botones de navegación
-  prevBtn.addEventListener('click', () => {
+  /*prevBtn.addEventListener('click', () => {
     scrollPagination('prev');
   });
 
   nextBtn.addEventListener('click', () => {
     scrollPagination('next');
-  });
-
-  // SCRIPT PARA EL MODAL DE PAGO
-  const formaPago = document.getElementById("id_forma_pago");
-  
-  formaPago.addEventListener("change", function () {
-    if (this.value === "2") {
-      document.getElementById("entidad_bancaria_modal").style.display = "block";
-      document.getElementById("cbu_modal").style.display = "block";
-      document.getElementById("cuit_modal").style.display = "block"
-    } else {
-      document.getElementById("entidad_bancaria_modal").style.display = "none";
-      document.getElementById("cbu_modal").style.display = "none";
-      document.getElementById("cuit_modal").style.display = "none";
-    }
-  })
+  });*/
 
   const cuit_modal = document.getElementById("cuit_modal");
   const cuit_input = cuit_modal.querySelector("input[name='cuit']");

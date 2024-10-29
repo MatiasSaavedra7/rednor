@@ -43,20 +43,36 @@ module.exports = {
 
   almacenarGastos: async (req, res) => {
     try {
-      let fechaActual = new Date()
+      console.log(req.body);
+      
+      const { nombre, descripcion, condiciones, dia_vencimiento, frecuencia, mes, forma_pago, entidad_bancaria, nro_tarjeta, cbu, cuit, email, telefono, divisa, monto } = req.body;
 
-      let dataGasto = {
+      let data = {
         id_categoria: req.params.idCategoria,
-        nombre: req.body.nombre,
-        descripcion: req.body.descripcion,
-        condiciones: req.body.condiciones,
-        dia_vencimiento: req.body.dia_vencimiento,
-        frecuencia: req.body.frecuencia,
+        nombre: nombre,
+        descripcion: descripcion,
+        condiciones: condiciones,
+        dia_vencimiento: dia_vencimiento,
+        frecuencia: frecuencia,
+        mes: mes,
+        id_forma_pago: forma_pago,
+        entidad_bancaria: entidad_bancaria,
+        nro_tarjeta: nro_tarjeta,
+        cbu: cbu,
+        cuit: cuit,
+        email: email,
+        telefono: telefono,
+        divisa: divisa,
+        monto: monto,
       }
 
-      let gasto = await gastosService.create(dataGasto);
+      let gasto = await gastosService.create(data);
 
-      let dataPago = {
+      if (!gasto) {
+        res.send("Error al crear el gasto. Intente nuevamente. <a href='/'>Volver al inicio</a>");
+      }
+
+      /* let dataPago = {
         id_gasto: gasto.id,
         id_forma_pago: req.body.forma_pago,
         entidad_bancaria: req.body.entidad_bancaria,
@@ -66,11 +82,13 @@ module.exports = {
         monto: req.body.monto,
         fecha_pago: fechaActual,
         fecha_vencimiento: new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, req.body.dia_vencimiento),
-      }
+      } */
 
-      let pago = await pagosService.create(dataPago);
+      // let pago = await pagosService.create(dataPago);
 
-      res.redirect(`/gastos/${req.params.idCategoria}/detalle`);
+      // res.redirect(`/gastos/${req.params.idCategoria}/detalle`);
+
+      res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}/pagos`);
     } catch (error) {
       console.log(error);
     }
@@ -95,9 +113,9 @@ module.exports = {
       pagos.sort((a, b) => new Date(a.fecha_pago) - new Date(b.fecha_pago));
       
       // Obtener el último pago
-      let ultimoPago = pagos.length > 0 ? pagos[pagos.length - 1] : null;
+      // let ultimoPago = pagos.length > 0 ? pagos[pagos.length - 1] : null;
   
-      res.render('gastos/servicios/detalleGasto', { categoria, gasto, pagos, ultimoPago, formas_pago});
+      res.render('gastos/servicios/detalleGasto', { categoria, gasto, pagos, /*ultimoPago,*/ formas_pago});
     } catch (error) {
       console.log(error);
     }
@@ -123,18 +141,20 @@ module.exports = {
     try {
       let gasto = await gastosService.getOneByPK(req.params.idServicio);
 
-      console.log(gasto);
-
       let fechaActual = new Date();
+
+      const { id_forma_pago, entidad_bancaria, nro_tarjeta, mes, cbu, cuit, divisa, monto } = req.body;
 
       let dataPago = {
         id_gasto: req.params.idServicio,
-        id_forma_pago: req.body.id_forma_pago,
-        entidad_bancaria: req.body.entidad_bancaria,
-        cbu: req.body.cbu,
-        cuit: req.body.cuit,
-        divisa: req.body.divisa,
-        monto: req.body.monto,
+        id_forma_pago: id_forma_pago,
+        entidad_bancaria: entidad_bancaria,
+        nro_tarjeta: nro_tarjeta,
+        cbu: cbu,
+        cuit: cuit,
+        divisa: divisa,
+        mes: mes,
+        monto: monto,
         fecha_pago: fechaActual,
         fecha_vencimiento: new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, gasto.dia_vencimiento),
       }

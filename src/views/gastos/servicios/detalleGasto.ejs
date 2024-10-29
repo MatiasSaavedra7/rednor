@@ -6,10 +6,16 @@
   <script src="/js/detalleGasto.js"></script>
   <title>REDNOR - Perfil del Servicio</title>
   <style>
+    .justify-content-center {
+      justify-content: initial !important; /* Sobrescribir el estilo de Bootstrap */
+    }
+
     .pagination-container {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      overflow-x: auto; /* Permitir scroll horizontal */
+      /* border: 1px dashed red; */
     }
 
     .pagination {
@@ -17,9 +23,10 @@
       width: 100%;
       overflow-x: auto;
       scroll-behavior: smooth;
-      margin: 0 10px;
+      /* margin: 0 10px; */
       padding: 10px 0;
       list-style-type: none;
+      /* border: 1px dashed blue; */
     }
 
     .page-item {
@@ -28,7 +35,7 @@
 
     .page-link {
       display: block;
-      padding: 10px;
+      padding: 5px;
       border: 1px solid #ddd;
       border-radius: 5px;
       background-color: #f9f9f9;
@@ -93,23 +100,23 @@
                         <div class="col-12 col-sm-4">
                           <div class="info-box bg-light">
                             <div class="info-box-content">
-                              <span class="info-box-text text-center text-muted">Estimated budget</span>
-                              <span class="info-box-number text-center text-muted mb-0">2300</span>
+                              <span class="info-box-text text-center text-muted">A devengar</span>
+                              <span class="info-box-number text-center text-muted mb-0 precios"><%= gasto.monto %></span>
                             </div>
                           </div>
                         </div>
                         <div class="col-12 col-sm-4">
                           <div class="info-box bg-light">
                             <div class="info-box-content">
-                              <span class="info-box-text text-center text-muted">Total amount spent</span>
-                              <span class="info-box-number text-center text-muted mb-0">2000</span>
+                              <span class="info-box-text text-center text-muted">Total gastado en el año</span>
+                              <span class="info-box-number text-center text-muted mb-0">$2300</span>
                             </div>
                           </div>
                         </div>
                         <div class="col-12 col-sm-4">
                           <div class="info-box bg-light">
                             <div class="info-box-content">
-                              <span class="info-box-text text-center text-muted">Estimated project duration</span>
+                              <span class="info-box-text text-center text-muted">Proximo vencimiento en</span>
                               <span class="info-box-number text-center text-muted mb-0">20</span>
                             </div>
                           </div>
@@ -117,33 +124,34 @@
                       </div>
                       
                       <!-- Paginación por meses de los pagos -->
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-12">
-                          <div class="card">
+                          <div class="card"> -->
 
-                            <div class="card-header">
+                            <!-- <div class="card-header">
                               <h3 class="card-title">Paginación Mensual</h3>
-                            </div>
+                            </div> -->
 
-                            <div class="card-body pagination-container">
-                              <button class="pagination-btn" id="prev-month">«</button>
-                              <ul class="pagination pagination-month justify-content-center">
-                                <% pagos.forEach(pago => { %>
-                                  <% const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
-                                  <li class="page-item <%= ultimoPago && ultimoPago.id == pago.id ? "active" : "" %>">
-                                    <a href="#" class="page-link pago-mes" data-pago-id="<%= pago.id %>">
-                                      <p class="page-month"><%= meses[pago.fecha_pago.getMonth()] %></p>
-                                      <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
-                                    </a>
-                                  </li>
-                                <% }) %>
-                              </ul>
-                              <button class="pagination-btn" id="next-month">»</button>
-                            </div>
+                            <!-- <div class="card-body pagination-container"> -->
+                              <!-- <button class="pagination-btn" id="prev-month">«</button> -->
+                              <!-- <ul class="pagination pagination-month justify-content-center"> -->
+                                <%# pagos.forEach(pago => { %>
+                                  <%# const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]; %>
+                                  <!-- <li class="page-item <%# ultimoPago && ultimoPago.id == pago.id ? "active" : "" %>"> -->
+                                    <!-- <a href="#" class="page-link pago-mes" data-pago-id="<%# pago.id %>"> -->
+                                      <!-- <p class="page-month"><%# meses[pago.fecha_pago.getMonth()] %></p> -->
+                                       <!-- <p class="page-month"><%# pago.id %></p> -->
+                                      <!-- <p class="page-year"><%# pago.fecha_pago.getFullYear() %></p> -->
+                                    <!-- </a> -->
+                                  <!-- </li> -->
+                                <%# }) %>
+                              <!-- </ul> -->
+                              <!-- <button class="pagination-btn" id="next-month">»</button> -->
+                            <!-- </div> -->
 
-                          </div>
-                        </div>
-                      </div>                      
+                          <!-- </div> -->
+                        <!-- </div> -->
+                      <!-- </div>                       -->
                       <!-- /Paginación por meses de los pagos -->
     
                       <!-- Datos del Pago -->
@@ -157,25 +165,65 @@
                                   <i class="fas fa-minus"></i>
                                 </button>
                               </div>
-                            </div>
-                            <div class="card-body" id="datos-pago">
-                              <dt>Forma de Pago</dt>
-                              <dd id="forma_pago"></dd>
-
-                              <dt>Entidad Bancaria</dt>
-                              <dd id="entidad_bancaria"></dd>
                               
-                              <dt>CBU</dt>
-                              <dd id="cbu"></dd>
 
-                              <dt>CUIT</dt>
-                              <dd id="cuit"></dd>
 
-                              <dt>Divisa</dt>
-                              <dd id="divisa"></dd>
+                            </div>
+                            <div class="card-body">
 
-                              <dt>Monto</dt>
-                              <dd id="monto" class="precio"></dd>
+                              <!-- Paginacion por meses -->
+                              <div class="pagination-container">
+                                <ul class="pagination pagination-month justify-content-center">
+                                  <% pagos.forEach(pago => { %>
+                                    <% const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
+                                    <li class="page-item">
+                                    <a href="#" class="page-link pago-mes" data-pago-id="<%= pago.id %>">
+                                      <p class="page-month"><%= meses[pago.fecha_pago.getMonth()] %></p>
+                                      <!-- <p><%# pago.id %></p> -->
+                                      <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
+                                    </a>
+                                   </li>
+                                  <% }) %>
+                                </ul>
+                              </div>
+
+                              <hr>
+                              <!-- Pago -->
+                              <div id="datos-pago">
+                                <dt>Forma de Pago</dt>
+                                <dd id="forma_pago"></dd>
+  
+                                <div>
+                                  <dt>Entidad Bancaria</dt>
+                                  <dd id="entidad_bancaria"></dd>
+                                </div>
+  
+                                <div>
+                                  <dt>Nro. Tarjeta</dt>
+                                  <dd id="nro_tarjeta"></dd>
+                                </div>
+                                
+                                <div>
+                                  <dt>CBU</dt>
+                                  <dd id="cbu"></dd>
+                                </div>
+  
+                                <div>
+                                  <dt>CUIT</dt>
+                                  <dd id="cuit"></dd>
+                                </div>
+  
+                                <div>
+                                  <dt>Mes</dt>
+                                  <dd id="mes"></dd>
+                                </div>
+                                
+                                <dt>Divisa</dt>
+                                <dd id="divisa"></dd>
+  
+                                <dt>Monto</dt>
+                                <dd id="monto" class="precios"></dd>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -222,15 +270,56 @@
                      <!-- Informacion del gasto/servicio -->
                     <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
                       <h3 class="text-primary"><i class="fas fa-paint-brush"></i><%= gasto.nombre %></h3>
-                      <p class="text-muted"><%= gasto.descripcion %></p>
-                      <br>
-                      <div class="text-muted">
-                        <p class="text-sm">Condiciones
-                          <b class="d-block"><%= gasto.condiciones %></b>
-                        </p>
-                        <p class="text-sm">Dia de Vencimiento
-                          <b class="d-block"><%= gasto.dia_vencimiento %> de cada mes</b>
-                        </p>
+
+                      <div class="row">
+                        <div class="col-6">
+
+                          <p class="text-muted"><%= gasto.descripcion %></p>
+
+                          <br>
+
+                          <div class="text-muted">
+                            <% if (gasto.condiciones) { %>
+                              <p class="text-sm">Condiciones
+                                <b class="d-block"><%= gasto.condiciones %></b>
+                              </p>
+                            <% } %>
+                            <p class="text-sm">Dia de Vencimiento
+                              <b class="d-block"><%= gasto.dia_vencimiento %> de cada mes</b>
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="col-6">
+                          <dt>Forma de Pago</dt>
+                          <dd><%= gasto.forma_pago.nombre %></dd>
+
+                          <% if (gasto.entidad_bancaria) { %>
+                           <dt>Entidad Bancaria</dt>
+                           <dd><%= gasto.entidad_bancaria %></dd>
+                          <% } %>
+
+                          <% if (gasto.nro_tarjeta) { %>
+                           <dt>Nro. Tarjeta</dt>
+                           <dd><%= gasto.nro_tarjeta %></dd>
+                          <% } %>
+
+                          <% if (gasto.cbu) { %>
+                           <dt>CBU</dt>
+                           <dd><%= gasto.cbu %></dd>
+                          <% } %>
+
+                          <% if (gasto.cuit) { %>
+                           <dt>CUIT</dt>
+                           <dd><%= gasto.cuit %></dd>
+                          <% } %>
+
+                          <dt>Divisa</dt>
+                          <dd><%= gasto.divisa %></dd>
+
+                          <dt>Monto</dt>
+                          <dd class="precios"><%= gasto.monto %></dd>
+                        </div>
                       </div>
         
                       <h5 class="mt-5 text-muted">Project files</h5>
@@ -263,44 +352,72 @@
             </div>
 
             <!-- Formulario para registrar nuevo pago -->
-            <form action="/gastos/<%= gasto.id_categoria %>/servicio/<%= gasto.id %>/nuevo-pago" method="post">
+            <form action="/gastos/<%= gasto.id_categoria %>/servicio/<%= gasto.id %>/nuevo-pago" method="post" id="form-pagar-servicio">
               <!-- Modal Body -->
               <div class="modal-body">
                 <div class="form-group">
                   <label for="id_forma_pago">Forma de Pago</label>
                   <select name="id_forma_pago" id="id_forma_pago" class="form-control">
+                    <option value="" selected disabled hidden>Seleccione una opcion</option>
                     <% formas_pago.forEach(forma_pago => { %>
-                     <option value="<%= forma_pago.id %>"><%= forma_pago.nombre %></option>
+                     <option value="<%= forma_pago.id %>">
+                      <%= forma_pago.nombre %>
+                    </option>
                     <% }) %>
                   </select>
                 </div>
 
                 <div class="form-group" id="entidad_bancaria_modal" style="display: none;">
                   <label for="entidad_bancaria">Entidad Bancaria</label>
-                  <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control"> <!--  Longitud 22 caracteres exactos -->
+                  <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control" value="<%= gasto.entidad_bancaria %>"> <!--  Longitud 22 caracteres exactos -->
+                </div>
+
+                <div class="form-group" id="nro_tarjeta_modal" style="display: none;">
+                  <label for="nro_tarjeta">Numero de Tarjeta</label>
+                  <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" value="<%= gasto.nro_tarjeta %>" maxlength="16">
+                </div>
+
+                <div class="form-group" id="mes_modal" style="display: none;">
+                  <label for="mes">Mes</label>
+                  <select name="mes" id="mes" class="form-control" required>
+                    <option value="" selected hidden disabled>Seleccione una opcion</option>
+                    <option value="Enero">Enero</option>
+                    <option value="Febrero">Febrero</option>
+                    <option value="Marzo">Marzo</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Mayo">Mayo</option>
+                    <option value="Junio">Junio</option>
+                    <option value="Julio">Julio</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Septiembre">Septiembre</option>
+                    <option value="Octubre">Octubre</option>
+                    <option value="Noviembre">Noviembre</option>
+                    <option value="Diciembre">Diciembre</option>
+                  </select>
                 </div>
 
                 <div class="form-group" id="cbu_modal" style="display: none;">
                   <label for="cbu">CBU/CVU</label>
-                  <input type="text" name="cbu" id="cbu" class="form-control"> <!--  Longitud 22 caracteres exactos -->
+                  <input type="text" name="cbu" id="cbu" class="form-control" value="<%= gasto.cbu %>" maxlength="22">
                 </div>
 
                 <div class="form-group" id="cuit_modal" style="display: none;">
                   <label for="cuit">CUIT/CUIL (Sin guiones)</label>
-                  <input type="text" name="cuit" id="cuit" class="form-control">
+                  <input type="text" name="cuit" id="cuit" class="form-control" value="<%= gasto.cuit %>">
                 </div>
 
                 <div class="form-group">
                   <label for="divisa">Divisa</label>
                   <select name="divisa" id="divisa" class="form-control">
-                    <option value="ARS">ARS</option>
-                    <option value="USD">USD</option>
+                    <option value="" selected hidden disabled>Seleccione una opcion</option>
+                    <option value="ARS" <%= gasto.divisa == "ARS" ? "selected" : "" %>>ARS</option>
+                    <option value="USD" <%= gasto.divisa == "USD" ? "selected" : "" %>>USD</option>
                   </select>
                 </div>
 
                 <div class="form-group">
                   <label for="monto">Monto</label>
-                  <input type="text" name="monto" id="monto" class="form-control">
+                  <input type="text" name="monto" id="monto" value="<%= gasto.monto %>" class="form-control">
                 </div>
               </div>
               
@@ -326,7 +443,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="/gastos/<%= gasto.id_categoria %>/servicio/<%= gasto.id %>/pagos/almacenar-archivos" method="post" enctype="multipart/form-data">
+            <form action="/gastos/pagos/almacenar-archivos" method="post" enctype="multipart/form-data" id="uploadForm">
 
               <!-- Modal Body -->
               <div class="modal-body">
@@ -377,19 +494,36 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Función para mostrar los detalles del pago
       const mostrarDetallesPago = (data) => {
-        document.getElementById('forma_pago').textContent = data.forma_pago.nombre || '-';
-        document.getElementById('entidad_bancaria').textContent = data.entidad_bancaria || '-';
-        document.getElementById('cbu').textContent = data.cbu || '-';
-        document.getElementById('cuit').textContent = data.cuit || '-';
-        document.getElementById('divisa').textContent = data.divisa || '-';
-        document.getElementById('monto').textContent = data.monto || '-';
+        const mostrarCampo = (fieldId, value) => {
+          const fieldElement = document.getElementById(fieldId);
+          const fieldContainer = fieldElement.parentElement;
+          
+          if (value) {
+            fieldElement.textContent = value;
+            fieldContainer.style.display = "block";
+          } else {
+            fieldContainer.style.display = "none";
+          }
+        }
+
+        mostrarCampo("forma_pago", data.forma_pago.nombre);
+        mostrarCampo("entidad_bancaria", data.entidad_bancaria);
+        mostrarCampo("nro_tarjeta", data.nro_tarjeta);
+        mostrarCampo("cbu", data.cbu);
+        mostrarCampo("cuit", data.cuit);
+        mostrarCampo("divisa", data.divisa);
+        mostrarCampo("monto", "$" + formatearPrecio(data.monto));
+        mostrarCampo("mes", data.mes);
 
         const archivosList = document.getElementById("archivos-list");
         archivosList.innerHTML = ""; // Limpiar la lista de archivos
 
+        // Mostrar los archivos asociados al pago
         if (data.archivos_pagos && data.archivos_pagos.length > 0) {
+          // Crear un elemento <li> por cada archivo
           data.archivos_pagos.forEach(archivo => {
             const li = document.createElement('li');
+            // Crear un enlace para descargar el archivo
             const a = document.createElement('a');
             a.href = `/docs/pagos/${archivo.nombre}`;
             a.textContent = archivo.nombre;
@@ -398,8 +532,10 @@
             const icon = document.createElement("i");
             icon.className = "far fa-fw fa-file-pdf";
             a.prepend(icon);
+            // Agregar el enlace al elemento <li>
             li.appendChild(a);
-            // archivosList.appendChild(li);
+            // Agregar el elemento <li> a la lista de archivos
+            archivosList.appendChild(li);
 
             // Boton para eliminar el archivo
             const deleteButton = document.createElement("button");
@@ -407,8 +543,6 @@
             deleteButton.className = "btn btn-danger btn-xs ml-2";
             deleteButton.addEventListener("click", () => eliminarArchivo(archivo.id, li));
             li.appendChild(deleteButton);
-
-            archivosList.appendChild(li);
           })
         } else {
           const li = document.createElement("li");
@@ -434,8 +568,8 @@
                 throw new Error(data.message);
               }
               alert(data.message);
-              // listItem.remove();  // Eliminar el elemento de la lista
-              window.location.reload();  // Refrescar/recargar la página
+              listItem.remove();  // Eliminar el elemento de la lista
+              //window.location.reload();  // Refrescar/recargar la página
             })
             .catch(error => {
               console.error("Error: ", error);
@@ -444,9 +578,9 @@
       }
 
       // Cargar los detalles del último pago automáticamente
-      const ultimoPagoId = "<%= ultimoPago ? ultimoPago.id : 'null' %>";
+      //const ultimoPagoId = "<%# ultimoPago ? ultimoPago.id : 'null' %>";
       
-      if (ultimoPagoId !== 'null') {
+      /*if (ultimoPagoId !== 'null') {
         const idPagoInput = document.getElementById("id_pago");
         idPagoInput.value = ultimoPagoId;
 
@@ -463,7 +597,7 @@
           .catch(error => {
             console.error('Error:', error);
           });
-      }
+      }*/
 
       // Evento de clic en los meses para mostrar detalles del pago seleccionado
       const pagosLinks = document.querySelectorAll('.pago-mes');
@@ -503,6 +637,126 @@
         });
       });
     });
+  </script>
+
+  <!-- Script Upload Form -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const uploadForm = document.getElementById("uploadForm");
+      
+      uploadForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const idPago = document.getElementById("id_pago").value;
+        const formData = new FormData(uploadForm);
+        console.log("ID del Pago:", idPago);
+
+        fetch("/gastos/pagos/almacenar-archivos", {
+          method: "POST",
+          body: formData,
+        })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error al subir los archivos");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.message);
+          }
+          alert(data.message);
+
+          // Cerrar el modal
+          $("#modal-agregar-archivos").modal("hide");
+
+          // Actualizar la lista de archivos
+          actualizarListaArchivos(idPago);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        })
+      })
+    })
+
+    function actualizarListaArchivos(idPago) {
+      fetch(`/gastos/pago/${idPago}`)
+        .then(response => response.json())
+        .then(data => {
+          const archivosList = document.getElementById("archivos-list");
+          archivosList.innerHTML = ""; // Limpiar la lista de archivos
+
+          // Mostrar los archivos en la lista
+          if (data.archivos_pagos && data.archivos_pagos.length > 0) {
+            // Crear un elemento <li> por cada archivo
+            data.archivos_pagos.forEach(archivo => {
+              const li = document.createElement("li");
+              // Crear un enlace para descargar el archivo
+              const a = document.createElement("a");
+              a.href = `/docs/pagos/${archivo.nombre}`;
+              a.textContent = archivo.nombre;
+              a.target = "_blank";
+              a.className = "btn-link text-secondary";
+              const icon = document.createElement("i");
+              icon.className = "far fa-fw fa-file-pdf";
+              a.prepend(icon);
+              li.appendChild(a);
+              archivosList.appendChild(li);
+
+
+              // Boton para eliminar el archivo
+              const deleteButton = document.createElement("button");
+              deleteButton.textContent = "Eliminar";
+              deleteButton.className = "btn btn-danger btn-xs ml-2";
+              deleteButton.addEventListener("click", () => eliminarArchivo(archivo.id, li));
+              li.appendChild(deleteButton);
+            })
+          } else {
+            const li = document.createElement("li");
+            li.textContent = "No hay archivos asociados a este pago";
+            archivosList.appendChild(li);
+          }
+        })
+        .catch(error => {
+          console.error("Error al actualizar la lista de archivos:", error);
+        });
+    }
+
+    const eliminarArchivo = (archivoId, listItem) => {
+      if (confirm("Estás seguro que deseas eliminar este archivo?")) {
+        fetch(`/gastos/pagos/eliminar-archivo/${archivoId}`, {
+          method: "DELETE",
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al eliminar el archivo');
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.error) {
+              throw new Error(data.message);
+            }
+            alert(data.message);
+            listItem.remove();  // Eliminar el elemento de la lista
+            //window.location.reload();  // Refrescar/recargar la página
+          })
+          .catch(error => {
+            console.error("Error: ", error);
+          })
+      }
+    }
+  </script>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const precios = document.querySelectorAll(".precios");
+
+      precios.forEach((precio) => {
+        const valor = parseFloat(precio.textContent);
+        precio.textContent = "$" + formatearPrecio(valor);
+      })
+    })
   </script>
 
 

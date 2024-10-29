@@ -8,17 +8,16 @@ const archivosPagosService = require("../database/services/archivosPagosService"
 module.exports = {
   almacenarArchivos: async (req, res) => {
     try {
-      // Traigo la informacion del pago
-      let pago = await pagosService.getOneByPK(req.body.id_pago);
-
-      // Traigo la informacion del gasto
-      let gasto = await gastosService.getOneByPK(pago.id_gasto);
+      console.log(req.body);
+      
+      // Obtener el ID del gasto
+      const { id_pago } = req.body;
 
       // Recorro los archivos y los almaceno en la base de datos
       for (const file of req.files) {
         // Creo un objeto con la informacion del archivo
         let data = {
-          id_pago: pago.id,
+          id_pago: id_pago,
           nombre: file.filename,
         }
 
@@ -28,9 +27,12 @@ module.exports = {
       // Fin del bucle
 
       // Redirijo a la pagina de pagos
-      res.redirect(`/gastos/${gasto.id_categoria}/servicio/${gasto.id}/pagos`)
+      // res.redirect(`/gastos/${gasto.id_categoria}/servicio/${gasto.id}/pagos`)
+
+      res.status(200).json({ message: "Archivos subidos correctamente. Mensaje enviado desde el controller.-" });
     } catch (error) {
       console.log("Error almacenando archivos", error);
+      res.status(500).json({ message: "Error almacenando archivos", error: error.message });
     }
   },
 

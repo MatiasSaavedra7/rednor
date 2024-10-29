@@ -31,6 +31,7 @@
                   <div class="form-group">
                     <label for="id_equipo">Equipo</label>
                     <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%;" >
+                      <option value="" selected disabled hidden>Seleccionar un equipo</option>
                       <% equipos.forEach(equipo => { %>
                         <option value="<%= equipo.id %>" <%= locals.old && old.id_equipo == equipo.id ? "selected" : "" %>>
                           <%= equipo.marca%> <%= equipo.modelo %> - <%=

@@ -72,7 +72,7 @@
                       <h3 class="lead">Informacion del Pago</h3>
 
                       <div class="form-group" style="display: none;">
-                        <label for="meses">Meses</label>
+                        <label for="mes">Meses</label>
                         <select name="mes" id="mes" class="form-control">
                           <option value="" selected hidden disabled>Seleccione una opcion</option>
                           <option value="Enero">Enero</option>
@@ -100,22 +100,22 @@
                         </select>
                       </div>
 
-                      <div class="form-group" style="display: none;">
-                        <label for="nro_tarjeta">N° Tarjeta</label>
-                        <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control">
-                      </div>
-
-                      <div class="form-group" id="entidad_bancaria" style="display: none;">
+                      <div class="form-group" id="entidad_bancaria_div" style="display: none;">
                         <label for="entidad_bancaria">Entidad Bancaria</label>
-                        <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control"> <!--  Longitud 22 caracteres exactos -->
+                        <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control">
                       </div>
 
-                      <div class="form-group" id="cbu" style="display: none;">
+                      <div class="form-group" id="nro_tarjeta_div" style="display: none;">
+                        <label for="nro_tarjeta">N° Tarjeta</label>
+                        <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" maxlength="16"> <!-- Longitud 16 caracteres exactos -->
+                      </div>
+
+                      <div class="form-group" id="cbu_div" style="display: none;">
                         <label for="cbu">CBU/CVU</label>
                         <input type="text" name="cbu" id="cbu" class="form-control" maxlength="22"> <!--  Longitud 22 caracteres exactos -->
                       </div>
 
-                      <div class="form-group" id="cuit" style="display: none;">
+                      <div class="form-group" id="cuit_div" style="display: none;">
                         <label for="cuit">CUIT/CUIL (Sin guiones)</label>
                         <input type="text" name="cuit" id="cuit" class="form-control" maxlength="13">
                       </div>
@@ -170,16 +170,23 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       let formaPago = document.getElementById("forma_pago");
+
+      const entidadBancaria = document.getElementById("entidad_bancaria_div");
+      const nroTarjeta = document.getElementById("nro_tarjeta_div");
+      const cbu = document.getElementById("cbu_div");
+      const cuitDiv = document.getElementById("cuit_div");
   
       formaPago.addEventListener("change", function () {
         if (this.value === "2") {
-          document.getElementById("entidad_bancaria").style.display = "block";
-          document.getElementById("cbu").style.display = "block";
-          document.getElementById("cuit").style.display = "block"
+          entidadBancaria.style.display = "block";
+          nroTarjeta.style.display = "block";
+          cbu.style.display = "block";
+          cuitDiv.style.display = "block"
         } else {
-          document.getElementById("entidad_bancaria").style.display = "none";
-          document.getElementById("cbu").style.display = "none";
-          document.getElementById("cuit").style.display = "none";
+          entidadBancaria.style.display = "none";
+          nroTarjeta.style.display = "none";
+          cbu.style.display = "none";
+          cuitDiv.style.display = "none";
         }
       })
 

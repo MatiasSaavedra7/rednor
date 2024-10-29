@@ -18,11 +18,11 @@ module.exports = (sequelize, dataTypes) => {
     },
     descripcion: {
       type: dataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     condiciones: {
       type: dataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     frecuencia: {
       type: dataTypes.STRING(30),
@@ -31,7 +31,35 @@ module.exports = (sequelize, dataTypes) => {
     dia_vencimiento: {
       type: dataTypes.STRING(2),
       allowNull: false,
-    }
+    },
+    id_forma_pago: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+    },
+    entidad_bancaria: {
+      type: dataTypes.STRING(50),
+      allowNull: true,
+    },
+    cbu: {
+      type: dataTypes.STRING(22),
+      allowNull: true,
+    },
+    cuit: {
+      type: dataTypes.STRING(13),
+      allowNull: true,
+    },
+    nro_tarjeta: {
+      type: dataTypes.STRING(16),
+      allowNull: true,
+    },
+    divisa: {
+      type: dataTypes.STRING(3),
+      allowNull: true,
+    },
+    monto: {
+      type: dataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
   };
 
   let config = {
@@ -50,6 +78,11 @@ module.exports = (sequelize, dataTypes) => {
     Gasto.hasMany(models.Pago, {
       as: "pago",
       foreignKey: "id_gasto",
+    });
+
+    Gasto.belongsTo(models.FormaPago, {
+      as: "forma_pago",
+      foreignKey: "id_forma_pago",
     })
   };
 
