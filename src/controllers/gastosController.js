@@ -100,12 +100,23 @@ module.exports = {
       //  Traer la información de la categoría
       let categoria = await categoriasService.getOneByPK(req.params.idCategoria);
   
-      //  Traer la información del gasto
+      //  Traer la información del gasto/servicio
       let gasto = await gastosService.getOneByPK(req.params.idServicio);
   
-      //  Traer la información de todos los pagos
+      //  Traer la información de todos los pagos/servicios
       let pagos = await pagosService.getAllByIdGasto(req.params.idServicio);
+      // console.log("Pagos", pagos);
 
+      let anios = await pagosService.getAnios(req.params.idServicio);
+      console.log("Años disponibles: ", anios);
+
+      anios.forEach((anio, index) => {
+        console.log(`Año[${index}]: `, anio.year);
+      });
+
+      // let pagosPorAnio = await pagosService.getPagosPorAnio(req.params.idServicio, anios[0].year);
+      // console.log("Pagos por año: ", pagosPorAnio);
+      
       //  Traer la informacion de todas las formas de pago
       let formas_pago = await formasPagoService.getAll();
 
@@ -115,7 +126,44 @@ module.exports = {
       // Obtener el último pago
       // let ultimoPago = pagos.length > 0 ? pagos[pagos.length - 1] : null;
   
-      res.render('gastos/servicios/detalleGasto', { categoria, gasto, pagos, /*ultimoPago,*/ formas_pago});
+      res.render('gastos/servicios/detalleGasto', { categoria, gasto, /*pagos,*/ formas_pago, anios });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  aniosDisponibles: async (req, res) => {
+    try {
+      //  Obtener el id del gasto/servicio
+      let idGasto = req.params.idServicio;
+
+      //  Traer los años disponibles para un gasto/servicio
+      let pagos = await pagosService.getAnios(idGasto);
+
+      if (!pagos) {
+        res.status(404).json({ error: "No se encontraron pagos asociados al año" });
+      }
+
+      res.json(pagos);
+    } catch (error) {
+      res.status(500).json({ error: "Error al obtener los pagos del año" });
+      console.log(error);
+    }
+  },
+
+  pagosPorAnio: async (req, res) => {
+    try {
+      //  Obtener el año y el id del gasto/servicio
+      let year = req.params.year;
+      let idGasto = req.params.idServicio;
+      
+      let pagos = await pagosService.getPagosPorAnio(idGasto, year);
+
+      if (!pagos) {
+        res.status(404).json({ error: "No se encontraron pagos asociados al año" });
+      }
+
+      res.json(pagos);
     } catch (error) {
       console.log(error);
     }
@@ -161,7 +209,7 @@ module.exports = {
 
       await pagosService.create(dataPago);
 
-      res.redirect(`/gastos/${gasto.id_categoria}/servicio/${gasto.id}/pagos`);
+      res.redirect(`/gastos/${gasto.id_categoria}/servicio/${gasto.id}`);
 
       console.log(dataPago);
     } catch (error) {

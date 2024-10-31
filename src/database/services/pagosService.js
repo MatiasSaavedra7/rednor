@@ -1,5 +1,7 @@
+const { raw } = require("mysql2");
 const db = require("../models");
 const Op = db.Sequelize.Op;
+const sequelize = db.Sequelize;
 
 function Pago(data) {
   this.id_gasto = data.id_gasto;
@@ -71,6 +73,7 @@ module.exports = {
       return await db.Pago.findAll({
         where: { id_gasto: id },
         include: ["gasto", "forma_pago", "archivos_pagos"],
+        raw: true,
       })
     } catch (error) {
       console.log(error);
@@ -87,5 +90,40 @@ module.exports = {
     } catch (error) {
       
     }
-  }
+  },
+
+  getAnios: async (id) => {
+    try {
+      return await db.Pago.findAll({
+        where: { id_gasto: id },
+        attributes: [[sequelize.fn("YEAR", sequelize.col("fecha_pago")), "year"]],
+        group: ["year"],
+        raw: true,
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getPagosPorAnio: async (id, year) => {
+    try {
+      return await db.Pago.findAll({
+        where: {
+          id_gasto: id,
+          [Op.and]: [ sequelize.where(sequelize.fn("YEAR", sequelize.col("fecha_pago")), year) ]
+        },
+        order: [["fecha_pago", "ASC"]],
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // getPagosPorMesAnio: async (id, year, month) => {
+  //   try {
+      
+  //   } catch (error) {
+      
+  //   }
+  // }
 }

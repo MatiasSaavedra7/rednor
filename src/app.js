@@ -49,7 +49,7 @@ app.use(
 );
 
 // MIDDLEWARE PARA EL CONTROL DE LAS FECHAS DE VENCIMIENTO
-app.use(controlVencimientos);
+// app.use(controlVencimientos);
 
 // MIDDLEWARE PARA CONTROL DEL USUARIO LOGEADO
 app.use(userLogged);

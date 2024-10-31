@@ -29,7 +29,7 @@ module.exports = {
       // Redirijo a la pagina de pagos
       // res.redirect(`/gastos/${gasto.id_categoria}/servicio/${gasto.id}/pagos`)
 
-      res.status(200).json({ message: "Archivos subidos correctamente. Mensaje enviado desde el controller.-" });
+      res.status(200).json({ message: "Archivos subidos correctamente." });
     } catch (error) {
       console.log("Error almacenando archivos", error);
       res.status(500).json({ message: "Error almacenando archivos", error: error.message });

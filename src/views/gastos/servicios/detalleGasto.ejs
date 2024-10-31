@@ -166,63 +166,39 @@
                                 </button>
                               </div>
                               
-
-
                             </div>
                             <div class="card-body">
+
+                              <!-- Menu de seleccion del año -->
+                              <div class="form-group" style="width: 50%; margin: 0 auto;">
+                                <select name="select-anio" id="select-anio" class="form-control">
+                                  <option value="" selected hidden disabled>Seleccione un año</option>
+                                  <% anios.forEach(anio => { %>
+                                   <option value="<%= anio.year %>"><%= anio.year %></option>
+                                  <% }) %>
+                                </select>
+                              </div>
 
                               <!-- Paginacion por meses -->
                               <div class="pagination-container">
                                 <ul class="pagination pagination-month justify-content-center">
-                                  <% pagos.forEach(pago => { %>
-                                    <% const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
-                                    <li class="page-item">
-                                    <a href="#" class="page-link pago-mes" data-pago-id="<%= pago.id %>">
-                                      <p class="page-month"><%= meses[pago.fecha_pago.getMonth()] %></p>
+                                  <%# pagos.forEach(pago => { %>
+                                    <%# const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
+                                    <!-- <li class="page-item"> -->
+                                    <!-- <a href="#" class="page-link pago-mes" data-pago-id="<%# pago.id %>"> -->
+                                      <!-- <p class="page-month"><%# meses[pago.fecha_pago.getMonth()] %></p> -->
                                       <!-- <p><%# pago.id %></p> -->
-                                      <p class="page-year"><%= pago.fecha_pago.getFullYear() %></p>
-                                    </a>
-                                   </li>
-                                  <% }) %>
+                                      <!-- <p class="page-year"><%# pago.fecha_pago.getFullYear() %></p> -->
+                                    <!-- </a> -->
+                                   <!-- </li> -->
+                                  <%# }) %>
                                 </ul>
                               </div>
 
                               <hr>
                               <!-- Pago -->
-                              <div id="datos-pago">
-                                <dt>Forma de Pago</dt>
-                                <dd id="forma_pago"></dd>
-  
-                                <div>
-                                  <dt>Entidad Bancaria</dt>
-                                  <dd id="entidad_bancaria"></dd>
-                                </div>
-  
-                                <div>
-                                  <dt>Nro. Tarjeta</dt>
-                                  <dd id="nro_tarjeta"></dd>
-                                </div>
-                                
-                                <div>
-                                  <dt>CBU</dt>
-                                  <dd id="cbu"></dd>
-                                </div>
-  
-                                <div>
-                                  <dt>CUIT</dt>
-                                  <dd id="cuit"></dd>
-                                </div>
-  
-                                <div>
-                                  <dt>Mes</dt>
-                                  <dd id="mes"></dd>
-                                </div>
-                                
-                                <dt>Divisa</dt>
-                                <dd id="divisa"></dd>
-  
-                                <dt>Monto</dt>
-                                <dd id="monto" class="precios"></dd>
+                              <div id="pagos-container">
+                                <!-- Detalles del Pago -->
                               </div>
                             </div>
                           </div>
@@ -489,155 +465,6 @@
       bsCustomFileInput.init();
     });
   </script>
-  <!-- Script Principal -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Función para mostrar los detalles del pago
-      const mostrarDetallesPago = (data) => {
-        const mostrarCampo = (fieldId, value) => {
-          const fieldElement = document.getElementById(fieldId);
-          const fieldContainer = fieldElement.parentElement;
-          
-          if (value) {
-            fieldElement.textContent = value;
-            fieldContainer.style.display = "block";
-          } else {
-            fieldContainer.style.display = "none";
-          }
-        }
-
-        mostrarCampo("forma_pago", data.forma_pago.nombre);
-        mostrarCampo("entidad_bancaria", data.entidad_bancaria);
-        mostrarCampo("nro_tarjeta", data.nro_tarjeta);
-        mostrarCampo("cbu", data.cbu);
-        mostrarCampo("cuit", data.cuit);
-        mostrarCampo("divisa", data.divisa);
-        mostrarCampo("monto", "$" + formatearPrecio(data.monto));
-        mostrarCampo("mes", data.mes);
-
-        const archivosList = document.getElementById("archivos-list");
-        archivosList.innerHTML = ""; // Limpiar la lista de archivos
-
-        // Mostrar los archivos asociados al pago
-        if (data.archivos_pagos && data.archivos_pagos.length > 0) {
-          // Crear un elemento <li> por cada archivo
-          data.archivos_pagos.forEach(archivo => {
-            const li = document.createElement('li');
-            // Crear un enlace para descargar el archivo
-            const a = document.createElement('a');
-            a.href = `/docs/pagos/${archivo.nombre}`;
-            a.textContent = archivo.nombre;
-            a.target = "_blank";
-            a.className = "btn-link text-secondary";
-            const icon = document.createElement("i");
-            icon.className = "far fa-fw fa-file-pdf";
-            a.prepend(icon);
-            // Agregar el enlace al elemento <li>
-            li.appendChild(a);
-            // Agregar el elemento <li> a la lista de archivos
-            archivosList.appendChild(li);
-
-            // Boton para eliminar el archivo
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Eliminar";
-            deleteButton.className = "btn btn-danger btn-xs ml-2";
-            deleteButton.addEventListener("click", () => eliminarArchivo(archivo.id, li));
-            li.appendChild(deleteButton);
-          })
-        } else {
-          const li = document.createElement("li");
-          li.textContent = "No hay archivos asociados a este pago";
-          archivosList.appendChild(li);
-        }
-      };
-
-      // Función para eliminar un archivo
-      const eliminarArchivo = (archivoId, listItem) => {
-        if (confirm("Estás seguro que deseas eliminar este archivo?")) {
-          fetch(`/gastos/pagos/eliminar-archivo/${archivoId}`, {
-            method: "DELETE",
-          })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Error al eliminar el archivo');
-              }
-              return response.json();
-            })
-            .then(data => {
-              if (data.error) {
-                throw new Error(data.message);
-              }
-              alert(data.message);
-              listItem.remove();  // Eliminar el elemento de la lista
-              //window.location.reload();  // Refrescar/recargar la página
-            })
-            .catch(error => {
-              console.error("Error: ", error);
-            })
-        }
-      }
-
-      // Cargar los detalles del último pago automáticamente
-      //const ultimoPagoId = "<%# ultimoPago ? ultimoPago.id : 'null' %>";
-      
-      /*if (ultimoPagoId !== 'null') {
-        const idPagoInput = document.getElementById("id_pago");
-        idPagoInput.value = ultimoPagoId;
-
-        fetch(`/gastos/pago/${ultimoPagoId}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Error al obtener los detalles del último pago');
-            }
-            return response.json();
-          })
-          .then(data => {
-            mostrarDetallesPago(data);
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-      }*/
-
-      // Evento de clic en los meses para mostrar detalles del pago seleccionado
-      const pagosLinks = document.querySelectorAll('.pago-mes');
-
-      pagosLinks.forEach(link => {
-        link.addEventListener('click', event => {
-          // Prevenir el comportamiento predeterminado del enlace
-          event.preventDefault();
-          
-          // Quitar la clase 'active' de todos los elementos
-          pagosLinks.forEach(el => el.parentNode.classList.remove('active'));
-          
-          // Añadir la clase 'active' al pago seleccionado
-          link.parentNode.classList.add('active');
-
-          // Obtener el ID del pago seleccionado
-          const pagoId = link.getAttribute('data-pago-id');
-
-          // Actualizar el valor del input 'id_pago' con el ID del pago seleccionado
-          const idPagoInput = document.getElementById("id_pago");
-          idPagoInput.value = pagoId;
-
-          // Obtener los detalles del pago seleccionado
-          fetch(`/gastos/pago/${pagoId}`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Error al obtener los detalles del pago');
-              }
-              return response.json();
-            })
-            .then(data => {
-              mostrarDetallesPago(data);
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
-        });
-      });
-    });
-  </script>
 
   <!-- Script Upload Form -->
   <script>
@@ -758,6 +585,181 @@
       })
     })
   </script>
+
+  <!-- Script para manejar el cambio de selección del año -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const selectAnio = document.getElementById("select-anio");
+      const pagosContainer = document.getElementById("pagos-container");
+      const pagination = document.getElementById("pagination");
+
+    
+      selectAnio.addEventListener("change", (e) => {
+        const selectedAnio = e.target.value;
+        console.log("Año seleccionado:", selectedAnio);
+        const idGasto = "<%= gasto.id %>";
+        
+        fetch(`/gastos/servicio/${idGasto}/pagos/${selectedAnio}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Error al obtener los pagos del año seleccionado");
+            }
+            return response.json();
+          })
+          .then(data => {
+            const pagosContainer = document.querySelector(".pagination-month");
+            pagosContainer.innerHTML = "";  // Limpiar la paginación de pagos
+            const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+            data.forEach(pago => {
+              const li = document.createElement("li");
+              li.className = "page-item";
+              li.innerHTML = `
+                <a href="#" class="page-link pago-mes" data-pago-id="${pago.id}">
+                  <p class="page-month">${meses[new Date(pago.fecha_pago).getMonth()]}</p>
+                  <p class="page-year">${new Date(pago.fecha_pago).toLocaleDateString()}</p>
+                </a>
+              `;
+              pagosContainer.appendChild(li);
+            });
+
+            const pagoLinks = document.querySelectorAll(".pago-mes");
+            pagoLinks.forEach((link) => {
+              link.addEventListener("click", (event) => {
+                // Cancelar el evento de click
+                event.preventDefault();
+
+                // Quitar la clase "active" de todos los elementos
+                pagoLinks.forEach((link) => {
+                  link.parentElement.classList.remove("active");
+                });
+
+                // Agregar la clase "active" al elemento clickeado
+                link.parentElement.classList.add("active");
+
+                // Obtener el ID del pago
+                const pagoId = link.getAttribute("data-pago-id");
+
+                // Actualizar el valor del input "id_pago" con el ID del pago seleccionado
+                const idPagoInput = document.getElementById("id_pago");
+                idPagoInput.value = pagoId;
+                
+                // Obtener los detalles del pago seleccionado
+                fetchPagoDetalles(pagoId);
+              });
+            });
+          })
+          .catch(error => {
+            console.error("Error al obtener los pagos del año seleccionado:", error);
+          });
+      });
+
+      const fetchPagoDetalles = async (pagoId) => {
+        try {
+          const response = await fetch(`/gastos/pago/${pagoId}`);
+
+          if (!response.ok) {
+            throw new Error("Error al obtener los detalles del pago");
+          }
+
+          const data = await response.json();
+          mostrarDetallesPago(data);
+          // console.log("Detalles del Pago:", data);
+        } catch (error) {
+          console.error("Error al obtener los detalles del pago:", error);
+        }
+      }
+
+      const mostrarDetallesPago = (data) => {
+        const pagosContainer = document.getElementById("pagos-container");
+        pagosContainer.innerHTML = "";  // Limpiar el contenedor de detalles del pago
+
+
+        const addDetail = (label, value) => {
+          if (value) {
+            const dt = document.createElement("dt");
+            dt.textContent = label;
+            const dd = document.createElement("dd");
+            dd.textContent = value;
+            pagosContainer.appendChild(dt);
+            pagosContainer.appendChild(dd);
+          }
+        };
+        addDetail("Fecha de Pago", new Date(data.fecha_pago).toLocaleString());
+        addDetail("Forma de Pago", data.forma_pago.nombre);
+        addDetail("Entidad Bancaria", data.entidad_bancaria);
+        addDetail("Nro. Tarjeta", data.nro_tarjeta);
+        addDetail("CBU", data.cbu);
+        addDetail("CUIT", data.cuit);
+        addDetail("Mes", data.mes);
+        addDetail("Divisa", data.divisa);
+        addDetail("Monto", "$" + formatearPrecio(data.monto));
+
+        const archivosList = document.getElementById("archivos-list");
+        archivosList.innerHTML = "";  // Limpiar la lista de archivos
+
+        // Mostrar los archivos asociados al pago
+        if (data.archivos_pagos && data.archivos_pagos.length > 0) {
+          data.archivos_pagos.forEach(archivo => {
+            // Crear un elemento <li> por cada archivo
+            const li = document.createElement("li");
+            // Crear un enlace para descargar el archivo
+            const a = document.createElement("a");
+            a.href = `/docs/pagos/${archivo.nombre}`;
+            a.textContent = archivo.nombre;
+            a.target = "_blank";
+            a.className = "btn-link text-secondary";
+            const icon = document.createElement("i");
+            icon.className = "far fa-fw fa-file-pdf";
+            a.prepend(icon);
+            // Agregar el enlace al elemento <li>
+            li.appendChild(a);
+            // Agregar el elemento <li> a la lista de archivos
+            archivosList.appendChild(li);
+
+            // Boton para eliminar el archivo
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Eliminar";
+            deleteButton.className = "btn btn-danger btn-xs ml-2";
+            deleteButton.addEventListener("click", () => eliminarArchivo(archivo.id, li));
+            li.appendChild(deleteButton);
+          })
+        } else {
+          // Mostrar un mensaje si no hay archivos asociados al pago
+          // Crear un elemento <li>
+          const li = document.createElement("li");
+          li.textContent = "No hay archivos asociados a este pago";
+          // Agregar el elemento <li> a la lista de archivos
+          archivosList.appendChild(li);
+        }
+      };
+
+      const eliminarArchivo = (archivoId, listItem) => {
+        if (confirm("¿Estas seguro que deseas eliminar este archivo?")) {
+          fetch(`/gastos/pagos/eliminar-archivo/${archivoId}`, {
+            method: "DELETE",
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al eliminar el archivo');
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.error) {
+                throw new Error(data.message);
+              }
+              alert(data.message);
+              listItem.remove();  // Eliminar el elemento de la lista
+              //window.location.reload();  // Refrescar/recargar la página
+            })
+            .catch(error => {
+              console.error("Error: ", error);
+            })
+        }
+      }
+    });
+  </script>  
 
 
 </body>

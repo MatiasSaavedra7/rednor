@@ -25,7 +25,7 @@
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title"><%= categoria.nombre %></h3>
-                    <a href="/gastos/<%= categoria.id %>/servicio/crear" class="btn btn-outline-primary float-right">Nuevo</a>
+                    <a href="/gastos/<%= categoria.id %>/crear" class="btn btn-outline-primary float-right">Nuevo</a>
                   </div>
                   <div class="card-body">
                     <table id="table" class="table table-bordered table-hover">
@@ -40,12 +40,12 @@
                       </thead>
                       <tbody>
                         <% gastos.forEach(gasto => { %>
-                         <tr style="user-select: none;" class="clickable-row" data-href="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>/pagos">
+                         <tr style="user-select: none;" class="clickable-row" data-href="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>">
                           <td><%= gasto.id %></td>
                           <td><%= gasto.nombre %></td>
                           <td><%= gasto.dia_vencimiento %></td>
                           <td><%= gasto.frecuencia %></td>
-                          <td><a href="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>/pagos">Detalles</a></td>
+                          <td><a href="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>">Detalles</a></td>
                          </tr>
                         <% }) %>
                       </tbody>
