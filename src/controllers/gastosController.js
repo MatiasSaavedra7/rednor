@@ -88,7 +88,8 @@ module.exports = {
 
       // res.redirect(`/gastos/${req.params.idCategoria}/detalle`);
 
-      res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}/pagos`);
+      // res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}/pagos`);
+      res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}`)
     } catch (error) {
       console.log(error);
     }
