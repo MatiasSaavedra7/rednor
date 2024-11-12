@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead') %>
+  <script src="/js/cuit.js"></script>
+  <title>REDNOR - Editar Pago</title>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>
+
+    <!-- Main sidebar -->
+    <%- include('../../partials/mainSidebar') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar') %>
+
+    <main class="content-wrapper">
+
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-8 m-auto">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Editar Pago</h3>
+                </div>
+                <div class="card-body">
+                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima culpa odio, delectus quo velit natus aperiam magnam, mollitia aliquid voluptate laudantium ab molestiae quasi, repellat architecto dolor doloremque eaque ad.</p>
+                  
+                  <!-- Formulario para editar pago -->
+                  <form action="/pagos/<%= pago.id %>/editar?_method=PUT" method="post">
+                    <div class="form-group">
+                      <label for="id_forma_pago">Forma de Pago</label>
+                      <select name="id_forma_pago" id="id_forma_pago" class="form-control">
+                        <option value="" selected disabled hidden>Seleccione una opcion</option>
+                        <% formas_pago.forEach(forma_pago => { %>
+                        <option value="<%= forma_pago.id %>" <%= pago.forma_pago.id == forma_pago.id ? "selected" : "" %>>
+                          <%= forma_pago.nombre %>
+                        </option>
+                        <% }) %>
+                      </select>
+                    </div>
+
+                    <div class="form-group" id="entidad_bancaria" style="display: none;">
+                      <label for="entidad_bancaria">Entidad Bancaria</label>
+                      <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control" value="<%= pago.entidad_bancaria %>"> <!--  Longitud 22 caracteres exactos -->
+                    </div>
+
+                    <div class="form-group" id="nro_tarjeta" style="display: none;">
+                      <label for="nro_tarjeta">Numero de Tarjeta</label>
+                      <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" value="<%= pago.nro_tarjeta %>" maxlength="16">
+                    </div>
+
+                    <div class="form-group" id="mes" style="display: none;">
+                      <label for="mes">Mes</label>
+                      <select name="mes" id="mes" class="form-control">
+                        <option value="" selected hidden disabled>Seleccione una opcion</option>
+                        <option value="Enero">Enero</option>
+                        <option value="Febrero">Febrero</option>
+                        <option value="Marzo">Marzo</option>
+                        <option value="Abril">Abril</option>
+                        <option value="Mayo">Mayo</option>
+                        <option value="Junio">Junio</option>
+                        <option value="Julio">Julio</option>
+                        <option value="Agosto">Agosto</option>
+                        <option value="Septiembre">Septiembre</option>
+                        <option value="Octubre">Octubre</option>
+                        <option value="Noviembre">Noviembre</option>
+                        <option value="Diciembre">Diciembre</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group" id="cbu" style="display: none;">
+                      <label for="cbu">CBU/CVU</label>
+                      <input type="text" name="cbu" id="cbu" class="form-control" value="<%= pago.cbu %>" maxlength="22">
+                    </div>
+
+                    <div class="form-group" id="cuit" style="display: none;">
+                      <label for="cuit">CUIT/CUIL (Sin guiones)</label>
+                      <input type="text" name="cuit" id="cuit" class="form-control" value="<%= pago.cuit %>">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="divisa">Divisa</label>
+                      <select name="divisa" id="divisa" class="form-control">
+                        <option value="" selected hidden disabled>Seleccione una opcion</option>
+                        <option value="ARS" <%= pago.divisa == "ARS" ? "selected" : "" %>>ARS</option>
+                        <option value="USD" <%= pago.divisa == "USD" ? "selected" : "" %>>USD</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="monto">Monto</label>
+                      <input type="text" name="monto" id="monto" value="<%= pago.monto %>" class="form-control">
+                    </div>
+
+                    <input type="submit" value="Guardar" class="btn btn-primary btn-block">
+
+                    <!-- Boton Eliminar -->
+                    <a href="" type="button" class="btn btn-block btn-danger mt-3" data-toggle="modal" data-target="#modal-eliminar">Eliminar</a>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="modal-eliminar">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Eliminar Pago</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="/pagos/<%= pago.id %>/eliminar?_method=DELETE" method="post">
+            <div class="modal-body">
+              <p>¿Estas seguro de eliminar este pago?</p>
+              <p>Fecha del pago: <%= new Date(pago.fecha_pago).toLocaleString() %></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('../../partials/AdminLTEScripts') %>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("DOM cargado y listo");
+      const idPago = "<%= pago.id %>";
+      console.log("ID Pago: ", idPago);
+      
+
+      // Fetch para obtener un pago
+      fetch(`/pagos/${idPago}`)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+
+      const formaPago = document.getElementById("id_forma_pago");
+      const entidadBancaria = document.getElementById("entidad_bancaria");
+      const nroTarjeta = document.getElementById("nro_tarjeta");
+      const cbu = document.getElementById("cbu");
+      const cuit = document.getElementById("cuit")
+
+      formaPago.addEventListener("change", () => {
+        if (formaPago.value === "2") {
+          entidadBancaria.style.display = "block";
+          nroTarjeta.style.display = "block";
+          cbu.style.display = "block";
+          cuit.style.display = "block"
+        } else {
+          entidadBancaria.style.display = "none";
+          nroTarjeta.style.display = "none";
+          cbu.style.display = "none";
+          cuit.style.display = "none";
+        }
+      })
+
+
+      cuit.addEventListener("input", (event) => {
+        event.target.value = patternMatch({
+          input: event.target.value,
+          template: "xx-xxxxxxxx-x",
+        })
+      })
+    })
+  </script>
+</body>
+</html>

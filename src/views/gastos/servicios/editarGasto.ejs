@@ -3,7 +3,7 @@
 <head>
   <%- include('../../partials/AdminLTEHead.ejs') %>
   <script src="/js/cuit.js"></script>
-  <title>REDNOR - Registrar <%= categoria.nombre %></title>
+  <title>REDNOR - Eitar <%= categoria.nombre %></title>
   <style>
     .flex-gap {
       padding: 1rem;
@@ -30,41 +30,41 @@
             <div class="col-lg-8 m-auto">
               <div class="card">
                 <div class="card-header">
-                        <h3 class="card-title"><%= categoria.nombre %></h3>
+                  <h3 class="card-title"><%= categoria.nombre %></h3>
                 </div>
                 <div class="card-body">
-                  <form action="/gastos/<%= categoria.id %>/crear" method="post">
+                  <form action="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>/editar?_method=PUT" method="post">
 
-                    <h3 class="lead">Informacion del Servicio</h3>
+                    <h3 class="lead">Editar Informacion del Gasto/Servicio</h3>
 
                       <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" name="nombre" id="nombre" class="form-control" />
+                        <input type="text" name="nombre" id="nombre" class="form-control" value="<%= gasto.nombre %>" />
                       </div>
 
                       <div class="form-group">
                         <label for="descripcion">Descripcion</label>
-                        <textarea name="descripcion" id="descripcion" rows="3" class="form-control" autocomplete="on"></textarea>
+                        <textarea name="descripcion" id="descripcion" rows="3" class="form-control" autocomplete="on"><%= gasto.descripcion%></textarea>
                       </div>
 
                       <h3 class="lead" id="condiciones-lead">Condiciones</h3>
 
                       <div class="form-group">
                         <label for="condiciones">Condiciones</label>
-                        <textarea name="condiciones" id="condiciones" rows="3" class="form-control" autocomplete="on"></textarea>
+                        <textarea name="condiciones" id="condiciones" rows="3" class="form-control" autocomplete="on"><%= gasto.condiciones %></textarea>
                       </div>
 
                       <div class="form-group">
                         <label for="dia_vencimiento">Dia de Vencimiento</label>
-                        <input type="text" name="dia_vencimiento" id="dia_vencimiento" class="form-control">
+                        <input type="text" name="dia_vencimiento" id="dia_vencimiento" class="form-control" value="<%= gasto.dia_vencimiento %>">
                       </div>
 
                       <div class="form-group">
                         <label for="frecuencia ">Frecuencia</label>
                         <select name="frecuencia" id="frecuencia" class="form-control">
                           <option value="" selected hidden disabled>Seleccione una opcion</option>
-                          <option value="Único">Único</option>
-                          <option value="Recurrente">Recurrente</option>
+                          <option value="Único" <%= gasto.frecuencia == "Único" ? "selected" : "" %>>Único</option>
+                          <option value="Recurrente" <%= gasto.frecuencia == "Recurrente" ? "selected" : "" %>>Recurrente</option>
                         </select>
                       </div>
 
@@ -95,60 +95,63 @@
                         <select name="forma_pago" id="forma_pago" class="form-control">
                           <option value="" selected disabled hidden>Seleccione una opcion</option>
                           <% formas_pago.forEach(forma_pago => { %>
-                           <option value="<%= forma_pago.id %>"><%= forma_pago.nombre %></option>
+                           <option value="<%= forma_pago.id %>" <%= gasto.forma_pago.id == forma_pago.id ? "selected" : "" %>><%= forma_pago.nombre %></option>
                           <% }) %>
                         </select>
                       </div>
 
                       <div class="form-group" id="entidad_bancaria_div" style="display: none;">
                         <label for="entidad_bancaria">Entidad Bancaria</label>
-                        <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control">
+                        <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control" value="<%= gasto.entidad_bancaria %>">
                       </div>
 
                       <div class="form-group" id="nro_tarjeta_div" style="display: none;">
                         <label for="nro_tarjeta">N° Tarjeta</label>
-                        <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" maxlength="16"> <!-- Longitud 16 caracteres exactos -->
+                        <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" maxlength="16" value="<%= gasto.nro_tarjeta %>"> <!-- Longitud 16 caracteres exactos -->
                       </div>
 
                       <div class="form-group" id="cbu_div" style="display: none;">
                         <label for="cbu">CBU/CVU</label>
-                        <input type="text" name="cbu" id="cbu" class="form-control" maxlength="22"> <!--  Longitud 22 caracteres exactos -->
+                        <input type="text" name="cbu" id="cbu" class="form-control" maxlength="22" value="<%= gasto.cbu %>"> <!--  Longitud 22 caracteres exactos -->
                       </div>
 
                       <div class="form-group" id="cuit_div" style="display: none;">
                         <label for="cuit">CUIT/CUIL (Sin guiones)</label>
-                        <input type="text" name="cuit" id="cuit" class="form-control" maxlength="13">
+                        <input type="text" name="cuit" id="cuit" class="form-control" maxlength="13" value="<%= gasto.cuit %>">
                       </div>
 
                       <div class="form-group">
                         <label for="email">Email (opcional)</label>
-                        <input type="email" name="email" id="email" class="form-control" />
+                        <input type="email" name="email" id="email" class="form-control" value="<%= gasto.email %>"/>
                       </div>
 
                       <div class="form-group">
                         <label for="telefono">Telefono (Whatsapp)</label>
-                        <input type="tel" name="telefono" id="telefono" placeholder="+54 9 385X XX-XXXX" class="form-control">
+                        <input type="tel" name="telefono" id="telefono" placeholder="+54 9 385X XX-XXXX" class="form-control" value="<%= gasto.telefono %>">
                       </div>
 
                       <div class="form-group">
                         <label for="divisa">Tipo de Divisa</label>
                         <select name="divisa" id="divisa" class="form-control">
                           <option value="" selected hidden disabled>Seleccione una opcion</option>
-                          <option value="ARS">ARS</option>
-                          <option value="USD">USD</option>
+                          <option value="ARS" <%= gasto.divisa == "ARS" ? "selected" : "" %>>ARS</option>
+                          <option value="USD" <%= gasto.divisa == "USD" ? "selected" : "" %>>USD</option>
                         </select>
                       </div>
 
                       <div class="form-group">
                         <label for="monto">Monto</label>
-                        <input type="number" step="0.01" name="monto" id="monto" class="form-control" />
+                        <input type="number" step="0.01" name="monto" id="monto" class="form-control" value="<%= gasto.monto %>"/>
                       </div>
 
                       <!-- Boton Enviar -->
-                      <input type="submit" class="btn btn-block btn-primary" />
+                      <input type="submit" value="Actualizar" class="btn btn-block btn-primary" />
 
+                      <!-- Boton Eliminar -->
+                      <a href="" type="button" class="btn btn-block btn-danger mt-3" data-toggle="modal" data-target="#modal-eliminar">Eliminar</a>
+                      
                       <!-- Boton Volver atras -->
-                      <a href="/gastos/<%= categoria.id %>/detalle" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás...</a>
+                      <a href="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>" class="btn btn-block btn-outline-secondary mt-3">Cancelar</a>
                   </form>
                 </div>
               </div>
@@ -158,6 +161,30 @@
       </section>
   <!-- FIN CONTENIDO -->
     </main>
+
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="modal-eliminar">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Eliminar <%= gasto.nombre %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>/eliminar?_method=DELETE" method="post">
+            <div class="modal-body">
+              <p>¿Estas seguro de eliminar este gasto/servicio?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal Eliminar -->
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
@@ -190,6 +217,13 @@
           cuitDiv.style.display = "none";
         }
       })
+
+      if (formaPago.value == 2) {
+        entidadBancaria.style.display = "block";
+        nroTarjeta.style.display = "block";
+        cbu.style.display = "block";
+        cuitDiv.style.display = "block"
+      }
 
       const cuit = document.getElementById("cuit");
 

@@ -14,6 +14,9 @@ const storage = multer.diskStorage({
       case "archivos_pagos":
         path = "./public/docs/pagos";
         break;
+      case "archivos_gastos":
+        path = "./public/docs/gastos";
+        break;
       default:
         path = "./public/docs/default"; //  Default path
         break;

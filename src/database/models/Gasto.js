@@ -32,6 +32,14 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING(2),
       allowNull: false,
     },
+    email: {
+      type: dataTypes.STRING(100),
+      allowNull: true,
+    },
+    telefono: {
+      type: dataTypes.STRING(20),
+      allowNull: true,
+    },
     id_forma_pago: {
       type: dataTypes.INTEGER,
       allowNull: false,
@@ -83,6 +91,11 @@ module.exports = (sequelize, dataTypes) => {
     Gasto.belongsTo(models.FormaPago, {
       as: "forma_pago",
       foreignKey: "id_forma_pago",
+    })
+
+    Gasto.hasMany(models.ArchivoGasto, {
+      as: "archivos",
+      foreignKey: "id_gasto",
     })
   };
 

@@ -14,7 +14,8 @@ const taller = require("./taller.routes.js");
 const pagos = require("./pagos.routes.js");
 const externos = require('./taller.externo.routes.js');
 const gastos = require('./gastos.routes.js');
-// const archivosPagos = require("./archivosPagos.routes.js");
+const archivosPagos = require("./archivosPagos.routes.js");
+const archivosGastos = require("./archivosGastos.routes.js");
 
 //  Rutas para pruebas
 const pruebas = require("./pruebas.routes.js");
@@ -52,7 +53,7 @@ router.use("/taller", authMiddleware, roleMiddleware([1]), taller);
 router.use("/taller/externos", authMiddleware, roleMiddleware([1]), externos);
 
 // Pruebas routes
-router.use("/pruebas", roleMiddleware([1]), pruebas);
+router.use("/pruebas", pruebas);
 
 // Pagos routes
 router.use("/pagos", authMiddleware, roleMiddleware([1]), pagos);
@@ -64,6 +65,9 @@ router.use("/gastos", authMiddleware, roleMiddleware([1]), gastos);
 router.use("/usuarios", usuarios);
 
 // Archivo de pagos routes
-// router.use("/archivos", archivosPagos);
+router.use("/archivos-pagos", archivosPagos);
+
+// Archivo de gastos routes
+router.use("/archivos-gastos", archivosGastos);
 
 module.exports = router;

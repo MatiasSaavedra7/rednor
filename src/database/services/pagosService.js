@@ -80,15 +80,17 @@ module.exports = {
     }
   },
 
-  getLastByIdGasto: async (id) => {
+  getLastPagoByIdGasto: async (id) => {
     try {
       return await db.Pago.findOne({
         where: { id_gasto: id },
         order: [["id", "DESC"]],
+        limit: 1,
         include: ["gasto", "forma_pago", "archivos_pagos"],
       })
     } catch (error) {
-      
+      console.error("Error en getLastPagoByIdGasto: ", error);
+      throw error; // Esto es para que el error se propague hasta el controlador
     }
   },
 

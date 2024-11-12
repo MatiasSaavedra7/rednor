@@ -4,8 +4,12 @@ const router = Router();
 const controller = require("../controllers/archivosPagosController");
 const upload = require("../middlewares/multerMiddleware");
 
-// router.post("/archivos/pagos", upload.single("archivo"), controller.subirArchivoPagos);
+// Rutas ("Todas comienzan con /archivos-pagos")
 
-// router.post("/pagos", upload.array("archivos_pagos", 10), controller.almacenarArchivos);
+// Almacenar archivos de un pago
+router.post("/almacenar", upload.array("archivos_pagos", 10), controller.almacenarArchivos);
+
+// Eliminar un archivo de un pago
+router.delete("/eliminar/:id", controller.eliminarArchivo);
 
 module.exports = router;

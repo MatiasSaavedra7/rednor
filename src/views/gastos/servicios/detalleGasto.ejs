@@ -122,37 +122,6 @@
                           </div>
                         </div>
                       </div>
-                      
-                      <!-- Paginación por meses de los pagos -->
-                      <!-- <div class="row">
-                        <div class="col-12">
-                          <div class="card"> -->
-
-                            <!-- <div class="card-header">
-                              <h3 class="card-title">Paginación Mensual</h3>
-                            </div> -->
-
-                            <!-- <div class="card-body pagination-container"> -->
-                              <!-- <button class="pagination-btn" id="prev-month">«</button> -->
-                              <!-- <ul class="pagination pagination-month justify-content-center"> -->
-                                <%# pagos.forEach(pago => { %>
-                                  <%# const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]; %>
-                                  <!-- <li class="page-item <%# ultimoPago && ultimoPago.id == pago.id ? "active" : "" %>"> -->
-                                    <!-- <a href="#" class="page-link pago-mes" data-pago-id="<%# pago.id %>"> -->
-                                      <!-- <p class="page-month"><%# meses[pago.fecha_pago.getMonth()] %></p> -->
-                                       <!-- <p class="page-month"><%# pago.id %></p> -->
-                                      <!-- <p class="page-year"><%# pago.fecha_pago.getFullYear() %></p> -->
-                                    <!-- </a> -->
-                                  <!-- </li> -->
-                                <%# }) %>
-                              <!-- </ul> -->
-                              <!-- <button class="pagination-btn" id="next-month">»</button> -->
-                            <!-- </div> -->
-
-                          <!-- </div> -->
-                        <!-- </div> -->
-                      <!-- </div>                       -->
-                      <!-- /Paginación por meses de los pagos -->
     
                       <!-- Datos del Pago -->
                       <div class="row">
@@ -182,16 +151,7 @@
                               <!-- Paginacion por meses -->
                               <div class="pagination-container">
                                 <ul class="pagination pagination-month justify-content-center">
-                                  <%# pagos.forEach(pago => { %>
-                                    <%# const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; %>
-                                    <!-- <li class="page-item"> -->
-                                    <!-- <a href="#" class="page-link pago-mes" data-pago-id="<%# pago.id %>"> -->
-                                      <!-- <p class="page-month"><%# meses[pago.fecha_pago.getMonth()] %></p> -->
-                                      <!-- <p><%# pago.id %></p> -->
-                                      <!-- <p class="page-year"><%# pago.fecha_pago.getFullYear() %></p> -->
-                                    <!-- </a> -->
-                                   <!-- </li> -->
-                                  <%# }) %>
+                                  <!-- Listado de pagos por mes -->
                                 </ul>
                               </div>
 
@@ -200,52 +160,70 @@
                               <div id="pagos-container">
                                 <!-- Detalles del Pago -->
                               </div>
+                              <!-- <h5 class="mt-3 text-muted">Project files</h5> -->
+                              <ul class="list-unstyled" id="archivos-list">
+                                <!-- Listado de archivos pertenecientes al pago -->
+                              </ul>
+                              <!-- <a type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-agregar-archivos">Add files</a> -->
                             </div>
                           </div>
                         </div>
                       </div>
                       <!-- /Datos del Pago -->
     
-                      <!-- Alertas -->
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="card">
-                            <div class="card-header">
-                              <h3 class="card-title">Alertas</h3>
-                              <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                  <i class="fas fa-minus"></i>
-                                </button>
+                      <% if (gasto.email || gasto.telefono) { %>
+                        <!-- Alertas -->
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header">
+                                <h3 class="card-title">Alertas</h3>
+                                <div class="card-tools">
+                                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                            <div class="card-body">
-                              <div class="callout callout-success">
-                                <h5>WhatsApp</h5>
-                                <p>xx xxx xxxx</p>
-                                <p>
-                                  There is a problem that we need to fix. A wonderful serenity has taken possession of my entire
-                                  soul,
-                                  like these sweet mornings of spring which I enjoy with my whole heart.
-                                </p>
-                              </div>
-        
-                              <div class="callout callout-info">
-                                <h5>Mensaje de Correo</h5>
-                                <p>correo@email.com</p>
-                                <p>
-                                  This is a warning message. It indicates a potential issue that may need to be addressed.
-                                </p>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label for="mensaje-personalizado">Mensaje Personalizado: </label>
+                                  <textarea name="mensaje-personalizado" id="mensaje-personalizado" rows="4" cols="50" class="form-control"></textarea>
+                                </div>
+                                <% if (gasto.telefono) { %>
+                                  <div class="callout callout-success">
+                                    <h5>WhatsApp</h5>
+                                    <p><%= gasto.telefono %></p>
+                                    <p id="alerta-telefono"></p>
+                                    <a id="boton-alerta-telefono"></a>
+                                  </div>
+                                <% } %>
+                                
+                                <% if (gasto.email) { %>
+                                  <div class="callout callout-info">
+                                    <h5>Mensaje de Correo</h5>
+                                    <p><%= gasto.email %></p>
+                                    <p id="alerta-correo"></p>
+                                    <a id="boton-alerta-correo"></a>
+                                  </div>
+                                <% } %>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <!-- /Alertas -->
+                        <!-- /Alertas -->
+                      <% } %>
                     </div>
                     
                      <!-- Informacion del gasto/servicio -->
                     <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-                      <h3 class="text-primary"><i class="fas fa-paint-brush"></i><%= gasto.nombre %></h3>
+                      <h3 class="text-primary">
+                        <i class="fas fa-paint-brush"></i>
+                        <%= gasto.nombre %>
+                        <a class="btn btn-sm" href="/gastos/<%= categoria.id %>/servicio/<%= gasto.id %>/editar">
+                          <i class="fas fa-edit"></i> Edit
+                        </a>
+                      </h3>
+                      
 
                       <div class="row">
                         <div class="col-6">
@@ -295,15 +273,31 @@
 
                           <dt>Monto</dt>
                           <dd class="precios"><%= gasto.monto %></dd>
+
+                          <dt>Frecuencia</dt>
+                          <dd><%= gasto.frecuencia %></dd>
+                          
+                          <% if (gasto.email) { %>
+                            <dt>Correo</dt>
+                            <dd><a href="mailto:<%= gasto.email %>"><%= gasto.email %></a></dd>
+                          <% } %>
+
+                          <% if (gasto.telefono) { %>
+                            <dt>Telefono</dt>
+                            <dd><%= gasto.telefono %></dd>
+                          <% } %>
                         </div>
                       </div>
         
-                      <h5 class="mt-5 text-muted">Project files</h5>
-                      <ul class="list-unstyled" id="archivos-list">
+                      <h5 class="mt-5 text-muted">Archivos del Servicio</h5>
+                      <ul class="list-unstyled" id="archivos-list-gasto">
+                        <%# gasto.archivos.forEach(archivo => { %>
+                         <!-- <li><i class="far fa-fw fa-file-pdf"></i> <a class="btn-link text-secondary" href="/docs/gastos/<%#= archivo.nombre %>" target="_blank"><%#= archivo.nombre %></a></li> -->
+                        <%# }) %>
                         <!-- Listado de archivos pertenecientes al pago -->
                       </ul>
                       <div class="text-center mt-5 mb-3">
-                        <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-agregar-archivos">Add files</a>
+                        <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-agregar-archivos-gastos">Add files</a>
                         <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                       </div>
                     </div>
@@ -409,17 +403,18 @@
         <!-- /.modal-dialog -->
       </div>
 
-      <!-- Modal Agregar Archivos -->
+      <!-- Modal agregar archivos a Pagos -->
       <div class="modal fade" id="modal-agregar-archivos">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Agregar Archivos</h4>
+              <h4 class="modal-title">Agregar Archivos al Pago</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="/gastos/pagos/almacenar-archivos" method="post" enctype="multipart/form-data" id="uploadForm">
+            <!-- <form action="/gastos/pagos/almacenar-archivos" method="post" enctype="multipart/form-data" id="uploadForm"> -->
+            <form action="/archivos-pagos/almacenar" method="post" enctype="multipart/form-data" id="uploadForm">
 
               <!-- Modal Body -->
               <div class="modal-body">
@@ -430,7 +425,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="archivos_pagos">Subir Archivos</label>
+                  <label for="archivos_pagos_label">Archivos</label>
                   <div class="input-group">
                     <div class="custom-file">
                       <input type="file" name="archivos_pagos" class="custom-file-input" id="archivos_pagos" multiple>
@@ -455,6 +450,47 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+      <!-- Modal agregar archivos a Gastos -->
+      <div class="modal fade" id="modal-agregar-archivos-gastos">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Agregar Archivos al Gasto</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+            <form action="/archivos-gastos/almacenar" method="post" enctype="multipart/form-data" id="uploadFormGasto">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="id_gasto">ID Gasto: </label>
+                  <input type="number" name="id_gasto" id="id_gasto" value="<%= gasto.id %>" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_gastos_label">Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="archivos_gastos" class="custom-file-input" id="archivos_gastos" multiple>
+                      <label class="custom-file-label" for="archivos_gastos">Elegir Archivo</label>
+                    </div>
+                    <div class="input-group-append">
+                      <!-- <span class="input-group-text">Upload</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
+              </div>
+            </form>
+        </div>
+      </div>
+      </div>
     </main>
   </div>
 
@@ -466,7 +502,7 @@
     });
   </script>
 
-  <!-- Script Upload Form -->
+  <!-- Script para subir archivos a los pagos -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const uploadForm = document.getElementById("uploadForm");
@@ -475,9 +511,8 @@
         event.preventDefault();
         const idPago = document.getElementById("id_pago").value;
         const formData = new FormData(uploadForm);
-        console.log("ID del Pago:", idPago);
 
-        fetch("/gastos/pagos/almacenar-archivos", {
+        fetch("/archivos-pagos/almacenar", {
           method: "POST",
           body: formData,
         })
@@ -495,9 +530,13 @@
 
           // Cerrar el modal
           $("#modal-agregar-archivos").modal("hide");
-
+          
           // Actualizar la lista de archivos
           actualizarListaArchivos(idPago);
+          
+          uploadForm.reset();  // Limpiar el formulario
+
+          document.getElementById("id_pago").value = idPago;  // Restaurar el valor del input "id_pago"
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -542,6 +581,25 @@
             li.textContent = "No hay archivos asociados a este pago";
             archivosList.appendChild(li);
           }
+
+          // Titulo para agregar archivos al pago
+          const tituloAgregarArchivoPago = document.createElement("h5");
+          tituloAgregarArchivoPago.className = "mt-3 text-muted";
+          tituloAgregarArchivoPago.textContent = "Archivos del Pago";
+
+          // Agregar el titulo al contenedor de archivos
+          archivosList.prepend(tituloAgregarArchivoPago);
+
+          // Boton para subir archivos al pago
+          const botonAgregarArchivoPago = document.createElement("a");
+          botonAgregarArchivoPago.href = "#";
+          botonAgregarArchivoPago.className = "btn btn-sm btn-success mt-2";
+          botonAgregarArchivoPago.setAttribute("data-toggle", "modal");
+          botonAgregarArchivoPago.setAttribute("data-target", "#modal-agregar-archivos");
+          botonAgregarArchivoPago.textContent = "Agregar Archivos";
+
+          // Agregar el boton al contenedor de archivos
+          archivosList.appendChild(botonAgregarArchivoPago);
         })
         .catch(error => {
           console.error("Error al actualizar la lista de archivos:", error);
@@ -550,7 +608,7 @@
 
     const eliminarArchivo = (archivoId, listItem) => {
       if (confirm("Estás seguro que deseas eliminar este archivo?")) {
-        fetch(`/gastos/pagos/eliminar-archivo/${archivoId}`, {
+        fetch(`/archivos-pagos/eliminar/${archivoId}`, {
           method: "DELETE",
         })
           .then(response => {
@@ -565,13 +623,206 @@
             }
             alert(data.message);
             listItem.remove();  // Eliminar el elemento de la lista
-            //window.location.reload();  // Refrescar/recargar la página
           })
           .catch(error => {
             console.error("Error: ", error);
           })
       }
     }
+  </script>
+
+  <script>
+    
+  </script>
+
+  <!-- Script mostrar archivos del gasto -->
+  <script>
+    document.addEventListener("DOMContentLoaded", (e) => {
+
+      const idGasto = "<%= gasto.id %>";
+
+      fetch(`/archivos-gastos/${idGasto}`)
+        .then(response => response.json())
+        .then((data) => {
+
+          const archivosListGasto = document.getElementById("archivos-list-gasto");
+          archivosListGasto.innerHTML = "";  // Limpiar la lista de archivos
+          
+          // Si hay archivos asociados al gasto, mostrarlos en la lista
+          if (data && data.length > 0) {
+            data.forEach((archivo) => {
+              // Crear un elemento <li> por cada archivo
+              const li = document.createElement("li");
+              // Crear un enlace para descargar el archivo
+              const a = document.createElement("a");
+              a.href = `/docs/gastos/${archivo.nombre}`;
+              a.textContent = archivo.nombre;
+              a.target = "_blank";
+              a.className = "btn-link text-secondary";
+              const icon = document.createElement("i");
+              icon.className = "far fa-fw fa-file-pdf";
+              a.prepend(icon);
+              li.appendChild(a);
+              archivosListGasto.appendChild(li);
+
+              // Boton para eliminar el archivo
+              const deleteButtonGasto = document.createElement("button");
+              deleteButtonGasto.textContent = "Eliminar";
+              deleteButtonGasto.className = "btn btn-danger btn-xs ml-2";
+              deleteButtonGasto.addEventListener("click", () => eliminarArchivoGasto(archivo.id, li));
+              li.appendChild(deleteButtonGasto);
+            })
+          } else { // Si no hay archivos asociados al gasto
+            const li = document.createElement("li");
+            li.textContent = "No hay archivos asociados a este gasto";
+            archivosListGasto.appendChild(li);
+          }
+        })
+        .catch(error => {
+          console.error("Error al obtener los archivos del gasto:", error);
+        })
+
+      // Funcion para eliminar un archivo del gasto
+      const eliminarArchivoGasto = (archivoId, listItem) => {
+        if (confirm("Estás seguro que deseas eliminar este archivo?")) {
+          fetch(`/archivos-gastos/eliminar/${archivoId}`, {
+            method: "DELETE",
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al eliminar el archivo');
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.error) {
+                throw new Error(data.message);
+              }
+              alert(data.message);
+              listItem.remove();  // Eliminar el elemento de la lista
+            })
+            .catch(error => {
+              console.error("Error: ", error);
+            }) 
+        }
+      }
+      
+    })
+  </script>
+
+  <!-- Script Upload Form Gasto -->
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
+    const uploadFormGasto = document.getElementById("uploadFormGasto");
+    const idGasto = document.getElementById("id_gasto").value;
+    // console.log("ID del Gasto:", idGasto);
+
+    uploadFormGasto.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formDataGasto = new FormData(uploadFormGasto);
+
+      fetch("/archivos-gastos/almacenar", {
+        method: "POST",
+        body: formDataGasto,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error al enviar los archivos al servidor");
+          }
+          return response.json();
+        })
+        .then((data) => {
+
+          if (data.error) {
+            throw new Error(data.message);
+          }
+
+          alert(data.message);
+          
+          // Cerrar el modal
+          $("#modal-agregar-archivos-gastos").modal("hide");
+          
+          // Actualizar la lista de archivos
+          actualizarListaArchivosGasto(idGasto);
+          
+          // Limpiar el formulario
+          uploadFormGasto.reset();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        })
+
+      function actualizarListaArchivosGasto(id) {
+        fetch(`/archivos-gastos/${id}`)
+          .then(response => response.json())
+          .then((data) => {
+            console.log("*** Archivos del Gasto ***");
+            
+            console.log(data);
+            
+            const archivosListGasto = document.getElementById("archivos-list-gasto");
+            archivosListGasto.innerHTML = "";  // Limpiar la lista de archivos
+            
+            // Mostrar los archivos en la lista
+            if (data.length > 0) {
+              // Crear un elemento <li> por cada archivo
+              data.forEach(archivo => {
+                const li = document.createElement("li");
+                // Crear un enlace para descargar el archivo
+                const a = document.createElement("a");
+                a.href = `/docs/gastos/${archivo.nombre}`;
+                a.textContent = archivo.nombre;
+                a.target = "_blank";
+                a.className = "btn-link text-secondary";
+                const icon = document.createElement("i");
+                icon.className = "far fa-fw fa-file-pdf";
+                a.prepend(icon);
+                li.appendChild(a);
+                archivosListGasto.appendChild(li);
+
+                // Boton para eliminar el archivo
+                const deleteButtonGasto = document.createElement("button");
+                deleteButtonGasto.textContent = "Eliminar";
+                deleteButtonGasto.className = "btn btn-danger btn-xs ml-2";
+                deleteButtonGasto.addEventListener("click", () => eliminarArchivoGasto(archivo.id, li));
+                li.appendChild(deleteButtonGasto);
+              })
+            } else {
+              const li = document.createElement("li");
+              li.textContent = "No hay archivos asociados a este gasto";
+              archivosListGasto.appendChild(li);
+            }
+          })
+          .catch(error => {
+            console.error("Error al actualizar la lista de archivos del gasto:", error);
+          });
+      }
+
+      const eliminarArchivoGasto = (archivoId, listItem) => {
+        if (confirm("Estás seguro que deseas eliminar este archivo?")) {
+          fetch(`/archivos-gastos/eliminar/${archivoId}`, {
+            method: "DELETE",
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al eliminar el archivo');
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.error) {
+                throw new Error(data.message);
+              }
+              alert(data.message);
+              listItem.remove();  // Eliminar el elemento de la lista
+            })
+            .catch(error => {
+              console.error("Error: ", error);
+            }) 
+        }
+      }
+    })
+   }) 
   </script>
 
 
@@ -593,10 +844,201 @@
       const pagosContainer = document.getElementById("pagos-container");
       const pagination = document.getElementById("pagination");
 
+      // ID del Gasto/Servicio
+      const idGasto = "<%= gasto.id %>";
+
+      // Funcion fetch para obtener la informacion del ultimo pago
+      async function getLastPago(id) {
+        try {
+          let response = await fetch(`/gastos/servicio/${id}/ultimo-pago`);
+          if (!response.ok) {
+            throw new Error("Error al obtener el último pago");
+          }
+          let pago = await response.json();
+          return pago;
+        } catch (error) {
+          console.error("Error al obtener el último pago:", error);
+        }
+      }
+
+      getLastPago(idGasto)
+        .then((data) => {
+          // console.log("Ultimo Pago:", data);
+          pagosContainer.innerHTML = "";
+
+          
+          if (data.gasto.telefono) {
+            // Enviar la informacion del pago a las alertas de telefono
+            const alertaTelefono = document.getElementById("alerta-telefono");
+            alertaTelefono.innerHTML = "";  // Limpiar el contenedor de alertas de telefono
+            alertaTelefono.innerText = `Hola ${data.gasto.nombre}, te informamos que tu pago de $${formatearPrecio(data.monto)} ${data.divisa} ha sido realizado exitosamente el ${new Date(data.fecha_pago).toLocaleDateString()}.`;
+            
+            const parentNodeAlertaTelefono = alertaTelefono.parentNode;
+
+            // Obtener el mensaje personalizado del usuario
+            
+            // Crear un enlace para enviar un mensaje de WhatsApp
+            let aTelefono = document.getElementById("boton-alerta-telefono");
+            aTelefono.className = "btn btn-success text-white text-decoration-none btn-sm";
+            aTelefono.target = "_blank";
+            aTelefono.textContent = "Enviar";
+            // Agregar el enlace al contenedor padre de la alerta
+            parentNodeAlertaTelefono.appendChild(aTelefono);
+
+            // Agregar el evento click al enlace de WhatsApp
+            aTelefono.addEventListener("click", (e) => {
+              // Obtener el mensaje personalizado del usuario
+              const mensajePersonalizado = document.getElementById("mensaje-personalizado").value;
+              // Enviar un mensaje de WhatsApp al telefono del usuario
+              //aTelefono.href = `https://api.whatsapp.com/send?phone=${data.gasto.telefono}&text=Hola%20${data.gasto.nombre},%20te%20informamos%20que%20tu%20pago%20de%20$${formatearPrecio(data.monto)}%20${data.divisa}%20ha%20sido%20realizado%20exitosamente%20el%20${new Date(data.fecha_pago).toLocaleDateString()}.%0A%0A${encodeURIComponent(mensajePersonalizado)}`;
+              aTelefono.href = `https://api.whatsapp.com/send?phone=${data.gasto.telefono}&text=${encodeURIComponent(mensajePersonalizado)}%0AFecha:%20${new Date(data.fecha_pago).toLocaleDateString()}%0A${data.forma_pago.nombre}%0A${data.divisa}$${formatearPrecio(data.monto)}`;
+            })
+          }
+
+          if (data.gasto.email) {
+            // Enviar la informacion del pago a las alertas de correo
+            const alertaCorreo = document.getElementById("alerta-correo");
+            alertaCorreo.innerHTML = "";  // Limpiar el contenedor de alertas de correo
+            alertaCorreo.innerText = `Hola ${data.gasto.nombre}, te informamos que tu pago de $${formatearPrecio(data.monto)} ${data.divisa} ha sido realizado exitosamente el ${new Date(data.fecha_pago).toLocaleDateString()}.`;
+    
+            const parentNodeAlertaCorreo = alertaCorreo.parentNode;
+    
+            // Crear un enlace para enviar un correo electronico
+            let aCorreo = document.getElementById("boton-alerta-correo");
+            aCorreo.href = `mailto:${data.gasto.email}?subject=Confirmacion%20de%20Pago&body=Hola%20${data.gasto.nombre},%20te%20informamos%20que%20tu%20pago%20de%20$${formatearPrecio(data.monto)}%20${data.divisa}%20ha%20sido%20realizado%20exitosamente%20el%20${new Date(data.fecha_pago).toLocaleDateString()}.`;
+            aCorreo.className = "btn btn-info text-white text-decoration-none btn-sm";
+            aCorreo.textContent = "Enviar";
+    
+            // Agregar el enlace al contenedor padre de la alerta
+            parentNodeAlertaCorreo.appendChild(aCorreo);
+          }
+
+          // Funcion para mostrar los detalles del pago
+          const addDetail = (label, value) => {
+            // Si el valor no esta vacio
+            if (value) {
+              // Crear un elemento <dt> y <dd> para mostrar el detalle
+              const dt = document.createElement("dt");
+              dt.textContent = label;
+              const dd = document.createElement("dd");
+              dd.textContent = value;
+              // Agregar los elementos al contenedor de pagos
+              pagosContainer.appendChild(dt);
+              pagosContainer.appendChild(dd);
+            }
+          };
+
+          addDetail("Fecha de Pago", new Date(data.fecha_pago).toLocaleString());
+          addDetail("Forma de Pago", data.forma_pago.nombre);
+          addDetail("Entidad Bancaria", data.entidad_bancaria);
+          addDetail("Nro. Tarjeta", data.nro_tarjeta);
+          addDetail("CBU", data.cbu);
+          addDetail("CUIT", data.cuit);
+          addDetail("Mes", data.mes);
+          addDetail("Divisa", data.divisa);
+          addDetail("Monto", "$" + formatearPrecio(data.monto));
+
+          // Boton para editar la informacion del pago
+          const editButton = document.createElement("a");
+          editButton.href = `/pagos/${data.id}/editar`;
+          editButton.className = "btn btn-primary btn-sm";
+          editButton.textContent = "Editar";
+
+          // Agregar el boton al contenedor de pagos
+          pagosContainer.appendChild(editButton);
+          
+          // Capturar el ID del pago y asignarlo al input "id_pago" del modal para subir archivos
+          const idPagoInput = document.getElementById("id_pago");
+          idPagoInput.value = data.id;
+
+          // Actualizar la lista de archivos asociados al pago
+          const archivosList = document.getElementById("archivos-list");
+          archivosList.innerHTML = "";  // Limpiar la lista de archivos
+
+          // Si hay archivos asociados al pago
+          if (data.archivos_pagos && data.archivos_pagos.length > 0) {
+            data.archivos_pagos.forEach(archivo => {
+              // Crear un elemento <li> por cada archivo
+              const li = document.createElement("li");
+              // Crear un enlace para descargar el archivo
+              const a = document.createElement("a");
+              a.href = `/docs/pagos/${archivo.nombre}`;
+              a.textContent = archivo.nombre;
+              a.target = "_blank";
+              a.className = "btn-link text-secondary";
+              const icon = document.createElement("i");
+              icon.className = "far fa-fw fa-file-pdf";
+              a.prepend(icon);
+              // Agregar el enlace al elemento <li>
+              li.appendChild(a);
+              // Agregar el elemento <li> a la lista de archivos
+              archivosList.appendChild(li);
+
+              // Boton para eliminar el archivo
+              const deleteButton = document.createElement("button");
+              deleteButton.textContent = "Eliminar";
+              deleteButton.className = "btn btn-danger btn-xs ml-2";
+              deleteButton.addEventListener("click", () => eliminarArchivo(archivo.id, li));
+              li.appendChild(deleteButton);
+            })
+          } else { // Mostrar un mensaje si no hay archivos asociados al pago
+            const li = document.createElement("li");
+            li.textContent = "No hay archivos asociados a este pago";
+            // Agregar el elemento <li> a la lista de archivos
+            archivosList.appendChild(li);
+          }
+
+          // Titulo para agregar archivos al pago
+          const tituloAgregarArchivoPago = document.createElement("h5");
+          tituloAgregarArchivoPago.className = "mt-3 text-muted";
+          tituloAgregarArchivoPago.textContent = "Archivos del Pago";
+
+          // Agregar el titulo al contenedor de archivos
+          archivosList.prepend(tituloAgregarArchivoPago);
+
+          // Boton para subir archivos al pago
+          const botonAgregarArchivoPago = document.createElement("a");
+          botonAgregarArchivoPago.href = "#";
+          botonAgregarArchivoPago.className = "btn btn-sm btn-success mt-2";
+          botonAgregarArchivoPago.setAttribute("data-toggle", "modal");
+          botonAgregarArchivoPago.setAttribute("data-target", "#modal-agregar-archivos");
+          botonAgregarArchivoPago.textContent = "Agregar Archivos";
+
+          // Agregar el boton al contenedor de archivos
+          archivosList.appendChild(botonAgregarArchivoPago);
+
+          // Funcion para eliminar un archivo asociado al pago
+          const eliminarArchivo = (archivoId, listItem) => {
+            if (confirm("¿Estas seguro que deseas eliminar este archivo?")) {
+              fetch(`/archivos-pagos/eliminar/${archivoId}`, {
+                method: "DELETE",
+              })
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Error al eliminar el archivo');
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  if (data.error) {
+                    throw new Error(data.message);
+                  }
+                  alert(data.message);
+                  listItem.remove();  // Eliminar el elemento de la lista de archivos
+                })
+                .catch(error => {
+                  console.error("Error: ", error);
+                })
+            }
+          } 
+        })
+        .catch((error) => {
+          console.error("Error al obtener el último pago:", error);
+        });
+
     
       selectAnio.addEventListener("change", (e) => {
         const selectedAnio = e.target.value;
-        console.log("Año seleccionado:", selectedAnio);
         const idGasto = "<%= gasto.id %>";
         
         fetch(`/gastos/servicio/${idGasto}/pagos/${selectedAnio}`)
@@ -672,7 +1114,45 @@
 
       const mostrarDetallesPago = (data) => {
         const pagosContainer = document.getElementById("pagos-container");
-        pagosContainer.innerHTML = "";  // Limpiar el contenedor de detalles del pago
+        // Limpiar el contenedor de detalles del pago
+        pagosContainer.innerHTML = "";
+
+        if (data.gasto.telefono) {
+          // Enviar la informacion del pago a las alertas de telefono
+          const alertaTelefono = document.getElementById("alerta-telefono");
+          alertaTelefono.innerHTML = "";  // Limpiar el contenedor de alertas de telefono
+          alertaTelefono.innerText = `Hola ${data.gasto.nombre}, te informamos que tu pago de $${formatearPrecio(data.monto)} ${data.divisa} ha sido realizado exitosamente el ${new Date(data.fecha_pago).toLocaleDateString()}.`;
+          
+          const parentNodeAlertaTelefono = alertaTelefono.parentNode;
+  
+          // Crear un enlace para enviar un mensaje de WhatsApp
+          let aTelefono = document.getElementById("boton-alerta-telefono");
+          aTelefono.href = `https://api.whatsapp.com/send?phone=${data.gasto.telefono}&text=Hola%20${data.gasto.nombre},%20te%20informamos%20que%20tu%20pago%20de%20$${formatearPrecio(data.monto)}%20${data.divisa}%20ha%20sido%20realizado%20exitosamente%20el%20${new Date(data.fecha_pago).toLocaleDateString()}.`;
+          aTelefono.target = "_blank";
+          aTelefono.className = "btn btn-success text-white text-decoration-none btn-sm";
+          aTelefono.textContent = "Enviar";
+  
+          // Agregar el enlace al contenedor padre de la alerta
+          parentNodeAlertaTelefono.appendChild(aTelefono);
+        }
+
+        if (data.gasto.email) {
+          // Enviar la informacion del pago a las alertas de correo
+          const alertaCorreo = document.getElementById("alerta-correo");
+          alertaCorreo.innerHTML = "";  // Limpiar el contenedor de alertas de correo
+          alertaCorreo.innerText = `Hola ${data.gasto.nombre}, te informamos que tu pago de $${formatearPrecio(data.monto)} ${data.divisa} ha sido realizado exitosamente el ${new Date(data.fecha_pago).toLocaleDateString()}.`;
+  
+          const parentNodeAlertaCorreo = alertaCorreo.parentNode;
+  
+          // Crear un enlace para enviar un correo electronico
+          let aCorreo = document.getElementById("boton-alerta-correo");
+          aCorreo.href = `mailto:${data.gasto.email}?subject=Confirmacion%20de%20Pago&body=Hola%20${data.gasto.nombre},%20te%20informamos%20que%20tu%20pago%20de%20$${formatearPrecio(data.monto)}%20${data.divisa}%20ha%20sido%20realizado%20exitosamente%20el%20${new Date(data.fecha_pago).toLocaleDateString()}.`;
+          aCorreo.className = "btn btn-info text-white text-decoration-none btn-sm";
+          aCorreo.textContent = "Enviar";
+  
+          // Agregar el enlace al contenedor padre de la alerta
+          parentNodeAlertaCorreo.appendChild(aCorreo);
+        }
 
 
         const addDetail = (label, value) => {
@@ -685,6 +1165,7 @@
             pagosContainer.appendChild(dd);
           }
         };
+
         addDetail("Fecha de Pago", new Date(data.fecha_pago).toLocaleString());
         addDetail("Forma de Pago", data.forma_pago.nombre);
         addDetail("Entidad Bancaria", data.entidad_bancaria);
@@ -694,6 +1175,15 @@
         addDetail("Mes", data.mes);
         addDetail("Divisa", data.divisa);
         addDetail("Monto", "$" + formatearPrecio(data.monto));
+
+        // Boton para editar el pago
+        const editButton = document.createElement("a");
+        editButton.href = `/pagos/${data.id}/editar`;
+        editButton.className = "btn btn-primary btn-sm";
+        editButton.textContent = "Editar";
+
+        // Agregar el boton al contenedor de pagos
+        pagosContainer.appendChild(editButton);
 
         const archivosList = document.getElementById("archivos-list");
         archivosList.innerHTML = "";  // Limpiar la lista de archivos
@@ -732,11 +1222,30 @@
           // Agregar el elemento <li> a la lista de archivos
           archivosList.appendChild(li);
         }
+
+          // Titulo para agregar archivos al pago
+          const tituloAgregarArchivoPago = document.createElement("h5");
+          tituloAgregarArchivoPago.className = "mt-3 text-muted";
+          tituloAgregarArchivoPago.textContent = "Archivos del Pago";
+
+          // Agregar el titulo al contenedor de archivos
+          archivosList.prepend(tituloAgregarArchivoPago);
+
+          // Boton para subir archivos al pago
+          const botonAgregarArchivoPago = document.createElement("a");
+          botonAgregarArchivoPago.href = "#";
+          botonAgregarArchivoPago.className = "btn btn-sm btn-success mt-2";
+          botonAgregarArchivoPago.setAttribute("data-toggle", "modal");
+          botonAgregarArchivoPago.setAttribute("data-target", "#modal-agregar-archivos");
+          botonAgregarArchivoPago.textContent = "Agregar Archivos";
+
+          // Agregar el boton al contenedor de archivos
+          archivosList.appendChild(botonAgregarArchivoPago);
       };
 
       const eliminarArchivo = (archivoId, listItem) => {
         if (confirm("¿Estas seguro que deseas eliminar este archivo?")) {
-          fetch(`/gastos/pagos/eliminar-archivo/${archivoId}`, {
+          fetch(`/archivos-pagos/eliminar/${archivoId}`, {
             method: "DELETE",
           })
             .then(response => {
@@ -751,7 +1260,6 @@
               }
               alert(data.message);
               listItem.remove();  // Eliminar el elemento de la lista
-              //window.location.reload();  // Refrescar/recargar la página
             })
             .catch(error => {
               console.error("Error: ", error);
@@ -760,7 +1268,5 @@
       }
     });
   </script>  
-
-
 </body>
 </html>

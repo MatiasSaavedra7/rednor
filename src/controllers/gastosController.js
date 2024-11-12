@@ -3,6 +3,9 @@ const formasPagoService = require("../database/services/formasPagoService.js");
 const gastosService = require("../database/services/gastosService.js");
 const pagosService = require("../database/services/pagosService.js");
 const archivosPagosService = require("../database/services/archivosPagosService.js");
+const fs = require("fs");
+const util = require("util");
+const unlinkAsync = util.promisify(fs.unlink);
 
 module.exports = {
   // Pagina principal de gastos
@@ -72,24 +75,96 @@ module.exports = {
         res.send("Error al crear el gasto. Intente nuevamente. <a href='/'>Volver al inicio</a>");
       }
 
-      /* let dataPago = {
-        id_gasto: gasto.id,
-        id_forma_pago: req.body.forma_pago,
-        entidad_bancaria: req.body.entidad_bancaria,
-        cbu: req.body.cbu,
-        cuit: req.body.cuit,
-        divisa: req.body.divisa,
-        monto: req.body.monto,
-        fecha_pago: fechaActual,
-        fecha_vencimiento: new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, req.body.dia_vencimiento),
-      } */
-
-      // let pago = await pagosService.create(dataPago);
-
-      // res.redirect(`/gastos/${req.params.idCategoria}/detalle`);
-
-      // res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}/pagos`);
       res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}`)
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  editarGasto: async (req, res) => {
+    try {
+      let categoria = await categoriasService.getOneByPK(req.params.idCategoria);
+      let formas_pago = await formasPagoService.getAll();
+      let gasto = await gastosService.getOneByPK(req.params.idServicio);
+
+      res.render("gastos/servicios/editarGasto", { categoria, formas_pago, gasto });
+    } catch (error) {
+      console.log(error);
+      res.send("Error al editar el gasto. Intente nuevamente. <a href='/'>Volver al inicio</a>");
+    }
+  },
+
+  actualizarGasto: async (req, res) => {
+    try {
+      console.log(req.body);
+
+      const { nombre, descripcion, condiciones, dia_vencimiento, frecuencia, mes, forma_pago, entidad_bancaria, nro_tarjeta, cbu, cuit, email, telefono, divisa, monto } = req.body;
+
+      let dataToUpdate = {
+        nombre: nombre,
+        descripcion: descripcion,
+        condiciones: condiciones,
+        dia_vencimiento: dia_vencimiento,
+        frecuencia: frecuencia,
+        mes: mes,
+        id_forma_pago: forma_pago,
+        entidad_bancaria: entidad_bancaria,
+        nro_tarjeta: nro_tarjeta,
+        cbu: cbu,
+        cuit: cuit,
+        email: email,
+        telefono: telefono,
+        divisa: divisa,
+        monto: monto,
+      }
+
+      await gastosService.updateByPK(req.params.idServicio, dataToUpdate);
+
+      res.redirect(`/gastos/${req.params.idCategoria}/servicio/${req.params.idServicio}`);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  eliminarGasto: async (req, res) => {
+    try {
+      // Para eliminar correctamente un gasto/servicio, primero se deben eliminar los pagos asociados a este
+      // Para eliminar correctamente un pago, primero se deben eliminar los archivos asociados a este
+      // Luego se puede eliminar el gasto/servicio
+      let gasto = await gastosService.getOneByPK(req.params.idServicio);
+      let idCategoria = gasto.id_categoria
+
+      // Traer los pagos asociados al gasto/servicio
+      let pagos = await pagosService.getAllByIdGasto(req.params.idServicio);
+
+      if (pagos.length > 0) {
+        // Eliminar los archivos asociados a cada pago
+        await Promise.all(pagos.map(async (pago) => {
+          // Traer los archivos asociados a cada pago
+          let archivos = await archivosPagosService.getAllByIdPago(pago.id);
+          if (archivos.length > 0) {
+            // Eliminar los archivos asociados a cada pago
+            await Promise.all(archivos.map(async (archivo) => {
+              // Eliminar el archivo de los archivos publicos
+              let path = `public/docs/pagos/${archivo.nombre_archivo}`;
+              try {
+                await unlinkAsync(path);
+              } catch (error) {
+                console.log("Error eliminando el archivo del sistema de archivos: " + error);
+              }
+              await archivosPagosService.deleteByPK(archivo.id);              
+            }));
+          }
+          // Eliminar el pago
+          await pagosService.deleteByPK(pago.id);
+        }));
+      }
+
+      // Eliminar el gasto/servicio
+      await gastosService.deleteByPK(req.params.idServicio);
+
+      // Redirigir a la pagina de la categoria
+      res.redirect(`/gastos/${idCategoria}`);
     } catch (error) {
       console.log(error);
     }

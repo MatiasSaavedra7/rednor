@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("detalleGasto.js Conectado!");
   
   // Obtener los elementos del DOM
   // const prevBtn = document.getElementById('prev-month');

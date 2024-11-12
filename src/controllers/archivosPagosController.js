@@ -10,7 +10,7 @@ module.exports = {
     try {
       console.log(req.body);
       
-      // Obtener el ID del gasto
+      // Obtener el ID del pago
       const { id_pago } = req.body;
 
       // Recorro los archivos y los almaceno en la base de datos
@@ -25,9 +25,6 @@ module.exports = {
         await archivosPagosService.create(data);
       }
       // Fin del bucle
-
-      // Redirijo a la pagina de pagos
-      // res.redirect(`/gastos/${gasto.id_categoria}/servicio/${gasto.id}/pagos`)
 
       res.status(200).json({ message: "Archivos subidos correctamente." });
     } catch (error) {
