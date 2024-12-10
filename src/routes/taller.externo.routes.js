@@ -38,6 +38,9 @@ router.get("/informe/:id/editar", controller.editarInforme);
 
 router.put("/informe/:id/editar", controller.actualizarInforme);
 
+// DEFINIR EL PRECIO DE UN ARREGLO
+router.put("/definir-precio/:idEgreso", controller.definirPrecio);
+
 // INFORMAR EL COBRO DE UN ARREGLO
 router.put("/informar-cobro/:idEgreso", controller.informarCobro);
 

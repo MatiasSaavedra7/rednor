@@ -59,13 +59,31 @@
                       <dd>
                         <% if (equipo.id_estado == 3) { %>
                           <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
+                        <% } else if (equipo.id_estado == 4) { %>
+                          <a href="/taller/detalle/<%= taller.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
                         <% } else { %>
                           <%= equipo.estado.nombre %>
                         <% } %>
                       </dd>
 
                       <dt>Informes Taller</dt>
-                      <dd>Mostrar historial del taller aqui</dd>
+                      <dd>
+                        <ul class="list-unstyled">
+                          <% historial.forEach(ingreso => { %>
+                            <li class="mb-2">
+                              <a href="/taller/detalle/<%= ingreso.id %>" class="unstyled">
+                                <i>
+                                  <%= ingreso.fecha_ingreso.toLocaleDateString() %> - 
+                                </i>
+                                <i>
+                                  Motivo: <%= ingreso.motivo %>
+                                </i>
+                              </a>
+                            </li>
+                          <% }) %>
+                        </ul>
+                      </dd>
+                      
                     </dl>
                   </div>
                 </div>

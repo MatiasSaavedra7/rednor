@@ -44,9 +44,15 @@
                 <div class="card-header">
                   <h3 class="card-title">Detalles del Ingreso</h3>
                   <% if (ingreso.id_estado == 3) { %>
-                    <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-cobro">
-                      Informar Cobro
-                    </button>
+                    <% if (!egreso.precio) { %>
+                     <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-definir-precio">
+                      Definir Precio
+                     </button>
+                    <% } else { %>
+                      <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-cobro">
+                        Informar Cobro
+                      </button>
+                    <% } %>
                   <% } %>
                   <% if (ingreso.id_estado == 1 || ingreso.id_estado == 2) { %>
                     <a href="/taller/externos/<%= ingreso.id %>/editar" class="btn btn-outline-primary btn-sm float-right">Editar</a>
@@ -243,20 +249,31 @@
               <!-- Formulario -->
               <form action="/taller/externos/informar-cobro/<%= egreso.id %>?_method=PUT" method="post">
                 <div class="modal-body">
+
+                  <!-- FECHA DE COBRO -->
+                  <div class="form-group">
+                    <p>Fecha: <%= new Date().toLocaleDateString() %></p>
+                  </div> 
+
+                  <!-- PRECIO -->
+                  <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" name="precio" id="precio" class="form-control" value="<%= egreso.precio %>" readonly>
+                  </div>
+
+                  <!-- FORMA DE PAGO -->
                   <div class="form-group">
                     <label for="id_forma_pago">Forma de Pago</label>
                     <select name="id_forma_pago" id="id_forma_pago" class="form-control">
                       <option value="" disabled hidden>Seleccione una opcion</option>
-                      <% formasPago.forEach(formaPago => { %>
-                        <option value="<%= formaPago.id %>"><%= formaPago.nombre %></option>
-                      <% }) %>
+                      <% for(let i = 0; i < 3; i++ ) { %>
+                        <option value="<%= formasPago[i].id %>"><%= formasPago[i].nombre %></option>
+                      <% } %>
+                      <%# formasPago.forEach(formaPago => { %>
+                        <!-- <option value="<%# formaPago.id %>"><%# formaPago.nombre %></option> -->
+                      <%# }) %>
                     </select>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="precio">Precio</label>
-                    <input type="number" name="precio" id="precio" class="form-control" placeholder="ARS">
-                  </div>
+                  </div>                 
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -271,6 +288,36 @@
         </div>
       <% } %>
       <!-- /Modal de cobro -->
+
+
+      <!-- Modal de definir precio -->
+      <% if (egreso) { %>
+        <div class="modal fade" id="modal-definir-precio">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Definir Precio</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <!-- Formulario -->
+              <form action="/taller/externos/definir-precio/<%= egreso.id %>?_method=PUT" method="post">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" name="precio" id="precio" class="form-control">
+                  </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Aceptar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>        
+      <% } %>
     </main>
   </div>
 

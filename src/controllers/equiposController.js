@@ -1,6 +1,7 @@
 const equiposService = require("../database/services/equiposService");
 const marcasService = require("../database/services/marcasService");
 const alquileresService = require("../database/services/alquileresService");
+const ingresosService = require("../database/services/ingresosService");
 const tiposEquiposService = require("../database/services/tiposEquiposService");
 
 const { validationResult } = require("express-validator");
@@ -19,8 +20,17 @@ module.exports = {
   detalleEquipo: async (req, res) => {
     try {
       let equipo = await equiposService.getOneByPK(req.params.id);
+
+      // Si el equipo esta alquilado, se busca el alquiler correspondiente
       let alquiler = await alquileresService.getByIdEquipo(equipo.id);
-      res.render(`equipos/detalleEquipo`, { equipo, alquiler });
+
+      // Si el equipo esta en el taller, se busca el ingreso correspondiente
+      let taller = await ingresosService.getOneByIdEquipo(equipo.id);
+
+      // Historial de ingresos del equipo
+      let historial = await ingresosService.getAllByIdEquipo(equipo.id);
+      
+      res.render(`equipos/detalleEquipo`, { equipo, alquiler, taller, historial });
     } catch (error) {
       console.log(error);
     }

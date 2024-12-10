@@ -26,6 +26,20 @@ module.exports = {
     }
   },
 
+  getOneByIdEquipo: async (id) => {
+    try {
+      return await db.Ingreso.findOne({
+        where: { id_equipo: id },
+        order: [["fecha_ingreso", "DESC"]],
+        limit: 1,
+        include: ["equipo", "egreso", "estado", "informes", "insumos"],
+      })
+    } catch (error) {
+      console.log("[ERROR] Error en ingresosService.getOneByIdEquipo " + error);
+      
+    }
+  },
+
   getAllByIdEquipo: async (id) => {
     try {
       return await db.Ingreso.findAll({
@@ -51,7 +65,8 @@ module.exports = {
         where: { id: id },
       })
     } catch (error) {
-      console.log(error);
+      let message = `[ERROR] Error en ingresosService.updateByPK: ${error}`;
+      console.log(message);
     }
   },
 };

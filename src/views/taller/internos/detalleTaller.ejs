@@ -40,12 +40,22 @@
               <!-- Detalles del Ingreso -->
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Detalles del Ingreso</h3>
-                  <% if (ingreso.id_estado == 2) { %>
-                    <button type="button" class="btn btn-outline-info btn-sm float-right" id="insumosButton" data-toggle="modal" data-target="#modal-insumos">
+                  <div class="d-flex justify-content-between align-items-baseline">
+                    <div class="align-self-center">
+                      <h3 class="card-title">Detalles del Ingreso</h3>
+                    </div>
+                    
+                    <% if ([1, 2, 3].includes(ingreso.id_estado)) { %>
+                      <div>
+                        <a href="/taller/ingreso/<%= ingreso.id %>/editar" class="btn btn-sm btn-outline-primary">Editar</a>
+                      </div>
+                    <% } %>
+                  </div>
+                  <%# if (ingreso.id_estado == 2) { %>
+                    <!-- <button type="button" class="btn btn-outline-info btn-sm float-right" id="insumosButton" data-toggle="modal" data-target="#modal-insumos">
                       Insumos
-                    </button>
-                  <% } %>
+                    </button> -->
+                  <%# } %>
                 </div>
                 <div class="card-body">
                   <!-- Fecha de Ingreso -->
@@ -158,8 +168,8 @@
                   <% } %>
 
                   <!-- Costo -->
-                  <dt>Costo</dt>
-                  <dd>$<%= egreso.costo %></dd>
+                  <!-- <dt>Costo</dt>
+                  <dd>$<%# egreso.costo %></dd> -->
                 </div>
                </div>
               <% } %>
@@ -183,16 +193,5 @@
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
-  <script>
-    let insumosButton = document.getElementById('insumosButton');
-
-    insumosButton.addEventListener('click', () => {
-      let a = prompt('Ingresar tu nombre');
-
-      if (a.length > 3) {
-        console.log(a);
-      }
-    });
-  </script>
 </body>
 </html>

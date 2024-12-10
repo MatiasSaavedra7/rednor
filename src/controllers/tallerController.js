@@ -3,6 +3,7 @@ const equiposService = require("../database/services/equiposService");
 const egresosService = require("../database/services/egresosService");
 const informesService = require("../database/services/informesService");
 const insumosService = require("../database/services/insumosService");
+const { actualizarIngreso } = require("./tallerExternosController");
 
 module.exports = {
   taller: async (req, res) => {
@@ -97,6 +98,40 @@ module.exports = {
     }
   },
 
+  editarIngreso: async (req, res) => {
+    try {
+      const ingreso = await ingresosService.getOneByPK(req.params.id);
+
+      res.render("taller/internos/editarIngreso", { ingreso });
+    } catch (error) {
+      console.log(" [ERROR] Ocurrio un error en el controller. tallerController.editarIngreso" + error);
+    }
+  },
+
+  actualizarIngreso: async (req, res) => {
+    try {
+      const ingreso = await ingresosService.getOneByPK(req.params.id);
+
+      const { motivo, detalle } = req.body;
+
+      const dataToUpdate = {
+        motivo,
+        detalle,
+      };
+
+      const updatedIngreso = await ingresosService.updateByPK(ingreso.id, dataToUpdate);
+
+      if (!updatedIngreso) {
+        console.log("No se pudo actualizar el ingreso");
+        res.send("No se pudo actualizar el ingreso");
+      }
+      
+      res.redirect(`/taller/detalle/${ingreso.id}`);
+    } catch (error) {
+      console.log(" [ERROR] Ocurrio un error en el controller. tallerController.actualizarIngreso" + error);
+    }
+  },
+
   egreso: async (req, res) => {
     try {
       let ingreso = await ingresosService.getOneByPK(req.params.id);
@@ -183,6 +218,44 @@ module.exports = {
       res.redirect(`/taller/detalle/${req.params.id}`);
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  editarInforme: async (req, res) => {
+    try {
+      const informe = await informesService.getOneByPK(req.params.id);
+
+      const ingreso = await ingresosService.getOneByPK(informe.id_ingreso);
+
+      res.render("taller/internos/editarInforme", { ingreso, informe });
+    } catch (error) {
+      let message = `[ERROR] Error en tallerController.editarInforme: ${error}`;
+      console.log(message);
+    }
+  },
+
+  actualizarInforme: async (req, res) => {
+    try {
+      const informe = await informesService.getOneByPK(req.params.id);
+
+      const { detalle } = req.body;
+
+      const dataToUpdate = {
+        detalle,
+      };
+
+      const updatedInforme = await informesService.updateByPK(informe.id, dataToUpdate);
+
+      if (!updatedInforme) {
+        console.log("No se pudo actualizar el informe");
+        res.send("No se pudo actualizar el informe");
+      }
+
+      res.redirect(`/taller/detalle/${informe.id_ingreso}`);
+      
+    } catch (error) {
+      let message = `[ERROR] Error en tallerController.actualizarInforme: ${error}`;
+      console.log(message);
     }
   },
 

@@ -272,6 +272,23 @@ module.exports = {
     }
   },
 
+  definirPrecio: async (req, res) => {
+    try {
+      // Traigo la informacion del egreso desde la base de datos
+      let egreso = await egresosExternosService.getOneByPK(req.params.idEgreso);
+
+      const { precio } = req.body;
+
+      // Actualizo el precio del egreso
+      await egresosExternosService.updateByPK(egreso.id, { precio });
+
+      // Redirecciono al usuario a la lista de ingresos
+      res.redirect(`/taller/externos/detalle/${egreso.id_ingreso_externo}`);
+    } catch (error) {
+      console.log("\n\n [ERROR] : Error al definir el precio del arreglo." + error);
+    }
+  },
+
   informarCobro: async (req, res) => {
     try {
       // Traigo la informacion del egreso desde la base de datos
