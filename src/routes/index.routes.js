@@ -8,6 +8,7 @@ const usuarios = require('./usuarios.routes.js');
 const clientes = require("./clientes.routes.js");
 const habilitados = require("./habilitados.routes.js");
 const equipos = require("./equipos.routes.js");
+const equiposExternos = require("./equipos.externos.routes.js");
 const alquileres = require("./alquileres.routes.js");
 const repuestos = require("./repuestos.routes.js");
 const taller = require("./taller.routes.js");
@@ -39,6 +40,9 @@ router.use("/habilitados", authMiddleware, roleMiddleware([1, 2]), habilitados);
 
 // Equipos routes
 router.use("/equipos", authMiddleware, roleMiddleware([1, 2]), equipos);
+
+// Equipos externos routes
+router.use("/equipos-externos", equiposExternos);
 
 // Alquileres routes
 router.use("/alquileres", authMiddleware, roleMiddleware([1, 2]), alquileres);

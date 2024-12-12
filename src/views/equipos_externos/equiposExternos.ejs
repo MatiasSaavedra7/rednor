@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+  <%- include('../partials/AdminLTEHeadTables.ejs') %>
+  <script src="/js/equipos.js"></script>
+  <title>REDNOR - Listado de Equipos Externos</title>
+</head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+      <section class="content mt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between">
+                    <div class="align-self-center">
+                      <h3 class="card-title">Equipos Externos</h3>
+                    </div>
+
+                    <div>
+                      <a href="/equipos-externos/crear" class="btn btn-sm btn-outline-primary">Crear</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <table id="equiposExternos" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Serie</th>
+                        <th>Tipo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% equiposExternos.forEach((equipo )=> { %>
+                        <tr class="clickable-row" data-href="/equipos-externos/<%= equipo.id %>/detalle">
+                          <td>
+                            <%= equipo.id %>
+                          </td>
+                          <td>
+                            <%= equipo.marca %>
+                          </td>
+                          <td>
+                            <%= equipo.modelo %>
+                          </td>
+                          <td>
+                            <%= equipo.numero_serie %>
+                          </td>
+                          <td>
+                            <%= equipo.tipo.nombre %>
+                          </td>  
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+  <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+  <script>
+    $(function () {
+      $("#equiposExternos").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#equiposExternos_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      document.querySelectorAll('.clickable-row').forEach(row => {
+        row.style.cursor = "pointer";
+        row.addEventListener('click', () => {
+          window.location.href = row.getAttribute('data-href');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

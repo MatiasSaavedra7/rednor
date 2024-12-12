@@ -232,7 +232,6 @@ module.exports = {
     try {
       let data = {
         ...req.body,
-        fecha_ingreso: new Date(),
       };
 
       await ingresosExternosService.updateByPK(req.params.id, data);

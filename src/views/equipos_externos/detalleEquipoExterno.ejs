@@ -3,7 +3,7 @@
   <head>
     <%- include('../partials/AdminLTEHead.ejs') %>
     <link rel="stylesheet" href="/css/detalleEquipo.css" />
-    <title>REDNOR - Detalle del Equipo <%= equipo.numero_serie %></title>
+    <title>REDNOR - Detalle del Equipo Externo <%= equipoExterno.numero_serie %></title>
   </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -27,14 +27,8 @@
                     <div class="dropdown float-right">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item">Nuevo Contrato</a>
-                        <% if (equipo.id_estado == 1 || equipo.id_estado == 2) { %>
-                          <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
-                        <% } %>
-                        <div class="dropdown-divider"></div>
-                        <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item btn" data-toggle="modal" data-target="#modal-eliminar">
+                        <a href="/equipos-externos/<%= equipoExterno.id %>/editar" class="dropdown-item">Editar Informacion</a>
+                        <a class="dropdown-item btn disabled" data-toggle="modal" data-target="#modal-eliminar">
                           Eliminar Equipo
                         </a>
                       </div>
@@ -44,47 +38,48 @@
                   <div class="card-body">
                     <dl>
                       <dt>Marca</dt>
-                      <dd><%= equipo.marca %></dd>
+                      <dd><%= equipoExterno.marca %></dd>
 
                       <dt>Modelo</dt>
-                      <dd><%= equipo.modelo %></dd>
+                      <dd><%= equipoExterno.modelo %></dd>
 
                       <dt>Numero de Serie</dt>
-                      <dd><%= equipo.numero_serie %></dd>
+                      <dd><%= equipoExterno.numero_serie %></dd>
 
                       <dt>Tipo</dt>
-                      <dd><%= equipo.tipo.nombre %></dd>
-
-                      <dt>Estado</dt>
-                      <dd>
-                        <% if (equipo.id_estado == 3) { %>
-                          <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
-                        <% } else if (equipo.id_estado == 4) { %>
-                          <a href="/taller/detalle/<%= taller.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
-                        <% } else { %>
-                          <%= equipo.estado.nombre %>
-                        <% } %>
-                      </dd>
+                      <dd><%= equipoExterno.tipo.nombre %></dd>
 
                       <dt>Informes Taller</dt>
-                      <dd>
-                        <ul class="list-unstyled">
-                          <% historial.forEach(ingreso => { %>
-                            <li class="mb-2">
-                              <a href="/taller/detalle/<%= ingreso.id %>" target="_blank" class="unstyled">
-                                <i>
-                                  <%= ingreso.fecha_ingreso.toLocaleDateString() %> - 
-                                </i>
-                                <i>
-                                  Motivo: <%= ingreso.motivo %>
-                                </i>
-                              </a>
-                            </li>
-                          <% }) %>
-                        </ul>
-                      </dd>
+                      <% if (equipoExterno.ingreso.length > 0) { %>
+                        <dd>
+                          <ul class="list-unstyled">
+                            <% let historial = equipoExterno.ingreso %>
+                            <% historial.forEach(ingreso => { %>
+                              <li class="mb-2">
+                                <a href="/taller/externos/detalle/<%= ingreso.id %>" target="_blank" class="unstyled">
+                                  <i>
+                                    <%= ingreso.fecha_ingreso.toLocaleDateString() %> - 
+                                  </i>
+                                  <i>
+                                    Motivo: <%= ingreso.motivo %>
+                                  </i>
+                                </a>
+                              </li>
+                            <% }) %>
+                          </ul>
+                        </dd>
+                      <% } %>
                       
                     </dl>
+                  </div>
+                </div>
+                <div>
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-center">
+                        <a href="/equipos-externos" class="btn btn-outline-info">Ver listado completo de equipos externos</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -104,7 +99,7 @@
                 <div class="modal-body">
                   <p>¿Estas seguro que deseas eliminar este equipo?</p>
                 </div>
-                <form action="/equipos/eliminar/<%= equipo.id %>?_method=DELETE" method="post">
+                <form action="/equipos/eliminar/<%# equipo.id %>?_method=DELETE" method="post">
                   <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger float-right">Eliminar</button>

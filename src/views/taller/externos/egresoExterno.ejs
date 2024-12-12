@@ -26,6 +26,7 @@
                 </div>
                 <div class="card-body">
                   <form action="/taller/externos/egresos/<%= ingreso.id %>" method="post">
+
                     <div class="form-group">
                       <label for="id_ingreso_externo">ID Ingreso</label>
                       <input type="number" name="id_ingreso_externo" id="id_ingreso_externo" class="form-control" value="<%= ingreso.id %>" disabled>
@@ -35,18 +36,8 @@
                       <label for="detalle">Detalles de la Reparacion: </label>
                       <textarea name="detalle" id="detalle" class="form-control" rows="5"></textarea>
                     </div>
-
-                    <!-- <div class="form-group">
-                      <label for="observacion">Observacion</label>
-                      <textarea name="observacion" id="observacion" class="form-control" rows="5"></textarea>
-                    </div> -->
-          
-                    <!-- <div class="form-group">
-                      <label for="costo">Costo</label>
-                      <input type="number" name="costo" id="costo" class="form-control">
-                    </div> -->
                     
-                    <div class="form-group clearfix"></div>
+                    <div class="form-group clearfix">
                       <div class="icheck-primary d-block">
                         <input type="radio" id="radioPrimary1" name="estado" value="Listo para retirar" required>
                         <label for="radioPrimary1">Listo para Retirar</label>
@@ -58,11 +49,9 @@
                       </div>
                     </div>
                     
-                    <div class="form-group">
-                      <input type="submit" class="btn btn-block btn-primary" />
-                    </div>
+                    <input type="submit" class="btn btn-block btn-primary"/>
 
-                    <a class="btn btn-block btn-outline-secondary mt-3" id="volverAtras">Volver Atrás</a>
+                    <a href="/taller/externos/detalle/<%= ingreso.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás</a>
                   </form>
                 </div>
               </div>

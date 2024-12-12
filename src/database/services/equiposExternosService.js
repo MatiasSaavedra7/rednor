@@ -11,17 +11,19 @@ module.exports = {
         include: ["ingreso", "tipo"],
       });
     } catch (error) {
-      console.log(error);
+      let message = `\n\n[ERROR] No se pudo obtener el equipo externo: ${error}\n\n`;
+      console.log(message);
     }
   },
 
   getAll: async () => {
     try {
       return await db.EquipoExterno.findAll({
-        include: ["ingreso", "tipo"],
+        include: [/*"ingreso",*/ "tipo"],
       });
     } catch (error) {
-      console.log(error);
+      let message = `\n\n[ERROR] No se pudieron obtener los equipos externos: ${error}\n\n`;
+      console.log(message);
     }
   },
 
@@ -29,7 +31,8 @@ module.exports = {
     try {
       return await db.EquipoExterno.create(new EquipoExterno(data));
     } catch (error) {
-      console.log(error);
+      let message = `\n\n[ERROR] No se pudo crear el equipo externo: ${error}\n\n`;
+      console.log(message);
     }
   },
 
@@ -39,7 +42,20 @@ module.exports = {
         where: { id: id },
       });
     } catch (error) {
-      console.log(error);
+      let message = `\n\n[ERROR] Error en equiposExternosService.updateByPK. No se pudo actualizar el equipo externo: ${error}\n\n`;
+      console.log(message);
     }
   },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.EquipoExterno.destroy({
+        where: { id: id },
+      })
+    } catch (error) {
+      let message = `\n\n[ERROR] No se pudo eliminar el equipo externo: ${error}\n\n`;
+      console.log(message);
+      
+    }
+  }
 };

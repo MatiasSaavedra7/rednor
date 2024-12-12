@@ -42,21 +42,28 @@
               <!-- Detalles del Ingreso -->
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Detalles del Ingreso</h3>
-                  <% if (ingreso.id_estado == 3) { %>
-                    <% if (!egreso.precio) { %>
-                     <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-definir-precio">
-                      Definir Precio
-                     </button>
-                    <% } else { %>
-                      <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-cobro">
-                        Informar Cobro
-                      </button>
-                    <% } %>
-                  <% } %>
-                  <% if (ingreso.id_estado == 1 || ingreso.id_estado == 2) { %>
-                    <a href="/taller/externos/<%= ingreso.id %>/editar" class="btn btn-outline-primary btn-sm float-right">Editar</a>
-                  <% } %>
+                  <div class="d-flex justify-content-between">
+                    <div class="align-self-center">
+                      <h3 class="card-title">Detalles del Ingreso</h3>
+                    </div>
+
+                    <div>
+                      <% if (ingreso.id_estado == 3) { %>
+                        <% if (!egreso.precio) { %>
+                         <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-definir-precio">
+                          Definir Precio
+                         </button>
+                        <% } else { %>
+                          <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-cobro">
+                            Informar Cobro
+                          </button>
+                        <% } %>
+                      <% } %>
+                      <% if (ingreso.id_estado == 1 || ingreso.id_estado == 2) { %>
+                        <a href="/taller/externos/<%= ingreso.id %>/editar" class="btn btn-outline-primary btn-sm float-right">Editar</a>
+                      <% } %>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-body">
                   <!-- Fecha de Ingreso -->
@@ -83,7 +90,12 @@
                   <dd><%= ingreso.direccion_cliente %></dd>
 
                   <!-- Informacion del Equipo -->
-                  <p class="lead mb-1">Informacion del Equipo</p>
+                  <p class="lead mb-1">
+                    <span>
+                      Informacion del Equipo
+                    </span>
+                    <a href="/equipos-externos/<%= ingreso.equipo.id %>/detalle" class="text-sm text-bold ml-1">Ver perfil <i class="fas fa-external-link-alt"></i> </a>
+                  </p>
                   <dt>Marca</dt>
                   <dd><%= ingreso.equipo.marca %></dd>
 
