@@ -53,4 +53,17 @@ module.exports = {
       console.log(error);
     }
   },
+
+  // Metodos para la API
+  getOneByIdIngresoAPI: async (id) => {
+    try {
+      return await db.Egreso.findOne({
+        where: { id_ingreso: id },
+        include: ["forma_pago"],
+      })
+    } catch (error) {
+      let message = "[ERROR] Error en egresosService.getOneByIdIngresoAPI " + error;
+      console.log(message);
+    }
+  }
 };

@@ -36,7 +36,7 @@
                     </div>
                   </div>
                   <div class="card-body">
-                    <dl>
+                    <dl id="detalle-equipo">
                       <dt>Marca</dt>
                       <dd><%= equipoExterno.marca %></dd>
 
@@ -52,20 +52,8 @@
                       <dt>Informes Taller</dt>
                       <% if (equipoExterno.ingreso.length > 0) { %>
                         <dd>
-                          <ul class="list-unstyled">
-                            <% let historial = equipoExterno.ingreso %>
-                            <% historial.forEach(ingreso => { %>
-                              <li class="mb-2">
-                                <a href="/taller/externos/detalle/<%= ingreso.id %>" target="_blank" class="unstyled">
-                                  <i>
-                                    <%= ingreso.fecha_ingreso.toLocaleDateString() %> - 
-                                  </i>
-                                  <i>
-                                    Motivo: <%= ingreso.motivo %>
-                                  </i>
-                                </a>
-                              </li>
-                            <% }) %>
+                          <ul class="list-unstyled" id="historial-taller">
+                            
                           </ul>
                         </dd>
                       <% } %>
@@ -81,6 +69,93 @@
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Detalle Taller -->
+          <div class="modal fade" id="modal-taller">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="modal-title-detalle-historial">Taller</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </div>
+                <div class="modal-body" id="modal-body-taller">
+                  <!-- Informacion de Ingreso -->
+                  <div class="card">
+                    <div class="card-body">
+                      <dl>
+                        <dt>Fecha de Ingreso</dt>
+                        <dd>18/12/2024</dd>
+
+                        <dt>Estado</dt>
+                        <dd>En Taller</dd>
+
+                        <p class="lead">Informacion del Cliente</p>
+                        <dt>Nombre</dt>
+                        <dd>Matias Saavedra</dd>
+
+                        <dt>Telefono</dt>
+                        <dd>3855776198</dd>
+
+                        <dt>Ciudad</dt>
+                        <dd>Santiago del Estero</dd>
+
+                        <dt>Direccion</dt>
+                        <dd>Estrecho de Le Maire 37</dd>
+
+                        <p class="lead">Informacion del Equipo</p>
+                        <dt>Marca</dt>
+                        <dd>Brother</dd>
+
+                        <dt>Modelo</dt>
+                        <dd>101</dd>
+
+                        <dt>Numero de Serie</dt>
+                        <dd>0123456789</dd>
+
+                        <dt>Motivo de Ingreso</dt>
+                        <dd>No funciona el elemento x.</dd>
+
+                        <dt>Detalle</dt>
+                        <dd>
+                          Lorem, ipsum dolor sit amet consectetur adipisicing elit. At laudantium, deleniti veritatis id assumenda quas tenetur aliquid ipsa minus repudiandae iure ut repellendus nobis vel reiciendis rem, fugiat quasi perspiciatis!
+                        </dd>
+
+
+                      </dl>
+                    </div>
+                  </div>
+
+                  <!-- Informacion de Egreso -->
+                  <div class="card">
+                    <div class="card-body">
+                      <dl>
+                        <dt>Fecha de Egreso</dt>
+                        <dd>18/12/2024</dd>
+
+                        <dt>Detalles de la Reparacion</dt>
+                        <dd>
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est amet, rem obcaecati asperiores numquam exercitationem modi laboriosam, maxime, doloribus enim porro velit ducimus quod doloremque magni! Atque consequatur voluptatum eligendi?
+                        </dd>
+
+                        <dt>Costo</dt>
+                        <dd>$1500</dd>
+
+                        <dt>Forma de Pago</dt>
+                        <dd>Efectivo</dd>
+
+                        <dt>Fecha de Cobro</dt>
+                        <dd>18/12/2024</dd>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
               </div>
             </div>
@@ -114,5 +189,381 @@
     </div>
 
     <%- include('../partials/AdminLTEScripts.ejs') %>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+
+      const endpoint = `/equipos-externos/<%= equipoExterno.id %>/historial-taller`;
+
+      // Funcion para consultar el historial del taller, solo trae los ingresos y se muestran en una lista
+      const fetchHistorial = async (url) => {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          if (data.length > 0) {
+            mostrarHistorial(data);
+          } else {
+            const dlDetalleEquipo = document.getElementById("detalle-equipo");
+            const dd = document.createElement("dd");
+            dd.textContent = "No hay historial de taller para este equipo.";
+            dlDetalleEquipo.appendChild(dd);
+          }
+        } catch (error) {
+          console.error(error);
+          alert("Ocurrio un error al cargar el historial del taller");
+        }
+      }
+
+      fetchHistorial(endpoint);
+      
+      });
+      
+      function mostrarHistorial(data) {
+        const ulHistorial = document.getElementById("historial-taller");
+
+        // Limpiar el contenido del ul
+        ulHistorial.textContent = "";
+
+        data.forEach(ingreso => {
+          const li = document.createElement("li");
+          li.classList.add("mb-2");
+
+          const a = document.createElement("a");
+          a.href = "#";
+          a.classList.add("unstyled");
+          a.classList.add("linkHistorial");
+          a.dataset.id = ingreso.id;
+
+          const i1 = document.createElement("i");
+          i1.textContent = new Date(ingreso.fecha_ingreso).toLocaleDateString() + " - ";
+
+          const i2 = document.createElement("i");
+          i2.textContent = `Motivo: ${ingreso.motivo} (id: ${ingreso.id})`;
+
+          // 
+          a.appendChild(i1);
+          a.appendChild(i2);
+
+          li.appendChild(a);
+
+          ulHistorial.appendChild(li);
+        })
+
+        // Capturar los links del historial
+        const linksHistorial = document.querySelectorAll(".linkHistorial");
+
+        // Agregar el evento click a los links del historial
+        linksHistorial.forEach(link => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Obtener el id del historial
+            const id = link.dataset.id;
+
+            // Mostrar el modal con el detalle del historial
+            fetchDetalleHistorial(id);
+          });
+        })
+      }
+
+      // Funcion para consultar el detalle del historial(Ingreso, Informes, Informes de Insumos y Egreso)
+      const fetchDetalleHistorial = async (id) => {
+        try {
+          const response = await fetch(`/equipos-externos/detalle-taller/${id}`);
+          const data = await response.json();
+
+          mostrarModalDetalleHistorial(data);
+
+        } catch (error) {
+          console.error(error);
+          alert("Ocurrio un error al cargar el detalle del historial");
+        }
+      }
+
+      // Funcion para mostrar el modal con el detalle del historial
+      function mostrarModalDetalleHistorial(data) {
+        // Capturar el modal
+        const modal = document.getElementById("modal-taller");
+
+        // Mostrar el modal
+        $(modal).modal("show");
+
+        // Capturar el body del modal
+        const modalBody = document.getElementById("modal-body-taller");
+
+        // Capturar el titulo del modal
+        const modalTitleDetalleHistorial = document.getElementById("modal-title-detalle-historial");
+
+        // Limpiar el titulo del modal
+        modalTitleDetalleHistorial.textContent = "";
+        // Cambiar el titulo del modal
+        modalTitleDetalleHistorial.textContent = data.ingreso.motivo;
+
+        // Crear un link para ir a la pagina del taller
+        const aLinkDetalleTaller = document.createElement("a");
+        aLinkDetalleTaller.href = `/taller/externos/detalle/${data.ingreso.id}`;
+        // aLinkDetalleTaller.classList("text-sm text-bold ml-1");
+        aLinkDetalleTaller.className = "text-sm text-bold ml-1";
+        aLinkDetalleTaller.textContent = "Ir a la pagina del Taller";
+
+        // Icono del link
+        const iLinkDetalleTaller = document.createElement("i");
+        // iLinkDetalleTaller.classList("fas fa-external-link-alt");
+        iLinkDetalleTaller.className = "fas fa-external-link-alt";
+
+        // Agregar el icono al link
+        aLinkDetalleTaller.appendChild(iLinkDetalleTaller);
+
+        // Agregar el link al titulo del modal
+        modalTitleDetalleHistorial.appendChild(aLinkDetalleTaller);
+
+        // Limpiar el contenido del modal
+        modalBody.textContent = "";
+
+        // Informacion de Ingreso
+        const cardIngreso = document.createElement("div");
+        cardIngreso.classList.add("card");
+
+        const cardBodyIngreso = document.createElement("div");
+        cardBodyIngreso.classList.add("card-body");
+
+        const dlIngreso = document.createElement("dl");
+
+        // Fecha del Ingreso
+        const dtFechaIngreso = document.createElement("dt");
+        dtFechaIngreso.textContent = "Fecha de Ingreso";
+        dlIngreso.appendChild(dtFechaIngreso);
+        const ddFechaIngreso = document.createElement("dd");
+        ddFechaIngreso.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleString();
+        dlIngreso.appendChild(ddFechaIngreso);
+        
+        // Estado del Ingreso
+        const dtEstadoIngreso = document.createElement("dt");
+        dtEstadoIngreso.textContent = "Estado";
+        dlIngreso.appendChild(dtEstadoIngreso);
+        const ddEstadoIngreso = document.createElement("dd");
+        ddEstadoIngreso.textContent = data.ingreso.estado.nombre;
+        dlIngreso.appendChild(ddEstadoIngreso);
+
+        // Detalle del Ingreso
+        const dtDetalleIngreso = document.createElement("dt");
+        dtDetalleIngreso.textContent = "Detalle";
+        dlIngreso.appendChild(dtDetalleIngreso);
+        const ddDetalleIngreso = document.createElement("dd");
+        ddDetalleIngreso.textContent = data.ingreso.detalle;
+        dlIngreso.appendChild(ddDetalleIngreso);
+        
+        // Informacion del Cliente
+        const pCliente = document.createElement("p");
+        pCliente.classList.add("lead");
+        pCliente.textContent = "Informacion del Cliente";
+        dlIngreso.appendChild(pCliente);
+        
+        // Nombre del Cliente
+        const dtNombreCliente = document.createElement("dt");
+        dtNombreCliente.textContent = "Nombre";
+        dlIngreso.appendChild(dtNombreCliente);
+        const ddNombreCliente = document.createElement("dd");
+        ddNombreCliente.textContent = data.ingreso.nombre_cliente;
+        dlIngreso.appendChild(ddNombreCliente);
+        
+        // Telefono del Cliente
+        const dtTelefonoCliente = document.createElement("dt");
+        dtTelefonoCliente.textContent = "Telefono";
+        dlIngreso.appendChild(dtTelefonoCliente);
+        const ddTelefonoCliente = document.createElement("dd");
+        ddTelefonoCliente.textContent = data.ingreso.telefono_cliente;
+        dlIngreso.appendChild(ddTelefonoCliente);
+
+        // Ciudad del Cliente
+        const dtCiudadCliente = document.createElement("dt");
+        dtCiudadCliente.textContent = "Ciudad";
+        dlIngreso.appendChild(dtCiudadCliente);
+        const ddCiudadCliente = document.createElement("dd");
+        ddCiudadCliente.textContent = data.ingreso.ciudad_cliente;
+        dlIngreso.appendChild(ddCiudadCliente);
+
+        // Direccion del Cliente
+        const dtDireccionCliente = document.createElement("dt");
+        dtDireccionCliente.textContent = "Direccion";
+        dlIngreso.appendChild(dtDireccionCliente);
+        const ddDireccionCliente = document.createElement("dd");
+        ddDireccionCliente.textContent = data.ingreso.direccion_cliente;
+        dlIngreso.appendChild(ddDireccionCliente);
+        
+        // Agregar elementos al modal
+        cardBodyIngreso.appendChild(dlIngreso);
+        cardIngreso.appendChild(cardBodyIngreso);
+        
+        modalBody.appendChild(cardIngreso);
+
+        // Informes e Informes de Insumos
+        // data.combinedData es un array donde se encuentran los Informes e Insumos(informes)
+        if (data.combinedData.length > 0) {
+          const divRow = document.createElement("div");
+          divRow.classList.add("row");
+          modalBody.appendChild(divRow);
+
+          const divCol = document.createElement("div");
+          divCol.classList.add("col");
+          divRow.appendChild(divCol);
+
+          const divTimeline = document.createElement("div");
+          divTimeline.classList.add("timeline");
+          divCol.appendChild(divTimeline);
+
+          const divTimeLabel = document.createElement("div");
+          divTimeLabel.classList.add("time-label");
+          divTimeline.appendChild(divTimeLabel);
+
+          const spanBgRed = document.createElement("span");
+          spanBgRed.classList.add("bg-red");
+          spanBgRed.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleDateString();
+          divTimeLabel.appendChild(spanBgRed);
+
+          // Recorrer el array de informes e insumos
+          data.combinedData.forEach((item) => {
+            // Si el item es un informe
+            if (item.type == "informe") {
+              const divInforme = document.createElement("div");	
+
+              const iInforme = document.createElement("i");
+              iInforme.className = "fas fa-file-alt bg-yellow";
+              divInforme.appendChild(iInforme);
+
+              const divTimelineItem = document.createElement("div");
+              divTimelineItem.classList.add("timeline-item");
+              divInforme.appendChild(divTimelineItem);
+
+              const spanTime = document.createElement("span");
+              spanTime.classList.add("time");
+              spanTime.innerHTML = `<i class = "fas fa-clock"></i> ${new Date(item.fecha).toLocaleString()}`;
+              divTimelineItem.appendChild(spanTime);
+
+              const h3TimelineHeader = document.createElement("h3");
+              h3TimelineHeader.classList.add("timeline-header");
+              h3TimelineHeader.textContent = `Informe ${item.id}`;
+              divTimelineItem.appendChild(h3TimelineHeader);
+
+              const divTimelineBody = document.createElement("div");
+              divTimelineBody.classList.add("timeline-body");
+              divTimelineBody.textContent = item.detalle;
+              divTimelineItem.appendChild(divTimelineBody);
+
+              divTimeline.appendChild(divInforme);
+            } else {
+              // Si el item es un insumo
+              const divInsumo = document.createElement("div");
+
+              const iInsumo = document.createElement("i");
+              iInsumo.className = "fas fa-file-alt bg-green";
+              divInsumo.appendChild(iInsumo);
+
+              const divTimelineItem = document.createElement("div");
+              divTimelineItem.classList.add("timeline-item");
+              divInsumo.appendChild(divTimelineItem);
+
+              const spanTime = document.createElement("span");
+              spanTime.classList.add("time");
+              divTimelineItem.appendChild(spanTime);
+              spanTime.innerHTML = `<i class = "fas fa-clock"></i> ${new Date(item.fecha).toLocaleString()}`;
+              
+
+              const h3TimelineHeader = document.createElement("h3");
+              h3TimelineHeader.classList.add("timeline-header");
+              h3TimelineHeader.textContent = `Informe de Insumo ${item.id}`;
+              divTimelineItem.appendChild(h3TimelineHeader);
+
+              const divTimelineBody = document.createElement("div");
+              divTimelineBody.classList.add("timeline-body");
+              divTimelineBody.textContent = item.observacion;
+              divTimelineItem.appendChild(divTimelineBody);
+
+              const divTimelineFooter = document.createElement("div");
+              divTimelineFooter.classList.add("timeline-footer");
+
+              const pTimelineFooter = document.createElement("p");
+              pTimelineFooter.classList.add("text-info");
+              pTimelineFooter.textContent = `Nro de Remito: ${item.nro_remito}`;
+              divTimelineFooter.appendChild(pTimelineFooter);
+
+              divTimelineItem.appendChild(divTimelineFooter);
+
+              divTimeline.appendChild(divInsumo);
+            }
+          });
+        }
+
+        // Informacion de Egreso
+        if (data.egreso) {
+          const cardEgreso = document.createElement("div");
+          cardEgreso.classList.add("card");
+  
+          const cardBodyEgreso = document.createElement("div");
+          cardBodyEgreso.classList.add("card-body");
+  
+          const dlEgreso = document.createElement("dl");
+  
+          const dtFechaEgreso = document.createElement("dt");
+          dtFechaEgreso.textContent = "Fecha de Egreso";
+  
+          const ddFechaEgreso = document.createElement("dd");
+          ddFechaEgreso.textContent = new Date(data.egreso.fecha_egreso).toLocaleString();
+  
+          const dtDetalleEgreso = document.createElement("dt");
+          dtDetalleEgreso.textContent = "Detalles de la Reparacion";
+  
+          const ddDetalleEgreso = document.createElement("dd");
+          ddDetalleEgreso.textContent = data.egreso.detalle;
+          
+          if (data.egreso.forma_pago && data.egreso.forma_pago.nombre) {
+            const dtFormaPago = document.createElement("dt");
+            dtFormaPago.textContent = "Forma de Pago";
+
+            const ddFormaPago = document.createElement("dd");
+            ddFormaPago.textContent = data.egreso.forma_pago.nombre;
+
+            dlEgreso.appendChild(dtFormaPago);
+            dlEgreso.appendChild(ddFormaPago);
+          }
+
+          if (data.egreso.precio) {
+            const dtPrecio = document.createElement("dt");
+            dtPrecio.textContent = "Precio";
+    
+            const ddPrecio = document.createElement("dd");
+            ddPrecio.textContent = `$${data.egreso.precio}`;
+
+            dlEgreso.appendChild(dtPrecio);
+            dlEgreso.appendChild(ddPrecio);
+          }
+  
+          if (data.egreso.fecha_cobro ) {
+            const dtFechaCobro = document.createElement("dt");
+            dtFechaCobro.textContent = "Fecha de Cobro";
+    
+            const ddFechaCobro = document.createElement("dd");
+            ddFechaCobro.textContent = new Date(data.egreso.fecha_cobro).toLocaleString();
+
+            dlEgreso.appendChild(dtFechaCobro);
+            dlEgreso.appendChild(ddFechaCobro);
+          }
+  
+          // Agregar elementos al modal
+          dlEgreso.appendChild(dtFechaEgreso);
+          dlEgreso.appendChild(ddFechaEgreso);
+  
+          dlEgreso.appendChild(dtDetalleEgreso);
+          dlEgreso.appendChild(ddDetalleEgreso);
+  
+          cardBodyEgreso.appendChild(dlEgreso);
+          cardEgreso.appendChild(cardBodyEgreso);
+  
+          modalBody.appendChild(cardEgreso);
+        }
+      }
+
+
+    </script>
   </body>
 </html>

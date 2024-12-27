@@ -75,18 +75,6 @@ function Egreso(data) {
   this.costo = data.costo;
 }
 
-function IngresoExterno(data) {
-  this.id_equipo = data.id_equipo;
-  this.motivo = data.motivo;
-  this.detalle = data.detalle;
-  this.id_estado = data.id_estado;
-  this.fecha_ingreso = data.fecha_ingreso;
-  this.nombre_cliente = data.nombre_cliente;
-  this.telefono_cliente = data.telefono_cliente;
-  this.ciudad_cliente = data.ciudad_cliente;
-  this.direccion_cliente = data.direccion_cliente;
-}
-
 function EgresoExterno(data) {
   this.id_ingreso_externo = data.id_ingreso_externo;
   this.detalle = data.detalle;
@@ -126,7 +114,6 @@ module.exports = {
   Cartucho,
   Ingreso,
   Egreso,
-  IngresoExterno,
   EgresoExterno,
   Informe,
   InformeExterno,

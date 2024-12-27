@@ -4,9 +4,6 @@
 <head>
   <%- include('../partials/AdminLTEHead.ejs') %>
   <%- include('../partials/AdminLTEHeadTables.ejs') %>
-  <!-- <link rel="stylesheet" href="/css/tables.css"> -->
-  <!-- <link rel="stylesheet" href="/css/equipos.css"> -->
-  <script src="/js/equipos.js"></script>
   <title>REDNOR - Listado de Equipos</title>
 </head>
 
@@ -29,8 +26,15 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Equipos</h3>
-                  <a href="/equipos/crear" class="btn btn-outline-primary float-right">Crear</a>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h3 class="card-title">Equipos</h3>
+                    </div>
+
+                    <div>
+                      <a href="/equipos/crear" class="btn btn-outline-primary">Crear</a>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-body">
                   <table id="equipos" class="table table-head-fixed table-bordered table-hover">

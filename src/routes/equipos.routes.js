@@ -26,4 +26,10 @@ router.put("/editar/:id", validateMiddleware, controller.update);
 // RUTA POR DELETE PARA ELIMINAR UN EQUIPO
 router.delete("/eliminar/:id", controller.delete);
 
+// HISTORIAL DEL TALLER DE UN EQUIPO
+router.get("/detalle/:id/historial-taller", controller.getHistorialTaller);
+
+// DETALLE DEL HISTORIAL DE TALLER
+router.get("/detalle-taller/:idIngreso", controller.getDetalleHistorialTaller);
+
 module.exports = router;

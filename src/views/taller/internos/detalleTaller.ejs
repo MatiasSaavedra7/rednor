@@ -61,7 +61,15 @@
                   <!-- Fecha de Ingreso -->
                   <dt>Fecha de Ingreso</dt>
                   <dd><%= ingreso.fecha_ingreso.toLocaleString() %></dd>
+                  
+                  <!-- Motivo del Ingreso -->
+                  <dt>Motivo de Ingreso</dt>
+                  <dd><%= ingreso.motivo %></dd>
 
+                  <!-- Detalle del Ingreso -->
+                  <dt>Detalle</dt>
+                  <dd><%= ingreso.detalle %></dd>
+                  
                   <dt>Estado</dt>
                   <dd><%= ingreso.estado.nombre %></dd>
                   
@@ -77,13 +85,6 @@
                   <dt>Numero de Serie</dt>
                   <dd><%= ingreso.equipo.numero_serie %></dd>
 
-                  <!-- Motivo del Ingreso -->
-                  <dt>Motivo de Ingreso</dt>
-                  <dd><%= ingreso.motivo %></dd>
-
-                  <!-- Detalle del Ingreso -->
-                  <dt>Detalle</dt>
-                  <dd><%= ingreso.detalle %></dd>
                 </div>
               </div>
               <!-- /Detalles del Ingreso -->

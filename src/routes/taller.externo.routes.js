@@ -4,9 +4,13 @@ const router = Router();
 const controller = require("../controllers/tallerExternosController");
 const validateMiddleware = require('../middlewares/validateEquipoMiddleware');
 
+// LISTADO DE INGRESOS EXTERNOS
 router.get("/", controller.taller);
 
+// DETALLE DE UN INGRESO EXTERNO
 router.get("/detalle/:id", controller.detalle);
+// API
+// router.get("/api/detalle/:id", controller.detalleApi);
 
 // CREAR EQUIPO
 router.get("/equipos/crear", controller.crearEquipo);
@@ -48,5 +52,7 @@ router.put("/informar-cobro/:idEgreso", controller.informarCobro);
 router.get("/:idInforme/insumos/crear", controller.insumos);
 
 router.post("/:idInforme/insumos/crear", controller.almacenarInsumos);
+
+
 
 module.exports = router;

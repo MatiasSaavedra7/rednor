@@ -18,4 +18,10 @@ router.put("/:id/editar", validateEquipoMiddleware, controller.update);
 router.get("/crear", controller.create);
 router.post("/crear", controller.store);
 
+// INFORMACION DE TALLER
+router.get("/:idEquipo/historial-taller", controller.getHistorialTaller);
+
+// DETALLE HISTORIAL TALLER
+router.get("/detalle-taller/:idIngreso", controller.getDetalleHistorialTaller);
+
 module.exports = router;

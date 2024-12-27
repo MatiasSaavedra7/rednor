@@ -19,7 +19,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.EquipoExterno.findAll({
-        include: [/*"ingreso",*/ "tipo"],
+        include: ["tipo"],
       });
     } catch (error) {
       let message = `\n\n[ERROR] No se pudieron obtener los equipos externos: ${error}\n\n`;

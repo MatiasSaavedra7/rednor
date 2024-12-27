@@ -37,7 +37,7 @@ module.exports = {
     try {
       return await db.InformeExterno.findAll({
         where: { id_ingreso_externo: id },
-        include: ["ingreso"],
+        // include: ["ingreso"],
       });
     } catch (error) {
       console.log(error);

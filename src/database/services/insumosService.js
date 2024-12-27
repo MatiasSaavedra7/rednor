@@ -84,4 +84,16 @@ module.exports = {
       console.log(error);
     }
   },
+
+  // Metodos para la API
+  getAllByIdIngresoAPI: async (id) => {
+    try {
+      return await db.Insumo.findAll({
+        where: { id_ingreso: id },
+      })
+    } catch (error) {
+      let message = "[ERROR] Error en insumosService.getOneByIdIngresoAPI " + error;
+      console.log(message);
+    }
+  }
 }

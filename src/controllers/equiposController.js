@@ -1,8 +1,13 @@
 const equiposService = require("../database/services/equiposService");
 const marcasService = require("../database/services/marcasService");
-const alquileresService = require("../database/services/alquileresService");
-const ingresosService = require("../database/services/ingresosService");
 const tiposEquiposService = require("../database/services/tiposEquiposService");
+const alquileresService = require("../database/services/alquileresService");
+
+// Taller
+const ingresosService = require("../database/services/ingresosService");
+const egresosService = require("../database/services/egresosService");
+const informesService = require("../database/services/informesService");
+const insumosService = require("../database/services/insumosService");
 
 const { validationResult } = require("express-validator");
 
@@ -116,5 +121,61 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-  }
+  },
+
+  getHistorialTaller: async (req, res) => {
+    try {
+      let ingresos = await ingresosService.getAllByIdEquipoAPI(req.params.id);
+
+      if (!ingresos) {
+        res.status(404).json({ message: "No se encontraron ingresos para el equipo" });
+      }
+
+      res.status(200).json(ingresos);
+    } catch (error) {
+      res.send(error);
+    }
+  },
+
+  getDetalleHistorialTaller: async (req, res) => {
+    try {
+      const ingreso = await ingresosService.getOneByPKAPI(req.params.idIngreso);
+      const egreso = await egresosService.getOneByIdIngresoAPI(req.params.idIngreso);
+      const informes = await informesService.getAllByIdIngresoAPI(req.params.idIngreso);
+      const insumos = await insumosService.getAllByIdIngresoAPI(req.params.idIngreso);
+
+      // Combinacion de Informes e Insumos en un solo array
+      const combinedData = [
+        ...informes.map(informe => ({
+          type: "informe",
+          id: informe.id,
+          fecha: informe.fecha_informe,
+          detalle: informe.detalle,
+          pedido_insumos: informe.pedido_insumos,
+        })),
+
+        ...insumos.map(insumo => ({
+          type: "insumo",
+          id: insumo.id,
+          fecha: insumo.fecha_entrega,
+          observacion: insumo.observacion,
+          nro_remito: insumo.nro_remito,
+        })),
+      ];
+
+      // Ordenar los datos por fecha (de más antiguo a más reciente)
+      combinedData.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+      const data = {
+        ingreso,
+        egreso,
+        combinedData,
+      }
+
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ message: "Error al buscar el ingreso" });
+    }
+  },
+    
 };

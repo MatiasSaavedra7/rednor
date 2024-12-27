@@ -22,9 +22,15 @@ const archivosGastos = require("./archivosGastos.routes.js");
 const pruebas = require("./pruebas.routes.js");
 
 //  Middlewares
+//  Middleware autenticacion
 const authMiddleware = require("../middlewares/authMiddleware.js");
-//  Middleware para controlar el acceso a rutas segun el rol (1- Admin, 2 - Moderador, 3 - Tecnico, 4 - Invitado)
+//  Middleware para controlar el acceso a rutas segun el rol.
 const roleMiddleware = require("../middlewares/roleMiddleware.js");
+//  ROLES
+//  1 - Admin
+//  2 - Moderador
+//  3 - Tecnico
+//  4 - Invitado
 
 // Main routes
 router.use("/", main);
@@ -42,7 +48,7 @@ router.use("/habilitados", authMiddleware, roleMiddleware([1, 2]), habilitados);
 router.use("/equipos", authMiddleware, roleMiddleware([1, 2]), equipos);
 
 // Equipos externos routes
-router.use("/equipos-externos", equiposExternos);
+router.use("/equipos-externos", authMiddleware, roleMiddleware([1, 2]), equiposExternos);
 
 // Alquileres routes
 router.use("/alquileres", authMiddleware, roleMiddleware([1, 2]), alquileres);
@@ -55,9 +61,6 @@ router.use("/taller", authMiddleware, roleMiddleware([1]), taller);
 
 // Taller externos routes
 router.use("/taller/externos", authMiddleware, roleMiddleware([1]), externos);
-
-// Pruebas routes
-router.use("/pruebas", pruebas);
 
 // Pagos routes
 router.use("/pagos", authMiddleware, roleMiddleware([1]), pagos);
@@ -73,5 +76,8 @@ router.use("/archivos-pagos", archivosPagos);
 
 // Archivo de gastos routes
 router.use("/archivos-gastos", archivosGastos);
+
+// Pruebas routes
+router.use("/pruebas", pruebas);
 
 module.exports = router;

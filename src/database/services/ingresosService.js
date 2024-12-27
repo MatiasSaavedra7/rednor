@@ -69,4 +69,29 @@ module.exports = {
       console.log(message);
     }
   },
+
+  // Metodos para la API
+  getAllByIdEquipoAPI: async (id) => {
+    try {
+      return await db.Ingreso.findAll({
+        where: { id_equipo: id },
+        attributes: ["id", "fecha_ingreso", "motivo"],
+      })
+    } catch (error) {
+      let message = `[ERROR] Error en ingresosService.getAllByIdEquipoAPI: ${error}`;
+      console.log(message);
+    }
+  },
+
+  getOneByPKAPI: async (id) => {
+    try {
+      return db.Ingreso.findOne({
+        where: { id: id },
+        include: ["estado"],
+      })
+    } catch (error) {
+      let message = `[ERROR] Error en ingresosService.getOneByPKAPI: ${error}`;
+      console.log(message);
+    }
+  }
 };

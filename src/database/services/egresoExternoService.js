@@ -30,7 +30,7 @@ module.exports = {
     try {
       return await db.EgresoExterno.findOne({
         where: { id_ingreso_externo: id },
-        include: ["ingreso", "forma_pago"],
+        include: [/*"ingreso",*/ "forma_pago"],
       });
     } catch (error) {
       console.log(error);

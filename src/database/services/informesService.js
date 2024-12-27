@@ -53,5 +53,17 @@ module.exports = {
       console.log(error);
       
     }
+  },
+
+  // Metodos para la API
+  getAllByIdIngresoAPI: async (id) => {
+    try {
+      return await db.Informe.findAll({
+        where: { id_ingreso: id },
+      })
+    } catch (error) {
+      let message = `[ERROR] Error en informesService.getAllByIdIngresoAPI: ${error}`;
+      console.log(message);
+    }
   }
 };

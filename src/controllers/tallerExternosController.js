@@ -114,6 +114,20 @@ module.exports = {
     }
   },
 
+  // detalleApi: async (req, res) => {
+  //   try {
+  //     const ingreso = await ingresosExternosService.getOneByPK(req.params.id);
+
+  //     if (!ingreso) {
+  //       res.status(404).json({ message: "No se encontró el ingreso" });
+  //     }
+
+  //     res.status(200).json(ingreso);
+  //   } catch (error) {
+  //     res.status(500).json({ message: error.message });  
+  //   }
+  // },
+
   ingreso: async (req, res) => {
     try {
       let equipos = await equiposExternosService.getAll();
@@ -307,7 +321,7 @@ module.exports = {
       await ingresosExternosService.updateByPK(egreso.id_ingreso_externo, { id_estado: 4 });
 
       // Redirecciono al usuario a la lista de ingresos
-      res.redirect("/taller/externos");
+      res.redirect(`/taller/externos/detalle/${egreso.id_ingreso_externo}`);
     } catch (error) {
       console.log(error);
     }
