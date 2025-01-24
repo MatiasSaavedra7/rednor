@@ -35,10 +35,10 @@
                       <table id="ingresosEnTaller" class="table table-bordered table-hover">
                         <thead>
                           <tr>
-                            <th>ID</th>
+                            <!-- <th>ID</th> -->
                             <th>Equipo</th>
                             <th>Ingreso</th>
-                            <th>Egreso</th>
+                            <!-- <th>Egreso</th> -->
                             <th>Estado</th>
                             <th>Detalles</th>
                           </tr>
@@ -46,22 +46,28 @@
                         <tbody>
                           <% ingresosEnTaller.forEach(ingresoEnTaller => { %>
                             <tr>
-                              <td><%= ingresoEnTaller.id %></td>
+                              <!-- <td><%# ingresoEnTaller.id %></td> -->
                               <td>
                                 <%= ingresoEnTaller.equipo.marca %>
                                 <%= ingresoEnTaller.equipo.modelo %>
                                 <%= ingresoEnTaller.equipo.numero_serie %>
                               </td>
                               <td>
-                                <%= ingresoEnTaller.fecha_ingreso.toLocaleString() %>
+                                <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-ES", {
+                                  year: "numeric",
+                                  month: "numeric",
+                                  day: "numeric",
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                }) %>
                               </td>
-                              <td>
-                                <% if (ingresoEnTaller.egreso) { %>
-                                  <%= ingresoEnTaller.egreso.fecha_egreso.toLocaleString() %>
-                                <% } else { %>
+                              <!-- <td>
+                                <%# if (ingresoEnTaller.egreso) { %>
+                                  <%# ingresoEnTaller.egreso.fecha_egreso.toLocaleString() %>
+                                <%# } else { %>
                                   -
-                                <% } %>
-                              </td>
+                                <%# } %>
+                              </td> -->
                               <td><%= ingresoEnTaller.estado.nombre %></td>
                               <td>
                                 <a href="/taller/detalle/<%= ingresoEnTaller.id %>">Ver más...</a>
@@ -117,7 +123,7 @@
                       <table id="ingresosEntregados" class="table table-bordered table-hover">
                         <thead>
                           <tr>
-                            <th>ID</th>
+                            <!-- <th>ID</th> -->
                             <th>Equipo</th>
                             <th>Ingreso</th>
                             <th>Egreso</th>
@@ -128,18 +134,30 @@
                         <tbody>
                           <% ingresosHistorial.forEach(ingresoHistorial => { %>
                             <tr>
-                              <td><%= ingresoHistorial.id %></td>
+                              <!-- <td><%# ingresoHistorial.id %></td> -->
                               <td>
                                 <%= ingresoHistorial.equipo.marca %>
                                 <%= ingresoHistorial.equipo.modelo %>
                                 <%= ingresoHistorial.equipo.numero_serie %>
                               </td>
                               <td>
-                                <%= ingresoHistorial.fecha_ingreso.toLocaleString() %>
+                                <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-ES", {
+                                  year: "numeric",
+                                  month: "numeric",
+                                  day: "numeric",
+                                  // hour: "numeric",
+                                  // minute: "numeric",
+                                }) %>
                               </td>
                               <td>
                                 <% if (ingresoHistorial.egreso) { %>
-                                  <%= ingresoHistorial.egreso.fecha_egreso.toLocaleString() %>
+                                  <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-ES", {
+                                     year: "numeric",
+                                     month: "numeric",
+                                     day: "numeric",
+                                    //  hour: "numeric",
+                                    //  minute: "numeric",
+                                  }) %>
                                 <% } else { %>
                                   -
                                 <% } %>

@@ -60,7 +60,13 @@
                 <div class="card-body">
                   <!-- Fecha de Ingreso -->
                   <dt>Fecha de Ingreso</dt>
-                  <dd><%= ingreso.fecha_ingreso.toLocaleString() %></dd>
+                  <dd><%= new Date(ingreso.fecha_ingreso).toLocaleString("es-ES", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  }) %></dd>
                   
                   <!-- Motivo del Ingreso -->
                   <dt>Motivo de Ingreso</dt>
@@ -85,6 +91,20 @@
                   <dt>Numero de Serie</dt>
                   <dd><%= ingreso.equipo.numero_serie %></dd>
 
+                  <!-- Motivo del Ingreso -->
+                  <dt>Motivo de Ingreso</dt>
+                  <dd><%= ingreso.motivo %></dd>
+
+                  <!-- Detalle del Ingreso -->
+                  <dt>Detalle</dt>
+                  <dd><%= ingreso.detalle %></dd>
+                  
+                  <dt>Informes</dt>
+                  <dd>
+                    <ul id="informes-taller" class="list-unstyled">
+
+                    </ul>
+                  </dd>
                 </div>
               </div>
               <!-- /Detalles del Ingreso -->
@@ -111,7 +131,13 @@
                           <% } %>
                           <div class="timeline-item">
                             <span class="time"><i class="fas fa-clock"></i> 
-                              <%= new Date(item.fecha).toLocaleString() %>
+                              <%= new Date(item.fecha).toLocaleString("es-ES", {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                                hour: "numeric",
+                                minute: "numeric",
+                              }) %>
                             </span>
                             <% if (item.type === 'informe') { %>
                               <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
@@ -156,7 +182,13 @@
                 <div class="card-body">
                   <!-- Fecha de Egreso -->
                   <dt>Fecha de Egreso</dt>
-                  <dd><%= egreso.fecha_egreso.toLocaleString() %></dd>
+                  <dd><%= new Date(egreso.fecha_egreso).toLocaleString("es-ES", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  }) %></dd>
 
                   <!-- Detalles de la Reparacion -->
                   <dt>Detalles de la Reparacion</dt>
@@ -191,8 +223,328 @@
       </section>
     </main>
     <!-- FIN MAIN -->
+
+    <!-- Modal para mostrar el detalle de Taller -->
+    <div class="modal fade" id="modal-detalle-taller">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Detalle de Taller</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body" id="detalle-taller">
+            <p>Detalle de Taller</p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      console.log("Script cargado");
+
+      // Capturar el ID del Equipo
+      const idEquipo = "<%= ingreso.equipo.id %>";
+
+      // Capturar la Fecha del Ingreso
+      const fechaIngreso = "<%= new Date(ingreso.fecha_ingreso).toISOString() %>";  // Guardar en formato ISO
+      // console.log(`%cFecha de Ingreso: ${fechaIngreso}`, "color: red");
+
+      // Crear un Objeto Literal con el ID del Equipo y la Fecha de Ingreso
+      const data = {
+        id_equipo: idEquipo,
+        fecha_ingreso: fechaIngreso,
+      };
+      
+      // Funcion fetch para obtener el historial de Ingresos
+      const fetchHistorialTaller = async (id) => {
+        try {
+          const response = await fetch(`/taller/historial-taller`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // Enviar los datos en el body de la peticion
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al obtener el historial");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion fetch para obtener el detalle de un Ingreso(a traves del ID del mismo Ingreso)
+      const fetchDetalleTaller = async (id) => {
+        try {
+          const response = await fetch(`/taller/detalle-taller/${id}`)
+
+          if (!response.ok) { 
+            throw new Error("Error al obtener el Detalle del Ingreso");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion para mostrar el historial de Ingresos
+      const mostrarHistorial = (ingresos) => {
+        // Capturar el elemento ul
+        const ulInformes = document.getElementById("informes-taller");
+
+        // Limpiar el contenido del elemento ul
+        ulInformes.innerHTML = "";
+
+        if (!ingresos.length > 0) {
+          const li = document.createElement("li");
+          li.textContent = "No hay informes para mostrar";
+          ulInformes.appendChild(li);
+        }
+        
+        // Recorrer los ingresos y agregar al listado
+        ingresos.forEach(ingreso => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+
+          a.textContent = `${new Date(ingreso.fecha_ingreso).toLocaleDateString()} - ${ingreso.motivo}`;
+          a.classList.add("linkIngreso");
+          a.href = "#detalle-taller";
+
+          a.addEventListener("click", async (e) => {
+            // Prevenir el comportamiento por defecto
+            e.preventDefault();
+
+            // Mostrar el modal
+            $("#modal-detalle-taller").modal("show");
+
+            // Obtener el detalle del Ingreso
+            const data = await fetchDetalleTaller(ingreso.id);
+            // console.log(data);
+
+            // Capturar el body del modal para mostrar la información
+            const modalDetalle = document.getElementById("detalle-taller")
+
+            // Limpiar el contenido del body
+            modalDetalle.innerHTML = "";
+
+            // Ingreso
+            if (data.ingreso) {
+              // Crear un card para mostrar la informacion del Ingreso
+              const cardIngreso = document.createElement("div");
+              cardIngreso.classList.add("card");
+  
+              const cardBodyIngreso = document.createElement("div");
+              cardBodyIngreso.classList.add("card-body");
+              
+              const dlIngreso = document.createElement("dl");
+  
+              dlIngreso.innerHTML = `
+                <dt>Fecha de Ingreso</dt>
+                <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}</dd>
+  
+                <dt>Estado</dt>
+                <dd>${data.ingreso.estado.nombre}</dd>
+  
+                <dt>Motivo</dt>
+                <dd>${data.ingreso.motivo}</dd>
+  
+                <dt>Detalle</dt>
+                <dd>${data.ingreso.detalle}</dd>
+                
+                <p class="lead mb-0">Informacion del Equipo</p>
+                
+                <dt>Marca</dt>
+                <dd>${data.ingreso.equipo.marca}</dd>
+  
+                <dt>Modelo</dt>
+                <dd>${data.ingreso.equipo.modelo}</dd>
+  
+                <dt>Numero de Serie</dt>
+                <dd>${data.ingreso.equipo.numero_serie}</dd>
+              `
+  
+              cardBodyIngreso.appendChild(dlIngreso);
+              cardIngreso.appendChild(cardBodyIngreso);
+              modalDetalle.appendChild(cardIngreso);
+            }
+            
+            // Informes e Insumos
+            if (data.combinedData.length > 0) {
+              const divRow = document.createElement("div");
+              divRow.classList.add("row");
+              modalDetalle.appendChild(divRow);
+
+              const divCol = document.createElement("div");
+              divCol.classList.add("col");
+              divRow.appendChild(divCol);
+
+              const divTimeline = document.createElement("div");
+              divTimeline.classList.add("timeline");
+              divCol.appendChild(divTimeline);
+
+              const divTimeLabel = document.createElement("div");
+              divTimeLabel.classList.add("time-label");
+              divTimeline.appendChild(divTimeLabel);
+
+              const spanBgRed = document.createElement("span");
+              spanBgRed.classList.add("bg-red");
+              spanBgRed.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleDateString();
+              divTimeLabel.appendChild(spanBgRed);
+
+              // Recorrer el vector dataCombined
+              data.combinedData.forEach((item) => {
+
+                if (item.type == "informe") {
+                  // Si el item es un Informe
+                  const divInforme = document.createElement("div");
+                  divInforme.classList.add("time-label");
+
+                  divInforme.innerHTML = `
+                    <i class="fas fa-file-alt bg-yellow"></i>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-ES", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}</span>
+                      <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                      <div class="timeline-body">
+                        <p>${item.detalle}</p>
+                      </div>
+                    </div>
+                  `
+                  // Agregar el item Informe al Timeline
+                  divTimeline.appendChild(divInforme);
+                } else {
+                  // Si el item es un Insumo
+                  const divInsumo = document.createElement("div");
+                  divInsumo.classList.add("time-label");
+
+                  divInsumo.innerHTML = `
+                    <i class="fas fa-box bg-green"></i>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-ES", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}</span>
+                      <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                      <div class="timeline-body">
+                        <p>${item.observacion}</p>
+                      </div>
+                      <div class="timeline-footer">
+                        <p class="text-info">Nro. Remito: ${item.nro_remito}</p>
+                      </div>
+                    </div>
+                  `
+
+                  // Agregar el item Insumo al Timeline
+                  divTimeline.appendChild(divInsumo);
+                }
+              })
+            }
+
+            // Egreso
+            if (data.egreso) {
+              // Crear un card para mostrar la informacion del Egreso
+              const cardEgreso = document.createElement("div");
+              cardEgreso.classList.add("card");
+  
+              const cardBodyEgreso = document.createElement("div");
+              cardBodyEgreso.classList.add("card-body");
+              
+              const dlEgreso = document.createElement("dl");
+  
+              dlEgreso.innerHTML = `
+                <dt>Fecha de Egreso</dt>
+                <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}</dd>
+  
+                <dt>Detalle</dt>
+                <dd>${data.egreso.detalle}</dd>
+              `
+              if (data.egreso.observacion) {
+                dlEgreso.innerHTML += `
+                  <dt>Observaciones</dt>
+                  <dd>${data.egreso.observacion}</dd>
+                `;
+              }
+
+              if (data.egreso.forma_pago && data.egreso.forma_pago.nombre) {
+                dlEgreso.innerHTML += `
+                  <dt>Forma de Pago</dt>
+                  <dd>${data.egreso.forma_pago.nombre}</dd>
+                `;
+              }
+  
+              if (data.egreso.precio) {
+                dlEgreso.innerHTML += `
+                  <dt>Precio</dt>
+                  <dd>$${formatearPrecio(data.egreso.precio)}</dd>
+                `;
+              }
+  
+              if (data.egreso.fecha_cobro) {
+                dlEgreso.innerHTML += `
+                <dt>Fecha de Cobro</dt>
+                <dd>${new Date(data.egreso.fecha_cobro).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}</dd>
+                `;
+              }
+  
+              cardBodyEgreso.appendChild(dlEgreso);
+              cardEgreso.appendChild(cardBodyEgreso);
+              modalDetalle.appendChild(cardEgreso);
+            }
+          })
+
+          li.appendChild(a);
+          ulInformes.appendChild(li);
+        });
+      };
+
+      // Convoco a la funcion fetch
+      const ingresos = await fetchHistorialTaller(idEquipo);
+
+      // Muestro el historial en la lista
+      mostrarHistorial(ingresos);
+    })
+  </script>
 </body>
 </html>

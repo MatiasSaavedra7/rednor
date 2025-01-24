@@ -366,4 +366,83 @@ module.exports = {
       console.log(error);
     }
   },
+
+  getHistorialTaller: async (req, res) => {
+    try {
+      // Capturar el ID y la Fecha de Ingreso del body
+      const { idEquipo, fechaIngreso } = req.body;
+
+      // Obtener los ingresos del equipo
+      const ingresos = await ingresosExternosService.getLastFiveByIdEquipo(idEquipo, fechaIngreso);
+      // console.log(ingresos);
+      
+      // Validar que existan ingresos
+      if (!ingresos) {
+        return res.status(404).json({ message: "No se encontraron datos del ingreso" });
+      }
+
+      // Retornar los ingresos al usuario
+      res.status(200).json(ingresos);
+    } catch (error) {
+      // Error en el servidor
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  // Metodo para traer el detalle completo del ingreso de un Equipo al Taller(Ingreso, Informes, Insumos y Egreso)
+  getDetalleTaller: async (req, res) => {
+    try {
+      // Capturar el ID del Ingreso
+      const idIngreso = req.params.idIngreso;
+
+      // Obtener el Ingreso
+      const ingreso = await ingresosExternosService.getOneByPK(idIngreso);
+      
+      // Validar que exista el ingreso
+      if (!ingreso) {
+        return res.status(404).json({ message: "No se encontró el ingreso" });
+      }
+      
+      // Obtener el Egreso
+      const egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id);
+      // Obtener los Informes
+      const informes = await informesExternosService.getAllByIdIngreso(ingreso.id);
+      // Obtener los Insumos
+      const insumos = await insumosExternosService.getAllByIdIngreso(ingreso.id);
+      
+      // Combinar en un solo vector los Informes e Insumos
+      const combinedData = [
+        ...informes.map(informe => ({
+          type: "informe",
+          id: informe.id,
+          fecha: informe.fecha_informe,
+          detalle: informe.detalle,
+          pedido_insumos: informe.pedido_insumos,
+        })),
+
+        ...insumos.map(insumo => ({
+          type: "insumo",
+          id: insumo.id,
+          fecha: insumo.fecha_entrega,
+          observacion: insumo.observacion,
+          nro_remito: insumo.nro_remito,
+        })),
+      ];
+
+      // Ordenar el vector combinedData por fecha(de mas antiguo a mas reciente)
+      combinedData.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+      
+      // Construir la respuesta con todos los datos del Ingreso, Informes, Insumos y Egreso.
+      const data = {
+        ingreso,
+        combinedData,
+        egreso,
+      }
+
+      // Retornar la informacion
+      res.status(200).json(data);
+    } catch (error) {
+      res.send(error);
+    }
+  }
 };

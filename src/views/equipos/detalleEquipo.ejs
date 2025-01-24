@@ -85,7 +85,7 @@
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h4 class="modal-title" id="modal-title-taller">Historial de Ingresos al Taller</h4>
+                  <h4 class="modal-title" id="modal-title-taller">Informacion del Taller</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -198,7 +198,7 @@
             const response = await fetch(`/equipos/detalle-taller/${idIngreso}`);
             const data = await response.json();
 
-            console.log(data);
+            // console.log(data);
 
             mostrarModalDetalleHistorial(data);
 
@@ -214,22 +214,36 @@
           // Mostrar el modal
           $(modal).modal("show");
 
+          // Modal Title
+          const modalTitleTaller = document.getElementById("modal-title-taller");
+
+          // Limpiar el contenido del titulo
+          modalTitleTaller.textContent = "";
+
+          const spanTitleTaller = document.createElement("span");
+          spanTitleTaller.textContent = `Informacion del Taller`;
+
+          modalTitleTaller.appendChild(spanTitleTaller);
+
+          // Link para ir a la pagina del Taller
+          const aLinkDetalleTaller = document.createElement("a");
+          aLinkDetalleTaller.className = "text-sm text-bold ml-2";
+          aLinkDetalleTaller.textContent = "Ir a la pagina del Taller";
+          aLinkDetalleTaller.href = `/taller/detalle/${data.ingreso.id}`;
+
+          // Icono
+          const iconExternalLink = document.createElement("i");
+          iconExternalLink.classList.add("fas", "fa-external-link-alt", "ml-1");
+          aLinkDetalleTaller.appendChild(iconExternalLink);
+
+          // Agregar el link para ir a la pagina del Taller al titulo del Modal
+          modalTitleTaller.appendChild(aLinkDetalleTaller);
+
           // Capturar el cuerpo del modal
           const modalBody = modal.querySelector(".modal-body");
 
           // Limpiar el cuerpo del modal
           modalBody.innerHTML = "";
-
-          // Capturar el titulo del modal
-          const modalTitleTaller = document.getElementById("modal-title-taller");
-
-          // Limpiar el titulo del modal
-          modalTitleTaller.innerHTML = "";
-
-          // Mostrar el titulo del modal
-          modalTitleTaller.innerHTML = `${data.ingreso.motivo}
-            <a href="/taller/detalle/${data.ingreso.id}" class="text-sm text-bold ml-1" target="_blank">Ir a la pagina del taller  <i class="fas fa-external-link-alt"></i></a>
-          `;
 
           // Mostrar la informacion del Ingreso
           const cardIngreso = document.createElement("div");
@@ -243,10 +257,19 @@
           dlIngreso.classList.add("mb-3");
           dlIngreso.innerHTML = `
             <dt>Fecha de Ingreso</dt>
-            <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString()}</dd>
+            <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            })}</dd>
 
             <dt>Estado</dt>
             <dd>${data.ingreso.estado.nombre}</dd>
+
+            <dt>Motivo</dt>
+            <dd>${data.ingreso.motivo}</dd>
 
             <dt>Detalle</dt>
             <dd>${data.ingreso.detalle}</dd>
@@ -287,7 +310,13 @@
                 divInforme.innerHTML = `
                   <i class="fas fa-file-alt bg-yellow"></i>
                   <div class="timeline-item">
-                    <span class="time"><i class="fas fa-clock"></i> ${new Date(item.fecha).toLocaleString()}</span>
+                    <span class="time"><i class="fas fa-clock"></i> ${new Date(item.fecha).toLocaleString("es-ES", {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    })}</span>
                     <h3 class="timeline-header">Informe ${item.id}</h3>
                     <div class="timeline-body">
                       <p>${item.detalle}</p>
@@ -304,7 +333,13 @@
                 divInsumo.innerHTML = `
                   <i class="fas fa-file-alt bg-green"></i>
                   <div class="timeline-item">
-                    <span class="time"><i class="fas fa-clock"></i> ${new Date(item.fecha).toLocaleString()}</span>
+                    <span class="time"><i class="fas fa-clock"></i> ${new Date(item.fecha).toLocaleString("es-ES", {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    })}</span>
                     <h3 class="timeline-header">Insumo ${item.id}</h3>
                     <div class="timeline-body">
                       <p>${item.observacion}</p>
@@ -318,7 +353,6 @@
                 divTimeline.appendChild(divInsumo);
               }
             })
-            
           }
 
           if (data.egreso) {
@@ -334,7 +368,13 @@
             dlEgreso.classList.add("mb-3");
             dlEgreso.innerHTML = `
               <dt>Fecha de Egreso</dt>
-              <dd>${new Date(data.egreso.fecha_egreso).toLocaleString()}</dd>
+              <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}</dd>
   
               <dt>Detalles de la Reparacion</dt>
               <dd>${data.egreso.detalle}</dd>
@@ -365,7 +405,13 @@
             if (data.egreso.fecha_cobro) {
               dlEgreso.innerHTML += `
                 <dt>Fecha de Cobro</dt>
-                <dd>${new Date(data.egreso.fecha_cobro).toLocaleDateString()}</dd>
+                <dd>${new Date(data.egreso.fecha_cobro).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour:"numeric",
+                  minute: "numeric",
+                })}</dd>
               `;
             }
   

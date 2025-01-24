@@ -3,22 +3,21 @@ const equiposService = require("../database/services/equiposService");
 const egresosService = require("../database/services/egresosService");
 const informesService = require("../database/services/informesService");
 const insumosService = require("../database/services/insumosService");
-const { actualizarIngreso } = require("./tallerExternosController");
 
 module.exports = {
   taller: async (req, res) => {
     try {
+      // Obtener todos los ingresos registrados en la base de datos
       let ingresos = await ingresosService.getAll();
 
+      // Filtrar aquellos ingresos cuyo estado sea 1, 2 o 3 (Disponibles)
       let ingresosEnTaller = ingresos.filter((ingreso) => ingreso.id_estado == 1 || ingreso.id_estado == 2 || ingreso.id_estado == 3);
-      // let ingresosEnEspera = ingresos.filter(
-      //   (ingreso) => ingreso.id_estado == 2
-      // );
+
+      // Filtrar aquellos ingresos cuyo estado sea 4, 5, 6 o 7 (Historial)
       let ingresosHistorial = ingresos.filter((ingreso) => ingreso.id_estado == 4 || ingreso.id_estado == 5 || ingreso.id_estado == 6 || ingreso.id_estado == 7);
       res.render("taller/internos/taller", {
         ingresos,
         ingresosEnTaller,
-        // ingresosEnEspera,
         ingresosHistorial,
       });
     } catch (error) {
@@ -295,6 +294,76 @@ module.exports = {
       res.redirect(`/taller/detalle/${informe.id_ingreso}`);
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  getHistorialTaller: async (req, res) => {
+    try {
+      // Capturar el ID y la Fecha de Ingreso desde el body
+      const { id_equipo, fecha_ingreso } = req.body;
+      // console.log(`ID Equipo: ${id_equipo}, Fecha de Ingreso: ${fecha_ingreso}`);
+
+      
+      // Obtener los ultimos 5 ingresos al Taller.
+      const ingresos = await ingresosService.getLastFiveByIdEquipo(id_equipo, fecha_ingreso);
+      // console.log(ingresos);
+      
+      res.status(200).json(ingresos);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getDetalleTaller: async (req, res) => {
+    try {
+      // Capturar el ID del Ingreso
+      const idIngreso = req.params.idIngreso;
+
+      // Obtener el Ingreso
+      const ingreso = await ingresosService.getOneByPKAPI(idIngreso);
+      
+      // Obtener todos los Informes asociados al Ingreso
+      const informes = await informesService.getAllByIdIngreso(idIngreso);
+      
+      // Obtener todos los Insumos asociados al Ingreso
+      const insumos = await insumosService.getAllByIdIngreso(idIngreso);
+
+      // Obtener el Egreso
+      const egreso = await egresosService.getOneByIdIngresoAPI(idIngreso);
+      
+      // Combinar en un solo vector los Informes e Insumos
+      const combinedData = [
+        ...informes.map(informe => ({
+          type: "informe",
+          id: informe.id,
+          fecha: informe.fecha_informe,
+          detalle: informe.detalle,
+          pedido_insumos: informe.pedido_insumos,
+        })),
+
+        ...insumos.map(insumo => ({
+          type: "insumo",
+          id: insumo.id,
+          fecha: insumo.fecha_entrega,
+          observacion: insumo.observacion,
+          nro_remito: insumo.nro_remito,
+        })),
+      ];
+
+      // Ordenar el vector combinedData por fecha(de mas antiguo a mas reciente)
+      combinedData.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+      const data = {
+        ingreso,
+        combinedData,
+        egreso,
+      }
+      
+      // Enviar el resultado al cliente
+      res.status(200).json(data);
+
+    } catch (error) {
+      res.status(500).json({ message: error.message});
     }
   }
 };

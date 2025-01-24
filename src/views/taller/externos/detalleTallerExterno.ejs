@@ -69,7 +69,13 @@
                   <dl>
                     <dt>Fecha de Ingreso</dt>
                     <dd>
-                      <%= ingreso.fecha_ingreso.toLocaleString() %>
+                      <%= ingreso.fecha_ingreso.toLocaleString("es-ES", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      }) %>
                     </dd>
   
                     <!-- Estado -->
@@ -77,7 +83,7 @@
                     <dd><%= ingreso.estado.nombre %></dd>
   
                     <!-- Motivo del Ingreso -->
-                    <dt>Motivo de Ingreso</dt>
+                    <dt>Motivo</dt>
                     <dd>
                       <%= ingreso.motivo %>
                     </dd>
@@ -123,6 +129,15 @@
   
                     <dt>Numero de Serie</dt>
                     <dd><%= ingreso.equipo.numero_serie %></dd>
+
+                    <dt>Informes</dt>
+                    <dd>
+                      <ul class="list-unstyled" id="historial-taller">
+                        <li><a href="#">Informe 1</a></li>
+                        <li><a href="#">Informe 2</a></li>
+                        <li><a href="#">Informe 3</a></li>
+                      </ul>
+                    </dd>
                   </dl>
                 </div>
               </div>
@@ -196,7 +211,13 @@
                     <!-- Fecha de Egreso -->
                     <dt>Fecha de Egreso</dt>
                     <dd>
-                      <%= egreso.fecha_egreso.toLocaleString() %>
+                      <%= egreso.fecha_egreso.toLocaleString("es-ES", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      }) %>
                     </dd>
 
                     <!-- Detalles de la Reparacion -->
@@ -208,8 +229,8 @@
                     <!-- Precio -->
                     <% if (egreso.precio) { %>
                       <dt>Precio</dt>
-                      <dd>
-                        $<%= egreso.precio %>
+                      <dd class="precio">
+                        <%= egreso.precio %>
                       </dd>
                     <% } %>
 
@@ -225,7 +246,13 @@
                     <% if (egreso.fecha_cobro) { %>
                       <dt>Fecha de Cobro</dt>
                       <dd>
-                        <%= egreso.fecha_cobro.toLocaleString() %>
+                        <%= egreso.fecha_cobro.toLocaleString("es-ES", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                        }) %>
                       </dd>
                     <% } %>
                   </div>
@@ -337,10 +364,336 @@
           </div>
         </div>        
       <% } %>
+
+      <!-- Modal para mostrar el detalle de Taller -->
+      <div class="modal fade" id="modal-detalle-taller">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Detalle de Taller</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body" id="detalle-taller">
+              <p>Detalle de Taller</p>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <!-- Script formatear precios -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const precios = document.querySelectorAll(".precio");
+      
+      precios.forEach(precio => {
+        const valor = precio.textContent;
+        precio.textContent = "$" + formatearPrecio(valor);
+      })
+    })
+  </script>
+
+  <!-- Script para mostrar el historial de un equipo -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Capturar el ID del Equipo
+      const idEquipo = "<%= ingreso.equipo.id %>";
+
+      // Capturar la Fecha de Ingreso
+      const fechaIngreso = "<%= new Date(ingreso.fecha_ingreso).toISOString() %>";
+      // console.log(`La fecha de Ingreso es ${fechaIngreso}`);
+      
+      // Crear un Objeto Literal con el ID del Equipo y la Fecha de Ingreso
+      const dataToFetch = {
+        idEquipo,
+        fechaIngreso,
+      };
+
+      // Funcion fetch para traer los ultimos 5 Ingresos del Equipo al Taller
+      // Se envia en el body de la funcion el ID del Equipo y la Fecha de Ingreso actual
+      const fetchHistorialTaller = async () => {
+        try {
+          const response = await fetch(`/taller/externos/historial-taller`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataToFetch),
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al intentar obtener los datos");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      // Funcion fetch para traer el detalle completo del taller (Ingreso, Informes, Insumos y Egreso) de un Equipo a traves del ID del Ingreso.
+      const fetchDetalleTaller = async (id) => {
+        try {
+          const response = await fetch(`/taller/externos/detalle-taller/${id}`);
+
+          if (!response.ok) {
+            throw new Error("Error al intentar obtener los datos");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion para mostrar el historial de ingresos
+      const mostrarHistorial = (ingresos) => {
+        // Capturar el elemento
+        const ulHistorial = document.getElementById("historial-taller");
+
+        // Limpiar el contenido anterior
+        ulHistorial.innerHTML = "";
+
+        // Recorrer los ingresos
+        ingresos.forEach(ingreso => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+
+          a.textContent = `${new Date(ingreso.fecha_ingreso).toLocaleDateString()} - ${ingreso.motivo}`;
+          a.classList.add("linkIngreso")
+          a.href = "#detalle-taller";
+
+          a.addEventListener("click", async (event) => {
+            event.preventDefault();
+
+            $("#modal-detalle-taller").modal("show");
+
+            const data = await fetchDetalleTaller(ingreso.id);
+            // console.log(data);
+
+            // Capturar el cuerpo del Modal para mostrar la informacion
+            const modalDetalle = document.getElementById("detalle-taller");
+
+            modalDetalle.innerHTML = ""; // Limpiar el contenido anterior
+
+            // Ingreso
+            if (data.ingreso) {
+              // Crear un card para mostrar la informacion del Ingreso
+              const cardIngreso = document.createElement("div");
+              cardIngreso.classList.add("card");
+  
+              const cardBodyIngreso = document.createElement("div");
+              cardBodyIngreso.classList.add("card-body");
+              
+              const dlIngreso = document.createElement("dl");
+  
+              dlIngreso.innerHTML = `
+                <dt>Fecha de Ingreso</dt>
+                <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}</dd>
+  
+                <dt>Estado</dt>
+                <dd>${data.ingreso.estado.nombre}</dd>
+  
+                <dt>Motivo</dt>
+                <dd>${data.ingreso.motivo}</dd>
+  
+                <dt>Detalle</dt>
+                <dd>${data.ingreso.detalle}</dd>
+                
+                <p class="lead mb-0">Informacion del Cliente</p>
+
+                <dt>Cliente</dt>
+                <dd>${data.ingreso.nombre_cliente}</dd>
+  
+                <dt>Telefono</dt>
+                <dd>${data.ingreso.telefono_cliente}</dd>
+  
+                <dt>Ciudad</dt>
+                <dd>${data.ingreso.ciudad_cliente}</dd>
+  
+                <dt>Direccion</dt>
+                <dd>${data.ingreso.direccion_cliente}</dd>
+                
+                <p class="lead mb-0">Informacion del Equipo</p>
+                
+                <dt>Marca</dt>
+                <dd>${data.ingreso.equipo.marca}</dd>
+  
+                <dt>Modelo</dt>
+                <dd>${data.ingreso.equipo.modelo}</dd>
+  
+                <dt>Numero de Serie</dt>
+                <dd>${data.ingreso.equipo.numero_serie}</dd>
+              `
+  
+              cardBodyIngreso.appendChild(dlIngreso);
+              cardIngreso.appendChild(cardBodyIngreso);
+              modalDetalle.appendChild(cardIngreso);
+            }
+            
+            // Informes e Insumos
+            if (data.combinedData.length > 0) {
+              const divRow = document.createElement("div");
+              divRow.classList.add("row");
+              modalDetalle.appendChild(divRow);
+
+              const divCol = document.createElement("div");
+              divCol.classList.add("col");
+              divRow.appendChild(divCol);
+
+              const divTimeline = document.createElement("div");
+              divTimeline.classList.add("timeline");
+              divCol.appendChild(divTimeline);
+
+              const divTimeLabel = document.createElement("div");
+              divTimeLabel.classList.add("time-label");
+              divTimeline.appendChild(divTimeLabel);
+
+              const spanBgRed = document.createElement("span");
+              spanBgRed.classList.add("bg-red");
+              spanBgRed.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleDateString();
+              divTimeLabel.appendChild(spanBgRed);
+
+              // Recorrer el vector dataCombined
+              data.combinedData.forEach((item) => {
+
+                if (item.type == "informe") {
+                  // Si el item es un Informe
+                  const divInforme = document.createElement("div");
+                  divInforme.classList.add("time-label");
+
+                  divInforme.innerHTML = `
+                    <i class="fas fa-file-alt bg-yellow"></i>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-ES", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}</span>
+                      <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                      <div class="timeline-body">
+                        <p>${item.detalle}</p>
+                      </div>
+                    </div>
+                  `
+                  // Agregar el item Informe al Timeline
+                  divTimeline.appendChild(divInforme);
+                } else {
+                  // Si el item es un Insumo
+                  const divInsumo = document.createElement("div");
+                  divInsumo.classList.add("time-label");
+
+                  divInsumo.innerHTML = `
+                    <i class="fas fa-box bg-green"></i>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-ES", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}</span>
+                      <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                      <div class="timeline-body">
+                        <p>${item.observacion}</p>
+                      </div>
+                      <div class="timeline-footer">
+                        <p class="text-info">Nro. Remito: ${item.nro_remito}</p>
+                      </div>
+                    </div>
+                  `
+
+                  // Agregar el item Insumo al Timeline
+                  divTimeline.appendChild(divInsumo);
+                }
+              })
+            }
+
+            // Egreso
+            if (data.egreso) {
+              // Crear un card para mostrar la informacion del Egreso
+              const cardEgreso = document.createElement("div");
+              cardEgreso.classList.add("card");
+  
+              const cardBodyEgreso = document.createElement("div");
+              cardBodyEgreso.classList.add("card-body");
+              
+              const dlEgreso = document.createElement("dl");
+  
+              dlEgreso.innerHTML = `
+                <dt>Fecha de Egreso</dt>
+                <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}</dd>
+  
+                <dt>Detalle</dt>
+                <dd>${data.egreso.detalle}</dd>
+              `
+              if (data.egreso.forma_pago && data.egreso.forma_pago.nombre) {
+                dlEgreso.innerHTML += `
+                  <dt>Forma de Pago</dt>
+                  <dd>${data.egreso.forma_pago.nombre}</dd>
+                `;
+              }
+  
+              if (data.egreso.precio) {
+                dlEgreso.innerHTML += `
+                  <dt>Precio</dt>
+                  <dd>$${formatearPrecio(data.egreso.precio)}</dd>
+                `;
+              }
+  
+              if (data.egreso.fecha_cobro) {
+                dlEgreso.innerHTML += `
+                <dt>Fecha de Cobro</dt>
+                <dd>${new Date(data.egreso.fecha_cobro).toLocaleString("es-ES", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}</dd>
+                `;
+              }
+  
+              cardBodyEgreso.appendChild(dlEgreso);
+              cardEgreso.appendChild(cardBodyEgreso);
+              modalDetalle.appendChild(cardEgreso);
+            }
+          });
+
+          li.appendChild(a);
+          ulHistorial.appendChild(li);
+        });
+      }
+
+      const data = await fetchHistorialTaller(idEquipo);
+      
+      mostrarHistorial(data);
+
+    })
+  </script>
 </body>
 
 </html>

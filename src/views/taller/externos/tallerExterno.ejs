@@ -27,13 +27,11 @@
                       <div class="">
                         <ul class="nav nav-pills">
                           <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">En Taller</a></li>
-                          <!-- <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">En Espera de Insumos </a></li> -->
-                          <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Historial</a></li>
+                          <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Historial</a></li>
                         </ul>
                       </div>
 
                       <div class="align-self-center">
-                        <!-- <a href="/equipos-externos" class="">Ver equipos externos</a> -->
                         <a href="/taller/externos/ingresos" class="btn btn-outline-primary">Nuevo</a>
                       </div>
                     </div>
@@ -45,10 +43,9 @@
                           <table id="ingresosEnTaller" class="table table-bordered table-hover">
                             <thead>
                               <tr>
-                                <th>ID</th>
+                                <th>Nombre</th>
                                 <th>Equipo</th>
                                 <th>Ingreso</th>
-                                <th>Egreso</th>
                                 <th>Estado</th>
                                 <th>Detalles</th>
                               </tr>
@@ -56,21 +53,21 @@
                             <tbody>
                               <% ingresosEnTaller.forEach(ingresoEnTaller => { %>
                               <tr>
-                                <td><%= ingresoEnTaller.id %></td>
+                                <td><%= ingresoEnTaller.nombre_cliente %></td>
                                 <td>
                                   <%= ingresoEnTaller.equipo.marca %>
                                   <%= ingresoEnTaller.equipo.modelo %>
                                   <%= ingresoEnTaller.equipo.numero_serie %>
                                 </td>
                                 <td>
-                                  <%= ingresoEnTaller.fecha_ingreso.toLocaleString() %>
-                                </td>
-                                <td>
-                                  <% if (ingresoEnTaller.egreso) { %>
-                                    <%= ingresoEnTaller.egreso.fecha_egreso.toLocaleString() %>
-                                  <% } else { %>
-                                    -
-                                  <% } %>
+                                  <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-ES", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    // hour: "2-digit",
+                                    // minute: "2-digit",
+                                    // hour12: false,
+                                  }) %>
                                 </td>
                                 <td><%= ingresoEnTaller.estado.nombre %></td>
                                 <td>
@@ -81,53 +78,12 @@
                             </tbody>
                           </table>
                         </div>
-                        <!-- /.tab-pane -->
-                        <!-- <div class="tab-pane" id="tab_2">
-                          <table id="ingresosEnEspera" class="table table-bordered table-hover">
-                            <thead>
-                              <tr>
-                                <th>ID</th>
-                                <th>Equipo</th>
-                                <th>Ingreso</th>
-                                <th>Egreso</th>
-                                <th>Estado</th>
-                                <th>Detalles</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <%# ingresosEnEspera.forEach(ingresoEnEspera => { %>
-                              <tr>
-                                <td><%# ingresoEnEspera.id %></td>
-                                <td>
-                                  <%# ingresoEnEspera.equipo.marca %>
-                                  <%# ingresoEnEspera.equipo.modelo %>
-                                  <%# ingresoEnEspera.equipo.numero_serie %>
-                                </td>
-                                <td>
-                                  <%# ingresoEnEspera.fecha_ingreso.toLocaleString() %>
-                                </td>
-                                <td>
-                                  <%# if (ingresoEnEspera.egreso) { %>
-                                    <%# ingresoEnEspera.egreso.fecha_egreso.toLocaleString() %>
-                                  <%# } else { %>
-                                    -
-                                  <%# } %>
-                                </td>
-                                <td><%# ingresoEnEspera.estado.nombre %></td>
-                                <td>
-                                  <a href="/taller/externos/detalle/<%# ingresoEnEspera.id %>">Detalles</a>
-                                </td>
-                              </tr>
-                              <%# }); %>
-                            </tbody>
-                          </table>
-                        </div> -->
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_3">
+                        
+                        <div class="tab-pane" id="tab_2">
                           <table id="ingresosHistorial" class="table table-bordered table-hover">
                             <thead>
                               <tr>
-                                <th>ID</th>
+                                <th>Cliente</th>
                                 <th>Equipo</th>
                                 <th>Ingreso</th>
                                 <th>Egreso</th>
@@ -138,18 +94,32 @@
                             <tbody>
                               <% ingresosHistorial.forEach(ingresoHistorial => { %>
                               <tr>
-                                <td><%= ingresoHistorial.id %></td>
+                                <td><%= ingresoHistorial.nombre_cliente %></td>
                                 <td>
                                   <%= ingresoHistorial.equipo.marca %>
                                   <%= ingresoHistorial.equipo.modelo %>
                                   <%= ingresoHistorial.equipo.numero_serie %>
                                 </td>
                                 <td>
-                                  <%= ingresoHistorial.fecha_ingreso.toLocaleString() %>
+                                  <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-ES", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    // hour: "2-digit",
+                                    // minute: "2-digit",
+                                    // hour12: false,
+                                  }) %>
                                 </td>
                                 <td>
                                   <% if (ingresoHistorial.egreso) { %>
-                                    <%= ingresoHistorial.egreso.fecha_egreso.toLocaleString() %>
+                                    <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-ES", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                      // hour: "2-digit",
+                                      // minute: "2-digit",
+                                      // hour12: false,
+                                    }) %>
                                   <% } else { %>
                                     -
                                   <% } %>

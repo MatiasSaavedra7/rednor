@@ -297,7 +297,7 @@
         // Limpiar el titulo del modal
         modalTitleDetalleHistorial.textContent = "";
         // Cambiar el titulo del modal
-        modalTitleDetalleHistorial.textContent = data.ingreso.motivo;
+        modalTitleDetalleHistorial.textContent = "Informacion del Taller";
 
         // Crear un link para ir a la pagina del taller
         const aLinkDetalleTaller = document.createElement("a");
@@ -308,8 +308,7 @@
 
         // Icono del link
         const iLinkDetalleTaller = document.createElement("i");
-        // iLinkDetalleTaller.classList("fas fa-external-link-alt");
-        iLinkDetalleTaller.className = "fas fa-external-link-alt";
+        iLinkDetalleTaller.classList.add("fas", "fa-external-link-alt", "ml-1");
 
         // Agregar el icono al link
         aLinkDetalleTaller.appendChild(iLinkDetalleTaller);
@@ -334,7 +333,13 @@
         dtFechaIngreso.textContent = "Fecha de Ingreso";
         dlIngreso.appendChild(dtFechaIngreso);
         const ddFechaIngreso = document.createElement("dd");
-        ddFechaIngreso.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleString();
+        ddFechaIngreso.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        });
         dlIngreso.appendChild(ddFechaIngreso);
         
         // Estado del Ingreso
@@ -344,6 +349,14 @@
         const ddEstadoIngreso = document.createElement("dd");
         ddEstadoIngreso.textContent = data.ingreso.estado.nombre;
         dlIngreso.appendChild(ddEstadoIngreso);
+
+        // Motivo del Ingreso
+        const dtMotivoIngreso = document.createElement("dt");
+        dtMotivoIngreso.textContent = "Motivo";
+        dlIngreso.appendChild(dtMotivoIngreso);
+        const ddMotivoIngreso = document.createElement("dd");
+        ddMotivoIngreso.textContent = data.ingreso.motivo;
+        dlIngreso.appendChild(ddMotivoIngreso);
 
         // Detalle del Ingreso
         const dtDetalleIngreso = document.createElement("dt");
@@ -356,6 +369,7 @@
         // Informacion del Cliente
         const pCliente = document.createElement("p");
         pCliente.classList.add("lead");
+        pCliente.classList.add("mb-0");
         pCliente.textContent = "Informacion del Cliente";
         dlIngreso.appendChild(pCliente);
         
@@ -437,7 +451,13 @@
 
               const spanTime = document.createElement("span");
               spanTime.classList.add("time");
-              spanTime.innerHTML = `<i class = "fas fa-clock"></i> ${new Date(item.fecha).toLocaleString()}`;
+              spanTime.innerHTML = `<i class = "fas fa-clock"></i> ${new Date(item.fecha).toLocaleString("es-ES", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}`;
               divTimelineItem.appendChild(spanTime);
 
               const h3TimelineHeader = document.createElement("h3");
@@ -508,13 +528,25 @@
           dtFechaEgreso.textContent = "Fecha de Egreso";
   
           const ddFechaEgreso = document.createElement("dd");
-          ddFechaEgreso.textContent = new Date(data.egreso.fecha_egreso).toLocaleString();
+          ddFechaEgreso.textContent = new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          dlEgreso.appendChild(dtFechaEgreso);
+          dlEgreso.appendChild(ddFechaEgreso);
   
           const dtDetalleEgreso = document.createElement("dt");
           dtDetalleEgreso.textContent = "Detalles de la Reparacion";
   
           const ddDetalleEgreso = document.createElement("dd");
           ddDetalleEgreso.textContent = data.egreso.detalle;
+
+          dlEgreso.appendChild(dtDetalleEgreso);
+          dlEgreso.appendChild(ddDetalleEgreso);
           
           if (data.egreso.forma_pago && data.egreso.forma_pago.nombre) {
             const dtFormaPago = document.createElement("dt");
@@ -532,7 +564,8 @@
             dtPrecio.textContent = "Precio";
     
             const ddPrecio = document.createElement("dd");
-            ddPrecio.textContent = `$${data.egreso.precio}`;
+            ddPrecio.classList.add("precio");
+            ddPrecio.textContent = "$" + formatearPrecio(data.egreso.precio);
 
             dlEgreso.appendChild(dtPrecio);
             dlEgreso.appendChild(ddPrecio);
@@ -543,27 +576,24 @@
             dtFechaCobro.textContent = "Fecha de Cobro";
     
             const ddFechaCobro = document.createElement("dd");
-            ddFechaCobro.textContent = new Date(data.egreso.fecha_cobro).toLocaleString();
+            ddFechaCobro.textContent = new Date(data.egreso.fecha_cobro).toLocaleString("es-ES", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            });
 
             dlEgreso.appendChild(dtFechaCobro);
             dlEgreso.appendChild(ddFechaCobro);
           }
-  
-          // Agregar elementos al modal
-          dlEgreso.appendChild(dtFechaEgreso);
-          dlEgreso.appendChild(ddFechaEgreso);
-  
-          dlEgreso.appendChild(dtDetalleEgreso);
-          dlEgreso.appendChild(ddDetalleEgreso);
-  
           cardBodyEgreso.appendChild(dlEgreso);
           cardEgreso.appendChild(cardBodyEgreso);
   
           modalBody.appendChild(cardEgreso);
         }
       }
-
-
     </script>
+
   </body>
 </html>

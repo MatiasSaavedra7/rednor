@@ -20,6 +20,7 @@ module.exports = {
         include: ["equipo", "egreso", "informe" ,"estado"],
       });
     } catch (error) {
+      console.log(error);
       let consoleMessage = `\n\n[ERROR] No se pudo obtener los ingresos externos: ${error}\n\n`;
       console.log(consoleMessage);
     }
@@ -29,13 +30,38 @@ module.exports = {
     try {
       return await db.IngresoExterno.findAll({
         where: { id_equipo: id },
-        attributes: ["id", "motivo", "fecha_ingreso", /*"detalle", "nombre_cliente", "telefono_cliente", "ciudad_cliente", "direccion_cliente"*/],
+        attributes: ["id", "motivo", "fecha_ingreso", ],
         // include: ["equipo", "egreso", "informe", "insumo" ,"estado"],
-        // raw: true,
+        order: [["fecha_ingreso", "DESC"]]
       });
     } catch (error) {
       let consoleMessage = `\n\n[ERROR] No se pudo obtener los ingresos externos por id de equipo: ${error}\n\n`;
       console.log(consoleMessage);
+    }
+  },
+
+  getLastFiveByIdEquipo: async (id, fecha) => {
+    try {
+      return await db.IngresoExterno.findAll({
+        where: { 
+          id_equipo: id,
+          // [db.Sequelize.Op.not]: db.Sequelize.literal('EXISTS (SELECT 1 FROM egresos_externos WHERE egresos_externos.id_ingreso_externo = IngresoExterno.id)')  
+          fecha_ingreso: {
+            [Op.lt]: fecha,
+          },
+         },
+        include: [{
+          model: db.EgresoExterno,
+          as: "egreso",
+          attributes: ["id", "fecha_egreso"]
+        }],
+        attributes: ["id", "motivo", "fecha_ingreso"],
+        order: [["fecha_ingreso", "DESC"]],
+        limit: 5,
+        raw: true,
+      })
+    } catch (error) {
+      console.log(error);
     }
   },
 

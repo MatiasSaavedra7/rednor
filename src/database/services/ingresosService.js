@@ -8,7 +8,7 @@ module.exports = {
     try {
       return await db.Ingreso.findAll({
         include: ["equipo", "egreso", "estado", "informes", "insumos"],
-        // group: ["id_equipo"]
+        order: [["fecha_ingreso", "DESC"]],
       });
     } catch (error) {
       console.log(error);
@@ -44,7 +44,7 @@ module.exports = {
     try {
       return await db.Ingreso.findAll({
         where: { id_equipo: id },
-        include: ["equipo", "egreso", "estado", "informes", "insumos"],
+        // include: ["equipo", "egreso", "estado", "informes", "insumos"],
       })
     } catch (error) {
       console.log(error);
@@ -76,6 +76,13 @@ module.exports = {
       return await db.Ingreso.findAll({
         where: { id_equipo: id },
         attributes: ["id", "fecha_ingreso", "motivo"],
+        include: [{
+          model: db.Egreso,   // Tabla Egresos
+          as: "egreso",       // Alias para la relación Egreso con Ingreso
+          required: true,     // Solo incluir los Ingresos que tienen un Egreso asociado
+          attributes: [],     // No traer los atributos/columnas de Egreso
+        }],
+        order: [["fecha_ingreso", "DESC"]],
       })
     } catch (error) {
       let message = `[ERROR] Error en ingresosService.getAllByIdEquipoAPI: ${error}`;
@@ -87,11 +94,30 @@ module.exports = {
     try {
       return db.Ingreso.findOne({
         where: { id: id },
-        include: ["estado"],
+        include: ["estado", "equipo"],
       })
     } catch (error) {
       let message = `[ERROR] Error en ingresosService.getOneByPKAPI: ${error}`;
       console.log(message);
+    }
+  },
+
+  getLastFiveByIdEquipo: async (id, fechaIngreso) => {
+    try {
+      return db.Ingreso.findAll({
+        where: {
+          id_equipo: id,
+          fecha_ingreso: {
+            [Op.lt]: fechaIngreso,
+          },
+        },
+        attributes: ["id", "fecha_ingreso", "motivo"],
+        order: [["fecha_ingreso", "DESC"]],
+        limit: 5,
+        include: ["estado", "equipo"],
+      })
+    } catch (error) {
+      console.log(error);
     }
   }
 };

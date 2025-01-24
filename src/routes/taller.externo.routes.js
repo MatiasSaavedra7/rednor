@@ -53,6 +53,11 @@ router.get("/:idInforme/insumos/crear", controller.insumos);
 
 router.post("/:idInforme/insumos/crear", controller.almacenarInsumos);
 
+// HISTORIAL DEL TALLER DE UN EQUIPO (ULTIMOS 5 INGRESOS)
+router.post("/historial-taller", controller.getHistorialTaller);
+
+// DETALLE DEL INGRESO AL TALLER DE UN EQUIPO
+router.get("/detalle-taller/:idIngreso", controller.getDetalleTaller);
 
 
 module.exports = router;
