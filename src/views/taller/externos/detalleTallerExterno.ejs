@@ -130,7 +130,7 @@
                     <dt>Numero de Serie</dt>
                     <dd><%= ingreso.equipo.numero_serie %></dd>
 
-                    <dt>Informes</dt>
+                    <dt>Historial de Informes</dt>
                     <dd>
                       <ul class="list-unstyled" id="historial-taller">
                         <li><a href="#">Informe 1</a></li>
@@ -462,6 +462,12 @@
 
         // Limpiar el contenido anterior
         ulHistorial.innerHTML = "";
+
+        if (ingresos.length == 0) {
+          const li = document.createElement("li");
+          li.textContent = "No hay informes para mostrars";
+          ulHistorial.appendChild(li);
+        };
 
         // Recorrer los ingresos
         ingresos.forEach(ingreso => {
