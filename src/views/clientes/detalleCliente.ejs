@@ -44,34 +44,40 @@
                     <dt>Nombre</dt>
                     <dd><%= cliente.nombre %></dd>
 
+                    <dt>Razon Social</dt>
+                    <dd><%= cliente.razon_social ? cliente.razon_social : "-" %></dd>
+
+                    <dt>Domicilio Comercial</dt>
+                    <dd><%= cliente.domicilio_comercial ? cliente.domicilio_comercial : "-" %></dd>
+
                     <!-- Email -->
                     <dt>Email</dt>
                     <dd>
-                      <a href="mailto:<%= cliente.email %>"><%= cliente.email %></a>
+                      <a href="mailto:<%= cliente.email %>"><%= cliente.email ? cliente.email : "-" %></a>
                     </dd>
 
                     <!-- Telefono -->
                     <dt>Telefono</dt>
-                    <dd><%= cliente.telefono %></dd>
+                    <dd><%= cliente.telefono ? cliente.telefono : "-" %></dd>
 
                     <!-- Ciudad -->
                     <dt>Ciudad</dt>
-                    <dd><%= cliente.ciudad %></dd>
+                    <dd><%= cliente.ciudad ? cliente.ciudad : "-" %></dd>
 
                     <!-- Direccion -->
                     <dt>Direccion</dt>
-                    <dd><%= cliente.direccion %></dd>
+                    <dd><%= cliente.direccion ? cliente.direccion : "-" %></dd>
 
                     <!-- Tipo de Cliente -->
                     <dt>Tipo</dt>
-                    <dd><%# cliente.tipo.nombre %></dd>
+                    <dd><%= cliente.tipo ? cliente.tipo.nombre : "-" %></dd>
 
                     <!-- CUIT -->
                     <dt>CUIT</dt>
-                    <dd><%= cliente.cuit %></dd>
+                    <dd><%= cliente.cuit ? cliente.cuit : "-" %></dd>
 
                     <dt>Condicion AFIP</dt>
-                    <dd><%= cliente.condicion_afip %></dd>
+                    <dd><%= cliente.condicion_afip ? cliente.condicion_afip : "-" %></dd>
 
                     <!-- Inscripcion AFIP -->
                     <% if (cliente.inscripcion_afip) { %>

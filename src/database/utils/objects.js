@@ -9,6 +9,8 @@ function Cliente(data) {
   this.inscripcion_afip = data.inscripcion_afip;
   this.condicion_afip = data.condicion_afip;
   this.formulario_005 = data.formulario_005;
+  this.razon_social = data.razon_social;
+  this.domicilio_comercial = data.domicilio_comercial;
 }
 
 function Habilitado(data) {

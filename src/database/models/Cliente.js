@@ -48,6 +48,15 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: true,
     },
+    // Modificaciones 03/02/2025
+    razon_social: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
+    domicilio_comercial: {
+      type: dataTypes.STRING,
+      allowNull: false,
+    },
   };
 
   let config = {

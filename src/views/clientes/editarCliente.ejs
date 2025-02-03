@@ -4,7 +4,7 @@
   <%- include('../partials/AdminLTEHead.ejs') %>
   <!-- <link rel="stylesheet" href="/css/formulario.css" /> -->
   <script src="/js/registroCliente.js"></script>
-  <title>REDNOR -  Editar cliente</title>
+  <title>REDNOR -  Editar Cliente</title>
 </head>
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
@@ -35,6 +35,22 @@
                       <input type="text" name="nombre" id="nombre" class="form-control" value="<%= locals.errors && errors.nombre ? "" : (locals.old && old.nombre ? old.nombre : cliente.nombre) %>" /> 
                       <% if (locals.errors && errors.nombre) { %>
                       <p class="text-danger"><%= errors.nombre.msg %></p>
+                      <% } %>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="razon_social">Razon Social</label>
+                      <input type="text" name="razon_social" id="razon_social" class="form-control" value="<%= locals.errors && errors.razon_social ? "" : (locals.old && old.razon_social ? old.razon_social : cliente.razon_social) %>">
+                      <% if (locals.errors && errors.razon_social) { %>
+                       <p class="text-danger"><%= errors.razon_social.msg %></p>
+                      <% } %>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="domicilio_comercial">Domicilio Comercial</label>
+                      <input type="text" name="domicilio_comercial" id="domicilio_comercial" class="form-control" value="<%= locals.errors && errors.domicilio_comercial ? "" : (locals.old && old.domicilio_comercial ? old.domicilio_comercial : cliente.domicilio_comercial) %>">
+                      <% if (locals.errors && errors.domicilio_comercial) { %>
+                       <p class="text-danger"><%= errors.domicilio_comercial.msg %></p>
                       <% } %>
                     </div>
           
@@ -96,6 +112,17 @@
                         <p class="text-danger"><%= errors.cuit.msg %></p>
                       <% } %>
                     </div>
+
+                    <div class="form-group">
+                      <label for="condicion_afip">Condicion AFIP</label>
+                      <select name="condicion_afip" id="condicion" class="form-control">
+                        <option value="" selected disabled hidden>Elegir una opcion...</option>
+                        <option value="Consumidor Final" <%= cliente.condicion_afip == "Consumidor Final" ? "selected" : ""  %>>Consumidor Final</option>
+                        <option value="Monotributo" <%= cliente.condicion_afip == "Monotributo" ? "selected" : "" %>>Monotributo</option>
+                        <option value="Responsable Inscripto" <%= cliente.condicion_afip == "Responsable Inscripto" ? "selected" :  "" %>>Responsable Inscripto</option>
+                        <option value="IVA Sujeto Exento" <%= cliente.condicion_afip == "IVA Sujeto Exento" ? "selected" : "" %> >IVA Sujeto Exento</option>
+                      </select>
+                    </div>
                     
                     <div class="form-group">
                       <label for="inscripcion_afip">Inscripcion AFIP</label>
@@ -114,10 +141,10 @@
                     </div>
 
                     <!-- Boton Enviar -->
-                    <input type="submit" class="btn btn-primary w-100" />
+                    <input type="submit" value="Guardar Cambios" class="btn btn-primary w-100" />
                     <br>
                     <!-- Boton Volver Atras -->
-                    <a href="/clientes/detalle/<%= cliente.id %>" class="btn btn-outline-danger w-50 mt-3 align-self-center">Volver Atras</a>
+                    <a href="/clientes/detalle/<%= cliente.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver Atras</a>
                   </form>
                 </div>
               </div>

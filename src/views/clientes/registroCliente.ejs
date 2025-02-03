@@ -3,7 +3,7 @@
   <head>
     <%- include('../partials/AdminLTEHead.ejs') %>
     <script src="/js/cuit.js"></script>
-    <title>REDNOR - Nuevo Habilitado</title>
+    <title>REDNOR - Nuevo Cliente</title>
   </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -33,6 +33,22 @@
                         <input type="text" name="nombre" id="nombre" class="form-control" value="<%= locals.old && old.nombre ? old.nombre : "" %>" /> 
                         <% if (locals.errors && errors.nombre) { %>
                         <p class="text-danger"><%= errors.nombre.msg %></p>
+                        <% } %>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="razon_social">Razon Social</label>
+                        <input type="text" name="razon_social" id="razon_social" class="form-control" value="<%= locals.old && old.razon_social ? old.razon_social : "" %>" />
+                        <% if (locals.errors && errors.razon_social) { %>
+                          <p class="text-danger"><%= errors.razon_social.msg %></p>
+                        <% } %>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="domicilio_comercial">Domicilio Comercial</label>
+                        <input type="text" name="domicilio_comercial" id="domicilio_comercial" class="form-control" value="<%= locals.old && old.domicilio_comercial ? old.domicilio_comercial : "" %>" />
+                        <% if (locals.errors && errors.domicilio_comercial) { %>
+                          <p class="text-danger"><%= errors.domicilio_comercial.msg %></p>
                         <% } %>
                       </div>
           
