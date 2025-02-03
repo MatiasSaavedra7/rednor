@@ -27,8 +27,11 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Clientes</h3>
-                    <a href="/clientes/crear" class="btn btn-outline-primary float-right">Crear</a>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h3 class="card-title">Clientes</h3>
+
+                      <a href="/clientes/crear" class="btn btn-outline-primary">Crear</a>
+                    </div>
                   </div>
                   <div class="card-body">
                     <table id="clientes" class="table table-bordered table-hover">
@@ -46,7 +49,7 @@
                           <tr style="user-select: none;" class="clickable-row" data-href="/clientes/detalle/<%= cliente.id %>">
                             <td><%= cliente.id %></td>
                             <td><%= cliente.nombre %></td>
-                            <td><%# cliente.tipo.nombre %></td>
+                            <td><%= cliente.tipo ? cliente.tipo.nombre : "-"  %></td>
                             <td><%= cliente.email %></td>
                             <td><a href='/clientes/detalle/<%= cliente.id %>'>Ver más</a></td>
                           </tr>

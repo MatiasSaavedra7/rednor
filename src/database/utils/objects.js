@@ -5,12 +5,13 @@ function Cliente(data) {
   this.telefono = data.telefono;
   this.ciudad = data.ciudad;
   this.direccion = data.direccion;
-  this.cuit = data.cuit;
   this.inscripcion_afip = data.inscripcion_afip;
   this.condicion_afip = data.condicion_afip;
   this.formulario_005 = data.formulario_005;
   this.razon_social = data.razon_social;
   this.domicilio_comercial = data.domicilio_comercial;
+  this.DocTipo = data.DocTipo;
+  this.DocNro = data.DocNro;
 }
 
 function Habilitado(data) {

@@ -32,10 +32,6 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: false,
     },
-    cuit: {
-      type: dataTypes.STRING,
-      allowNull: false,
-    },
     inscripcion_afip: {
       type: dataTypes.STRING,
       allowNull: true,
@@ -51,11 +47,19 @@ module.exports = (sequelize, dataTypes) => {
     // Modificaciones 03/02/2025
     razon_social: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     domicilio_comercial: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
+    },
+    DocTipo: {
+      type: dataTypes.STRING(2),
+      allowNull: true,
+    },
+    DocNro: {
+      type: dataTypes.STRING(13),
+      allowNull: true,
     },
   };
 

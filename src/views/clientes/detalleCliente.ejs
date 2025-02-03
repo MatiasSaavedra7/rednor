@@ -72,9 +72,20 @@
                     <dt>Tipo</dt>
                     <dd><%= cliente.tipo ? cliente.tipo.nombre : "-" %></dd>
 
-                    <!-- CUIT -->
-                    <dt>CUIT</dt>
-                    <dd><%= cliente.cuit ? cliente.cuit : "-" %></dd>
+                    <!-- Numero de Documento -->
+                    <dt>
+                      <% if (cliente.DocTipo == 80) { %>
+                       <%= "CUIT" %>
+                      <% } else if (cliente.DocTipo == 86) { %>
+                        <%= "CUIL" %>
+                      <% } else { %>
+                        <%= "DNI" %>
+                      <% } %>
+                    </dt>
+                    <dd>
+                      <%= cliente.DocNro ? cliente.DocNro : "-" %>
+                    </dd>
+                    
 
                     <dt>Condicion AFIP</dt>
                     <dd><%= cliente.condicion_afip ? cliente.condicion_afip : "-" %></dd>
@@ -117,8 +128,11 @@
             <div class="col-md-8">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Contratos</h3>
-                  <a href="/alquileres/crear?cliente=<%= cliente.id %>" class="btn btn-outline-primary btn-sm float-right">Nuevo Contrato</a>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Contratos</h3>
+                    
+                    <a href="/alquileres/crear?cliente=<%= cliente.id %>" class="btn btn-outline-primary btn-sm float-right">Nuevo Contrato</a>
+                  </div>
                 </div>
                 <div class="card-body">
                   <table id="alquileres" class="table table-bordered table-hover">

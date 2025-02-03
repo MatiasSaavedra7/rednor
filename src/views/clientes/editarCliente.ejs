@@ -3,6 +3,7 @@
 <head>
   <%- include('../partials/AdminLTEHead.ejs') %>
   <!-- <link rel="stylesheet" href="/css/formulario.css" /> -->
+  <script src="/js/cuit.js"></script>
   <script src="/js/registroCliente.js"></script>
   <title>REDNOR -  Editar Cliente</title>
 </head>
@@ -106,10 +107,20 @@
                     </div>
           
                     <div class="form-group">
-                      <label for="cuit">CUIT (Sin guiones)</label>
-                      <input type="text" name="cuit" id="cuit" class="form-control" value="<%= locals.errors && errors.cuit ? "" : (locals.old && old.cuit ? old.cuit : cliente.cuit) %>">
+                      <label for="cuit">Numero de Documento</label>
+
+                      <div class="row">
+                        <select name="DocTipo" id="DocTipo" class="form-control col-3" required>
+                          <option value="" selected hidden disabled>Selecciona una opcion</option>
+                          <option value="80" <%= cliente.DocTipo == "80" ? "selected" : "" %>>CUIT</option>
+                          <option value="86" <%= cliente.DocTipo == "86" ? "selected" : "" %>>CUIL</option>
+                          <option value="96" <%= cliente.DocTipo == "96" ? "selected" : ""  %>>DNI</option>
+                        </select>
+
+                        <input type="text" name="DocNro" id="DocNro" class="form-control col-9" value="<%= cliente.DocNro %>">
+                      </div>
                       <% if (locals.errors && errors.cuit) { %>
-                        <p class="text-danger"><%= errors.cuit.msg %></p>
+                       <p class="text-danger"><%= errors.cuit.msg %></p>
                       <% } %>
                     </div>
 
@@ -156,6 +167,44 @@
   </div>
   <!-- FIN MAIN -->
   <%- include('../partials/AdminLTEScripts.ejs') %>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const DocTipo = document.getElementById("DocTipo");
+      const DocNro = document.getElementById("DocNro");
+      
+      // Agregar maximum length al input
+      DocNro.maxLength = 13;
+
+      const patterns = {
+        80: "xx-xxxxxxxx-x",
+        86: "xx-xxxxxxxx-x",
+        96: "xxxxxxxx",
+      };
+
+      let currentListener = null;
+
+      const applyPattern = (event) => {
+        event.target.value = patternMatch({
+          input: event.target.value,
+          template: patterns[DocTipo.value] || "xxxxxxxx",
+        });
+      };
+
+      DocTipo.addEventListener("change", (e) => {
+        // Remover el listener previo si existe
+        if(currentListener) {
+          DocNro.removeEventListener("input", currentListener);
+        }
+
+        // Asignar el nuevo listener
+        currentListener = applyPattern;
+        DocNro.addEventListener("input", applyPattern);
+
+        // Limpiar el valor del input y aplicar el patron inicial
+        DocNro.value = "";
+      })
+    })
+  </script>
     
 </body>
 </html>
