@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <script src="/js/cuit.js"></script>
+  <!-- <script src="/js/detalleGasto.js"></script> -->
+  <title>Servicios</title>
+  <style>
+    .justify-content-center {
+      justify-content: initial !important; /* Sobrescribir el estilo de Bootstrap */
+    }
+
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto; /* Permitir scroll horizontal */
+      /* border: 1px dashed red; */
+    }
+
+    .pagination {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      /* margin: 0 10px; */
+      padding: 10px 0;
+      list-style-type: none;
+      /* border: 1px dashed blue; */
+    }
+
+    .page-item {
+      margin: 0 5px;
+    }
+
+    .page-link {
+      display: block;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .page-link:hover {
+      background-color: #e0e0e0;
+      cursor: pointer;
+    }
+
+    .active .page-link {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .pagination-btn {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+    
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+
+    <main class="content-wrapper">
+      <!-- Main content -->
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between align-items-baseline">
+                    <div class="align-self-center">
+                      <h1 class="card-title">
+                        <a ><%= servicio.nombre %></a>
+                        <a href="/gastos/servicios/<%= servicio.id %>/editar"><i class="fas fa-edit"></i></a>
+                      </h1>
+                    </div>
+  
+                    <div>
+                      <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-lg">
+                        Pagar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                      <div class="row">
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">A devengar</span>
+                              <span class="info-box-number text-center text-muted mb-0 precios"><%# gasto.monto %></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Total gastado en el año</span>
+                              <span class="info-box-number text-center text-muted mb-0">$2300</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Proximo vencimiento en</span>
+                              <span class="info-box-number text-center text-muted mb-0">20</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <!-- Datos del Pago -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Datos del Pago</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                              </div>
+                              
+                            </div>
+                            <div class="card-body">
+
+                              <!-- Menu de seleccion del año -->
+                              <div class="form-group" style="width: 80%; margin: 0 auto;">
+                                <select name="select-anio" id="select-anio" class="form-control">
+                                </select>
+                              </div>
+
+                              <!-- Paginacion por meses -->
+                              <div class="pagination-container">
+                                <ul class="pagination pagination-month justify-content-center">
+                                  <!-- Listado de pagos por mes -->
+                                </ul>
+                              </div>
+
+                              <hr>
+                              <!-- Pago -->
+                              <div id="pago-container">
+                                <!-- Detalles del Pago -->
+                              </div>
+                              <ul class="list-unstyled" id="archivos-list">
+                                <!-- Listado de archivos pertenecientes al pago -->
+                              </ul>
+                              <!-- <a type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-agregar-archivos">Add files</a> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <% if (servicio.email || servicio.telefono) { %>
+                        <!-- Alertas -->
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header">
+                                <h3 class="card-title">Alertas</h3>
+                                <div class="card-tools">
+                                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label for="mensaje-personalizado">Mensaje Personalizado: </label>
+                                  <textarea name="mensaje-personalizado" id="mensaje-personalizado" rows="4" cols="50" class="form-control"></textarea>
+                                </div>
+                                <% if (servicio.telefono) { %>
+                                  <div class="callout callout-success">
+                                    <h5>WhatsApp</h5>
+                                    <p><%= servicio.telefono %></p>
+                                    <p id="alerta-telefono"></p>
+                                    <a id="boton-alerta-telefono"></a>
+                                  </div>
+                                <% } %>
+                                
+                                <% if (servicio.email) { %>
+                                  <div class="callout callout-info">
+                                    <h5>Correo</h5>
+                                    <p><%= servicio.email %></p>
+                                    <p id="alerta-correo"></p>
+                                    <a id="boton-alerta-correo"></a>
+                                  </div>
+                                <% } %>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    
+                    <!-- Informacion del gasto/servicio -->
+                    <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                      <!-- <h3 class="text-primary">
+                        <%# servicio.nombre %>
+                        <a class="btn btn-sm" href="#">
+                          <i class="fas fa-edit"></i> Edit
+                        </a>
+                      </h3> -->
+                      
+
+                      <div class="row">
+                        <div class="col">
+                          <div class="text-muted">
+                            <% if (servicio.descripcion) { %>
+                             <p class="text-sm">Descripcion
+                              <b class="d-block"><%= servicio.descripcion %></b>
+                             </p>
+                            <% } %>
+                          </div>
+
+                          <div class="text-muted">
+                            <% if (servicio.condiciones) { %>
+                              <p class="text-sm">Condiciones
+                                <b class="d-block"><%= servicio.condiciones %></b>
+                              </p>
+                            <% } %>
+
+                            <% if (servicio.dia_vencimiento) { %>
+                              <p class="text-sm">Dia de Vencimiento
+                                <b class="d-block"><%= servicio.dia_vencimiento %> de cada mes</b>
+                              </p>
+                            <% } %>
+                          </div>
+                        </div>
+                      </div>
+        
+                      <!-- Listado de archivos pertenecientes al pago -->
+                      <h6 class="mt-3 text-muted">Archivos del Servicio</h6>
+                      <ul class="list-unstyled" id="lista-archivos-servicio">
+                        <% servicio.archivos_servicio.forEach(archivo => { %>
+                         <li><i class="far fa-fw fa-file-pdf"></i> <a class="btn-link text-secondary" href="/docs/servicios/<%= archivo.nombre %>" target="_blank"><%= archivo.nombre %></a> <a id="eliminarArchivoButton" class="btn btn-xs btn-danger" data-idArchivo="<%= archivo.id %>">Eliminar</a></li>
+                        <% }) %>
+                      </ul>
+
+                      <div class="text-center mt-5 mb-3">
+                        <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-agregar-archivos-servicios">Subir archivos</a>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal de Pago -->
+      <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Pagar Servicio</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <!-- Formulario para registrar un pago -->
+            <form action="/pagos/servicios/<%= servicio.id %>/crear" method="post" id="formPago">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="id_forma_pago">Forma de Pago</label>
+                  <select name="id_forma_pago" id="id_forma_pago" class="form-control" required>
+                    <option value="" selected disabled hidden>Seleccione una opcion</option>
+                    <% formas_pago.forEach(forma_pago => { %>
+                     <option value="<%= forma_pago.id %>"><%= forma_pago.nombre %></option>
+                    <% }) %>
+                  </select>
+                </div>
+
+                <div class="form-group" id="entidad_bancaria_modal" style="display: none;">
+                  <label for="entidad_bancaria">Entidad Bancaria</label>
+                  <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control" value="<%# gasto.entidad_bancaria %>"> <!--  Longitud 22 caracteres exactos -->
+                </div>
+
+                <div class="form-group" id="cbu_modal" style="display: none;">
+                  <label for="cbu">CBU/CVU</label>
+                  <input type="text" name="cbu" id="cbu" class="form-control" value="<%# gasto.cbu %>" maxlength="22">
+                </div>
+
+                <div class="form-group" id="cuit_modal" style="display: none;">
+                  <label for="cuit">CUIT/CUIL</label>
+                  <input type="text" name="cuit" id="cuit" class="form-control" value="<%# gasto.cuit %>" maxlength="13">
+                </div>
+
+                <div class="form-group">
+                  <label for="divisa">Divisa</label>
+                  <select name="divisa" id="divisa" class="form-control">
+                    <option value="" selected hidden disabled>Seleccione una opcion</option>
+                    <option value="ARS" <%# gasto.divisa == "ARS" ? "selected" : "" %>>ARS</option>
+                    <option value="USD" <%# gasto.divisa == "USD" ? "selected" : "" %>>USD</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="monto">Monto</label>
+                  <input type="text" name="monto" id="monto" value="<%# gasto.monto %>" class="form-control">
+                </div>
+              </div>
+              
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Pagar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal subir archivos a Pagos -->
+      <div class="modal fade" id="modal-agregar-archivos-pagos">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Subir Archivos</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="#" method="post" enctype="multipart/form-data" id="uploadFormPagoServicio">
+
+              <!-- Modal Body -->
+              <div class="modal-body">
+
+                <div class="form-group">
+                  <label for="id_pago_servicio">ID del Pago</label>
+                  <input type="number" name="id_pago_servicio" id="id_pago_servicio" value="" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_pagos_label">Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="pagos_servicios" class="custom-file-input" id="pagos_servicios" multiple>
+                      <label for="pagos_servicios" class="custom-file-label">Elegir un archivo...</label>
+                    </div>
+                    <div class="input-group-append">
+                      <!-- <span class="input-group-text">Subir</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Modal Footer -->
+              <div class="modal-footer justify-content-between">
+                <button type="reset" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- Modal subir archivos a Servicios -->
+      <div class="modal fade" id="modal-agregar-archivos-servicios">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Subir Archivos | <%= servicio.nombre %></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+            <form action="/gastos/servicios/almacenar-archivos" method="post" enctype="multipart/form-data" id="uploadFormServicio">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="id_servicio">ID Servicio: </label>
+                  <input type="number" name="id_servicio" id="id_servicio" value="<%= servicio.id %>" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_servicios_label">Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="archivos_servicios" class="custom-file-input" id="archivos_servicios" multiple>
+                      <label class="custom-file-label" for="archivos_servicios">Elegir Archivo</label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
+              </div>
+            </form>
+        </div>
+      </div>
+      </div>
+
+    </main>
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script src="/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+  </script>
+
+  <!-- Script CUIT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const cuit = document.getElementById("cuit");
+      
+      cuit.addEventListener("input", (event) => {
+        event.target.value = patternMatch({
+          input: event.target.value,
+          template: "xx-xxxxxxxx-x",
+        })
+      })
+    })
+  </script>
+
+  <!-- Script Formas de Pago -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const formaPago = document.getElementById("id_forma_pago");
+
+      formaPago.addEventListener("change", () => {
+        if (formaPago.value == "2") {
+          document.getElementById("entidad_bancaria_modal").style.display = "block";
+          document.getElementById("cbu_modal").style.display = "block";
+          document.getElementById("cuit_modal").style.display = "block";
+        } else {
+          document.getElementById("entidad_bancaria_modal").style.display = "none";
+          document.getElementById("cbu_modal").style.display = "none";
+          document.getElementById("cuit_modal").style.display = "none";
+        }
+      })
+    })
+  </script>
+
+  <!-- Script Nuevo Pago -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const formPago = document.getElementById("formPago");
+
+      formPago.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const servicioId = "<%= servicio.id %>";
+        const url = `/pagos/servicios/${servicioId}/crear`;
+
+        const formData = {
+          id_forma_pago: document.getElementById("id_forma_pago").value,
+          entidad_bancaria: document.getElementById("entidad_bancaria").value,
+          cbu: document.getElementById("cbu").value,
+          cuit: document.getElementById("cuit").value,
+          divisa: document.getElementById("divisa").value,
+          monto: document.getElementById("monto").value
+        };
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al realizar el pago");
+          }
+
+          const result = await response.json();
+
+          alert("Pago realizado con exito");
+
+          formPago.reset(); // Limpiar formulario
+
+          location.reload(); // Recargar la pagina
+        } catch (error) {
+          console.error("Error: ", error);
+          alert("Error al realizar el pago");
+        }
+        
+        $("#modal-lg").modal("hide"); // Cerrar modal
+      })
+    })
+  </script>
+
+  <!-- Script fetch Pagos -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const servicioId = "<%= servicio.id %>";
+      const selectAnios = document.getElementById("select-anio");
+
+      // Funcion fetch para obtener los años disponibles
+      const fetchAniosDisponibles = async () => {
+        try {
+          const response = await fetch(`/pagos/servicios/${servicioId}/anios-disponibles`);
+
+          if (!response.ok) {
+            throw new Error("Error al obtener los años disponibles");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion para mostrar los años disponibles en el select
+      const mostrarAniosDisponibles = (anios) => {
+        // Limpiar select (por si hay opciones previas, dejar solo la opcion por defecto)
+        selectAnios.innerHTML = "<option selected hidden disabled> Seleccione un año </option>";
+
+        // Recorrer el array y agregar opciones al select
+        anios.forEach(anio => {
+          const option = document.createElement("option");
+          option.value = anio.year;
+          option.textContent = anio.year;
+          selectAnios.appendChild(option);
+        })
+      }
+
+      // Obtener los años disponibles para los pagos del servicio
+      const anios = await fetchAniosDisponibles();
+
+      // Mostrar los años disponibles en el select
+      if (anios.length > 0) { // Si hay años disponibles, mostrar en el select
+        mostrarAniosDisponibles(anios);
+      } else { // Si no hay años disponibles, mostrar un mensaje
+        selectAnios.innerHTML = "<option selected hidden disabled> No hay años disponibles </option>";
+      }
+
+      // Funcion fetch para obtener todos los pagos de un año seleccionado
+      const fetchPagosPorAnio = async (anio) => {
+        try {
+          const response = await fetch(`/pagos/servicios/${servicioId}/pagos-anio/${anio}`);
+
+          if (!response.ok) {
+            throw new Error("Error al obtener los pagos del año seleccionado");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion para mostrar los pagos del año seleccionado
+      const mostrarPagosPorAnio = (pagos) => {
+        const pagosContainer = document.querySelector(".pagination-month");
+
+        // Limpiar pagos anteriores
+        pagosContainer.innerHTML = "";
+
+        // Vector de meses
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+        // Recorrer el vector de pagos
+        pagos.forEach(pago => {
+          // Crear un elemento li por cada Pago
+          const li = document.createElement("li");
+          li.className = "page-item";
+          li.innerHTML = `
+            <a href="#" class="page-link pago-mes" data-pago-id="${pago.id}">
+              <p class="page-month">${meses[new Date(pago.fecha_pago).getMonth()]}</p>
+              <p class="page-year">${new Date(pago.fecha_pago).toLocaleDateString()}</p>  
+            </a>`;
+
+            pagosContainer.appendChild(li);
+          })
+      }
+
+      // Funcion fetch para traer los detalles de un Pago
+      const fetchDetallesPago = async (id) => {
+        try {
+          const response = await fetch(`/pagos/servicios/pago/${id}`);
+
+          if (!response.ok) {
+            throw new Error("Error al obtener los detalles del pago");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion para mostrar los detalles del pago
+      const mostrarDetallesPago = (pago) => {
+        const pagoContainer = document.getElementById("pago-container");
+
+        // Limpiar detalles anteriores
+        pagoContainer.innerHTML = "";
+
+        // Funcion para mostrar los detalles
+        function mostrarCampo(label, value) {
+          if (value) {
+            const dt = document.createElement("dt");
+            dt.textContent = label;
+            const dd = document.createElement("dd");
+            dd.textContent = value;
+            pagoContainer.appendChild(dt);
+            pagoContainer.appendChild(dd);
+          };
+        }; // Fin Funcion mostrarCampo
+
+        // Convoco a la funcion mostrarCampo para mostrar los detalles del pago
+        mostrarCampo("Fecha de Pago", new Date(pago.fecha_pago).toLocaleDateString());
+        // mostrarCampo("Forma de Pago", pago.forma_pago.nombre);
+        mostrarCampo("Entidad Bancaria", pago.entidad_bancaria);
+        mostrarCampo("CBU/CVU", pago.cbu);
+        mostrarCampo("CUIT/CUIL", pago.cuit);
+        mostrarCampo("Divisa", pago.divisa);
+        mostrarCampo("Monto", "$" + formatearPrecio(pago.monto));
+
+        // Listado de archivos pertenecientes al pago
+        const archivosPagoContainer = document.createElement("ul");
+        archivosPagoContainer.className = "list-unstyled";
+
+        if (pago.archivos && pago.archivos.length > 0) {
+          // Recorrer el vector de archivos
+          pago.archivos.forEach(archivo => {
+            // Crear un elemento li por cada archivo
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <i class="far fa-fw fa-file-pdf"></i>
+              <a class="btn-link text-secondary" href="/docs/pagos_servicios/${archivo.nombre}" target="_blank">${archivo.nombre}</a>
+            `;
+  
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "btn btn-xs btn-danger";
+            deleteButton.textContent = "Eliminar";
+  
+            deleteButton.addEventListener("click", () => eliminarArchivoPago(archivo.id, li));
+  
+            li.appendChild(deleteButton);
+            archivosPagoContainer.appendChild(li);
+          });
+  
+          pagoContainer.appendChild(archivosPagoContainer);
+        } else {
+          const li = document.createElement("li");
+          li.textContent = "No hay archivos asociados al Pago";
+          archivosPagoContainer.appendChild(li);
+        }
+
+        // Crear un button para subir archivos al Pago
+        const subirArchivosButton = document.createElement("button");
+        subirArchivosButton.className = "btn btn-sm btn-primary";
+        subirArchivosButton.textContent = "Subir archivos";
+        subirArchivosButton.setAttribute("id", "subirArchivosButton");
+        subirArchivosButton.setAttribute("data-toggle", "modal");
+        subirArchivosButton.setAttribute("data-target", "#modal-agregar-archivos-pagos");
+        subirArchivosButton.setAttribute("data-pago-id", pago.id);
+
+        pagoContainer.appendChild(document.createElement("hr"));
+
+        pagoContainer.appendChild(subirArchivosButton);
+
+        // Evento asociar el ID del Pago para poder subir archivos al mismo
+        subirArchivosButton.addEventListener("click", (e) => {
+          document.getElementById("id_pago_servicio").value = e.target.getAttribute("data-pago-id");
+        });
+      }
+
+      // Funcion Fetch para eliminar archivos del Pago
+      const fetchEliminarArchivoPago = async (id) => {
+        try {
+          const response = await fetch(`/pagos/servicios/eliminar-archivo/${id}`, {
+            method: "DELETE",
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al eliminar el archivo del Pago");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Funcion para eliminar archivos del Pago
+      const eliminarArchivoPago = async (idArchivo, listItem) => {
+        if (confirm("¿Estas seguro que quieres eliminar este archivo?")) {
+          const eliminarArchivoResponse = await fetchEliminarArchivoPago(idArchivo);
+          if (eliminarArchivoResponse) {
+            alert(eliminarArchivoResponse.message);
+
+            // Eliminar el item del listado de archivos
+            listItem.remove();
+          } else {
+            alert(eliminarArchivoResponse.message);
+          }
+        }
+      }
+
+      // Evento para obtener los pagos del año seleccionado
+      selectAnios.addEventListener("change", async (e) => {
+        // Cada vez que se cambie el año, guardar en una constante el valor
+        const anio = e.target.value;
+
+        try {
+          // Pagos realizados en un año
+          const pagosPorAnio = await fetchPagosPorAnio(anio);
+
+          // Mostrar los Pagos paginados
+          mostrarPagosPorAnio(pagosPorAnio);
+
+          // Obtener los enlaces de los pagos
+          const pagosLinks = document.querySelectorAll(".pago-mes");
+
+          // Recorrer los enlaces y agregar un evento click
+          pagosLinks.forEach(link => {
+            link.addEventListener("click", async (e) => {
+              // Cancelar el comportamiento por defecto del enlace
+              e.preventDefault();
+
+              // Quitar la clase "active" de todos los elementos
+              pagosLinks.forEach(link => link.parentElement.classList.remove("active"));
+
+              // Agregar la clase "active" al elemento clickeado
+              link.parentElement.classList.add("active");
+
+              // Obtener el ID del pago
+              const pagoId = link.getAttribute("data-pago-id");
+
+              // Obtener los detalles del pago
+              const pago = await fetchDetallesPago(pagoId);
+
+              // Mostrar los detalles del pago
+              if (pago) mostrarDetallesPago(pago);
+            });
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      });
+
+      // Fetch del ultimo pago
+      const fetchUltimoPago = async (id) => {
+        try {
+          const response = await fetch(`/pagos/servicios/${id}/ultimo-pago`);
+
+          if (!response.ok) {
+            throw new Error("Error al obtener el ultimo pago");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const ultimoPago = await fetchUltimoPago(servicioId);
+
+      if (ultimoPago) {
+        mostrarDetallesPago(ultimoPago);
+      } else {
+        const pagoContainer = document.getElementById("pago-container");
+        pagoContainer.innerHTML = "<p>No hay pagos realizados para este servicio.</p>";
+      }
+      
+    })
+  </script>
+
+  <!-- Script subir archivos a servicios -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("Script para subir archivos a servicios");
+
+      const uploadFormServicio = document.getElementById("uploadFormServicio");
+
+      // console.log(uploadFormServicio);
+
+      uploadFormServicio.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Obtener el id del servicio a almacenar los archivos
+        const idServicio = document.getElementById("id_servicio").value;
+
+        // Crear una instancia de FormData con los datos del formulario
+        const formData = new FormData(uploadFormServicio);
+
+        try {
+          const response = await fetch("/gastos/servicios/almacenar-archivos", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+
+          console.log(result.message);
+          alert(result.message)
+
+          // Ocultar el modal
+          $("#modal-agregar-archivos-servicios").modal("hide");
+
+          // Limpiar el formulario
+          uploadFormServicio.reset();
+
+          // Recargar la pagina
+          location.reload();
+        } catch (error) {
+          console.error("Error al enviar los archivos: ", error)
+          alert("Hubo un error al enviar los archivos.")
+        }
+
+      });
+      
+      
+    });
+  </script>
+
+  <!-- Script para eliminar archivos de servicios -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("Script para eliminar archivos de servicios");
+
+      const eliminarArchivoButton = document.querySelectorAll("#eliminarArchivoButton");
+
+      eliminarArchivoButton.forEach(button => {
+        button.addEventListener("click", async (e) => {
+          e.preventDefault();
+          
+          const id = button.dataset.idarchivo;
+
+          confirm("¿Estas seguro de eliminar el archivo?") ? eliminarArchivo(id) : console.log("Cancelado");
+        });
+      })
+
+      const eliminarArchivo = async (id) => {
+        try {
+          const response = await fetch(`/gastos/servicios/eliminar-archivo/${id}`, {
+            method: "DELETE",
+          })
+
+          if (!response.ok) {
+            throw new Error("Error al eliminar el archivo");
+          }
+
+          const result = await response.json();
+
+          // Mostrar mensaje en caso de exito
+          alert(result.message);
+
+          // Recargar la pagina
+          location.reload();
+        } catch (error) {
+          console.error(error);
+          alert(error.message);
+        }
+      }
+    });
+  </script>
+
+  <!-- Script para subir archivos al pago de un servicio -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("Script para subir archivos al pago de un servicio");
+      
+      const uploadFormPagoServicio = document.getElementById("uploadFormPagoServicio");
+
+      // console.log(uploadFormPagoServicio);
+
+      uploadFormPagoServicio.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(uploadFormPagoServicio);
+
+        try {
+          const response = await fetch("/pagos/servicios/almacenar-archivos", {
+            method: "POST",
+            body: formData,
+          })
+
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+
+          alert(result.message);
+
+          // Limpiar el formulario
+          uploadFormPagoServicio.reset();
+
+          // Ocultar el modal
+          $("#modal-agregar-archivos-pagos").modal("hide");
+
+          // Recargar la pagina
+          location.reload();
+        } catch (error) {
+          console.error("Error: ", error);
+          alert(error);
+        }
+      })
+      
+      
+    });
+  </script>
+</body>
+</html

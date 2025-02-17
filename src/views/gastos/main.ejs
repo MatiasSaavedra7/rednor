@@ -16,7 +16,7 @@
     <%- include('../partials/controlSidebar.ejs') %>
 
     <main class="content-wrapper"> <!-- Agregar clase content wrapper -->
-      <section class="content-header">
+      <!-- <section class="content-header">
         <div class="container-fluid">
           <div class="row">
             <div class="col">
@@ -24,13 +24,14 @@
             </div>
           </div>
         </div>
-      </section>
-      <section class="content"> <!-- Agregar clase content -->
+      </section> -->
+      
+      <section class="content mt-3">
         <div class="row">
           <div class="col">
             <div class="card">
-              <!-- <div class="card-header border-0">
-                <h3 class="card-title">Servicios</h3>
+              <div class="card-header border-0">
+                <h3 class="card-title">Gastos</h3>
                 <div class="card-tools">
                   <a href="#" class="btn btn-tool btn-sm">
                     <i class="fas fa-download"></i>
@@ -39,39 +40,60 @@
                     <i class="fas fa-bars"></i>
                   </a>
                 </div>
-              </div> -->
+              </div>
               <div class="card-body table-responsive p-0">
-                <table class="table table-striped table-valign-middle">
+                <table class="table table-striped table-hover">
                   <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Tipo de Gasto</th>
+                    <th>Categoria</th>
                     <th>Monto Anualizado</th>
                     <th>Ultimo Mes</th>
                     <th>Detalles</th>
                   </tr>
                   </thead>
                   <tbody>
-                    <% categorias.forEach(categoria => { %>
-                     <tr class="clickable-row" data-href="/gastos/<%= categoria.id %>">
-                      <td>
-                        <%= categoria.id %>
-                      </td>
-                      <td>
-                        <%= categoria.nombre %>
-                      </td>
-                      <td>
-                        <%= categoria.dia_vencimiento %>
-                      </td>
-                      <td>
-                        <%= categoria.descripcion %>
-                      </td>
-                      <td>
-                        <a href="/gastos/<%= categoria.id %>/detalle">Ver más...</a>
-                      </td>
-                     </tr>
-                    <% }) %>
-                  
+                    <tr>
+                      <td>Servicios</td>
+                      <td>$180,000.00</td>
+                      <td><%= new Date().toLocaleDateString() %></td>
+                      <td><a href="/gastos/servicios">Ver Detalles</a></td>
+                    </tr>
+
+                    <tr>
+                      <td>Honorarios</td>
+                      <td>$120,000.00</td>
+                      <td><%= new Date().toLocaleDateString() %></td>
+                      <td><a href="/gastos/honorarios">Ver Detalles</a></td>
+                    </tr>
+
+                    <tr>
+                      <td>Impuestos</td>
+                      <td>$80,000.00</td>
+                      <td><%= new Date().toLocaleDateString() %></td>
+                      <td><a href="/gastos/impuestos">Ver Detalles</a></td>
+                    </tr>
+
+                    <tr>
+                      <td>Sindicatos</td>
+                      <td>$60,000.00</td>
+                      <td><%= new Date().toLocaleDateString() %></td>
+                      <td><a href="/gastos/sindicatos">Ver Detalles</a></td>
+                    </tr>
+
+                    <tr>
+                      <td>Tarjeta VISA</td>
+                      <td>$40,000.00</td>
+                      <td><%= new Date().toLocaleDateString() %></td>
+                      <td><a href="/gastos/tarjeta-visa">Ver Detalles</a></td>
+                    </tr>
+
+                    <tr>
+                      <td>Planes de Pagos & Moratorias</td>
+                      <td>$20,000.00</td>
+                      <td><%= new Date().toLocaleDateString() %></td>
+                      <td><a href="/gastos/planes">Ver Detalles</a></td>
+                    </tr>
+
                   </tbody>
                 </table>
               </div>
@@ -120,9 +142,6 @@
             </div>
   
           </div>
-        </div>
-  
-        <div class="row">
           <div class="col">
             <div class="card">
               <div class="card-header border-0">
@@ -164,6 +183,7 @@
   
           </div>
         </div>
+
       </section>
     </main>
   </div>

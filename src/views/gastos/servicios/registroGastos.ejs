@@ -3,6 +3,7 @@
 <head>
   <%- include('../../partials/AdminLTEHead.ejs') %>
   <script src="/js/cuit.js"></script>
+  <script src="/js/registroGastos.js"></script>
   <title>REDNOR - Registrar <%= categoria.nombre %></title>
   <style>
     .flex-gap {
@@ -91,6 +92,11 @@
                       </div>
 
                       <div class="form-group">
+                        <label for="nro_tarjeta">N° Tarjeta</label>
+                        <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" maxlength="16"> <!-- Longitud 16 caracteres exactos -->
+                      </div>
+
+                      <div class="form-group">
                         <label for="forma_pago">Forma de Pago</label>
                         <select name="forma_pago" id="forma_pago" class="form-control">
                           <option value="" selected disabled hidden>Seleccione una opcion</option>
@@ -103,11 +109,6 @@
                       <div class="form-group" id="entidad_bancaria_div" style="display: none;">
                         <label for="entidad_bancaria">Entidad Bancaria</label>
                         <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control">
-                      </div>
-
-                      <div class="form-group" id="nro_tarjeta_div" style="display: none;">
-                        <label for="nro_tarjeta">N° Tarjeta</label>
-                        <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" maxlength="16"> <!-- Longitud 16 caracteres exactos -->
                       </div>
 
                       <div class="form-group" id="cbu_div" style="display: none;">
@@ -127,7 +128,7 @@
 
                       <div class="form-group">
                         <label for="telefono">Telefono (Whatsapp)</label>
-                        <input type="tel" name="telefono" id="telefono" placeholder="+54 9 385X XX-XXXX" class="form-control">
+                        <input type="tel" name="telefono" id="telefono" placeholder="" class="form-control">
                       </div>
 
                       <div class="form-group">
@@ -148,7 +149,7 @@
                       <input type="submit" class="btn btn-block btn-primary" />
 
                       <!-- Boton Volver atras -->
-                      <a href="/gastos/<%= categoria.id %>/detalle" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás...</a>
+                      <a href="/gastos/<%= categoria.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás...</a>
                   </form>
                 </div>
               </div>
@@ -172,22 +173,19 @@
     document.addEventListener("DOMContentLoaded", () => {
       let formaPago = document.getElementById("forma_pago");
 
-      const entidadBancaria = document.getElementById("entidad_bancaria_div");
-      const nroTarjeta = document.getElementById("nro_tarjeta_div");
-      const cbu = document.getElementById("cbu_div");
-      const cuitDiv = document.getElementById("cuit_div");
+      const entidadBancaria = document.getElementById("entidad_bancaria");
+      const cbu = document.getElementById("cbu");
+      const cuitDiv = document.getElementById("cuit");
   
       formaPago.addEventListener("change", function () {
         if (this.value === "2") {
-          entidadBancaria.style.display = "block";
-          nroTarjeta.style.display = "block";
-          cbu.style.display = "block";
-          cuitDiv.style.display = "block"
+          entidadBancaria.parentNode.style.display = "block";
+          cbu.parentNode.style.display = "block";
+          cuitDiv.parentNode.style.display = "block"
         } else {
-          entidadBancaria.style.display = "none";
-          nroTarjeta.style.display = "none";
-          cbu.style.display = "none";
-          cuitDiv.style.display = "none";
+          entidadBancaria.parentNode.style.display = "none";
+          cbu.parentNode.style.display = "none";
+          cuitDiv.parentNode.style.display = "none";
         }
       })
 
@@ -202,66 +200,7 @@
     })
   </script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const pathname = window.location.pathname;
-      console.log(pathname);
-
-      const condicionesLead = document.getElementById("condiciones-lead");
-      const condiciones = document.getElementById("condiciones").parentNode;
-      const meses = document.getElementById("mes").parentNode;
-      const nroTarjeta = document.getElementById("nro_tarjeta").parentNode;
-      console.log(condiciones, meses, nroTarjeta);
-
-      switch (pathname) {
-        case "/gastos/1/servicio/crear":
-          condicionesLead.style.display = "none";
-          condiciones.style.display = "none";
-          nroTarjeta.style.display = "none";
-          break;
-        case "/gastos/2/servicio/crear":
-          //  Code
-          nroTarjeta.style.display = "none";
-          break;
-        case "/gastos/3/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/4/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/5/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/6/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/7/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/8/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/9/servicio/crear":
-          //  Code
-          meses.style.display = "block";
-          nroTarjeta.style.display = "block";
-          break;
-        case "/gastos/10/servicio/crear":
-          //  Code
-          condicionesLead.style.display = "none";
-          condiciones.style.display = "none";
-          break;
-        case "/gastos/11/servicio/crear":
-          //  Code
-          break;
-        case "/gastos/12/servicio/crear":
-          //  Code
-          break;
-        default:
-          //  Nada para hacer
-          break;
-      }
-      
-    })
+    
   </script>
 
 

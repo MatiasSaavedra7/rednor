@@ -8,28 +8,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const entidadBancariaModal = document.getElementById("entidad_bancaria_modal");
   const cbuModal = document.getElementById("cbu_modal");
   const cuitModal = document.getElementById("cuit_modal");
-  const nroTarjetaModal = document.getElementById("nro_tarjeta_modal");
-  const mesModal = document.getElementById("mes_modal");
-  const mesSelect = mesModal.querySelector("select");
 
   const formaPago = document.getElementById("id_forma_pago");
 
   const formularioPago = document.getElementById("form-pagar-servicio");
 
   function toggleFieldsModal() {
-    if (formaPago.value == 2) {
+    if (formaPago.value == "2") {
       entidadBancariaModal.style.display = "block";
       cbuModal.style.display = "block";
       cuitModal.style.display = "block";
-      nroTarjetaModal.style.display = "block";
-      mesModal.style.display = "block";
     } else {
       entidadBancariaModal.style.display = "none";
       cbuModal.style.display = "none";
       cuitModal.style.display = "none";
-      nroTarjetaModal.style.display = "none";
-      mesSelect.removeAttribute("required");
-      mesModal.style.display = "none";
     }
   }
 
@@ -43,8 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
       cbuModal.querySelector("input").remove();
       cuitModal.querySelector("input").remove();
       nroTarjetaModal.querySelector("input").remove();
-      mesModal.querySelector("select").removeAttribute("required");
-      mesModal.querySelector("input").remove();
     }
     
   })

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <script src="/js/cuit.js"></script>
+  <script src="/js/detalleGasto.js"></script>
+  <title>Tarjeta VISA</title>
+  <style>
+    .justify-content-center {
+      justify-content: initial !important; /* Sobrescribir el estilo de Bootstrap */
+    }
+
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto; /* Permitir scroll horizontal */
+      /* border: 1px dashed red; */
+    }
+
+    .pagination {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      /* margin: 0 10px; */
+      padding: 10px 0;
+      list-style-type: none;
+      /* border: 1px dashed blue; */
+    }
+
+    .page-item {
+      margin: 0 5px;
+    }
+
+    .page-link {
+      display: block;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .page-link:hover {
+      background-color: #e0e0e0;
+      cursor: pointer;
+    }
+
+    .active .page-link {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .pagination-btn {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+    
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+
+    <main class="content-wrapper">
+      <!-- Main content -->
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Gasto Tarjeta 1</h3>
+        
+                  <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#modal-lg">
+                    Pagar Servicio
+                  </button>
+
+                </div>
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                      <div class="row">
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">A devengar</span>
+                              <span class="info-box-number text-center text-muted mb-0 precios"><%# gasto.monto %></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Total gastado en el año</span>
+                              <span class="info-box-number text-center text-muted mb-0">$2300</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Proximo vencimiento en</span>
+                              <span class="info-box-number text-center text-muted mb-0">20</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <!-- Datos del Pago -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Datos del Pago</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                              </div>
+                              
+                            </div>
+                            <div class="card-body">
+
+                              <!-- Menu de seleccion del año -->
+                              <div class="form-group" style="width: 50%; margin: 0 auto;">
+                                <select name="select-anio" id="select-anio" class="form-control">
+                                  <option value="" selected hidden disabled>Seleccione un año</option>
+                                  <%# anios.forEach(anio => { %>
+                                   <option value="<%# anio.year %>"><%# anio.year %></option>
+                                  <%# }) %>
+                                </select>
+                              </div>
+
+                              <!-- Paginacion por meses -->
+                              <div class="pagination-container">
+                                <ul class="pagination pagination-month justify-content-center">
+                                  <!-- Listado de pagos por mes -->
+                                </ul>
+                              </div>
+
+                              <hr>
+                              <!-- Pago -->
+                              <div id="pagos-container">
+                                <!-- Detalles del Pago -->
+                              </div>
+                              <!-- <h5 class="mt-3 text-muted">Project files</h5> -->
+                              <ul class="list-unstyled" id="archivos-list">
+                                <!-- Listado de archivos pertenecientes al pago -->
+                              </ul>
+                              <!-- <a type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-agregar-archivos">Add files</a> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /Datos del Pago -->
+    
+                      <%# if (gasto.email || gasto.telefono) { %>
+                        <!-- Alertas -->
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header">
+                                <h3 class="card-title">Alertas</h3>
+                                <div class="card-tools">
+                                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label for="mensaje-personalizado">Mensaje Personalizado: </label>
+                                  <textarea name="mensaje-personalizado" id="mensaje-personalizado" rows="4" cols="50" class="form-control"></textarea>
+                                </div>
+                                <%# if (gasto.telefono) { %>
+                                  <div class="callout callout-success">
+                                    <h5>WhatsApp</h5>
+                                    <p><%# gasto.telefono %></p>
+                                    <p id="alerta-telefono"></p>
+                                    <a id="boton-alerta-telefono"></a>
+                                  </div>
+                                <%# } %>
+                                
+                                <%# if (gasto.email) { %>
+                                  <div class="callout callout-info">
+                                    <h5>Mensaje de Correo</h5>
+                                    <p><%# gasto.email %></p>
+                                    <p id="alerta-correo"></p>
+                                    <a id="boton-alerta-correo"></a>
+                                  </div>
+                                <%# } %>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /Alertas -->
+                      <%# } %>
+                    </div>
+                    
+                     <!-- Informacion del gasto/servicio -->
+                    <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                      <h3 class="text-primary">
+                        <i class="fas fa-paint-brush"></i>
+                        <%# gasto.nombre %>
+                        <a class="btn btn-sm" href="#">
+                          <i class="fas fa-edit"></i> Edit
+                        </a>
+                      </h3>
+                      
+
+                      <div class="row">
+                        <div class="col-6">
+
+                          <p class="text-muted"><%# gasto.descripcion %></p>
+
+                          <br>
+
+                          <div class="text-muted">
+                            <%# if (gasto.condiciones) { %>
+                              <p class="text-sm">Condiciones
+                                <b class="d-block"><%# gasto.condiciones %></b>
+                              </p>
+                            <%# } %>
+                            <p class="text-sm">Dia de Vencimiento
+                              <b class="d-block"><%# gasto.dia_vencimiento %> de cada mes</b>
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="col-6">
+                          <dt>Forma de Pago</dt>
+                          <dd><%# gasto.forma_pago.nombre %></dd>
+
+                          <%# if (gasto.entidad_bancaria) { %>
+                           <dt>Entidad Bancaria</dt>
+                           <dd><%# gasto.entidad_bancaria %></dd>
+                          <%# } %>
+
+                          <%# if (gasto.nro_tarjeta) { %>
+                           <dt>Nro. Tarjeta</dt>
+                           <dd><%# gasto.nro_tarjeta %></dd>
+                          <%# } %>
+
+                          <%# if (gasto.cbu) { %>
+                           <dt>CBU</dt>
+                           <dd><%# gasto.cbu %></dd>
+                          <%# } %>
+
+                          <%# if (gasto.cuit) { %>
+                           <dt>CUIT</dt>
+                           <dd><%# gasto.cuit %></dd>
+                          <%# } %>
+
+                          <dt>Divisa</dt>
+                          <dd><%# gasto.divisa %></dd>
+
+                          <dt>Monto</dt>
+                          <dd class="precios"><%# gasto.monto %></dd>
+
+                          <dt>Frecuencia</dt>
+                          <dd><%# gasto.frecuencia %></dd>
+                          
+                          <%# if (gasto.email) { %>
+                            <dt>Correo</dt>
+                            <dd><a href="mailto:<%# gasto.email %>"><%# gasto.email %></a></dd>
+                          <%# } %>
+
+                          <%# if (gasto.telefono) { %>
+                            <dt>Telefono</dt>
+                            <dd><%# gasto.telefono %></dd>
+                          <%# } %>
+                        </div>
+                      </div>
+        
+                      <h5 class="mt-5 text-muted">Archivos del Servicio</h5>
+                      <ul class="list-unstyled" id="archivos-list-gasto">
+                        <%# gasto.archivos.forEach(archivo => { %>
+                         <!-- <li><i class="far fa-fw fa-file-pdf"></i> <a class="btn-link text-secondary" href="/docs/gastos/<%#= archivo.nombre %>" target="_blank"><%#= archivo.nombre %></a></li> -->
+                        <%# }) %>
+                        <!-- Listado de archivos pertenecientes al pago -->
+                      </ul>
+                      <div class="text-center mt-5 mb-3">
+                        <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-agregar-archivos-gastos">Add files</a>
+                        <a href="#" class="btn btn-sm btn-warning">Report contact</a>
+                      </div>
+                    </div>
+                    <!-- /Informacion del gasto/servicio -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal de Pago -->
+      <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Pagar Servicio</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <!-- Formulario para registrar nuevo pago -->
+            <form action="#" method="post" id="form-pagar-servicio">
+              <!-- Modal Body -->
+              <div class="modal-body">
+                <div class="form-group">
+
+                  <div class="form-group" style="display: none;">
+                    <label for="mes">Mes</label>
+                    <select name="mes" id="mes" class="form-control">
+                      <option value="" selected hidden disabled>Seleccione una opcion</option>
+                      <option value="Enero">Enero</option>
+                      <option value="Febrero">Febrero</option>
+                      <option value="Marzo">Marzo</option>
+                      <option value="Abril">Abril</option>
+                      <option value="Mayo">Mayo</option>
+                      <option value="Junio">Junio</option>
+                      <option value="Julio">Julio</option>
+                      <option value="Agosto">Agosto</option>
+                      <option value="Septiembre">Septiembre</option>
+                      <option value="Octubre">Octubre</option>
+                      <option value="Noviembre">Noviembre</option>
+                      <option value="Diciembre">Diciembre</option>
+                    </select>
+                  </div>
+
+                  <label for="id_forma_pago">Forma de Pago</label>
+                  <select name="id_forma_pago" id="id_forma_pago" class="form-control" required>
+                    <option value="" selected disabled hidden>Seleccione una opcion</option>
+                    <%# formas_pago.forEach(forma_pago => { %>
+                     <option value="<%# forma_pago.id %>">
+                    <%# forma_pago.nombre %>
+                    </option>
+                    <%# }) %>
+                  </select>
+                </div>
+
+                <div class="form-group" id="entidad_bancaria_modal" style="display: none;">
+                  <label for="entidad_bancaria">Entidad Bancaria</label>
+                  <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control" value="<%# gasto.entidad_bancaria %>"> <!--  Longitud 22 caracteres exactos -->
+                </div>
+
+                <div class="form-group" id="nro_tarjeta_modal" style="display: none;">
+                  <label for="nro_tarjeta">Numero de Tarjeta</label>
+                  <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" value="<%# gasto.nro_tarjeta %>" maxlength="16">
+                </div>
+
+                <div class="form-group" id="cbu_modal" style="display: none;">
+                  <label for="cbu">CBU/CVU</label>
+                  <input type="text" name="cbu" id="cbu" class="form-control" value="<%# gasto.cbu %>" maxlength="22">
+                </div>
+
+                <div class="form-group" id="cuit_modal" style="display: none;">
+                  <label for="cuit">CUIT/CUIL (Sin guiones)</label>
+                  <input type="text" name="cuit" id="cuit" class="form-control" value="<%# gasto.cuit %>">
+                </div>
+
+                <div class="form-group">
+                  <label for="divisa">Divisa</label>
+                  <select name="divisa" id="divisa" class="form-control">
+                    <option value="" selected hidden disabled>Seleccione una opcion</option>
+                    <option value="ARS" <%# gasto.divisa == "ARS" ? "selected" : "" %>>ARS</option>
+                    <option value="USD" <%# gasto.divisa == "USD" ? "selected" : "" %>>USD</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="monto">Monto</label>
+                  <input type="text" name="monto" id="monto" value="<%# gasto.monto %>" class="form-control">
+                </div>
+              </div>
+              
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Pagar</button>
+              </div>
+            </form>
+            <!-- Fin Formulario -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- Modal agregar archivos a Pagos -->
+      <div class="modal fade" id="modal-agregar-archivos">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Agregar Archivos al Pago</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <!-- <form action="/gastos/pagos/almacenar-archivos" method="post" enctype="multipart/form-data" id="uploadForm"> -->
+            <form action="/archivos-pagos/almacenar" method="post" enctype="multipart/form-data" id="uploadForm">
+
+              <!-- Modal Body -->
+              <div class="modal-body">
+
+                <div class="form-group">
+                  <label for="id_pago">ID del Pago</label>
+                  <input type="number" name="id_pago" id="id_pago" value="" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_pagos_label">Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="archivos_pagos" class="custom-file-input" id="archivos_pagos" multiple>
+                      <label for="archivos_pagos" class="custom-file-label">Elegir un archivo...</label>
+                    </div>
+                    <div class="input-group-append">
+                      <!-- <span class="input-group-text">Subir</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Modal Footer -->
+              <div class="modal-footer justify-content-between">
+                <button type="reset" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- Modal agregar archivos a Gastos -->
+      <div class="modal fade" id="modal-agregar-archivos-gastos">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Agregar Archivos al Gasto</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+            <form action="/archivos-gastos/almacenar" method="post" enctype="multipart/form-data" id="uploadFormGasto">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="id_gasto">ID Gasto: </label>
+                  <input type="number" name="id_gasto" id="id_gasto" value="<%# gasto.id %>" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_gastos_label">Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="archivos_gastos" class="custom-file-input" id="archivos_gastos" multiple>
+                      <label class="custom-file-label" for="archivos_gastos">Elegir Archivo</label>
+                    </div>
+                    <div class="input-group-append">
+                      <!-- <span class="input-group-text">Upload</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
+              </div>
+            </form>
+        </div>
+      </div>
+      </div>
+    </main>
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script src="/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+  </script>
+</body>
+</html

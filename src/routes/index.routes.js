@@ -13,14 +13,30 @@ const repuestos = require("./repuestos.routes.js");
 const taller = require("./taller.routes.js");
 const pagos = require("./pagos.routes.js");
 const externos = require('./taller.externo.routes.js');
-const gastos = require('./gastos.routes.js');
 const archivosPagos = require("./archivosPagos.routes.js");
 const archivosGastos = require("./archivosGastos.routes.js");
+
+// Modulo de Gastos
+// Ruta Principal
+const gastos = require('./gastos.routes.js');
+// Categorias
+const servicios = require("./gastos.routes/servicios.routes.js");
+const honorarios = require("./gastos.routes/honorarios.routes.js");
+const impuestos = require("./gastos.routes/impuestos.routes.js");
+const sindicatos = require("./gastos.routes/sindicatos.routes.js");
+const tarjeta = require("./gastos.routes/tarjeta.routes.js");
+const planes = require("./gastos.routes/planes.routes.js");
+
+// Modulo de Gastos
+// Categorias
+const pagosServicios = require("./pagos.routes/pagosServicios.routes.js");
+const pagosPlanes = require("./pagos.routes/pagosPlanes.routes.js");
 
 //  Rutas para pruebas
 const pruebas = require("./pruebas.routes.js");
 
 //  Middlewares
+// Middleware de autenticacion de usuario
 const authMiddleware = require("../middlewares/authMiddleware.js");
 //  Middleware para controlar el acceso a rutas segun el rol (1- Admin, 2 - Moderador, 3 - Tecnico, 4 - Invitado)
 const roleMiddleware = require("../middlewares/roleMiddleware.js");
@@ -56,10 +72,10 @@ router.use("/taller/externos", authMiddleware, roleMiddleware([1]), externos);
 router.use("/pruebas", pruebas);
 
 // Pagos routes
-router.use("/pagos", authMiddleware, roleMiddleware([1]), pagos);
+router.use("/pagos", /* authMiddleware, /*roleMiddleware([1]),*/ pagos);
 
 // Gastos routes
-router.use("/gastos", authMiddleware, roleMiddleware([1]), gastos);
+router.use("/gastos", authMiddleware, /*roleMiddleware([1]),*/ gastos);
 
 // Usuarios routes
 router.use("/usuarios", usuarios);
@@ -69,5 +85,31 @@ router.use("/archivos-pagos", archivosPagos);
 
 // Archivo de gastos routes
 router.use("/archivos-gastos", archivosGastos);
+
+// MODULO DE GASTOS
+// Servicios
+router.use("/gastos", servicios);
+
+// Honorarios
+router.use("/gastos", honorarios);
+
+// Impuestos
+router.use("/gastos", impuestos);
+
+// Sindicatos
+router.use("/gastos", sindicatos);
+
+// Tarjeta VISA
+router.use("/gastos", tarjeta);
+
+// Planes de Pago & Moratorias
+router.use("/gastos", planes);
+
+// MODULO DE PAGOS
+// Servicios
+router.use("/pagos", pagosServicios);
+
+// Planes de Pago & Moratorias
+router.use("/pagos", pagosPlanes);
 
 module.exports = router;

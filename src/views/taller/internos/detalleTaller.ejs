@@ -50,7 +50,8 @@
                 <div class="card-body">
                   <!-- Fecha de Ingreso -->
                   <dt>Fecha de Ingreso</dt>
-                  <dd><%= ingreso.fecha_ingreso.toLocaleString() %></dd>
+                  <dd><%= ingreso.fecha_ingreso.toLocaleDateString() %></dd>
+                  <dd><%= ingreso.fecha_ingreso.toLocaleTimeString() %></dd>
 
                   <dt>Estado</dt>
                   <dd><%= ingreso.estado.nombre %></dd>
@@ -145,7 +146,8 @@
                 <div class="card-body">
                   <!-- Fecha de Egreso -->
                   <dt>Fecha de Egreso</dt>
-                  <dd><%= egreso.fecha_egreso.toLocaleString() %></dd>
+                  <dd><%= egreso.fecha_egreso.toLocaleDateString() %></dd>
+                  <dd><%= egreso.fecha_egreso.toLocaleTimeString() %></dd>
 
                   <!-- Detalles de la Reparacion -->
                   <dt>Detalles de la Reparacion</dt>

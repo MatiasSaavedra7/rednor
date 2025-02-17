@@ -5,7 +5,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.FormaPago.findAll({
-        include: ["egreso", "egreso_externo", "pago", "gasto"]
+        // include: ["egreso", "egreso_externo", "pago", "gasto", "pago_servicio"]
       });
     } catch (error) {
       console.log(error);

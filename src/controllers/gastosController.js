@@ -3,6 +3,13 @@ const formasPagoService = require("../database/services/formasPagoService.js");
 const gastosService = require("../database/services/gastosService.js");
 const pagosService = require("../database/services/pagosService.js");
 const archivosPagosService = require("../database/services/archivosPagosService.js");
+
+// Planes de Pago & Moratorias
+// const planPagoService = require("../database/services/planPagoService.js");
+// const cuotasService = require("../database/services/cuotasService.js");
+// const vencimientosService = require("../database/services/vencimientosService.js");
+
+// Modulos para trabajar con archivos
 const fs = require("fs");
 const util = require("util");
 const unlinkAsync = util.promisify(fs.unlink);
@@ -78,6 +85,83 @@ module.exports = {
       res.redirect(`/gastos/${req.params.idCategoria}/servicio/${gasto.id}`)
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  // Formulario de registro Planes de Pago & Moratorias
+  registroPlanPago: async (req, res) => {
+    try {
+      res.render("gastos/servicios/registroPlanPago");
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  almacenarPlanPago: async (req, res) => {
+    try {
+      const planPagoData = req.body;
+
+      // Almacenar el plan de pago en la base de datos
+      const planPago = await planPagoService.create({
+        nro_plan: planPagoData.nro_plan,
+        cuit: planPagoData.cuit,
+        nombre: planPagoData.nombre,
+        cbu: planPagoData.cbu,
+        fecha_consolidacion: planPagoData.fecha_consolidacion,
+        cantidad_cuotas: planPagoData.cantidad_cuotas,
+      });
+
+      if (!planPago) {
+        return res.json({ error: "Error al crear el plan de pago" });
+      }
+
+      // Crear las cuotas
+      for (let i = 0; i < planPagoData.cantidad_cuotas; i++) {
+        const cuotaData = planPagoData.cuotas[i];
+        // Almacenar la cuota en la base de datos
+        const cuota = await cuotasService.create({
+          id_plan_pago: planPago.id,
+          nro_cuota: cuotaData.nro_cuota,
+          capital: cuotaData.capital,
+        });
+
+        if (!cuota) {
+          return res.json({ error: "Error al crear la cuota" });
+        }
+
+        // Crear los vencimientos
+        for (let j = 0; j < 2; j++) { // 2 vencimientos por cuota
+          const vencimientoData = cuotaData.vencimientos[j];
+          // Almacenar el vencimiento en la base de datos
+          const vencimiento = await vencimientosService.create({
+            id_cuota: cuota.id,
+            fecha_vencimiento: vencimientoData.fecha_vencimiento,
+            interes_financiero: vencimientoData.interes_financiero,
+            interes_resarcitorio: vencimientoData.interes_resarcitorio,
+            total: vencimientoData.total,
+          });
+
+          if (!vencimiento) {
+            return res.json({ error: "Error al crear el vencimiento" });
+          }
+        }
+      }
+
+      res.json({ message: "Plan de Pago creado correctamente" });
+      
+    } catch (error) {
+      console.log("Error almacenando plan de pago: ", error);
+      
+    }
+  },
+
+  // Detalle de Planes de Pagos & Moratorias
+  detallePlanPago: async (req, res) => {
+    try {
+      const planPago = await planPagoService.getAll();
+      res.send(planPago);
+    } catch (error) {
+      console.error("Error al traer informacion de los planes de pagos: ", error);
     }
   },
 

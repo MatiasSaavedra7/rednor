@@ -326,8 +326,28 @@
               <!-- Modal Body -->
               <div class="modal-body">
                 <div class="form-group">
+
+                  <div class="form-group" style="display: none;">
+                    <label for="mes">Mes</label>
+                    <select name="mes" id="mes" class="form-control">
+                      <option value="" selected hidden disabled>Seleccione una opcion</option>
+                      <option value="Enero">Enero</option>
+                      <option value="Febrero">Febrero</option>
+                      <option value="Marzo">Marzo</option>
+                      <option value="Abril">Abril</option>
+                      <option value="Mayo">Mayo</option>
+                      <option value="Junio">Junio</option>
+                      <option value="Julio">Julio</option>
+                      <option value="Agosto">Agosto</option>
+                      <option value="Septiembre">Septiembre</option>
+                      <option value="Octubre">Octubre</option>
+                      <option value="Noviembre">Noviembre</option>
+                      <option value="Diciembre">Diciembre</option>
+                    </select>
+                  </div>
+
                   <label for="id_forma_pago">Forma de Pago</label>
-                  <select name="id_forma_pago" id="id_forma_pago" class="form-control">
+                  <select name="id_forma_pago" id="id_forma_pago" class="form-control" required>
                     <option value="" selected disabled hidden>Seleccione una opcion</option>
                     <% formas_pago.forEach(forma_pago => { %>
                      <option value="<%= forma_pago.id %>">
@@ -345,25 +365,6 @@
                 <div class="form-group" id="nro_tarjeta_modal" style="display: none;">
                   <label for="nro_tarjeta">Numero de Tarjeta</label>
                   <input type="text" name="nro_tarjeta" id="nro_tarjeta" class="form-control" value="<%= gasto.nro_tarjeta %>" maxlength="16">
-                </div>
-
-                <div class="form-group" id="mes_modal" style="display: none;">
-                  <label for="mes">Mes</label>
-                  <select name="mes" id="mes" class="form-control" required>
-                    <option value="" selected hidden disabled>Seleccione una opcion</option>
-                    <option value="Enero">Enero</option>
-                    <option value="Febrero">Febrero</option>
-                    <option value="Marzo">Marzo</option>
-                    <option value="Abril">Abril</option>
-                    <option value="Mayo">Mayo</option>
-                    <option value="Junio">Junio</option>
-                    <option value="Julio">Julio</option>
-                    <option value="Agosto">Agosto</option>
-                    <option value="Septiembre">Septiembre</option>
-                    <option value="Octubre">Octubre</option>
-                    <option value="Noviembre">Noviembre</option>
-                    <option value="Diciembre">Diciembre</option>
-                  </select>
                 </div>
 
                 <div class="form-group" id="cbu_modal" style="display: none;">
@@ -631,10 +632,6 @@
     }
   </script>
 
-  <script>
-    
-  </script>
-
   <!-- Script mostrar archivos del gasto -->
   <script>
     document.addEventListener("DOMContentLoaded", (e) => {
@@ -710,7 +707,7 @@
     })
   </script>
 
-  <!-- Script Upload Form Gasto -->
+  <!-- Script para subir archivos a los gastos -->
   <script>
    document.addEventListener("DOMContentLoaded", () => {
     const uploadFormGasto = document.getElementById("uploadFormGasto");
@@ -825,7 +822,7 @@
    }) 
   </script>
 
-
+  <!-- Script para formatear los precios -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const precios = document.querySelectorAll(".precios");
@@ -837,7 +834,7 @@
     })
   </script>
 
-  <!-- Script para manejar el cambio de selección del año -->
+  <!-- Script para mostrar los detalles de los pagos -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const selectAnio = document.getElementById("select-anio");
@@ -871,17 +868,15 @@
             // Enviar la informacion del pago a las alertas de telefono
             const alertaTelefono = document.getElementById("alerta-telefono");
             alertaTelefono.innerHTML = "";  // Limpiar el contenedor de alertas de telefono
-            alertaTelefono.innerText = `Hola ${data.gasto.nombre}, te informamos que tu pago de $${formatearPrecio(data.monto)} ${data.divisa} ha sido realizado exitosamente el ${new Date(data.fecha_pago).toLocaleDateString()}.`;
             
             const parentNodeAlertaTelefono = alertaTelefono.parentNode;
-
-            // Obtener el mensaje personalizado del usuario
             
             // Crear un enlace para enviar un mensaje de WhatsApp
             let aTelefono = document.getElementById("boton-alerta-telefono");
             aTelefono.className = "btn btn-success text-white text-decoration-none btn-sm";
             aTelefono.target = "_blank";
-            aTelefono.textContent = "Enviar";
+            aTelefono.textContent = "Enviar WhatsApp";
+
             // Agregar el enlace al contenedor padre de la alerta
             parentNodeAlertaTelefono.appendChild(aTelefono);
 
@@ -889,8 +884,8 @@
             aTelefono.addEventListener("click", (e) => {
               // Obtener el mensaje personalizado del usuario
               const mensajePersonalizado = document.getElementById("mensaje-personalizado").value;
+
               // Enviar un mensaje de WhatsApp al telefono del usuario
-              //aTelefono.href = `https://api.whatsapp.com/send?phone=${data.gasto.telefono}&text=Hola%20${data.gasto.nombre},%20te%20informamos%20que%20tu%20pago%20de%20$${formatearPrecio(data.monto)}%20${data.divisa}%20ha%20sido%20realizado%20exitosamente%20el%20${new Date(data.fecha_pago).toLocaleDateString()}.%0A%0A${encodeURIComponent(mensajePersonalizado)}`;
               aTelefono.href = `https://api.whatsapp.com/send?phone=${data.gasto.telefono}&text=${encodeURIComponent(mensajePersonalizado)}%0AFecha:%20${new Date(data.fecha_pago).toLocaleDateString()}%0A${data.forma_pago.nombre}%0A${data.divisa}$${formatearPrecio(data.monto)}`;
             })
           }
@@ -899,7 +894,6 @@
             // Enviar la informacion del pago a las alertas de correo
             const alertaCorreo = document.getElementById("alerta-correo");
             alertaCorreo.innerHTML = "";  // Limpiar el contenedor de alertas de correo
-            alertaCorreo.innerText = `Hola ${data.gasto.nombre}, te informamos que tu pago de $${formatearPrecio(data.monto)} ${data.divisa} ha sido realizado exitosamente el ${new Date(data.fecha_pago).toLocaleDateString()}.`;
     
             const parentNodeAlertaCorreo = alertaCorreo.parentNode;
     
@@ -907,10 +901,19 @@
             let aCorreo = document.getElementById("boton-alerta-correo");
             aCorreo.href = `mailto:${data.gasto.email}?subject=Confirmacion%20de%20Pago&body=Hola%20${data.gasto.nombre},%20te%20informamos%20que%20tu%20pago%20de%20$${formatearPrecio(data.monto)}%20${data.divisa}%20ha%20sido%20realizado%20exitosamente%20el%20${new Date(data.fecha_pago).toLocaleDateString()}.`;
             aCorreo.className = "btn btn-info text-white text-decoration-none btn-sm";
-            aCorreo.textContent = "Enviar";
+            aCorreo.textContent = "Enviar Correo";
     
             // Agregar el enlace al contenedor padre de la alerta
             parentNodeAlertaCorreo.appendChild(aCorreo);
+
+            // Agregar el evento click al enlace de Correo
+            aCorreo.addEventListener("click", (e) => {
+              // Obtener el mensaje personalizado del usuario
+              const mensajePersonalizado = document.getElementById("mensaje-personalizado").value;
+
+              // Enviar un mensaje de correo electronico al usuario
+              aCorreo.href = `mailto:${data.gasto.email}?subject=Confirmacion%20de%20Pago&body=${encodeURIComponent(mensajePersonalizado)}%0AFecha:%20${new Date(data.fecha_pago).toLocaleDateString()}%0A${data.forma_pago.nombre}%0A${data.divisa}$${formatearPrecio(data.monto)}`;
+            })
           }
 
           // Funcion para mostrar los detalles del pago
@@ -1268,5 +1271,42 @@
       }
     });
   </script>  
+
+  <!-- Script para personalizar el envio de mensajes por WhatsApp y Correo -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const mensajePersonalizado = document.getElementById("mensaje-personalizado");
+      const botonAlertaTelefono = document.getElementById("boton-alerta-telefono");
+      const botonAlertaCorreo = document.getElementById("boton-alerta-correo");
+
+      // Recuperar el mensaje personalizado desde localStorage
+      const mensajeGuardado = localStorage.getItem("mensajePersonalizado");
+
+      if (mensajeGuardado) {
+        mensajePersonalizado.value = mensajeGuardado;  
+      }
+
+      // Guardar el mensaje personalizado en localStorage al cambiar su valor
+      mensajePersonalizado.addEventListener("input", () => {
+        localStorage.setItem("mensajePersonalizado", mensajePersonalizado.value);
+      })
+    })
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let pathname = window.location.pathname;
+      let pathParths = pathname.split("/");
+      let idCategoria = pathParths[2];
+      console.log("ID Categoria:", idCategoria);
+      console.log("Tipo: ", typeof idCategoria);
+
+      console.log("Mes:", document.getElementById("mes").parentNode);
+
+      if (idCategoria == "9") {
+        document.getElementById("mes").parentNode.style.display = "block";
+      }
+    })
+  </script>
 </body>
 </html>

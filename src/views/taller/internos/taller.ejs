@@ -53,11 +53,11 @@
                                 <%= ingresoEnTaller.equipo.numero_serie %>
                               </td>
                               <td>
-                                <%= ingresoEnTaller.fecha_ingreso.toLocaleString() %>
+                                <%= ingresoEnTaller.fecha_ingreso.toLocaleDateString() %>
                               </td>
                               <td>
                                 <% if (ingresoEnTaller.egreso) { %>
-                                  <%= ingresoEnTaller.egreso.fecha_egreso.toLocaleString() %>
+                                  <%= ingresoEnTaller.egreso.fecha_egreso.toLocaleDateString() %>
                                 <% } else { %>
                                   -
                                 <% } %>
@@ -135,11 +135,11 @@
                                 <%= ingresoHistorial.equipo.numero_serie %>
                               </td>
                               <td>
-                                <%= ingresoHistorial.fecha_ingreso.toLocaleString() %>
+                                <%= ingresoHistorial.fecha_ingreso.toLocaleDateString() %>
                               </td>
                               <td>
                                 <% if (ingresoHistorial.egreso) { %>
-                                  <%= ingresoHistorial.egreso.fecha_egreso.toLocaleString() %>
+                                  <%= ingresoHistorial.egreso.fecha_egreso.toLocaleDateString() %>
                                 <% } else { %>
                                   -
                                 <% } %>

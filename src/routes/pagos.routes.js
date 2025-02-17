@@ -3,6 +3,16 @@ const router = Router();
 
 const controller = require("../controllers/pagosController");
 
+// NUEVO MODULO
+// Pagos de Servicios
+const pagosServiciosController = require("../controllers/pagosController/pagosServiciosController")
+
+// Pagos de Planes de Pago & Moratorias
+const pagosPlanesController = require("../controllers/pagosController/pagosPlanesController")
+
+// Multer middleware
+const upload = require("../middlewares/multerMiddleware");
+
 // router.get("/cheques/registro", controller.registroCheques);
 
 // Detalle de un pago

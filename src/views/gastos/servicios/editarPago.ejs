@@ -36,8 +36,6 @@
                   <h3 class="card-title">Editar Pago</h3>
                 </div>
                 <div class="card-body">
-                  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima culpa odio, delectus quo velit natus aperiam magnam, mollitia aliquid voluptate laudantium ab molestiae quasi, repellat architecto dolor doloremque eaque ad.</p>
-                  
                   <!-- Formulario para editar pago -->
                   <form action="/pagos/<%= pago.id %>/editar?_method=PUT" method="post">
                     <div class="form-group">
@@ -105,10 +103,14 @@
                       <input type="text" name="monto" id="monto" value="<%= pago.monto %>" class="form-control">
                     </div>
 
+                    <!-- Boton Guardar Cambios -->
                     <input type="submit" value="Guardar" class="btn btn-primary btn-block">
 
                     <!-- Boton Eliminar -->
                     <a href="" type="button" class="btn btn-block btn-danger mt-3" data-toggle="modal" data-target="#modal-eliminar">Eliminar</a>
+
+                    <!-- Boton Cancelar -->
+                    <a href="/gastos/<%= pago.gasto.id_categoria %>/servicio/<%= pago.id_gasto %>" class="btn btn-block btn-secondary mt-3">Cancelar</a>
                   </form>
 
                 </div>
@@ -148,7 +150,6 @@
       console.log("DOM cargado y listo");
       const idPago = "<%= pago.id %>";
       console.log("ID Pago: ", idPago);
-      
 
       // Fetch para obtener un pago
       fetch(`/pagos/${idPago}`)
@@ -175,7 +176,6 @@
           cuit.style.display = "none";
         }
       })
-
 
       cuit.addEventListener("input", (event) => {
         event.target.value = patternMatch({

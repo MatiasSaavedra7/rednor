@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../../partials/AdminLTEHead.ejs') %>
+    <%- include('../../partials/AdminLTEHeadTables.ejs') %>
+    <title>Honorarios</title>
+  </head>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../../partials/navbar.ejs') %>
+  
+      <!-- Main Sidebar -->
+      <%- include('../../partials/mainSidebar.ejs') %>
+  
+      <!-- Control Sidebar -->
+       <%- include('../../partials/controlSidebar.ejs') %>
+       
+      <!-- Main Content -->
+      <main class="content-wrapper">
+        <section class="content mt-3">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Honorarios</h3>
+                    <a href="/gastos/honorarios/crear" class="btn btn-outline-primary float-right">Nuevo</a>
+                  </div>
+                  <div class="card-body">
+                    <table id="table" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Nombre del Servicio</th>
+                          <th>Dia de Vencimiento</th>
+                          <th>Monto</th>
+                          <th>Detalles</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% honorarios.forEach(honorario => { %>
+                         <tr>
+                          <td><%= honorario.id %></td>
+                          <td><%= honorario.nombre %></td>
+                          <td><%= honorario.dia_vencimiento %></td>
+                          <td>$<%= (Math.random() * (100000 - 10000) + 10000).toFixed(2) %></td>
+                          <td><a href="/gastos/honorarios/<%= honorario.id %>/detalles" class="clickable-row" data-href="/gastos/honorarios/<%= honorario.id %>/detalles">Detalles</a></td>
+                         </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <%- include('../../partials/AdminLTEScripts.ejs') %>
+    <%- include('../../partials/AdminLTEScriptsTables.ejs') %>
+    <script>
+      $(function () {
+        $("#table").DataTable({
+          "responsive": true, "lengthChange": false, "autoWidth": false,
+          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#table_wrapper .col-md-6:eq(0)');
+      });
+    </script>
+
+    <!-- Clickable row -->
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.clickable-row').forEach(row => {
+          row.style.cursor = "pointer";
+          row.addEventListener('click', () => {
+            window.location.href = row.getAttribute('data-href');
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

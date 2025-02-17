@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/AdminLTEHead.ejs') %>
+  <!-- <script src="/js/cuit.js"></script> -->
+  <!-- <script src="/js/detalleGasto.js"></script> -->
+  <title>Planes de Pagos & Moratorias</title>
+  <style>
+    .justify-content-center {
+      justify-content: initial !important; /* Sobrescribir el estilo de Bootstrap */
+    }
+
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto; /* Permitir scroll horizontal */
+      /* border: 1px dashed red; */
+    }
+
+    .pagination {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      /* margin: 0 10px; */
+      padding: 10px 0;
+      list-style-type: none;
+      /* border: 1px dashed blue; */
+    }
+
+    .page-item {
+      margin: 0 5px;
+    }
+
+    .page-link {
+      display: block;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .page-link:hover {
+      background-color: #e0e0e0;
+      cursor: pointer;
+    }
+
+    .active .page-link {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .pagination-btn {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar.ejs') %>
+    
+    <!-- Main Sidebar -->
+    <%- include('../../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../../partials/controlSidebar.ejs') %>
+
+    <main class="content-wrapper">
+      <!-- Main content -->
+      <section class="content pt-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h3 class="card-title">Numero de Plan: <%= plan.nro_plan %></h3>
+                      <a href="/gastos/planes/<%= plan.id %>/editar"><i class="fas fa-edit ml-1"></i></a>
+                    </div>
+
+                    <div>                      
+                      <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#nuevo-pago">
+                        Pagar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12 col-md-12 col-lg-9 order-2 order-md-1">
+                      <div class="row">
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">A devengar</span>
+                              <span class="info-box-number text-center text-muted mb-0 precios"><%# gasto.monto %></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Total gastado en el año</span>
+                              <span class="info-box-number text-center text-muted mb-0">$2300</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          <div class="info-box bg-light">
+                            <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Proximo vencimiento en</span>
+                              <span class="info-box-number text-center text-muted mb-0">20</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Cuotas -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="card card-success">
+                            <div class="card-header">
+                              <h3 class="card-title">Info de Cuotas</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="card-body table-responsive p-0">
+                              <table class="table table-bordered text-center">
+                                <thead>
+                                  <tr>
+                                    <th class="align-middle" style="width: 50px;">#</th>
+                                    <th class="align-middle">Capital</th>
+                                    <th>Interes Financiero</th>
+                                    <th>Interes Resarcitorio</th>
+                                    <th>Total</th>
+                                    <th>Fecha de Vencimiento</th>
+                                    <th>Estado</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <!-- Pago a Cuenta -->
+                                  <% plan.pagos_a_cuenta.forEach( pago => { %>
+                                    <tr>
+                                      <td class="align-middle">Pago a Cuenta</td>
+                                      <td class="align-middle">$<%= pago.capital %></td>
+                                      <td class="align-middle">$<%= pago.interes_financiero %></td>
+                                      <td class="align-middle">$<%= pago.interes_resarcitorio %></td>
+                                      <td class="align-middle">$<%= pago.total %></td>
+                                      <td class="align-middle"><%= new Date(pago.fecha_vencimiento).toLocaleDateString() %></td>
+                                      <td class="align-middle"><button class="btn btn-block btn-xs btn-info" data-toggle="modal" data-target="#pago-info">Pagar</button></td>
+                                    </tr>
+                                  <% }) %>
+                                    
+                                  <!-- Pago a Cuenta Pagado -->
+                                  <% plan.pagos_a_cuenta.forEach( pago => { %>
+                                    <tr>
+                                      <td class="align-middle">Pago a Cuenta</td>
+                                      <td class="align-middle">$<%= pago.capital %></td>
+                                      <td class="align-middle">$<%= pago.interes_financiero %></td>
+                                      <td class="align-middle">$<%= pago.interes_resarcitorio %></td>
+                                      <td class="align-middle">$<%= pago.total %></td>
+                                      <td class="align-middle"><%= new Date(pago.fecha_vencimiento).toLocaleDateString() %></td>
+                                      <td class="align-middle"><button class="btn btn-block btn-xs btn-success" data-toggle="modal" data-target="#pago-info">Pagado</button></td>
+                                    </tr>
+                                  <% }) %>
+                                  
+                                  <!-- Cuotas -->
+                                  <% plan.cuotas.forEach(cuota => { %>
+                                    <tr>
+                                      <td class="align-middle" rowspan="2"><%= cuota.nro_cuota %></td>
+                                      <td class="align-middle" rowspan="2">$<%= cuota.capital %></td>
+
+                                      <!-- PRIMER VENCIMIENTO -->
+                                      <td>$<%= cuota.vencimientos[0].interes_financiero %></td>
+                                      <td>$<%= cuota.vencimientos[0].interes_resarcitorio %></td>
+                                      <td>$<%= cuota.vencimientos[0].total %></td>
+                                      <td><%= new Date(cuota.vencimientos[0].fecha_vencimiento).toLocaleDateString() %>(id: <%= cuota.vencimientos[0].id %>)</td>
+                                      <!-- <td><button class="btn btn-block btn-xs btn-primary pagarButton" data-toggle="modal" data-target="#nuevo-pago" data-vencimiento-id="<%= cuota.vencimientos[0].id %>">Pagar</button></td> -->
+                                      <td><button class="btn btn-block btn-xs btn-primary pagarButton" data-toggle="modal" data-vencimiento-id="<%= cuota.vencimientos[0].id %>">Pagar</button></td>
+                                    </tr>
+                                    <!-- SEGUNDO VENCIMIENTO -->
+                                    <tr>
+                                      <td>$<%= cuota.vencimientos[1].interes_financiero %></td>
+                                      <td>$<%= cuota.vencimientos[1].interes_resarcitorio %></td>
+                                      <td>$<%= cuota.vencimientos[1].total %></td>
+                                      <td><%= new Date(cuota.vencimientos[1].fecha_vencimiento).toLocaleDateString() %>(id:<%= cuota.vencimientos[1].id %>)</td>
+                                      <!-- <td><button class="btn btn-block btn-xs btn-primary pagarButton" data-toggle="modal" data-target="#nuevo-pago" data-vencimiento-id="<%= cuota.vencimientos[1].id %>">Pagar</button></td> -->
+                                      <td><button class="btn btn-block btn-xs btn-primary pagarButton" data-toggle="modal" data-vencimiento-id="<%= cuota.vencimientos[1].id %>">Pagar</button></td>
+                                    </tr>
+                                  <% }) %>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <!-- Datos del Pago -->
+                      <div class="row">
+                        <div class="col">
+                          <div class="card card-info collapsed-card">
+                            <div class="card-header">
+                              <h3 class="card-title">Datos del Pago</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                  <i class="fas fa-plus"></i>
+                                </button>
+                              </div>
+                              
+                            </div>
+                            <div class="card-body">
+
+                              <!-- Menu de seleccion del año -->
+                              <div class="form-group" style="width: 50%; margin: 0 auto;">
+                                <select name="select-anio" id="select-anio" class="form-control">
+                                  <option value="" selected hidden disabled>Seleccione un año</option>
+                                  <%# anios.forEach(anio => { %>
+                                   <option value="<%# anio.year %>"><%# anio.year %></option>
+                                  <%# }) %>
+                                </select>
+                              </div>
+
+                              <!-- Paginacion por meses -->
+                              <div class="pagination-container">
+                                <ul class="pagination pagination-month justify-content-center">
+                                  <!-- Listado de pagos por mes -->
+                                </ul>
+                              </div>
+
+                              <hr>
+                              <!-- Pago -->
+                              <div id="pagos-container">
+                                <!-- Detalles del Pago -->
+                              </div>
+                              <!-- <h5 class="mt-3 text-muted">Project files</h5> -->
+                              <ul class="list-unstyled" id="archivos-list">
+                                <!-- Listado de archivos pertenecientes al pago -->
+                              </ul>
+                              <!-- <a type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-agregar-archivos">Add files</a> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <%# if (gasto.email || gasto.telefono) { %>
+                        <!-- Alertas -->
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="card card-warning collapsed-card">
+                              <div class="card-header">
+                                <h3 class="card-title">Alertas</h3>
+                                <div class="card-tools">
+                                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label for="mensaje-personalizado">Mensaje Personalizado: </label>
+                                  <textarea name="mensaje-personalizado" id="mensaje-personalizado" rows="4" cols="50" class="form-control"></textarea>
+                                </div>
+                                <%# if (gasto.telefono) { %>
+                                  <div class="callout callout-success">
+                                    <h5>WhatsApp</h5>
+                                    <p><%# gasto.telefono %></p>
+                                    <p id="alerta-telefono"></p>
+                                    <a id="boton-alerta-telefono"></a>
+                                  </div>
+                                <%# } %>
+                                
+                                <%# if (gasto.email) { %>
+                                  <div class="callout callout-info">
+                                    <h5>Mensaje de Correo</h5>
+                                    <p><%# gasto.email %></p>
+                                    <p id="alerta-correo"></p>
+                                    <a id="boton-alerta-correo"></a>
+                                  </div>
+                                <%# } %>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <%# } %>
+                    </div>
+                    
+                    <!-- Informacion del gasto/plan -->
+                    <div class="col-12 col-md-12 col-lg-3 order-1 order-md-2">
+                      <div class="row">
+                        <div class="col">
+                          <div class="text-muted">
+                            <% if (plan.nombre) { %>
+                             <p class="text-sm">Nombre
+                              <b class="d-block"><%= plan.nombre %></b>
+                             </p>
+                            <% } %>
+                          </div>
+
+                          <div class="text-muted">
+                            <% if (plan.cuit) { %>
+                              <p class="text-sm">CUIT
+                                <b class="d-block"><%= plan.cuit %></b>
+                              </p>
+                            <% } %>
+
+                            <% if (plan.fecha_consolidacion) { %>
+                              <p class="text-sm">Fecha de Consolidacion
+                                <b class="d-block"><%= new Date(plan.fecha_consolidacion).toLocaleDateString("es-ES") %></b>
+                              </p>
+                            <% } %>
+                          </div>
+                        </div>
+                      </div>
+        
+                      <!-- Listado de archivos pertenecientes al pago -->
+                      <h6 class="mt-3 text-muted">Archivos del Plan</h6>
+                      <ul class="list-unstyled" id="lista-archivos-servicio">
+                        <%# if (plan.archivos.length > 0) { %>
+                          <%# plan.archivos.forEach(archivo => { %>
+                            <li><i class="far fa-fw fa-file-pdf"></i> <a class="btn-link text-secondary" href="/docs/honorarios/<%# archivo.nombre %>" target="_blank"><%# archivo.nombre %></a> <a id="eliminarArchivoButton" class="btn btn-xs btn-danger" data-idArchivo="<%# archivo.id %>">Eliminar</a></li>
+                          <%# }) %>
+                        <%# } else { %>
+                          <li>No hay archivos</li>  
+                        <%# } %>
+                      </ul>
+
+                      <div class="text-center mt-5 mb-3">
+                        <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-agregar-archivos-honorarios">Subir archivos</a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal formulario nuevo pago -->
+      <div class="modal fade" id="nuevo-pago">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Pagar Cuota #x</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <!-- Formulario para registrar un pago -->
+            <form action="#" method="post" id="formPago">
+              <div class="modal-body">
+                <div id="info-vencimiento">
+
+                </div>
+
+                <div class="form-group">
+                  <label for="id_forma_pago">Forma de Pago</label>
+                  <select name="id_forma_pago" id="id_forma_pago" class="form-control" required>
+                    <option value="" selected disabled hidden>Seleccione una opcion</option>
+                    <% formas_pago.forEach(forma_pago => { %>
+                     <option value="<%= forma_pago.id %>"><%= forma_pago.nombre %></option>
+                    <% }) %>
+                  </select>
+                </div>
+
+                <div class="form-group" id="entidad_bancaria_modal" style="display: none;">
+                  <label for="entidad_bancaria">Entidad Bancaria</label>
+                  <input type="text" name="entidad_bancaria" id="entidad_bancaria" class="form-control"> <!--  Longitud 22 caracteres exactos -->
+                </div>
+
+                <div class="form-group" id="cbu_modal" style="display: none;">
+                  <label for="cbu">CBU/CVU</label>
+                  <input type="text" name="cbu" id="cbu" class="form-control" maxlength="22">
+                </div>
+
+                <div class="form-group" id="cuit_modal" style="display: none;">
+                  <label for="cuit">CUIT/CUIL</label>
+                  <input type="text" name="cuit" id="cuit" class="form-control" maxlength="13">
+                </div>
+
+                <div class="form-group">
+                  <label for="divisa">Divisa</label>
+                  <select name="divisa" id="divisa" class="form-control">
+                    <option value="" selected hidden disabled>Seleccione una opcion</option>
+                    <option value="ARS">ARS</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="monto">Monto</label>
+                  <input type="text" name="monto" id="monto" class="form-control">
+                </div>
+              </div>
+              
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Pagar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal mostrar informacion de un pago -->
+      <div class="modal fade" id="pago-info">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Informacion del Pago de la Cuota #x</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <p>Aqui se muestra la informacion del Pago de la Cuota</p>
+            </div>
+              
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary disabled">Pagar</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal subir Archivos a Planes de Pago & Moratoria -->
+      <div class="modal fade" id="modal-agregar-archivos-honorarios">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Subir Archivos | <%= plan.nombre %></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+  
+              <form action="#" method="post" enctype="multipart/form-data" id="uploadFormServicio">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="id_plan">ID Plan de Pago: </label>
+                    <input type="number" name="id_plan" id="id_plan" value="<%= plan.id %>" class="form-control" readonly>
+                  </div>
+  
+                  <div class="form-group">
+                    <label for="archivos_honorarios_label">Archivos</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" name="archivos_honorarios" class="custom-file-input" id="archivos_honorarios" multiple>
+                        <label class="custom-file-label" for="archivos_honorarios">Elegir Archivo</label>
+                      </div>
+                    </div>
+                  </div>
+  
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Subir Archivos</button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal subir Archivos a Pagos -->
+      <div class="modal fade" id="modal-agregar-archivos-pagos">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Subir Archivos</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="#" method="post" enctype="multipart/form-data" id="uploadFormPagoServicio">
+
+              <!-- Modal Body -->
+              <div class="modal-body">
+
+                <div class="form-group">
+                  <label for="id_pago_servicio">ID del Pago</label>
+                  <input type="number" name="id_pago_servicio" id="id_pago_servicio" value="" class="form-control" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="archivos_pagos_label">Archivos</label>
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="pagos_servicios" class="custom-file-input" id="pagos_servicios" multiple>
+                      <label for="pagos_servicios" class="custom-file-label">Elegir un archivo...</label>
+                    </div>
+                    <div class="input-group-append">
+                      <!-- <span class="input-group-text">Subir</span> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Modal Footer -->
+              <div class="modal-footer justify-content-between">
+                <button type="reset" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Subir Archivos</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
+
+    </main>
+  </div>
+
+  <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script src="/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script>
+    $(function () {
+      bsCustomFileInput.init();
+    });
+  </script>
+
+  <!-- Script CUIT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const cuit = document.getElementById("cuit");
+      
+      cuit.addEventListener("input", (event) => {
+        event.target.value = patternMatch({
+          input: event.target.value,
+          template: "xx-xxxxxxxx-x",
+        })
+      })
+    })
+  </script>
+  
+  <!-- Script Formas de Pago -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const formaPago = document.getElementById("id_forma_pago");
+
+      formaPago.addEventListener("change", () => {
+        if (formaPago.value == "2") {
+          document.getElementById("entidad_bancaria_modal").style.display = "block";
+          document.getElementById("cbu_modal").style.display = "block";
+          document.getElementById("cuit_modal").style.display = "block";
+        } else {
+          document.getElementById("entidad_bancaria_modal").style.display = "none";
+          document.getElementById("cbu_modal").style.display = "none";
+          document.getElementById("cuit_modal").style.display = "none";
+        }
+      })
+    })
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      console.log("Connected");
+
+      const pagarButtons = document.querySelectorAll(".pagarButton");
+
+      // console.log(pagarButtons);
+
+      // Recorrer el array de buttons
+      pagarButtons.forEach( (button) => {
+        // Agregar evento click a cada button
+        button.addEventListener("click", async () => {
+          // Obtener el ID del button que fue clickeado
+          const idVencimiento = button.dataset["vencimientoId"];
+          console.log(`ID del Button: ${idVencimiento}`);
+
+          // Traer la informacion del vencimiento
+          const dataVencimiento = await fetchVencimiento(idVencimiento);
+
+          // Mostrar la informacion en el modal
+          $("#nuevo-pago").modal("show");
+
+          // Seleccionar el modal
+          const modal = document.getElementById("nuevo-pago");
+          
+          // Seleccionar el titulo del modal
+          const modalTitle = modal.querySelector(".modal-title");
+
+          // Limpiar el contenido del titulo del modal
+          modalTitle.innerHTML = "";
+
+          modalTitle.innerHTML += `Pagar Cuota N° ${dataVencimiento.cuota.nro_cuota}`;
+          
+          // Seleccionar el body del modal
+          const infoVencimiento = modal.querySelector("#info-vencimiento");
+          console.log("infoVencimiento", infoVencimiento);
+
+          // Limpiar el contenido del div con id 'info-vencimiento'
+          infoVencimiento.innerHTML = "";
+
+          // Crear un div para el card con la informacion del vencimiento
+          const divCard = document.createElement("div");
+          divCard.classList.add("card");
+
+          const cardBody = document.createElement("div");
+          cardBody.classList.add("card-body", "table-responsive");
+
+          cardBody.innerHTML = `
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Cuota N°</th>
+                  <th>Capital</th>
+                  <th>Fecha de Vencimiento</th>
+                  <th>Interes Financiero</th>
+                  <th>Interes Resarcitorio</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>${dataVencimiento.cuota.nro_cuota}</td>
+                  <td>$${formatearPrecio(dataVencimiento.cuota.capital)}</td>
+                  <td>${new Date(dataVencimiento.fecha_vencimiento).toLocaleDateString()}</td>
+                  <td>$${formatearPrecio(dataVencimiento.interes_financiero)}</td>
+                  <td>$${formatearPrecio(dataVencimiento.interes_resarcitorio)}</td>
+                  <td>$${formatearPrecio(dataVencimiento.total)}</td>
+                </tr>
+              </tbody>
+            </table>
+          `
+          
+          divCard.appendChild(cardBody);
+          infoVencimiento.appendChild(divCard);
+          
+          // Mostrar la informacion por consola
+          console.log(dataVencimiento);
+        })
+      })
+      
+
+      // Funcion Fetch para traer la informacion del vencimiento
+      const fetchVencimiento = async (id) => {
+        try {
+          const response = await fetch(`/gastos/planes/vencimientos/${id}/detalles`);
+          
+          if (!response.ok) {
+            const error = await response.json()
+            throw new Error(`[FETCH ERROR]: Error al obtener la informacion del vencimiento: ${error.message}`);
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      
+    })
+  </script>
+</body>
+</html

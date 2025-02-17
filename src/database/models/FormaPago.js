@@ -41,6 +41,19 @@ module.exports = (sequelize, dataTypes) => {
       as: "gasto",
       foreignKey: "id_forma_pago"
     })
+
+    // NUEVO MODULO DE PAGOS
+    // Categoria Servicios
+    FormaPago.hasMany(models.PagoServicio, {
+      as: "pago_servicio",
+      foreignKey: "id_forma_pago"
+    });
+
+    // Categoria Honorarios
+    FormaPago.hasMany(models.PagoHonorario, {
+      as: "pago_honorario",
+      foreignKey: "id_forma_pago"
+    });
   };
 
   return FormaPago;

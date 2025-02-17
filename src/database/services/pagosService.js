@@ -1,4 +1,3 @@
-const { raw } = require("mysql2");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const sequelize = db.Sequelize;
