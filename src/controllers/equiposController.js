@@ -152,6 +152,8 @@ module.exports = {
           fecha: informe.fecha_informe,
           detalle: informe.detalle,
           pedido_insumos: informe.pedido_insumos,
+          id_usuario: informe.id_usuario || "Usuario",
+          nombre_usuario: informe.usuario?.nombre || "Usuario",
         })),
 
         ...insumos.map(insumo => ({
@@ -160,6 +162,8 @@ module.exports = {
           fecha: insumo.fecha_entrega,
           observacion: insumo.observacion,
           nro_remito: insumo.nro_remito,
+          id_usuario: insumo.id_usuario || "Usuario",
+          nombre_usuario: insumo.usuario?.nombre || "Usuario",
         })),
       ];
 

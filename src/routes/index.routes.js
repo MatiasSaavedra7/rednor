@@ -57,10 +57,10 @@ router.use("/alquileres", authMiddleware, roleMiddleware([1, 2]), alquileres);
 router.use("/repuestos", authMiddleware, roleMiddleware([1]), repuestos);
 
 // Taller routes
-router.use("/taller", authMiddleware, roleMiddleware([1]), taller);
+router.use("/taller", authMiddleware, roleMiddleware([1, 2]), taller);
 
 // Taller externos routes
-router.use("/taller/externos", authMiddleware, roleMiddleware([1]), externos);
+router.use("/taller/externos", authMiddleware, roleMiddleware([1, 2]), externos);
 
 // Pagos routes
 router.use("/pagos", authMiddleware, roleMiddleware([1]), pagos);

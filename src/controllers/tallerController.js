@@ -28,7 +28,10 @@ module.exports = {
   detalle: async (req, res) => {
     try {
       let ingreso = await ingresosService.getOneByPK(req.params.id);
+      // console.log(ingreso.toJSON());
       let egreso = await egresosService.getOneByIdIngreso(ingreso.id);
+      // console.log(egreso.toJSON());
+      
       let informes = await informesService.getAllByIdIngreso(ingreso.id);
       let insumos = await insumosService.getAllByIdIngreso(ingreso.id);
 
@@ -40,6 +43,8 @@ module.exports = {
           detalle: informe.detalle,
           pedido_insumos: informe.pedido_insumos,
           fecha: informe.fecha_informe,
+          id_usuario: informe.id_usuario,
+          nombre_usuario: informe.usuario != null ? informe.usuario.nombre + " " + informe.usuario.apellido : "Usuario",
         })),
         ...insumos.map(insumo => ({
           type: 'insumo',
@@ -47,6 +52,8 @@ module.exports = {
           observacion: insumo.observacion,
           nro_remito: insumo.nro_remito,
           fecha: insumo.fecha_entrega,
+          id_usuario: insumo.id_usuario || "Usuario",
+          nombre_usuario: insumo.usuario != null ? insumo.usuario.nombre + " " + insumo.usuario.apellido : "Usuario",
         }))
       ];
 
@@ -74,11 +81,15 @@ module.exports = {
 
   almacenarIngreso: async (req, res) => {
     try {
+      // Obtener los datos del usuario logueado
+      const user = req.session.userLogged;
+
       let data = {
         ...req.body,
         id_equipo: req.params.id,
         id_estado: 1,
         fecha_ingreso: new Date(),
+        id_usuario: user.id,
       };
 
       // console.log(req.body);
@@ -143,10 +154,14 @@ module.exports = {
 
   almacenarEgreso: async (req, res) => {
     try {
+      // Obtener los datos del usuario logueado
+      const user = req.session.userLogged;
+
       let data = {
         ...req.body,
         id_ingreso: req.params.id,
         fecha_egreso: new Date(),
+        id_usuario: user.id,
       };
 
       let egreso = await egresosService.create(data);
@@ -198,11 +213,15 @@ module.exports = {
 
   almacenarInforme: async (req, res) => {
     try {
+      // Obtener los datos del usuario logueado
+      const user = req.session.userLogged;
+
       let data = {
         ...req.body,
         id_ingreso: req.params.id,
         pedido_insumos: req.body.pedido_insumos ? true : false,
         fecha_informe: new Date(),
+        id_usuario: user.id,
       };
 
       await informesService.create(data);
@@ -273,12 +292,16 @@ module.exports = {
     try {
       let informe = await informesService.getOneByPK(req.params.idInforme);
 
+      // Obtener los datos del usuario logueado
+      const user = req.session.userLogged;
+
       // Creo un objeto 'data' con la informacion para almacenar en los informes de insumos
       let data = {
         ...req.body,
         id_informe: informe.id,
         id_ingreso: informe.id_ingreso,
         fecha_entrega: new Date(),
+        id_usuario: user.id,
       };
 
       // Almaceno el registro en la base de datos
@@ -339,6 +362,8 @@ module.exports = {
           fecha: informe.fecha_informe,
           detalle: informe.detalle,
           pedido_insumos: informe.pedido_insumos,
+          id_usuario: informe.id_usuario,
+          nombre_usuario: informe.usuario != null ? `${informe.usuario.nombre} ${informe.usuario.apellido}` : "Usuario"
         })),
 
         ...insumos.map(insumo => ({
@@ -347,6 +372,8 @@ module.exports = {
           fecha: insumo.fecha_entrega,
           observacion: insumo.observacion,
           nro_remito: insumo.nro_remito,
+          id_usuario: insumo.id_usuario,
+          nombre_usuario: insumo.usuario != null ? `${insumo.usuario.nombre} ${insumo.usuario.apellido}` : "Usuario",
         })),
       ];
 

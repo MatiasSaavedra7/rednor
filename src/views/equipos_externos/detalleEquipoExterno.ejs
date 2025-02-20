@@ -273,7 +273,6 @@
           const data = await response.json();
 
           mostrarModalDetalleHistorial(data);
-
         } catch (error) {
           console.error(error);
           alert("Ocurrio un error al cargar el detalle del historial");
@@ -320,96 +319,110 @@
         modalBody.textContent = "";
 
         // Informacion de Ingreso
-        const cardIngreso = document.createElement("div");
-        cardIngreso.classList.add("card");
-
-        const cardBodyIngreso = document.createElement("div");
-        cardBodyIngreso.classList.add("card-body");
-
-        const dlIngreso = document.createElement("dl");
-
-        // Fecha del Ingreso
-        const dtFechaIngreso = document.createElement("dt");
-        dtFechaIngreso.textContent = "Fecha de Ingreso";
-        dlIngreso.appendChild(dtFechaIngreso);
-        const ddFechaIngreso = document.createElement("dd");
-        ddFechaIngreso.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-        });
-        dlIngreso.appendChild(ddFechaIngreso);
-        
-        // Estado del Ingreso
-        const dtEstadoIngreso = document.createElement("dt");
-        dtEstadoIngreso.textContent = "Estado";
-        dlIngreso.appendChild(dtEstadoIngreso);
-        const ddEstadoIngreso = document.createElement("dd");
-        ddEstadoIngreso.textContent = data.ingreso.estado.nombre;
-        dlIngreso.appendChild(ddEstadoIngreso);
-
-        // Motivo del Ingreso
-        const dtMotivoIngreso = document.createElement("dt");
-        dtMotivoIngreso.textContent = "Motivo";
-        dlIngreso.appendChild(dtMotivoIngreso);
-        const ddMotivoIngreso = document.createElement("dd");
-        ddMotivoIngreso.textContent = data.ingreso.motivo;
-        dlIngreso.appendChild(ddMotivoIngreso);
-
-        // Detalle del Ingreso
-        const dtDetalleIngreso = document.createElement("dt");
-        dtDetalleIngreso.textContent = "Detalle";
-        dlIngreso.appendChild(dtDetalleIngreso);
-        const ddDetalleIngreso = document.createElement("dd");
-        ddDetalleIngreso.textContent = data.ingreso.detalle;
-        dlIngreso.appendChild(ddDetalleIngreso);
-        
-        // Informacion del Cliente
-        const pCliente = document.createElement("p");
-        pCliente.classList.add("lead");
-        pCliente.classList.add("mb-0");
-        pCliente.textContent = "Informacion del Cliente";
-        dlIngreso.appendChild(pCliente);
-        
-        // Nombre del Cliente
-        const dtNombreCliente = document.createElement("dt");
-        dtNombreCliente.textContent = "Nombre";
-        dlIngreso.appendChild(dtNombreCliente);
-        const ddNombreCliente = document.createElement("dd");
-        ddNombreCliente.textContent = data.ingreso.nombre_cliente;
-        dlIngreso.appendChild(ddNombreCliente);
-        
-        // Telefono del Cliente
-        const dtTelefonoCliente = document.createElement("dt");
-        dtTelefonoCliente.textContent = "Telefono";
-        dlIngreso.appendChild(dtTelefonoCliente);
-        const ddTelefonoCliente = document.createElement("dd");
-        ddTelefonoCliente.textContent = data.ingreso.telefono_cliente;
-        dlIngreso.appendChild(ddTelefonoCliente);
-
-        // Ciudad del Cliente
-        const dtCiudadCliente = document.createElement("dt");
-        dtCiudadCliente.textContent = "Ciudad";
-        dlIngreso.appendChild(dtCiudadCliente);
-        const ddCiudadCliente = document.createElement("dd");
-        ddCiudadCliente.textContent = data.ingreso.ciudad_cliente;
-        dlIngreso.appendChild(ddCiudadCliente);
-
-        // Direccion del Cliente
-        const dtDireccionCliente = document.createElement("dt");
-        dtDireccionCliente.textContent = "Direccion";
-        dlIngreso.appendChild(dtDireccionCliente);
-        const ddDireccionCliente = document.createElement("dd");
-        ddDireccionCliente.textContent = data.ingreso.direccion_cliente;
-        dlIngreso.appendChild(ddDireccionCliente);
-        
-        // Agregar elementos al modal
-        cardBodyIngreso.appendChild(dlIngreso);
-        cardIngreso.appendChild(cardBodyIngreso);
-        
-        modalBody.appendChild(cardIngreso);
+        if (data.ingreso != null) {
+          const cardIngreso = document.createElement("div");
+          cardIngreso.classList.add("card");
+  
+          const cardBodyIngreso = document.createElement("div");
+          cardBodyIngreso.classList.add("card-body");
+  
+          const dlIngreso = document.createElement("dl");
+  
+          // Informacion del Usuario
+          if (data.ingreso.usuario != null) {
+            const dtUsuarioIngreso = document.createElement("dt");
+            dtUsuarioIngreso.textContent = "Usuario";
+            
+            const ddUsuarioIngreso = document.createElement("dd");
+            ddUsuarioIngreso.textContent = data.ingreso.usuario.nombre + " " + data.ingreso.usuario.apellido;
+            
+            dlIngreso.appendChild(dtUsuarioIngreso);
+            dlIngreso.appendChild(ddUsuarioIngreso);
+          }
+  
+          // Fecha del Ingreso
+          const dtFechaIngreso = document.createElement("dt");
+          dtFechaIngreso.textContent = "Fecha de Ingreso";
+          dlIngreso.appendChild(dtFechaIngreso);
+          const ddFechaIngreso = document.createElement("dd");
+          ddFechaIngreso.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+          });
+          dlIngreso.appendChild(ddFechaIngreso);
+          
+          // Estado del Ingreso
+          const dtEstadoIngreso = document.createElement("dt");
+          dtEstadoIngreso.textContent = "Estado";
+          dlIngreso.appendChild(dtEstadoIngreso);
+          const ddEstadoIngreso = document.createElement("dd");
+          ddEstadoIngreso.textContent = data.ingreso.estado.nombre;
+          dlIngreso.appendChild(ddEstadoIngreso);
+  
+          // Motivo del Ingreso
+          const dtMotivoIngreso = document.createElement("dt");
+          dtMotivoIngreso.textContent = "Motivo";
+          dlIngreso.appendChild(dtMotivoIngreso);
+          const ddMotivoIngreso = document.createElement("dd");
+          ddMotivoIngreso.textContent = data.ingreso.motivo;
+          dlIngreso.appendChild(ddMotivoIngreso);
+  
+          // Detalle del Ingreso
+          const dtDetalleIngreso = document.createElement("dt");
+          dtDetalleIngreso.textContent = "Detalle";
+          dlIngreso.appendChild(dtDetalleIngreso);
+          const ddDetalleIngreso = document.createElement("dd");
+          ddDetalleIngreso.textContent = data.ingreso.detalle;
+          dlIngreso.appendChild(ddDetalleIngreso);
+          
+          // Informacion del Cliente
+          const pCliente = document.createElement("p");
+          pCliente.classList.add("lead");
+          pCliente.classList.add("mb-0");
+          pCliente.textContent = "Informacion del Cliente";
+          dlIngreso.appendChild(pCliente);
+          
+          // Nombre del Cliente
+          const dtNombreCliente = document.createElement("dt");
+          dtNombreCliente.textContent = "Nombre";
+          dlIngreso.appendChild(dtNombreCliente);
+          const ddNombreCliente = document.createElement("dd");
+          ddNombreCliente.textContent = data.ingreso.nombre_cliente;
+          dlIngreso.appendChild(ddNombreCliente);
+          
+          // Telefono del Cliente
+          const dtTelefonoCliente = document.createElement("dt");
+          dtTelefonoCliente.textContent = "Telefono";
+          dlIngreso.appendChild(dtTelefonoCliente);
+          const ddTelefonoCliente = document.createElement("dd");
+          ddTelefonoCliente.textContent = data.ingreso.telefono_cliente;
+          dlIngreso.appendChild(ddTelefonoCliente);
+  
+          // Ciudad del Cliente
+          const dtCiudadCliente = document.createElement("dt");
+          dtCiudadCliente.textContent = "Ciudad";
+          dlIngreso.appendChild(dtCiudadCliente);
+          const ddCiudadCliente = document.createElement("dd");
+          ddCiudadCliente.textContent = data.ingreso.ciudad_cliente;
+          dlIngreso.appendChild(ddCiudadCliente);
+  
+          // Direccion del Cliente
+          const dtDireccionCliente = document.createElement("dt");
+          dtDireccionCliente.textContent = "Direccion";
+          dlIngreso.appendChild(dtDireccionCliente);
+          const ddDireccionCliente = document.createElement("dd");
+          ddDireccionCliente.textContent = data.ingreso.direccion_cliente;
+          dlIngreso.appendChild(ddDireccionCliente);
+          
+          // Agregar elementos al modal
+          cardBodyIngreso.appendChild(dlIngreso);
+          cardIngreso.appendChild(cardBodyIngreso);
+          
+          modalBody.appendChild(cardIngreso);
+        }
 
         // Informes e Informes de Insumos
         // data.combinedData es un array donde se encuentran los Informes e Insumos(informes)
@@ -462,7 +475,7 @@
 
               const h3TimelineHeader = document.createElement("h3");
               h3TimelineHeader.classList.add("timeline-header");
-              h3TimelineHeader.textContent = `Informe ${item.id}`;
+              h3TimelineHeader.innerHTML += `<a href="#">${item.nombre_usuario}</a> hizo un informe`;
               divTimelineItem.appendChild(h3TimelineHeader);
 
               const divTimelineBody = document.createElement("div");
@@ -491,7 +504,7 @@
 
               const h3TimelineHeader = document.createElement("h3");
               h3TimelineHeader.classList.add("timeline-header");
-              h3TimelineHeader.textContent = `Informe de Insumo ${item.id}`;
+              h3TimelineHeader.innerHTML += `<a href="#">${item.nombre_usuario}</a> entrega de insumos`;
               divTimelineItem.appendChild(h3TimelineHeader);
 
               const divTimelineBody = document.createElement("div");
@@ -523,6 +536,18 @@
           cardBodyEgreso.classList.add("card-body");
   
           const dlEgreso = document.createElement("dl");
+
+          // Informacion del Usuario
+          if (data.egreso.usuario != null) {
+            const dtUsuarioEgreso = document.createElement("dt");
+            dtUsuarioEgreso.textContent = "Usuario";
+
+            const ddUsuarioEgreso = document.createElement("dd");
+            ddUsuarioEgreso.textContent = data.egreso.usuario.nombre + " " + data.egreso.usuario.apellido;
+
+            dlEgreso.appendChild(dtUsuarioEgreso);
+            dlEgreso.appendChild(ddUsuarioEgreso);
+          };
   
           const dtFechaEgreso = document.createElement("dt");
           dtFechaEgreso.textContent = "Fecha de Egreso";

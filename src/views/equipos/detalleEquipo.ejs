@@ -27,11 +27,11 @@
                     <div class="dropdown float-right">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item">Nuevo Contrato</a>
+                        <!-- <a href="#" class="dropdown-item">Nuevo Contrato</a> -->
                         <% if (equipo.id_estado == 1 || equipo.id_estado == 2) { %>
                           <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
                         <% } %>
-                        <div class="dropdown-divider"></div>
+                        <!-- <div class="dropdown-divider"></div> -->
                         <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item btn" data-toggle="modal" data-target="#modal-eliminar">
@@ -198,7 +198,7 @@
             const response = await fetch(`/equipos/detalle-taller/${idIngreso}`);
             const data = await response.json();
 
-            // console.log(data);
+            console.log(data);
 
             mostrarModalDetalleHistorial(data);
 
@@ -255,7 +255,15 @@
           // Crear un elemento dl para mostrar la informacion de Ingreso
           const dlIngreso = document.createElement("dl");
           dlIngreso.classList.add("mb-3");
-          dlIngreso.innerHTML = `
+
+          if (data.ingreso.usuario != null) {
+            dlIngreso.innerHTML += `
+              <dt>Usuario</dt>
+              <dd>${data.ingreso.usuario?.nombre} ${data.ingreso.usuario?.apellido}</dd>
+            `
+          }
+          
+          dlIngreso.innerHTML += `
             <dt>Fecha de Ingreso</dt>
             <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
               year: "numeric",
@@ -317,7 +325,7 @@
                       hour: "numeric",
                       minute: "numeric",
                     })}</span>
-                    <h3 class="timeline-header">Informe ${item.id}</h3>
+                    <h3 class="timeline-header"><a href="#">${item.nombre_usuario}</a> hizo un informe</h3>
                     <div class="timeline-body">
                       <p>${item.detalle}</p>
                     </div>
@@ -340,7 +348,7 @@
                       hour: "numeric",
                       minute: "numeric",
                     })}</span>
-                    <h3 class="timeline-header">Insumo ${item.id}</h3>
+                    <h3 class="timeline-header"><a href="#">${item.nombre_usuario}</a> entrega de insumos</h3>
                     <div class="timeline-body">
                       <p>${item.observacion}</p>
                     </div>
@@ -366,7 +374,15 @@
             // Crear un elemento dl para mostrar la informacion de Egreso
             const dlEgreso = document.createElement("dl");
             dlEgreso.classList.add("mb-3");
-            dlEgreso.innerHTML = `
+            
+            if (data.egreso.usuario != null) {
+              dlEgreso.innerHTML += `
+                <dt>Usuario</dt>
+                <dd>${data.egreso.usuario.nombre} ${data.egreso.usuario.apellido}</dd>
+              `
+            }
+
+            dlEgreso.innerHTML += `
               <dt>Fecha de Egreso</dt>
               <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
                 year: "numeric",

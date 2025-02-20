@@ -62,44 +62,6 @@ function Cartucho(data) {
   this.id_categoria_cartucho = data.categoria;
 }
 
-function Ingreso(data) {
-  this.id_equipo = data.id_equipo;
-  this.fecha_ingreso = data.fecha_ingreso;
-  this.motivo = data.motivo;
-  this.detalle = data.detalle;
-  this.id_estado = data.id_estado;
-}
-
-function Egreso(data) {
-  this.id_ingreso = data.id_ingreso;
-  this.fecha_egreso = data.fecha_egreso;
-  this.detalle = data.detalle;
-  this.observacion = data.observacion;
-  this.costo = data.costo;
-}
-
-function EgresoExterno(data) {
-  this.id_ingreso_externo = data.id_ingreso_externo;
-  this.detalle = data.detalle;
-  this.precio = data.precio;
-  this.id_forma_pago = data.id_forma_pago;
-  this.fecha_cobro = data.fecha_cobro;
-  this.fecha_egreso = data.fecha_egreso;
-}
-
-function Informe(data) {
-  this.id_ingreso = data.id_ingreso;
-  this.detalle = data.detalle;
-  this.pedido_insumos = data.pedido_insumos;
-  this.fecha_informe = data.fecha_informe;
-}
-
-function InformeExterno(data) {
-  this.id_ingreso_externo = data.id_ingreso_externo;
-  this.detalle = data.detalle;
-  this.pedido_insumos = data.pedido_insumos;
-  this.fecha_informe = data.fecha_informe;
-}
 
 function EquipoExterno(data) {
   this.marca = data.marca;
@@ -115,10 +77,5 @@ module.exports = {
   Alquiler,
   Reajuste,
   Cartucho,
-  Ingreso,
-  Egreso,
-  EgresoExterno,
-  Informe,
-  InformeExterno,
   EquipoExterno,
 };

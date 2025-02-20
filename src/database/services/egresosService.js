@@ -1,7 +1,14 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Egreso } = require("../utils/objects");
+function Egreso(data) {
+  this.id_ingreso = data.id_ingreso;
+  this.fecha_egreso = data.fecha_egreso;
+  this.detalle = data.detalle;
+  this.observacion = data.observacion;
+  this.costo = data.costo;
+  this.id_usuario = data.id_usuario;
+}
 
 module.exports = {
   getAll: async () => {
@@ -29,7 +36,7 @@ module.exports = {
     try {
       return await db.Egreso.findOne({
         where: { id_ingreso: id },
-        include: ["ingreso", "forma_pago"],
+        include: [/*"ingreso",*/ "forma_pago", "usuario"],
       });
     } catch (error) {
       console.log(error);
@@ -59,7 +66,11 @@ module.exports = {
     try {
       return await db.Egreso.findOne({
         where: { id_ingreso: id },
-        include: ["forma_pago"],
+        // include: ["forma_pago", "usuario"],
+        include: [
+          { model: db.FormaPago, as: "forma_pago" },
+          { model: db.Usuario, as: "usuario", attributes: ["id", "nombre", "apellido"] },
+        ]
       })
     } catch (error) {
       let message = "[ERROR] Error en egresosService.getOneByIdIngresoAPI " + error;

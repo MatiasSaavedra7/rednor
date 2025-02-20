@@ -37,6 +37,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-8 m-auto">
+              
               <!-- Detalles del Ingreso -->
               <div class="card">
                 <div class="card-header">
@@ -58,6 +59,12 @@
                   <%# } %>
                 </div>
                 <div class="card-body">
+                  <!-- Informacion del Usuario -->
+                  <% if (ingreso.usuario != null) { %>
+                    <dt>Usuario</dt>
+                    <dd><%= ingreso.usuario.nombre %> <%= ingreso.usuario.apellido %></dd>
+                  <% } %>
+
                   <!-- Fecha de Ingreso -->
                   <dt>Fecha de Ingreso</dt>
                   <dd><%= new Date(ingreso.fecha_ingreso).toLocaleString("es-ES", {
@@ -67,7 +74,7 @@
                     hour: "numeric",
                     minute: "numeric",
                   }) %></dd>
-                  
+
                   <!-- Motivo del Ingreso -->
                   <dt>Motivo de Ingreso</dt>
                   <dd><%= ingreso.motivo %></dd>
@@ -90,14 +97,6 @@
 
                   <dt>Numero de Serie</dt>
                   <dd><%= ingreso.equipo.numero_serie %></dd>
-
-                  <!-- Motivo del Ingreso -->
-                  <dt>Motivo de Ingreso</dt>
-                  <dd><%= ingreso.motivo %></dd>
-
-                  <!-- Detalle del Ingreso -->
-                  <dt>Detalle</dt>
-                  <dd><%= ingreso.detalle %></dd>
                   
                   <dt>Historial de Informes</dt>
                   <dd>
@@ -140,23 +139,30 @@
                               }) %>
                             </span>
                             <% if (item.type === 'informe') { %>
-                              <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                              <h3 class="timeline-header"><a href="#"><%= item.nombre_usuario %></a> hizo un informe</h3>
                               <div class="timeline-body">
                                 <%= item.detalle %>
                               </div>
-                              <div class="timeline-footer">
+
+                              <div class="timeline-footer d-flex justify-content-between">
                                 <% if (!egreso) { %>
-                                  <a href="/taller/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
-                                  <a class="btn btn-danger btn-sm">Borrar</a>
+                                  <% if (locals.userLogged.id == item.id_usuario) { %>
+                                    <div>
+                                      <a href="/taller/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
+                                      
+                                      <a class="btn btn-danger btn-sm">Borrar</a>
+                                    </div>
+                                  <% } %>
                                   <% if (item.type == "informe") { %>
                                    <% if (item.pedido_insumos === true && ingreso.id_estado === 2) { %>
-                                    <a href="/taller/<%= item.id %>/insumos/crear" class="btn btn-info btn-sm float-right">Entregar Insumos</a>
+                                    <a href="/taller/<%= item.id %>/insumos/crear" class="btn btn-info btn-sm ">Entregar Insumos</a>
                                    <% } %>
                                   <% } %>
                                 <% } %>
                               </div>
+
                             <% } else if (item.type == 'insumo') { %>
-                              <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                              <h3 class="timeline-header"><a href="#"><%= item.nombre_usuario %></a> entrega de insumos</h3>
                               <div class="timeline-body">
                                 <%= item.observacion %>
                               </div>
@@ -180,6 +186,11 @@
                   <h3 class="card-title">Detalles del Egreso</h3>
                 </div>
                 <div class="card-body">
+                  <!-- Informacion del Usuario -->
+                  <% if (egreso.usuario != null) { %>
+                    <dt>Usuario</dt>
+                    <dd><%= egreso.usuario.nombre %> <%= egreso.usuario.apellido %></dd>
+                  <% } %>
                   <!-- Fecha de Egreso -->
                   <dt>Fecha de Egreso</dt>
                   <dd><%= new Date(egreso.fecha_egreso).toLocaleString("es-ES", {
@@ -335,7 +346,7 @@
 
             // Obtener el detalle del Ingreso
             const data = await fetchDetalleTaller(ingreso.id);
-            // console.log(data);
+            console.log(data);
 
             // Capturar el body del modal para mostrar la información
             const modalDetalle = document.getElementById("detalle-taller")
@@ -353,8 +364,15 @@
               cardBodyIngreso.classList.add("card-body");
               
               const dlIngreso = document.createElement("dl");
+
+              if (data.ingreso.usuario != null) {
+                dlIngreso.innerHTML += `
+                  <dt>Usuario</dt>
+                  <dd>${data.ingreso.usuario.nombre} ${data.ingreso.usuario.apellido}</dd>
+                `
+              }
   
-              dlIngreso.innerHTML = `
+              dlIngreso.innerHTML += `
                 <dt>Fecha de Ingreso</dt>
                 <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
                   year: "numeric",
@@ -431,7 +449,7 @@
                         hour: "numeric",
                         minute: "numeric",
                       })}</span>
-                      <h3 class="timeline-header"><a href="#">Usuario</a> hizo un informe</h3>
+                      <h3 class="timeline-header"><a href="#">${item.nombre_usuario}</a> hizo un informe</h3>
                       <div class="timeline-body">
                         <p>${item.detalle}</p>
                       </div>
@@ -454,7 +472,7 @@
                         hour: "numeric",
                         minute: "numeric",
                       })}</span>
-                      <h3 class="timeline-header"><a href="#">Usuario</a> entrega de insumos</h3>
+                      <h3 class="timeline-header"><a href="#">${item.nombre_usuario}</a> entrega de insumos</h3>
                       <div class="timeline-body">
                         <p>${item.observacion}</p>
                       </div>
@@ -480,8 +498,15 @@
               cardBodyEgreso.classList.add("card-body");
               
               const dlEgreso = document.createElement("dl");
+
+              if (data.egreso.usuario != null) {
+                dlEgreso.innerHTML += `
+                  <dt>Usuario</dt>
+                  <dd>${data.egreso.usuario.nombre} ${data.egreso.usuario.apellido}</dd>
+                `
+              }
   
-              dlEgreso.innerHTML = `
+              dlEgreso.innerHTML += `
                 <dt>Fecha de Egreso</dt>
                 <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
                   year: "numeric",

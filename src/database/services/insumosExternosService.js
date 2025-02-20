@@ -7,6 +7,7 @@ function InsumoExterno(data) {
   this.nro_remito = data.nro_remito;
   this.observacion = data.observacion;
   this.fecha_entrega = data.fecha_entrega;
+  this.id_usuario = data.id_usuario;
 }
 
 module.exports = {
@@ -38,7 +39,9 @@ module.exports = {
     try {
       return await db.InsumoExterno.findAll({
         where: { id_ingreso_externo: id },
-        include: ["informe"]
+        include: [
+          { model: db.Usuario, as: "usuario", attributes: ["id", "nombre", "apellido"] }
+        ]
       })
     } catch (error) {
       console.log(error);

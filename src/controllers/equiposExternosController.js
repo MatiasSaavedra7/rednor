@@ -145,7 +145,7 @@ module.exports = {
       const egreso = await egresosExternosService.getOneByIdIngreso(req.params.idIngreso);
       const informes = await informesExternosService.getAllByIdIngreso(req.params.idIngreso);
       const insumos = await insumosExternosService.getAllByIdIngreso(req.params.idIngreso);
-
+      
       //  Combinacion de Informes e Insumos en un solo array.
       const combinedData = [
         ...informes.map(informe => ({
@@ -154,6 +154,7 @@ module.exports = {
           fecha: informe.fecha_informe,
           detalle: informe.detalle,
           pedido_insumos: informe.pedido_insumos,
+          nombre_usuario: informe.usuario != null ? `${informe.usuario.nombre} ${informe.usuario.apellido}` : "Usuario",
         })),
 
         ...insumos.map(insumo => ({
@@ -162,6 +163,7 @@ module.exports = {
           fecha: insumo.fecha_entrega,
           observacion: insumo.observacion,
           nro_remito: insumo.nro_remito,
+          nombre_usuario: insumo.usuario != null ? `${insumo.usuario.nombre} ${insumo.usuario.apellido}` : "Usuario",
         }))
       ];
 
@@ -171,8 +173,6 @@ module.exports = {
       const data = {
         ingreso,
         egreso,
-        // informes,
-        // insumos,
         combinedData,
       }
 

@@ -1,5 +1,9 @@
 module.exports = {
   index: (req, res) => {
+    // Informacion del Usuario Conectado
+    // const user = req.session.userLogged;
+    // console.log("Informacion del Usuario: ", user);
+    
     res.render("main");
   },
 

@@ -1,7 +1,13 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Informe } = require("../utils/objects");
+function Informe(data) {
+  this.id_ingreso = data.id_ingreso;
+  this.detalle = data.detalle;
+  this.pedido_insumos = data.pedido_insumos;
+  this.fecha_informe = data.fecha_informe;
+  this.id_usuario = data.id_usuario;
+}
 
 module.exports = {
   getAll: async () => {
@@ -17,7 +23,10 @@ module.exports = {
   getAllByIdIngreso: async (id) => {
     try {
       return await db.Informe.findAll({
-        include: ["ingreso"],
+        // include: [/*"ingreso"*/ "usuario"],
+        include: [
+          { model: db.Usuario, as: "usuario", attributes: ["id", "nombre", "apellido"] },
+        ],
         where: { id_ingreso: id },
       });
     } catch (error) {
@@ -60,6 +69,7 @@ module.exports = {
     try {
       return await db.Informe.findAll({
         where: { id_ingreso: id },
+        include: ["usuario"],
       })
     } catch (error) {
       let message = `[ERROR] Error en informesService.getAllByIdIngresoAPI: ${error}`;

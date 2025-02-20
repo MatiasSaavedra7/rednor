@@ -11,6 +11,7 @@ function IngresoExterno(data) {
   this.telefono_cliente = data.telefono_cliente;
   this.ciudad_cliente = data.ciudad_cliente;
   this.direccion_cliente = data.direccion_cliente;
+  this.id_usuario = data.id_usuario;
 }
 
 module.exports = {
@@ -69,11 +70,18 @@ module.exports = {
     try {
       return await db.IngresoExterno.findOne({
         where: { id: id },
-        include: ["equipo", /*"egreso", "informe",*/ "estado", /*"insumo"*/],
+        include: [
+          { model: db.EquipoExterno, as: "equipo" },
+          { model: db.EstadoTaller, as: "estado" },
+          {
+            model: db.Usuario,
+            as: "usuario",
+            attributes: ["id", "nombre", "apellido"]
+          }
+        ]
       });
     } catch (error) {
-      let consoleMessage = `\n\n[ERROR] No se pudo obtener el ingreso externo por id: ${error}\n\n`;
-      console.log(consoleMessage);
+      console.log(error);
     }
   },
 
@@ -81,8 +89,8 @@ module.exports = {
     try {
       return await db.IngresoExterno.create(new IngresoExterno(data));
     } catch (error) {
-      let consoleMessage = `\n\n[ERROR] No se pudo crear el ingreso externo: ${error}\n\n`;
-      console.log(consoleMessage);
+      // let consoleMessage = `\n\n[ERROR] No se pudo crear el ingreso externo: ${error}\n\n`;
+      console.log(error);
     }
   },
 
@@ -92,8 +100,8 @@ module.exports = {
         where: { id: id },
       });
     } catch (error) {
-      let consoleMessage = `\n\n[ERROR] No se pudo actualizar el ingreso externo por id: ${error}\n\n`;
-      console.log(consoleMessage);
+      // let consoleMessage = `\n\n[ERROR] No se pudo actualizar el ingreso externo por id: ${error}\n\n`;
+      console.log(error);
     }
   },
 };

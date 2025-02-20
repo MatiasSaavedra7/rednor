@@ -35,6 +35,10 @@ module.exports = (sequelize, dataTypes) => {
     fecha_cobro: {
       type: dataTypes.DATE,
       allowNull: true,
+    },
+    id_usuario: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
     }
   };
 
@@ -56,6 +60,10 @@ module.exports = (sequelize, dataTypes) => {
       foreignKey: "id_forma_pago"
     });
 
+    Egreso.belongsTo(models.Usuario, {
+      as: "usuario",
+      foreignKey: "id_usuario"
+    })
   };
 
   return Egreso;

@@ -24,6 +24,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.DATE,
       allowNull: false,
     },
+    id_usuario: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
+    }
   };
 
   let config = {
@@ -42,6 +46,11 @@ module.exports = (sequelize, dataTypes) => {
     InformeExterno.hasOne(models.InsumoExterno, {
       as: "insumos",
       foreignKey: "id_informe_externo"
+    });
+
+    InformeExterno.belongsTo(models.Usuario, {
+      as: "usuario",
+      foreignKey: "id_usuario",
     });
   };
 

@@ -28,6 +28,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
+    id_usuario: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
+    }
   };
 
   let config = {
@@ -62,6 +66,11 @@ module.exports = (sequelize, dataTypes) => {
       as: "egreso",
       foreignKey: "id_ingreso",
     });
+
+    Ingreso.belongsTo(models.Usuario, {
+      as: "usuario",
+      foreignKey: "id_usuario",
+    })
   };
 
   return Ingreso;

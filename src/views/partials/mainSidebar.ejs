@@ -113,8 +113,8 @@
               </li>
             <% } %>
           <% } %>
-          <% if (locals.isLogged) { %>
-           <% if (locals.userLogged.id_rol != 2) { %>
+          <%# if (locals.isLogged) { %>
+           <%# if (locals.userLogged.id_rol != 2) { %>
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-cogs"></i>
@@ -142,8 +142,8 @@
                 </li>
               </ul>
             </li>
-           <% } %>
-          <% } %>
+           <%# } %>
+          <%# } %>
           <% if (locals.isLogged) { %>
            <% if (locals.userLogged.id_rol != 2) { %>
             <li class="nav-item">

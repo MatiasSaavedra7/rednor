@@ -27,9 +27,7 @@ module.exports = {
         let equipoExterno = await equiposExternosService.create(req.body);
         //  Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado
         if (equipoExterno) {
-          res.redirect(
-            `/taller/externos/ingresos?equipo-externo=${equipoExterno.id}`
-          );
+          res.redirect(`/taller/externos/ingresos?equipo-externo=${equipoExterno.id}`);
         }
       } else {
         let marcas = await marcasService.getAll();
@@ -75,7 +73,9 @@ module.exports = {
   detalle: async (req, res) => {
     try {
       let ingreso = await ingresosExternosService.getOneByPK(req.params.id);
-      let egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id);
+      console.log("INGRESO: ", ingreso.toJSON());
+      let egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id); 
+      console.log(egreso != null ? egreso.toJSON() : "No hay Egreso" )
       let informes = await informesExternosService.getAllByIdIngreso(ingreso.id);
       let insumos = await insumosExternosService.getAllByIdIngreso(ingreso.id);
       let formasPago = await formasPagoService.getAll();
@@ -87,7 +87,9 @@ module.exports = {
           fecha: informe.fecha_informe,
           detalle: informe.detalle,
           pedido_insumos: informe.pedido_insumos,
-          id: informe.id
+          id: informe.id,
+          id_usuario: informe.id_usuario,
+          nombre_usuario: informe.usuario != null ? informe.usuario.nombre + " " + informe.usuario.apellido : "Usuario",
         })),
         ...insumos.map(insumo => ({
           type: 'insumo',
@@ -95,6 +97,8 @@ module.exports = {
           observacion: insumo.observacion,
           nro_remito: insumo.nro_remito,
           id: insumo.id,
+          id_usuario: insumo.id_usuario,
+          nombre_usuario: insumo.usuario != null ? insumo.usuario.nombre + " " + insumo.usuario.apellido : "Usuario",
         }))
       ];
       
@@ -140,9 +144,12 @@ module.exports = {
 
   almacenarIngreso: async (req, res) => {
     try {
+      const user = req.session.userLogged;
+
       let data = {
         ...req.body,
         id_estado: 1,
+        id_usuario: user.id,
         fecha_ingreso: new Date(),
       };
 
@@ -171,11 +178,15 @@ module.exports = {
       // Traigo desde la base de datos la informacion del ingreso.
       let ingreso = await ingresosExternosService.getOneByPK(req.params.id);
 
+      // Obtengo los datos del usuario logueado
+      const user = req.session.userLogged;
+
       // Creo el objeto con la informacion para guardar en el registro de egresos.
       let data = {
         ...req.body,
         id_forma_pago: null,
         id_ingreso_externo: ingreso.id,
+        id_usuario: user.id,
         fecha_egreso: new Date(),
       };
 
@@ -209,11 +220,15 @@ module.exports = {
 
   almacenarInforme: async (req, res) => {
     try {
+      // Obtengo los datos del usuario logueado
+      const user = req.session.userLogged;
+
       // Creo el objeto con la informacion del informe
       let data = {
         ...req.body,
         id_ingreso_externo: req.params.id,
         pedido_insumos: req.body.pedido_insumos ? true : false,
+        id_usuario: user.id,
         fecha_informe: new Date(),
       };
 
@@ -343,11 +358,14 @@ module.exports = {
       // console.log(informe);
       // let ingreso = await ingresosExternosService.getOneByPK(informe.id_ingreso_externo);
 
+      const user = req.session.userLogged;
+
       // Creo un objeto 'data' con la informacion para almacenar en los informes de insumos
       let data = {
         ...req.body,
         id_informe_externo: informe.id,
         id_ingreso_externo: informe.id_ingreso_externo,
+        id_usuario: user.id,
         fecha_entrega: new Date(),
       };
 

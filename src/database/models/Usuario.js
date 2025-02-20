@@ -45,6 +45,46 @@ module.exports = (sequelize, dataTypes) => {
       as: "rol",
       foreignKey: "id_rol",
     });
+
+    Usuario.hasMany(models.Ingreso, {
+      as: "ingresos",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.Egreso, {
+      as: "egresos",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.Informe, {
+      as: "informes",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.Insumo, {
+      as: "insumos",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.IngresoExterno, {
+      as: "ingresos_externos",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.EgresoExterno, {
+      as: "egresos_externos",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.InformeExterno, {
+      as: "informes_externos",
+      foreignKey: "id_usuario",
+    });
+
+    Usuario.hasMany(models.InsumoExterno, {
+      as: "insumos_externos",
+      foreignKey: "id_usuario",
+    });
   };
 
   return Usuario;

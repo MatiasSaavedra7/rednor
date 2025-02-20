@@ -7,7 +7,8 @@ function Insumo(data) {
   this.nro_remito = data.nro_remito;
   this.observacion = data.observacion;
   this.fecha_entrega = data.fecha_entrega;
-}
+  this.id_usuario = data.id_usuario;
+};
 
 module.exports = {
   // Metodo para traer todos los informes de insumos
@@ -51,7 +52,10 @@ module.exports = {
     try {
       return await db.Insumo.findAll({
         where: { id_ingreso: idIngreso },
-        include: ["informe", "ingreso"]
+        // include: [/*"informe", "ingreso",*/ "usuario"]
+        include: [
+          { model: db.Usuario, as: "usuario", attributes: ["id", "nombre", "apellido"]},
+        ],
       })
     } catch (error) {
       console.log(error);
@@ -90,6 +94,7 @@ module.exports = {
     try {
       return await db.Insumo.findAll({
         where: { id_ingreso: id },
+        include: ["usuario"]
       })
     } catch (error) {
       let message = "[ERROR] Error en insumosService.getOneByIdIngresoAPI " + error;

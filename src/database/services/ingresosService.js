@@ -1,7 +1,14 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Ingreso } = require("../utils/objects");
+function Ingreso(data) {
+  this.id_equipo = data.id_equipo;
+  this.fecha_ingreso = data.fecha_ingreso;
+  this.motivo = data.motivo;
+  this.detalle = data.detalle;
+  this.id_estado = data.id_estado;
+  this.id_usuario = data.id_usuario;
+};
 
 module.exports = {
   getAll: async () => {
@@ -19,7 +26,7 @@ module.exports = {
     try {
       return await db.Ingreso.findOne({
         where: { id: id },
-        include: ["equipo", "egreso", "estado", "informes", "insumos"],
+        include: ["equipo", "estado", "usuario"/*, "egreso", "informes", "insumos"*/],
       });
     } catch (error) {
       console.log(error);
@@ -94,7 +101,12 @@ module.exports = {
     try {
       return db.Ingreso.findOne({
         where: { id: id },
-        include: ["estado", "equipo"],
+        // include: ["estado", "equipo", "usuario"],
+        include: [
+          { model: db.EstadoTaller, as: "estado" },
+          { model: db.Equipo, as: "equipo" },
+          { model: db.Usuario, as: "usuario", attributes: ["id", "nombre", "apellido"] },
+        ]
       })
     } catch (error) {
       let message = `[ERROR] Error en ingresosService.getOneByPKAPI: ${error}`;

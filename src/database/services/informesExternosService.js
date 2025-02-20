@@ -1,7 +1,13 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { InformeExterno } = require("../utils/objects");
+function InformeExterno(data) {
+  this.id_ingreso_externo = data.id_ingreso_externo;
+  this.detalle = data.detalle;
+  this.pedido_insumos = data.pedido_insumos;
+  this.fecha_informe = data.fecha_informe;
+  this.id_usuario = data.id_usuario;
+}
 
 module.exports = {
   getAll: async () => {
@@ -37,7 +43,9 @@ module.exports = {
     try {
       return await db.InformeExterno.findAll({
         where: { id_ingreso_externo: id },
-        // include: ["ingreso"],
+        include: [
+          { model: db.Usuario, as: "usuario", attributes: ["id", "nombre", "apellido"]}
+        ],
       });
     } catch (error) {
       console.log(error);

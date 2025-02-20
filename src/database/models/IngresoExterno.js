@@ -43,6 +43,10 @@ module.exports = (sequelize, dataTypes) => {
     direccion_cliente: {
       type: dataTypes.STRING,
       allowNull: false,
+    },
+    id_usuario: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
     }
   };
 
@@ -77,6 +81,11 @@ module.exports = (sequelize, dataTypes) => {
     IngresoExterno.hasMany(models.InsumoExterno, {
       as: "insumo",
       foreignKey: "id_ingreso_externo",
+    });
+
+    IngresoExterno.belongsTo(models.Usuario, {
+      as: "usuario",
+      foreignKey: "id_usuario",
     });
   };
 

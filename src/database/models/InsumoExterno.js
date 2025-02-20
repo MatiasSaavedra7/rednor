@@ -28,6 +28,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.DATE,
       allowNull: false,
     },
+    id_usuario: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
+    }
   };
 
   let config = {
@@ -47,6 +51,11 @@ module.exports = (sequelize, dataTypes) => {
       as: "informe",
       foreignKey: "id_informe_externo",
     });
+
+    InsumoExterno.belongsTo(models.Usuario, {
+      as: "usuario",
+      foreignKey: "id_usuario",
+    })
   };
 
   return InsumoExterno;
