@@ -73,9 +73,7 @@ module.exports = {
   detalle: async (req, res) => {
     try {
       let ingreso = await ingresosExternosService.getOneByPK(req.params.id);
-      console.log("INGRESO: ", ingreso.toJSON());
-      let egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id); 
-      console.log(egreso != null ? egreso.toJSON() : "No hay Egreso" )
+      let egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id);
       let informes = await informesExternosService.getAllByIdIngreso(ingreso.id);
       let insumos = await insumosExternosService.getAllByIdIngreso(ingreso.id);
       let formasPago = await formasPagoService.getAll();
