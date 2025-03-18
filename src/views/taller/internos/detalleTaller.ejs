@@ -150,7 +150,7 @@
                                     <div>
                                       <a href="/taller/informe/<%= item.id %>/editar" class="btn btn-primary btn-sm">Editar</a>
                                       
-                                      <a class="btn btn-danger btn-sm">Borrar</a>
+                                      <a class="btn btn-danger btn-sm" id="btn-eliminar-informe" data-toggle="modal" data-target="#modal-eliminar-informe" data-id="<%= item.id %>">Borrar</a>
                                     </div>
                                   <% } %>
                                   <% if (item.type == "informe") { %>
@@ -227,6 +227,12 @@
                 <a href="/taller/egreso/<%= ingreso.id %>" class="btn btn-outline-success">Informar Egreso</a>
                </div>
               <% } %>
+
+              <!-- Ir al listado -->
+              <a href="/taller" class="btn btn-block btn-outline-secondary mt-3">Ir al listado</a>
+
+              <!-- Boton para Eliminar -->
+              <button type="button" data-toggle="modal" data-target="#modal-eliminar-ingreso" class="btn btn-block btn-outline-danger mt-3">Eliminar este registro</button>
               <!-- /Botones -->
             </div>
           </div>
@@ -252,6 +258,50 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Eliminar un Informe -->
+    <div class="modal fade" id="modal-eliminar-informe">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Borrar Informe</h4>
+          </div>
+          <!-- Body -->
+          <div class="modal-body">
+            <p>¿Estas seguro que quieres borrar este informe?</p>
+          </div>
+          <!-- Footer -->
+            <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+
+            <button type="button" class="btn btn-danger" id="btn-modal-eliminar-informe">Borrar</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Eliminar Ingreso -->
+    <div class="modal fade" id="modal-eliminar-ingreso">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Borrar Registro</h4>
+          </div>
+          <!-- Body -->
+          <div class="modal-body">
+            <p>¿Estas seguro que quieres borrar este registro?</p>
+          </div>
+          <!-- Footer -->
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            
+            <button type="button" class="btn btn-outline-danger" id="btn-modal-eliminar-ingreso">Borrar</button>
           </div>
         </div>
       </div>
@@ -569,6 +619,100 @@
 
       // Muestro el historial en la lista
       mostrarHistorial(ingresos);
+    })
+  </script>
+
+  <!-- Script para eliminar un informe -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btnEliminarInforme = document.querySelectorAll("#btn-eliminar-informe");
+
+      const btnModalEliminarInforme = document.getElementById("btn-modal-eliminar-informe");
+
+      let idInformeABorrar;
+
+      // Asignar el ID del Informe a borrar al boton del modal.
+      btnEliminarInforme.forEach( btn => {
+        btn.addEventListener("click", (e) => {
+          idInformeABorrar = e.target.dataset.id;
+          console.log("ID del Informe a Borrar: ", idInformeABorrar);
+        })
+
+        btnModalEliminarInforme.addEventListener("click", async () => {
+          try {
+            const response = await fetch(`/taller/informe/${idInformeABorrar}/eliminar`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+
+            if (!response.ok) {
+              throw new Error("Error al eliminar el informe");
+            }
+
+            const data = await response.json();
+            // console.log(data);
+            // Mostrar mensaje
+            // alert(data.message);
+            // Recargar la pagina
+            location.reload();
+          } catch (error) {
+            console.error(error);
+            alert("Ocurrio un error al intentar eliminar el informe.")
+          }
+        })
+      })
+    })
+  </script>
+
+  <!-- Script para Eliminar registro de Ingreso -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("Script para eliminar un registro de ingreso conectado.");
+
+      const id = "<%= ingreso.id %>";
+      console.log("ID Ingreso: ", id);
+
+      const btnModalEliminarIngreso = document.getElementById("btn-modal-eliminar-ingreso");
+      console.log(btnModalEliminarIngreso);
+
+      btnModalEliminarIngreso.addEventListener("click", async () => {
+        const data = await fetchEliminarIngreso(id);
+
+        if (data) {
+          console.log(data);
+          // Mostrar mensaje de confirmacion
+          alert(data.message);
+          // Redireccionar al listado
+          window.location.href = "/taller";
+        } else {
+          console.error(data);
+          alert(data.message);
+        }
+      })
+
+      // Funcion Fetch para eliminar el registro
+      const fetchEliminarIngreso = async (id) => {
+        try {
+          const response = await fetch(`/taller/${id}/eliminar-registro`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al eliminar el registro");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      
+      
     })
   </script>
 </body>

@@ -5,10 +5,12 @@ const session = require("express-session");
 const path = require("path");
 const methodOverride = require("method-override");
 
+// Modulo HTTP
+const http = require("http");
+
 // MIDDLEWARES
 const controlVencimientos = require("../src/middlewares/controlFechaAlquileresMiddleware");
 const userLogged = require("../src/middlewares/userLoggedMiddleware");
-
 
 // RUTAS
 const routes = require("./routes/index.routes");
@@ -18,6 +20,13 @@ const app = express();
 // DEFINICION DEL PUERTO
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
+
+// Crear Servidor HTTP
+const server = http.createServer(app);
+
+// Crear instancia de Socket.io
+const { initSocket } = require("./socket");
+initSocket(server);
 
 // RECURSOS ESTÁTICOS.
 app.use(express.static(path.join(__dirname, "../public")));
@@ -65,7 +74,7 @@ app.use((req, res, next) => {
 	res.status(500).render("errors/error500.ejs");
 });
 
-// SERVIDOR
-app.listen(PORT, HOST ,() => {
-  console.log(`Servidor corriendo http://${HOST}:${PORT}/`);
+// INICIAR EL SERVIDOR
+server.listen(PORT, HOST, () => {
+    console.log(`Servidor corriendo http://${HOST}:${PORT}/`);
 });

@@ -39,6 +39,9 @@ router.get("/informe/:id/editar", controller.editarInforme);
 // ACTUALIZAR INFORME
 router.put("/informe/:id/editar", controller.actualizarInforme);
 
+// ELIMINAR INFORME
+router.delete("/informe/:id/eliminar", controller.eliminarInforme);
+
 // FORMULARIO DE INFORME DE INSUMOS
 router.get("/:idInforme/insumos/crear", controller.insumos);
 
@@ -50,5 +53,8 @@ router.post("/historial-taller", controller.getHistorialTaller);
 
 // DETALLE DEL INGRESO AL TALLER DE UN EQUIPO
 router.get("/detalle-taller/:idIngreso", controller.getDetalleTaller);
+
+// Eliminar Ingreso + Informes + Insumos + Egreso
+router.delete("/:id/eliminar-registro", controller.eliminarRegistro);
 
 module.exports = router;

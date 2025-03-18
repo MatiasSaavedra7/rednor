@@ -61,6 +61,16 @@ module.exports = {
     }
   },
 
+  deleteByPK: async (id) => {
+    try {
+      return await db.Egreso.destroy({
+        where: { id : id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   // Metodos para la API
   getOneByIdIngresoAPI: async (id) => {
     try {

@@ -48,6 +48,16 @@ module.exports = {
     }
   },
 
+  getOneByIdInforme: async (id) => {
+    try {
+      return await db.InsumoExterno.findOne({
+        where: { id_informe_externo: id },
+      })      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   // Metodo para crear un nuevo informe de insumo
   create: async (data) => {
     try {

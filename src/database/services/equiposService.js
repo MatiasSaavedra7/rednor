@@ -134,7 +134,7 @@ module.exports = {
   
   updateByPK: async (data, id) => {
     try {
-      return db.Equipo.update(new Equipo(data), { where: { id: id } })
+      return db.Equipo.update(data, { where: { id: id } })
     } catch (error) {
       console.log(error);
     }

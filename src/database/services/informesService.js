@@ -75,5 +75,15 @@ module.exports = {
       let message = `[ERROR] Error en informesService.getAllByIdIngresoAPI: ${error}`;
       console.log(message);
     }
-  }
+  },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.Informe.destroy({
+        where: { id: id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

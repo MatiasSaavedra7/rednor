@@ -32,15 +32,54 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">Starter Page</h1>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card" id="notificaciones-card">
+              <div class="card-header">
+                <h3 class="card-title font-weight-bold">Ultimas notificaciones</h3>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover" id="notificaciones-table">
+                    <!-- Header -->
+                    <thead>
+                      <tr>
+                        <!-- <th>ID</th> -->
+                        <th>Titulo</th>
+                        <th>Mensaje</th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                    <!-- Body -->
+                    <tbody>
+                      <tr>
+                        <!-- <td>1</td> -->
+                        <td>Titulo 1</td>
+                        <td>Mensaje 1</td>
+                        <td>Fecha 1</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="d-flex justify-content-center gap-3">
+                  <button class="btn btn-sm btn-primary mr-2" id="cargar-mas-btn">&laquo;</button>
+
+                  <button class="btn btn-sm btn-primary ml-2" id="volver-atras-btn">&raquo;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div class="row">
           <div class="col-lg-6">
             <div class="card">
@@ -73,7 +112,7 @@
               </div>
             </div><!-- /.card -->
           </div>
-          <!-- /.col-md-6 -->
+
           <div class="col-lg-6">
             <div class="card">
               <div class="card-header">
@@ -99,18 +138,135 @@
               </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
+
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
   </div>
-  <!-- /. Content Wrapper. Contains page content -->
 </div>
-<!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
 <%- include('./partials/AdminLTEScripts.ejs') %>
+<!-- Script Notificaciones -->
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Card Notificaciones
+    const notificacionesCard = document.getElementById("notificaciones-card");
+    // Tabla de notificaciones
+    const notificacionesTable = document.getElementById("notificaciones-table");
+    // Boton para cargar mas notificaciones
+    const cargarMasBtn = document.getElementById("cargar-mas-btn");
+    // Boton para volver atras en las notificaciones
+    const volverAtrasBtn = document.getElementById("volver-atras-btn");
+
+    // Paginado de notificaciones
+    const limit = 5;      // Limite de notificaciones por pagina
+    let currentPage = 1;  // Primer pagina
+    let totalPages = 0;   // Total de paginas
+
+    const fetchNotificaciones = async (limit, offset) => {
+      try {
+        const response = await fetch(`/notificaciones?limit=${limit}&offset=${offset}`);
+
+        if (!response.ok) {
+          throw new Error("Error fetching data notificaciones");
+        };
+
+        return await response.json();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const mostrarNotificaciones = (notificaciones) => {
+      const notificacionesBody = notificacionesTable.querySelector("tbody");
+
+      let options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
+      }
+      
+      // Limpiar el contenido anterior
+      notificacionesBody.innerHTML = "";
+
+      notificaciones.forEach(notificacion => {
+        // Crear una nueva fila
+        const tr = document.createElement("tr");
+
+        // Agregar el nuevo contenido
+        tr.innerHTML += `
+          <td>${notificacion.titulo}</td>
+          <td><a href="${notificacion.url}" class="text-white text-decoration-none">${notificacion.mensaje}</a></td>
+          <td>${new Date(notificacion.fecha).toLocaleString("es-ES", options)}</td>
+        `;
+
+        // Agregar la nueva fila a la tabla
+        notificacionesBody.appendChild(tr);
+      });
+    };
+
+    const cargarNotificaciones = async () => {
+      const offset = (currentPage - 1) * limit;
+      const data = await fetchNotificaciones(limit, offset);
+      console.log("Notificaciones: ", data);
+      if (data) {
+        // Si no hay notificaciones, mostrar un mensaje
+        if (data.notifications.length == 0) {
+          // Seleccionar el body de la card de notificaciones
+          const notificacionesCardBody = notificacionesCard.querySelector(".card-body");
+          // Limpiar el contenido anterior
+          notificacionesCardBody.innerHTML = "";
+          // Crear un nuevo parrafo
+          const p = document.createElement("p");
+          p.textContent = "No hay notificaciones";
+          p.classList.add("text-center");
+          notificacionesCardBody.appendChild(p);
+          return;
+        }
+        // Mostrar las notificaciones, se encuentran en data.notifications
+        mostrarNotificaciones(data.notifications)
+        totalPages = data.totalPages;
+        verificarBotones();
+      };
+    };
+    
+    // Cargar las siguientes 5 notificaciones
+    const cargarPaginaSiguiente = async () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        await cargarNotificaciones();
+      }
+    };
+
+    // Volver a las anteriores 5 notificaciones
+    const cargarPaginaAnterior = async () => {
+      if (currentPage > 1) {
+        currentPage--;
+        await cargarNotificaciones();
+      };
+    };
+    
+    const verificarBotones = () => {
+      cargarMasBtn.disabled = currentPage >= totalPages;
+      volverAtrasBtn.disabled = currentPage <= 1;
+    }
+
+    // Cargar las primeras 5 notificaciones al cargar la página.
+    await cargarNotificaciones();
+
+    // Cargar mas notificaciones al hacer click en el boton
+    cargarMasBtn.addEventListener("click", async () => {
+      await cargarPaginaSiguiente();
+    });
+
+    volverAtrasBtn.addEventListener("click", async () => {
+      await cargarPaginaAnterior();
+    })
+  })
+</script>
 </body>
 </html>

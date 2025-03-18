@@ -77,6 +77,16 @@ module.exports = {
     }
   },
 
+  deleteByPK: async (id) => {
+    try {
+      return await db.Ingreso.destroy({
+        where: { id: id },
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   // Metodos para la API
   getAllByIdEquipoAPI: async (id) => {
     try {

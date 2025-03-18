@@ -4,6 +4,12 @@ const egresosService = require("../database/services/egresosService");
 const informesService = require("../database/services/informesService");
 const insumosService = require("../database/services/insumosService");
 
+// Notificaciones
+const notificacionesService = require("../database/services/notificacionesService");
+
+// Socket.IO para emitir notificaciones
+const { getIo } = require("../socket");
+
 module.exports = {
   taller: async (req, res) => {
     try {
@@ -84,24 +90,46 @@ module.exports = {
       // Obtener los datos del usuario logueado
       const user = req.session.userLogged;
 
-      let data = {
+      // Socket.IO
+      const io = getIo();
+
+      const equipo = await equiposService.getOneByPK(req.params.id);
+
+      const data = {
         ...req.body,
-        id_equipo: req.params.id,
+        id_equipo: equipo.id,
         id_estado: 1,
         fecha_ingreso: new Date(),
         id_usuario: user.id,
       };
 
-      // console.log(req.body);
+      // Almacenar en base de datos
+      const ingreso = await ingresosService.create(data);
 
-      let ingreso = await ingresosService.create(data);
-
+      
       if (ingreso) {
         // Actualizo el estado del Equipo a 'En Taller'
         await equiposService.updateByPK({ id_estado: 4}, ingreso.id_equipo);
+        
+        const notificacion = {
+          id_usuario: user.id,
+          titulo: "Nuevo Ingreso",
+          mensaje: `${user.nombre} ${user.apellido} ha ingresado el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) al taller`,
+          fecha: new Date(),
+          leida: false,
+          url: `/taller/detalle/${ingreso.id}`
+        };
+  
+        // Almacenar notificacion en base de datos
+        await notificacionesService.create(notificacion, user.id);
+  
+        // Emitir la notificacion a todos los usuarios mediante Socket.IO
+        io.emit("nueva_notificacion", notificacion)
 
         // Redirigir al usuario al detalle del ingreso
         res.redirect(`/taller/detalle/${ingreso.id}`);
+      } else {
+        throw new Error("Error al crear el ingreso");
       }
     } catch (error) {
       console.log(error);
@@ -157,17 +185,28 @@ module.exports = {
       // Obtener los datos del usuario logueado
       const user = req.session.userLogged;
 
-      let data = {
+      // Socket.IO
+      const io = getIo();
+
+      // Ingreso
+      const ingreso = await ingresosService.getOneByPK(req.params.id);
+
+      // Equipo
+      const equipo = await equiposService.getOneByPK(ingreso.id_equipo);
+
+      // Crear un Objeto con la informacion para almacenar el Egreso
+      const data = {
         ...req.body,
         id_ingreso: req.params.id,
         fecha_egreso: new Date(),
         id_usuario: user.id,
       };
 
-      let egreso = await egresosService.create(data);
+      const egreso = await egresosService.create(data);
 
       if (egreso) {
-        let ingreso = await ingresosService.getOneByPK(req.params.id);
+        // Titulo y mensaje de la notificacion
+        let titulo, mensaje;
 
         // Analizo el estado seleccionado desde los radio inputs
         if (req.body.estado == "Sin arreglo") {
@@ -176,6 +215,9 @@ module.exports = {
 
           // Actualizo el estado del Equipo a 'Sin Arreglo'
           await equiposService.updateByPK({ id_estado: 5}, ingreso.id_equipo);
+
+          titulo = "Equipo sin arreglo";
+          mensaje = `${user.nombre} ${user.apellido} informa que el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) no tiene arreglo`;
         }
 
         if (req.body.estado == "Disponible" && req.body.observacion != "") {
@@ -184,6 +226,9 @@ module.exports = {
 
           // Actualizo el estado del Equipo a 'Disponible c/ obs.'
           await equiposService.updateByPK({id_estado: 2}, ingreso.id_equipo);
+
+          titulo = "Equipo disponible, con observaciones";
+          mensaje = `${user.nombre} ${user.apellido} informa que el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) esta disponible, con observaciones`;
         }
 
         if (req.body.estado == "Disponible" && req.body.observacion == "") {
@@ -192,7 +237,25 @@ module.exports = {
           
           // Actualizo el estado del Equipo a 'Disponible'
           await equiposService.updateByPK({id_estado: 1}, ingreso.id_equipo);
+
+          titulo = "Equipo disponible";
+          mensaje = `${user.nombre} ${user.apellido} informa que el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) esta disponible`
         }
+
+        const notificacion = {
+          id_usuario: user.id,
+          titulo: titulo,
+          mensaje: mensaje,
+          fecha: new Date(),
+          leida: false,
+          url: `/taller/detalle/${ingreso.id}`,
+        };
+
+        // Almacenar la notificacion en base de datos
+        await notificacionesService.create(notificacion, user.id);
+
+        // Emitir notificacion a todos los usuarios
+        io.emit("nueva_notificacion", notificacion);
 
         // Redirigir al usuario a la pagina de detalle del ingreso
         res.redirect(`/taller/detalle/${egreso.id_ingreso}`);
@@ -216,15 +279,39 @@ module.exports = {
       // Obtener los datos del usuario logueado
       const user = req.session.userLogged;
 
-      let data = {
+      // Socket.IO
+      const io = getIo();
+
+      // Traer la informacion del Ingreso
+      const ingreso = await ingresosService.getOneByPK(req.params.id);
+
+      // Informacion del Equipo
+      const equipo = await equiposService.getOneByPK(ingreso.id_equipo);
+
+      const data = {
         ...req.body,
-        id_ingreso: req.params.id,
+        id_ingreso: ingreso.id,
         pedido_insumos: req.body.pedido_insumos ? true : false,
         fecha_informe: new Date(),
         id_usuario: user.id,
       };
 
       await informesService.create(data);
+
+      const notificacion = {
+        id_usuario: user.id,
+        titulo: req.body.pedido_insumos ? "Pedido de Insumos" : "Informe",
+        mensaje: req.body.pedido_insumos ? `${user.nombre} ${user.apellido} ha realizado un pedido de insumos para el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie})` : `${user.nombre} ${user.apellido} ha realizado un informe sobre el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie})`,
+        fecha: new Date(),
+        leida: false,
+        url: `/taller/detalle/${req.params.id}`,
+      }
+
+      // Almacenar notificacion en la base de datos
+      await notificacionesService.create(notificacion, user.id);
+
+      // Emitir notificacion a todos los usuarios conectados
+      io.emit("nueva_notificacion", notificacion);
 
       // Analizo si se hizo un pedido de insumos
       if (req.body.pedido_insumos) {
@@ -277,6 +364,29 @@ module.exports = {
     }
   },
 
+  eliminarInforme: async (req, res) => {
+    try {
+      // Capturar el ID del Informe
+      const id = req.params.id;
+
+      // Consultar si tiene un Insumo asociado
+      const insumo = await insumosService.getOneByIdInforme(id);
+
+      // Si hay un Insumo
+      if (insumo) {
+        // Eliminar de la base de datos
+        await insumosService.deleteByPK(insumo.id);
+      }
+
+      // Por ultimo, eliminar el Informe de la base de datos
+      await informesService.deleteByPK(id);
+
+      return res.status(200).json({ message: "Informe eliminado correctamente." });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   insumos: async (req, res) => {
     try {
       let informe = await informesService.getOneByPK(req.params.idInforme);
@@ -290,10 +400,20 @@ module.exports = {
 
   almacenarInsumos: async (req, res) => {
     try {
-      let informe = await informesService.getOneByPK(req.params.idInforme);
+      // Traer la informacion del Informe
+      const informe = await informesService.getOneByPK(req.params.idInforme);
+
+      // Ingreso
+      const ingreso = await ingresosService.getOneByPK(informe.id_ingreso);
+
+      // Equipo
+      const equipo = await equiposService.getOneByPK(ingreso.id_equipo);
 
       // Obtener los datos del usuario logueado
       const user = req.session.userLogged;
+
+      // Socket.IO
+      const io = getIo();
 
       // Creo un objeto 'data' con la informacion para almacenar en los informes de insumos
       let data = {
@@ -309,9 +429,24 @@ module.exports = {
 
       // Actualizo el estado del ingreso a 'En Taller'
       await ingresosService.updateByPK(informe.id_ingreso, { id_estado: 1});
-
+      
       // Actualizo el valor de pedido_insumos de la tabla ingresos a false
       await informesService.updateByPK(informe.id, { pedido_insumos: false});
+
+      const notificacion = {
+        id_usuario: user.id,
+        titulo: "Entrega de Insumos",
+        mensaje: `${user.nombre} ${user.apellido} ha entregado insumos para el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie})`,
+        fecha: new Date(),
+        leida: false,
+        url: `/taller/detalle/${informe.id_ingreso}`,
+      };
+
+      // Almacenar notificacion en base de datos
+      await notificacionesService.create(notificacion, user.id);
+
+      // Emitir notificacion a todos los usuarios conectados
+      io.emit("nueva_notificacion", notificacion);
 
       // Redirecciono al detalle del ingreso
       res.redirect(`/taller/detalle/${informe.id_ingreso}`);
@@ -391,6 +526,61 @@ module.exports = {
 
     } catch (error) {
       res.status(500).json({ message: error.message});
+    }
+  },
+
+  eliminarRegistro: async (req, res) => {
+    try {
+      // Capturar el ID del Ingreso
+      const id = req.params.id;
+
+      // Traer la informacion del Ingreso
+      const ingreso = await ingresosService.getOneByPK(id);
+
+      // Traer el array de Informes
+      const informes = await informesService.getAllByIdIngreso(id);
+
+      if (informes.length > 0) {
+        for (const informe of informes) {
+          // Traer los insumos de cada informe, si es que tiene
+          const insumo = await insumosService.getOneByIdInforme(informe.id);
+
+          // Si hay insumos, borrar de la base de datos
+          if (insumo) {
+            // Eliminar
+            await insumosService.deleteByPK(insumo.id);
+          }
+
+          // Eliminar el Informe de la base de datos
+          await informesService.deleteByPK(informe.id);
+        }
+      };
+
+      // Consultar el Egreso
+      const egreso = await egresosService.getOneByIdIngreso(id);
+
+      if (egreso) {
+        // Borrar de la base de datos
+        await egresosService.deleteByPK(egreso.id);
+      }
+
+      // Revisar el Estado del Equipo
+      const equipo = await equiposService.getOneByPK(ingreso.id_equipo);
+      console.log("Equipo: ", equipo);
+      
+      // Si el Equipo tiene el estado "En Taller"
+      if (equipo.id_estado == "4") {
+        console.log("equipo.id_estado = ", equipo.id_estado);
+        // Actualizar a Disponible antes de eliminar el registro
+        await equiposService.updateByPK({ id_estado: 1 }, ingreso.id_equipo);
+      };
+
+      // Por ultimo, borrar el Ingreso de la base de datos
+      await ingresosService.deleteByPK(id);
+
+      return res.status(200).json({ message: "Registro eliminado correctamente" });
+    } catch (error) {
+      console.error(error);
     }
   }
 };

@@ -65,4 +65,14 @@ module.exports = {
       console.log(error);
     }
   },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.EgresoExterno.destroy({
+        where: { id: id }
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

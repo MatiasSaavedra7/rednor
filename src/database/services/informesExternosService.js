@@ -62,4 +62,14 @@ module.exports = {
       console.log(error);
     }
   },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.InformeExterno.destroy({
+        where: { id : id}
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

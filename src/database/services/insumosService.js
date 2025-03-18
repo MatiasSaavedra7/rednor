@@ -35,9 +35,9 @@ module.exports = {
   },
 
   // Metodo para traer todos los informes de insumos a traves de su id_informe
-  getAllByIdInforme: async (id) => {
+  getOneByIdInforme: async (id) => {
     try {
-      return await db.Insumo.findAll({
+      return await db.Insumo.findOne({
         where: { id_informe: id },
         include: ["informe", "ingreso"]
       })

@@ -120,6 +120,7 @@ module.exports = {
         const checkPassword = await bcryptjs.compare(password, usuario.password);
         if (checkPassword && usuario.verified) {
           req.session.userLogged = usuario;
+          res.cookie("usuario", usuario);
           return res.redirect("/");
         } else if (!usuario.verified) {
           return res.status(401).render("usuarios/loginUsuario", {

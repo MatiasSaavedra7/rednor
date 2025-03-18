@@ -42,6 +42,9 @@ router.get("/informe/:id/editar", controller.editarInforme);
 
 router.put("/informe/:id/editar", controller.actualizarInforme);
 
+// ELIMINAR INFORME
+router.delete("/informe/:id/eliminar", controller.eliminarInforme);
+
 // DEFINIR EL PRECIO DE UN ARREGLO
 router.put("/definir-precio/:idEgreso", controller.definirPrecio);
 
@@ -58,6 +61,9 @@ router.post("/historial-taller", controller.getHistorialTaller);
 
 // DETALLE DEL INGRESO AL TALLER DE UN EQUIPO
 router.get("/detalle-taller/:idIngreso", controller.getDetalleTaller);
+
+// Eliminar Ingreso + Informes + Insumos + Egreso de un Equipo
+router.delete("/:id/eliminar-registro", controller.eliminarRegistro);
 
 
 module.exports = router;
