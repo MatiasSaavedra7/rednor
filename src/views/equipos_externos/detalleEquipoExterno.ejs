@@ -28,7 +28,7 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
                       <div class="dropdown-menu dropdown-menu-right">
                         <a href="/equipos-externos/<%= equipoExterno.id %>/editar" class="dropdown-item">Editar Informacion</a>
-                        <a class="dropdown-item btn disabled" data-toggle="modal" data-target="#modal-eliminar">
+                        <a class="dropdown-item btn" data-toggle="modal" data-target="#modal-eliminar">
                           Eliminar Equipo
                         </a>
                       </div>
@@ -165,21 +165,22 @@
           <div class="modal fade" id="modal-eliminar">
             <div class="modal-dialog">
               <div class="modal-content">
+                <!-- Header -->
                 <div class="modal-header">
                   <h4 class="modal-title">Eliminar Equipo</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
+                <!-- Body -->
                 <div class="modal-body">
                   <p>¿Estas seguro que deseas eliminar este equipo?</p>
                 </div>
-                <form action="/equipos/eliminar/<%# equipo.id %>?_method=DELETE" method="post">
-                  <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
-                  </div>
-                </form>
+                <!-- Footer -->
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-danger float-right" id="eliminarEquipoButton">Eliminar</button>
+                </div>
               </div>
             </div>
           </div>
@@ -620,5 +621,35 @@
       }
     </script>
 
+    <!-- Script para Eliminar el Equipo -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const eliminarButton = document.getElementById("eliminarEquipoButton");
+
+        const id = "<%= equipoExterno.id %>";
+
+        eliminarButton.addEventListener("click", async () => {
+          try {
+            const response = await fetch(`/equipos-externos/eliminar/${id}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error("Error fetching data");
+            }
+
+            const data = await response.json();
+            console.log(data);
+            alert(data.message);
+            window.location.href = "/equipos-externos";
+          } catch (error) {
+            console.error(error);
+          }
+        });
+      })
+    </script>
   </body>
 </html>

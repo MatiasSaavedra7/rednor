@@ -124,6 +124,59 @@ module.exports = {
     }
   },
 
+  deleteByPK: async (req, res) => {
+    try {
+      // Capturar el ID del Equipo Externo
+      const id = req.params.id;
+
+      const ingresos = await ingresosExternosService.getAllByIdEquipo(id);
+
+      // Recorrer el vector de ingresos
+      for (const ingreso of ingresos) {
+        // Traer los Informes de cada Ingreso
+        const informes = await informesExternosService.getAllByIdIngreso(ingreso.id);
+        
+        // Recorrer el vector de Informes
+        for (const informe of informes) {
+          // Traer los Insumos de cada Informe
+          const insumo = await insumosExternosService.getOneByIdInforme(informe.id);
+          
+          // Eliminar el Insumo, si es que tiene
+          if (insumo) {
+            await insumosExternosService.deleteByPK(insumo.id);
+          }
+
+          // Luego de eliminar el Insumo, eliminar el Informe
+          await informesExternosService.deleteByPK(informe.id);
+        }
+
+        // Traer el Egreso
+        const egreso = await egresosExternosService.getOneByIdIngreso(ingreso.id);
+
+        // Eliminar el Egreso, si es que tiene
+        if (egreso) {
+          await egresosExternosService.deleteByPK(egreso.id);
+        }
+
+        // Por ultimo, eliminar el Ingreso
+        await ingresosExternosService.deleteByPK(ingreso.id);
+      };
+      
+
+      // Eliminar el Equipo de la base de datos
+      const data = await equiposExternosService.deleteByPK(id);
+
+      if (!data) {
+        return res.status(404).json({ message: "Equipo externo no encontrado" });
+      }
+
+      return res.status(200).json({ message: "Equipo externo eliminado correctamente" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: error });
+    };
+  },
+
   getHistorialTaller: async (req, res) => {
     try {
       const ingreso = await ingresosExternosService.getAllByIdEquipo(req.params.idEquipo);

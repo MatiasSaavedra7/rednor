@@ -18,6 +18,9 @@ router.put("/:id/editar", validateEquipoMiddleware, controller.update);
 router.get("/crear", controller.create);
 router.post("/crear", controller.store);
 
+// ELIMINAR EQUIPO
+router.delete("/eliminar/:id", controller.deleteByPK);
+
 // INFORMACION DE TALLER
 router.get("/:idEquipo/historial-taller", controller.getHistorialTaller);
 
