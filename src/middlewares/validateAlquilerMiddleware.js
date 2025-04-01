@@ -16,7 +16,7 @@ module.exports = [
   // check("numero_facturacion")
   //   .notEmpty()
   //   .withMessage("Ingresa el numero de facturacion"),
-  check("departamento")
-    .notEmpty()
-    .withMessage("Debes ingresar el departamento de la operacion")
+  // check("departamento")
+  //   .notEmpty()
+  //   .withMessage("Debes ingresar el departamento de la operacion")
 ]

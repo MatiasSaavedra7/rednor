@@ -28,9 +28,9 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
                       <div class="dropdown-menu dropdown-menu-right">
                         <!-- <a href="#" class="dropdown-item">Nuevo Contrato</a> -->
-                        <% if (equipo.id_estado == 1 || equipo.id_estado == 2) { %>
+                        <%# if (equipo.id_estado == 1 || equipo.id_estado == 2) { %>
                           <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
-                        <% } %>
+                        <%# } %>
                         <!-- <div class="dropdown-divider"></div> -->
                         <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
                         <div class="dropdown-divider"></div>

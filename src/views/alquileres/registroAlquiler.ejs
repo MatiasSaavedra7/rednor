@@ -84,12 +84,12 @@
                   <hr />
                   <h5>Datos adicionales</h5>
                   <div class="form-group">
-                    <label for="numero_facturacion">Codigo de Facturacion</label>
+                    <label for="numero_facturacion">Numero de Facturacion</label>
                     <input type="number" name="numero_facturacion" id="numero_facturacion" value="<%= locals.old && old.numero_facturacion ? old.numero_facturacion : "" %>" class="form-control">
                   </div>
-                  <% if (locals.errors && errors.numero_facturacion) { %>
-                   <p class="text-danger"><%= errors.numero_facturacion.msg %></p>
-                  <% } %>
+                  <%# if (locals.errors && errors.numero_facturacion) { %>
+                   <!-- <p class="text-danger"><%# errors.numero_facturacion.msg %></p> -->
+                  <%# } %>
 
                   <div class="form-group">
                     <label for="departamento">Departamento</label>

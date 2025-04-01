@@ -58,6 +58,11 @@ module.exports = (sequelize, dataTypes) => {
       as: "ingreso",
       foreignKey: "id_equipo",
     });
+
+    Equipo.hasMany(models.HistorialEstado, {
+      as: "historial",
+      foreignKey: "id_equipo",
+    })
   };
 
   return Equipo;

@@ -1,7 +1,20 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Alquiler } = require("../utils/objects");
+function Alquiler(data) {
+  this.id_cliente = data.id_cliente;
+  this.id_equipo = data.id_equipo;
+  this.minimo_copias = data.minimo_copias;
+  this.precio_copias = data.precio_copias;
+  this.precio = data.precio;
+  this.firma = data.firma;
+  this.numero_facturacion = data.numero_facturacion;
+  this.departamento = data.departamento;
+  this.fecha_alta = data.fecha_alta;
+  this.fecha_baja = data.fecha_baja;
+  this.fecha_reajuste = data.fecha_reajuste;
+  this.activo = data.activo; // Por defecto, al crear un nuevo alquiler, el valor será true (o 1).
+}
 
 module.exports = {
   getAll: async () => {

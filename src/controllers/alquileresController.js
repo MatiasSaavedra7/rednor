@@ -2,7 +2,6 @@ const alquileresService = require("../database/services/alquileresService");
 const clientesService = require("../database/services/clientesService");
 const equiposService = require("../database/services/equiposService");
 const firmasService = require("../database/services/firmasService");
-// const marcasService = require("../database/services/marcasService");
 const reajustesService = require("../database/services/reajustesService");
 
 const { validationResult } = require("express-validator");
@@ -11,7 +10,6 @@ module.exports = {
   alquileres: async (req, res) => {
     try {
       let alquileres = await alquileresService.getAllActivos();
-      // let marcas = await marcasService.getAll();
       res.render("alquileres/alquileres", { alquileres });
     } catch (error) {
       console.log(error);
@@ -58,6 +56,8 @@ module.exports = {
     try {
       let errors = validationResult(req);
 
+      console.log(req.body);
+      
       if (errors.isEmpty()) {
         let data = {
           ...req.body,
@@ -67,12 +67,12 @@ module.exports = {
           fecha_baja: req.body.fecha_baja ? req.body.fecha_baja : null,
           fecha_reajuste: new Date(),
           activo: true,
+          numero_facturacion: req.body.numero_facturacion || null,
         };
 
         let alquiler = await alquileresService.create(data);
         if (alquiler) {
           // Actualizo el estado del equipo a 'Alquilado'
-          // await equiposService.setEstadoAlquilado(alquiler.id_equipo);
           await equiposService.updateByPK({id_estado: 3}, alquiler.id_equipo);
 
           // Redirigir al usuario al detalle del alquiler
@@ -100,11 +100,13 @@ module.exports = {
       // Capturo el ID del contrato que viene por parametro.
       let alquiler = await alquileresService.getOneByPK(req.params.id);
 
+      // Crear un objeto con la informacion a actualizar del registro
       let data = {
-        fecha_baja: new Date(),   // Envio la fecha actual
-        activo: false,            // Cambio el valor de activo a false
+        fecha_baja: new Date(), // Fecha actual
+        activo: false,          // Cambio el valor del campo activo del alquiler a false
       };
 
+      // Actualizar el Alquiler
       await alquileresService.updateByPK(data, req.params.id);
 
       // Actualizo el estado del equipo a Disponible.

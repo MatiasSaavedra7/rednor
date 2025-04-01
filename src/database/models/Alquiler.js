@@ -38,7 +38,7 @@ module.exports = (sequelize, dataTypes) => {
     },
     departamento: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     fecha_alta: {
       type: dataTypes.DATE,
