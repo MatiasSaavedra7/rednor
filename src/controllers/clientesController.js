@@ -117,22 +117,46 @@ module.exports = {
     }
   },
 
-  // eliminarDocumento: async (req, res) => {
-  //   try {
-  //     const clienteId = req.params.id;
+  delete: async (req, res) => {
+    try {
+      // Capturar el ID del Cliente
+      const id = req.params.id;
 
-  //     const cliente = await clientesService.getOneByPK(clienteId);
+      const cliente = await clientesService.getOneByPK(id);
 
-  //     if (!cliente) {
-  //         return res.status(404).send("Cliente no encontrado");
-  //     }
+      if (!cliente) throw new Error("Cliente no encontrado.");
 
-      
-  //   } catch (error) {
-  //     console.log(error);
-      
-  //   }
-  // },
+      // Archivo Inscripcion AFIP
+      if (cliente.inscripcion_afip != null) {
+        // Obtener la ruta del archivo
+        const filePathInscripcionAFIP = path.join(__dirname, "../../public/docs/inscripciones", cliente.inscripcion_afip);
+  
+        // Eliminar el archivo del servidor
+        await fs.promises.unlink(filePathInscripcionAFIP);
+        console.log("Archivo Inscripcion AFIP eliminado correctamente.");
+      }
+
+      // Archivo Formulario 005
+      if (cliente.formulario_005 != null) {
+        // Obtener la ruta del archivo
+        const filePathFormulario005 = path.join(__dirname, "../../public/docs/formulario005", cliente.formulario_005);
+        
+        // Eliminar el archivo del servidor
+        await fs.promises.unlink(filePathFormulario005);
+        console.log("Archivo Formulario 005 eliminado correctamente.");        
+      }
+
+      // Eliminar el Cliente de la Base de Datos
+      await clientesService.deleteByPK(id);
+      console.log("Cliente eliminado de la base de datos correctamente.");
+
+      // Responder con un mensaje de exito
+      return res.status(200).json({ message: "Cliente eliminado correctamente"});
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Ocurrio un error intentando eliminar el cliente", error: error.message});
+    }
+  },
 
   subirInscripcionAFIP: async (req, res) => {
     try {
@@ -174,8 +198,7 @@ module.exports = {
       // Actualizar el valor del campo inscripcion_afip a null en la base de datos
       await clientesService.updateByPK({ inscripcion_afip: null }, idCliente);
 
-      res.redirect("back");
-      // res.redirect(`/clientes/detalle/${idCliente}`);
+      res.redirect(`/clientes/detalle/${idCliente}`);
     } catch (error) {
       console.log(error);
       
@@ -229,6 +252,4 @@ module.exports = {
       
     }
   }
-
-
 };

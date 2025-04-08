@@ -27,6 +27,9 @@ router.post(
   controller.store
 );
 
+// ELIMINAR CLIENTE
+router.delete("/eliminar/:id", controller.delete);
+
 // Ruta para subir archivo Inscripcion AFIP
 router.post("/detalle/:id/subir-inscripcion-afip", upload.single("inscripcion_afip"), controller.subirInscripcionAFIP);
 

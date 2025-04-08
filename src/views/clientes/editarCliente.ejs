@@ -4,7 +4,7 @@
   <%- include('../partials/AdminLTEHead.ejs') %>
   <!-- <link rel="stylesheet" href="/css/formulario.css" /> -->
   <script src="/js/cuit.js"></script>
-  <script src="/js/registroCliente.js"></script>
+  <!-- <script src="/js/registroCliente.js"></script> -->
   <title>REDNOR -  Editar Cliente</title>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -152,8 +152,11 @@
                     </div>
 
                     <!-- Boton Enviar -->
-                    <input type="submit" value="Guardar Cambios" class="btn btn-primary w-100" />
-                    <br>
+                    <input type="submit" value="Guardar Cambios" class="btn btn-block btn-primary" />
+                    
+                    <!-- Boton Eliminar Cliente -->
+                    <button type="button" data-toggle="modal" data-target="#modal-eliminar-cliente" class="btn btn-block btn-outline-danger mt-3">Eliminar Cliente</button>
+
                     <!-- Boton Volver Atras -->
                     <a href="/clientes/detalle/<%= cliente.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver Atras</a>
                   </form>
@@ -164,6 +167,28 @@
         </div>
       </section>
     </main>
+
+    <div class="modal fade" id="modal-eliminar-cliente">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Eliminar Cliente</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <p>¿Estas seguro que deseas eliminar este cliente?</p>
+          </div>
+
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="btn-eliminar-cliente-modal">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- FIN MAIN -->
   <%- include('../partials/AdminLTEScripts.ejs') %>
@@ -205,6 +230,51 @@
       })
     })
   </script>
-    
+
+  <!-- Script para eliminar cliente -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      console.log("Script para eliminar cliente");
+      // ID del Cliente
+      const id = "<%= cliente.id %>";
+      console.log("ID del Cliente: ", id);
+      
+      const eliminarClienteButtonModal = document.getElementById("btn-eliminar-cliente-modal");
+      console.log("Button: ", eliminarClienteButtonModal);
+      
+      eliminarClienteButtonModal.addEventListener("click", async () => {
+        try {
+          const data = await fetchEliminarCliente(id);
+          window.location.href = "/clientes";
+        } catch (error) {
+          console.log(error);
+        }
+      })
+      
+      // Funcion Fetch para eliminar el cliente
+      const fetchEliminarCliente = async (id) => {
+        try {
+          const response = await fetch(`/clientes/eliminar/${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error("Error fetching data");
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      // const data = await fetchEliminarCliente(id);
+      // console.log("Cliente: ", data);
+    })
+  </script>
+
 </body>
 </html>
