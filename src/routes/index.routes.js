@@ -18,6 +18,8 @@ const gastos = require('./gastos.routes.js');
 const archivosPagos = require("./archivosPagos.routes.js");
 const archivosGastos = require("./archivosGastos.routes.js");
 
+const rentas = require("./rentas.routes.js");
+
 const notificaciones = require("./notificaciones.routes.js");
 
 //  Rutas para pruebas
@@ -78,6 +80,9 @@ router.use("/archivos-pagos", archivosPagos);
 
 // Archivo de gastos routes
 router.use("/archivos-gastos", archivosGastos);
+
+// Rentas routes
+router.use("/", rentas);
 
 // Notificaciones
 router.use("/notificaciones", notificaciones);

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <%- include('../partials/AdminLTEHead.ejs') %>
+    <title>Automatización de Retenciones</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/css/adminlte.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+    <style>
+      .timeline {
+        position: relative;
+        margin: 0 0 30px 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .timeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #ddd;
+        left: 31px;
+        margin: 0;
+        border-radius: 2px;
+      }
+
+      .timeline-item {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        margin-right: 10px;
+        margin-left: 60px;
+        padding: 15px;
+        position: relative;
+        background: #f8f9fa;
+        margin-bottom: 15px;
+      }
+
+      .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: -12px;
+        top: 16px;
+        width: 12px;
+        height: 12px;
+        background: #fff;
+        border-radius: 100%;
+        border: 2px solid #6c757d;
+      }
+
+      .time-label {
+        border-radius: 4px;
+        margin-bottom: 15px;
+      }
+
+      .time-label>span {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: #6c757d;
+        color: white;
+        font-weight: 600;
+      }
+
+      .timeline-body pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background: #f1f1f1;
+        padding: 10px;
+        border-radius: 4px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .bg-warning {
+        background-color: #ffc107 !important;
+      }
+
+      .stats-card {
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../partials/navbar.ejs') %>
+
+    <!-- Main Sidebar -->
+    <%- include('../partials/mainSidebar.ejs') %>
+
+    <!-- Control Sidebar -->
+    <%- include('../partials/controlSidebar.ejs') %>
+
+    <div class="content-wrapper">
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Automatización de Retenciones</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="/rentas">Retenciones</a></li>
+                <li class="breadcrumb-item active">Automatización</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Status Alerts -->
+          <div id="automationAlerts"></div>
+
+          <!-- Status Cards -->
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box stats-card">
+                <span class="info-box-icon bg-info"><i class="fas fa-robot"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Estado</span>
+                  <span class="info-box-number">
+                    <span id="automationStatusBadge" class="badge badge-secondary">Inactivo</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box stats-card">
+                <span class="info-box-icon bg-success"><i class="fas fa-check-circle"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Ejecuciones exitosas</span>
+                  <span id="statSuccess" class="info-box-number">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box stats-card">
+                <span class="info-box-icon bg-danger"><i class="fas fa-times-circle"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Ejecuciones fallidas</span>
+                  <span id="statFails" class="info-box-number">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box stats-card">
+                <span class="info-box-icon bg-warning"><i class="fas fa-file-alt"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Comparar archivos</span>
+                  <button id="compareRetentionsBtn" class="btn btn-xs btn-outline-dark mt-1 mr-1">
+                    Comparar ahora
+                  </button>
+                  <button id="updateRetentionTableBtn" class="btn btn-xs btn-outline-primary mt-1">
+                    <i class="fas fa-table"></i> Actualizar tabla
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Main configuration card -->
+            <div class="col-md-6">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Configuración de automatización</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="startHour">Hora de inicio (24h)</label>
+                    <input type="number" class="form-control" id="startHour" min="0" max="23" value="00">
+                    <small class="form-text text-muted">La hora en que empezará a ejecutarse la
+                      automatización (formato 24h)</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="endHour">Hora de fin (24h)</label>
+                    <input type="number" class="form-control" id="endHour" min="0" max="23" value="22">
+                    <small class="form-text text-muted">La hora en que se detendrá la automatización
+                      (formato 24h)</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="intervalMinutes">Intervalo (minutos)</label>
+                    <input type="number" class="form-control" id="intervalMinutes" min="1" value="1">
+                    <small class="form-text text-muted">Frecuencia con la que se ejecutará la
+                      automatización</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="automationCuit">CUIT</label>
+                    <input type="text" class="form-control" id="automationCuit" value="20394527999">
+                  </div>
+                  <div class="form-group">
+                    <label for="automationPassword">Contraseña</label>
+                    <input type="password" class="form-control" id="automationPassword" value="villalba99">
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button type="button" id="startAutomationBtn" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Iniciar automatización
+                  </button>
+                  <button type="button" id="stopAutomationBtn" class="btn btn-danger" disabled>
+                    <i class="fas fa-stop"></i> Detener automatización
+                  </button>
+                  <button type="button" id="runNowBtn" class="btn btn-info float-right">
+                    <i class="fas fa-bolt"></i> Ejecutar ahora
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status and schedule card -->
+            <div class="col-md-6">
+              <div class="card card-info">
+                <div class="card-header">
+                  <h3 class="card-title">Estado y programación</h3>
+                </div>
+                <div class="card-body">
+                  <dl class="row">
+                    <dt class="col-sm-4">Última ejecución:</dt>
+                    <dd class="col-sm-8"><span id="lastRun">Nunca</span></dd>
+
+                    <dt class="col-sm-4">Próxima ejecución:</dt>
+                    <dd class="col-sm-8"><span id="nextRun">No programado</span></dd>
+                  </dl>
+
+                  <div class="alert alert-info">
+                    <h5><i class="icon fas fa-info"></i> Información</h5>
+                    La automatización se ejecutará entre las horas configuradas, y comprobará
+                    si hay nuevas retenciones desde el primer día hábil del año hasta hoy.
+                    <br>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Log files card -->
+              <div class="card card-secondary">
+                <div class="card-header">
+                  <h3 class="card-title">Archivos de registro</h3>
+                </div>
+                <div class="card-body p-0">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Archivo</th>
+                        <th>Descripción</th>
+                        <th style="width: 40px">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>automation.log</td>
+                        <td>Log general de la automatización</td>
+                        <td>
+                          <button class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver log">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>changes.log</td>
+                        <td>Registro de cambios detectados</td>
+                        <td>
+                          <button class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver log">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>automatizacion.json</td>
+                        <td>Datos actualizados automáticamente</td>
+                        <td>
+                          <button class="btn btn-xs btn-info" data-toggle="tooltip" title="Ver archivo">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Timeline -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-history"></i>
+                    Actividad de la automatización
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="timeline" id="automationTimeline">
+                    <!-- Timeline items will be added dynamically -->
+                    <div class="time-label">
+                      <span class="bg-info">
+                        Ahora
+                      </span>
+                    </div>
+                    <div class="timeline-item">
+                      <h3 class="timeline-header">Sistema inicializado</h3>
+                      <div class="timeline-body">
+                        El sistema de automatización está listo para usar.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <%- include('../partials/AdminLTEScripts.ejs') %>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script> -->
+  <script src="/js/automation.js"></script>
+</body>
+
+</html>
