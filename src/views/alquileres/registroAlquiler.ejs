@@ -26,7 +26,8 @@
                 <h3 class="card-title">Nuevo Contrato - <%= cliente.nombre %></h3>
               </div>
               <div class="card-body">
-                <form action="/alquileres/crear?cliente=<%= cliente.id %>" method="post">
+                <!-- <form action="/alquileres/crear?cliente=<%# cliente.id %>" method="post" id="form-nuevo-alquiler"> -->
+                <form id="form-nuevo-alquiler">
                   
                   <div class="form-group">
                     <label for="id_equipo">Equipo</label>
@@ -46,7 +47,7 @@
         
                   <div class="form-group">
                     <label for="minimo_copias">Minimo de Copias</label>
-                    <input type="number" name="minimo_copias" id="minimo_copias" class="form-control" value="<%= locals.old && old.minimo_copias ? old.minimo_copias : "" %>">
+                    <input type="number" name="minimo_copias" id="minimo_copias" class="form-control" value="<%= locals.old && old.minimo_copias ? old.minimo_copias : "0" %>">
                     <% if (locals.errors && errors.minimo_copias) { %>
                       <p class="text-danger"><%= errors.minimo_copias.msg %></p>
                     <% } %>
@@ -54,9 +55,17 @@
         
                   <div class="form-group">
                     <label for="precio_copias">Precio por Copia</label>
-                    <input type="number" name="precio_copias" id="precio_copias" class="form-control" step="any" value="<%= locals.old && old.precio_copias ? old.precio_copias : ""  %>">
+                    <input type="number" name="precio_copias" id="precio_copias" class="form-control precios" step="any" value="<%= locals.old && old.precio_copias ? old.precio_copias : "0"  %>">
                     <% if (locals.errors && errors.precio_copias) { %>
                       <p class="text-danger"><%= errors.precio_copias.msg %></p>
+                    <% } %>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" name="precio" id="precio" class="form-control precios" step="any" value="<%= locals.old && old.precio ? old.precio : "0"  %>">
+                    <% if (locals.errors && errors.precio) { %>
+                     <p class="text-danger"><%= errors.precio.msg %></p>
                     <% } %>
                   </div>
         
@@ -114,5 +123,100 @@
 
   <%- include('../partials/AdminLTEScripts.ejs') %>
   <%- include('../partials/Select2Scripts.ejs') %>
+  <!-- Script Precio -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("Script precio cargado...");
+      const inputPrecio = document.getElementById("precio");
+      const inputMinimoCopias = document.getElementById("minimo_copias");
+      const inputPrecioPorCopias = document.getElementById("precio_copias");
+      
+      function calcularPrecio() {
+        const minimoCopias = parseInt(inputMinimoCopias.value) || 0;
+        const precioCopias = parseFloat(inputPrecioPorCopias.value) || 0;
+        // Calcular el precio final
+        const precioFinal = minimoCopias * precioCopias;
+
+        // Actualizar el valor del campo de entrada
+        inputPrecio.value = precioFinal;
+      }
+      
+      // Agregar event listeners a los campos de entrada
+      inputMinimoCopias.addEventListener("input", calcularPrecio);
+      inputPrecioPorCopias.addEventListener("input", calcularPrecio);
+    })
+  </script>
+
+  <!-- Script - Formulario para registrar un nuevo alquiler -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function (e) {
+      const cliente = "<%= cliente.id %>";
+      console.log("Cliente: ", cliente);
+
+      const form = document.getElementById("form-nuevo-alquiler");
+
+      form.addEventListener("submit", async function (e) {
+        // Prevenir el comportamiento por default del formulario
+        e.preventDefault();
+        // Cliente
+        const idCliente = cliente;
+        // Equipo
+        const idEquipo = document.getElementById("id_equipo").value;
+        // Minimo de copias
+        const minimoCopias = document.getElementById("minimo_copias").value || 0;
+        // Precio por copias
+        const precioCopias = document.getElementById("precio_copias").value || 0;
+        // Precio
+        const precio = document.getElementById("precio").value || 0;
+        // Firma
+        const firma = document.getElementById("firma").value;
+        // Fecha de vencimiento
+        const fechaBaja = document.getElementById("fecha_baja").value;
+        // Numero de facturacion
+        const numeroFacturacion = document.getElementById("numero_facturacion").value;
+        // Departamento
+        const departamento = document.getElementById("departamento").value;
+
+        const data = {
+          id_cliente: idCliente,
+          id_equipo: idEquipo,
+          minimo_copias: minimoCopias,
+          precio_copias: precioCopias,
+          precio: precio,
+          firma: firma,
+          numero_facturacion: numeroFacturacion,
+          departamento: departamento,
+        }
+
+        await fetchNuevoAlquiler(idCliente, data);
+      })
+
+      // Funcion Fetch para enviar el formulario de creacion de alquiler
+      const fetchNuevoAlquiler = async (id, dataNuevoAlquiler) => {
+        try {
+          const response = await fetch(`/alquileres/crear?cliente=${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+  
+            },
+            body: JSON.stringify(dataNuevoAlquiler)
+          });
+  
+          if (!response.ok) {
+            throw new Error("Error fetching data");
+          }
+  
+          const data = await response.json();
+
+          window.location.href = data.url;
+        } catch (error) {
+          console.log("Error: ", error);
+          alert("Error al intentar crear el alquiler: ", error);
+        }
+      }
+    })
+  </script>
 </body>
 </html>
