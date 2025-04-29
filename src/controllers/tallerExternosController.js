@@ -146,7 +146,7 @@ module.exports = {
         ...req.body,
         id_estado: 1,
         id_usuario: user.id,
-        fecha_ingreso: new Date(),
+        // fecha_ingreso: new Date(),
       };
 
       const equipoExterno = await equiposExternosService.getOneByPK(req.body.id_equipo);

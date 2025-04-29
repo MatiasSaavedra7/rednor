@@ -4,12 +4,15 @@ module.exports = [
   check("id_equipo")
     .notEmpty()
     .withMessage("Debes seleccionar un equipo"),
-  check("minimo_copias")
+  // check("minimo_copias")
+  //   .notEmpty()
+  //   .withMessage("Ingresa la cantidad minima de copias"),
+  // check("precio_copias")
+  //   .notEmpty()
+  //   .withMessage("Ingresa el precio por cada copia"),
+  check("precio")
     .notEmpty()
-    .withMessage("Ingresa la cantidad minima de copias"),
-  check("precio_copias")
-    .notEmpty()
-    .withMessage("Ingresa el precio por cada copia"),
+    .withMessage("Ingresa el precio total"),
   check("firma")
     .notEmpty()
     .withMessage("Debes seleccionar una firma"),

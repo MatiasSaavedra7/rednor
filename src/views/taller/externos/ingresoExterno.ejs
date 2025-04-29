@@ -64,8 +64,6 @@
                       <input type="text" name="direccion_cliente" id="direccion_cliente" class="form-control">
                     </div>
 
-                    
-
                     <hr>
             
                     <div class="form-group">
@@ -77,7 +75,12 @@
                       <label for="detalle">Descripcion: </label>
                       <textarea name="detalle" id="detalle" class="form-control" rows="10"></textarea>
                     </div>
-                    <input type="submit" class="btn btn-primary w-100"/>
+
+                    <div class="form-group">
+                      <label for="fecha_ingreso">Fecha de Ingreso: </label>
+                      <input type="datetime-local" name="fecha_ingreso" id="fecha_ingreso" class="form-control">
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-block"/>
                   </form>
                   <a class="btn btn-block btn-outline-secondary mt-3" id="volverAtras">Volver Atrás</a>
                 </div>
@@ -103,6 +106,33 @@
       let selectElement = document.getElementById("id_equipo");
       selectElement.value = equipoExterno;
     }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Capturar el input date
+      const fechaIngreso = document.getElementById("fecha_ingreso");
+      // Fecha Actual
+      let fechaActual = new Date();
+
+      // Ajustar la fecha a la zona horaria local
+      fechaActual.setMinutes(fechaActual.getMinutes() - fechaActual.getTimezoneOffset());
+
+      // Formatear la fecha como 'yyyy-MM-ddThh:mm'
+      let year = fechaActual.getFullYear();
+      let month = String(fechaActual.getMonth() + 1).padStart(2, '0');
+      let day = String(fechaActual.getDate()).padStart(2, '0');
+      let hours = String(fechaActual.getUTCHours()).padStart(2, '0');
+      let minutes = String(fechaActual.getMinutes()).padStart(2, '0');
+
+      // Crear el formato adecuado
+      let fechaFormateada = `${year}-${month}-${day}T${hours}:${minutes}`
+
+      console.log("Fecha formateada: ", fechaFormateada);
+
+      // Asignar la fecha al input
+      fechaIngreso.value = fechaFormateada;
+    })
   </script>
 </body>
 </html>

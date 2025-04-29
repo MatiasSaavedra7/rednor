@@ -59,6 +59,12 @@
                         <label for="detalle">Descripcion: </label>
                         <textarea name="detalle" id="detalle" class="form-control" rows="10"></textarea>
                       </div>
+
+                      <div class="form-group">
+                        <label for="fecha_ingreso">Fecha de Ingreso: </label>
+                        <input type="datetime-local" name="fecha_ingreso" id="fecha_ingreso" class="form-control">
+                      </div>
+
                       <input type="submit" class="btn btn-block btn-primary" />
                     </form>
                   </div>
@@ -71,5 +77,31 @@
     </div>
 
     <%- include('../../partials/AdminLTEScripts.ejs') %>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Capturar el input date
+        const fechaIngreso = document.getElementById("fecha_ingreso");
+
+        // Fecha actual
+        let fechaActual = new Date();
+
+        // Ajustar la fecha a la zona horaria local
+        fechaActual.setMinutes(fechaActual.getMinutes() - fechaActual.getTimezoneOffset());
+
+        // Formatear la fecha como 'yyyy-MM-ddThh:mm'
+        let year = fechaActual.getFullYear();
+        let month = String(fechaActual.getMonth() + 1).padStart(2, '0');
+        let day = String(fechaActual.getDate()).padStart(2, '0');
+        let hours = String(fechaActual.getUTCHours()).padStart(2, '0');
+        let minutes = String(fechaActual.getMinutes()).padStart(2, '0');
+
+        // Crear el formato adecuado
+        let fechaFormateada = `${year}-${month}-${day}T${hours}:${minutes}`
+
+        // Asignar la fecha al input
+        fechaIngreso.value = fechaFormateada;
+      })
+    </script>
   </body>
 </html>

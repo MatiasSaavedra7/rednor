@@ -109,7 +109,7 @@ module.exports = {
         ...req.body,
         id_equipo: equipo.id,
         id_estado: 1,
-        fecha_ingreso: new Date(),
+        // fecha_ingreso: new Date(),
         id_usuario: user.id,
       };
 

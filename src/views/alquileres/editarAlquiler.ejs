@@ -43,6 +43,14 @@
                       <p class="text-danger"><%= errors.precio_copias.msg %></p>
                     <% } %>
                   </div>
+
+                  <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" name="precio" id="precio" class="form-control" step="any" value="<%= locals.errors && errors.precio ? "" : (locals.old && old.precio ? old.precio : alquiler.precio) %>">
+                    <% if (locals.errors && errors.precio) { %>
+                     <p class="text-danger"><%= errors.precio.msg %></p>
+                    <% } %>
+                  </div>
         
                   <div class="form-group">
                     <label for="firma">Firma</label>
@@ -95,5 +103,26 @@
 
   <%- include('../partials/AdminLTEScripts.ejs') %>
   <%- include('../partials/Select2Scripts.ejs') %>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const inputPrecio = document.getElementById("precio");
+      const inputMinimoCopias = document.getElementById("minimo_copias");
+      const inputPrecioCopias = document.getElementById("precio_copias");
+
+      function calcularPrecio() {
+        const minimoCopias = parseInt(inputMinimoCopias.value) || 0;
+        const precioCopias = parseFloat(inputPrecioCopias.value) || 0;
+        // Calcular el precio final
+        const precioFinal = minimoCopias * precioCopias;
+
+        // Actualizar el valor del campo de entrada
+        inputPrecio.value = precioFinal;
+      };
+
+      // Agregar event listeners a los campos de entrada
+      inputMinimoCopias.addEventListener("input", calcularPrecio);
+      inputPrecioCopias.addEventListener("input", calcularPrecio);
+    })
+  </script>
 </body>
 </html>

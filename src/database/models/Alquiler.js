@@ -18,11 +18,11 @@ module.exports = (sequelize, dataTypes) => {
     },
     minimo_copias: {
       type: dataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     precio_copias: {
-      type: dataTypes.DECIMAL,
-      allowNull: false,
+      type: dataTypes.DECIMAL(10, 2),
+      allowNull: true,
     },
     precio: {
       type: dataTypes.DECIMAL,
