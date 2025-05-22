@@ -59,7 +59,7 @@
                         Elegir una opcion
                       </option>
                       <% firmas.forEach(firma => { %>
-                      <option value="<%= firma.nombre %>" <%= alquiler.firma.nombre == firma.nombre ? "selected" : "" %>>
+                      <option value="<%= firma.id %>" <%= alquiler.firma.nombre == firma.nombre ? "selected" : "" %>>
                         <%= firma.nombre %>
                       </option>
                       <% }) %>
