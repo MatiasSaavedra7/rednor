@@ -85,6 +85,11 @@
                             <%= equipo.estado.nombre.toUpperCase() %>
                           <% } %>
                         </span>
+                        <% if (equipo.id_estado != 4) { %>
+                          <% if (alquiler !== null) { %>
+                            <span class="text-sm">(<%= alquiler.cliente.nombre %> - <%= alquiler.departamento %>)</span>
+                          <% } %>
+                        <% } %>
                       </dd>
 
                       <% if (equipo.id_estado == 4) { %>
