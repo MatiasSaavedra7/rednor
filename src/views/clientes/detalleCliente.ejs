@@ -26,16 +26,20 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Informacion del Cliente</h3>
-                  <div class="dropdown float-right">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="/habilitados/crear?cliente=<%= cliente.id %>" class="dropdown-item">Agregar Habilitado</a>
-                      <a href="/alquileres/crear?cliente=<%= cliente.id %>" class="dropdown-item">Nuevo Contrato</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="/clientes/editar/<%= cliente.id %>" class="dropdown-item">Editar Informacion</a>
-                    </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <!-- Titulo -->
+                    <h3 class="card-title">Informacion del Cliente</h3>
 
+                    <!-- Dropdown -->
+                    <div class="dropdown float-right">
+                      <a href="#" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Mas opciones </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a href="/habilitados/crear?cliente=<%= cliente.id %>" class="dropdown-item">Agregar Habilitado</a>
+                        <a href="/alquileres/crear?cliente=<%= cliente.id %>" class="dropdown-item">Nuevo Contrato</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/clientes/editar/<%= cliente.id %>" class="dropdown-item">Editar Informacion</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="card-body">
@@ -134,31 +138,31 @@
                     <a href="/alquileres/crear?cliente=<%= cliente.id %>" class="btn btn-outline-primary btn-sm float-right">Nuevo Contrato</a>
                   </div>
                 </div>
-                <div class="card-body">
-                  <table id="alquileres" class="table table-bordered table-hover">
+                <div class="card-body table-responsive">
+                  <table id="alquileres" class="table table-bordered table-hover table-striped">
                     <thead>
                       <tr>
-                        <th>Cliente</th>
+                        <!-- <th>Cliente</th> -->
                         <th>Departamento</th>
                         <th>Equipo</th>
                         <th>Firma</th>
                         <th>Precio</th>
-                        <th>Detalles</th>
+                        <!-- <th>Detalles</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <% alquileres.forEach(alquiler => { %>
-                      <tr>
-                        <td><%= alquiler.cliente.nombre %></td>
+                      <tr class="clickable-row" data-href="/alquileres/detalles/<%= alquiler.id %>">
+                        <!-- <td><%# alquiler.cliente.nombre %></td> -->
                         <td><%= alquiler.departamento %></td>
                         <td><%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%= alquiler.equipo.numero_serie %></td>
-                        <td><%= alquiler.firma %></td>
+                        <td><%= alquiler.firma.nombre %></td>
                         <td class="precios"><%= alquiler.precio %></td>
-                        <td>
-                          <a href="/alquileres/detalles/<%= alquiler.id %>">
+                        <!-- <td>
+                          <a href="/alquileres/detalles/<%# alquiler.id %>">
                             Detalles
                           </a>
-                        </td>
+                        </td> -->
                       </tr>
                       <% }); %>
                     </tbody>
@@ -359,7 +363,7 @@
   <script>
     $(function () {
       $("#alquileres").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 20,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#alquileres_wrapper .col-md-6:eq(0)');
     });
@@ -379,6 +383,18 @@
 
         // Formatear el valor del precio
         precio.textContent = "$" + formatearPrecio(valor);
+      })
+    })
+  </script>
+
+  <!-- Script para ir al detalle de un alquiler clickeando sobre la fila -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".clickable-row").forEach(row => {
+        row.style.cursor = "pointer";
+        row.addEventListener("click", function() {
+          window.location.href = row.getAttribute("data-href");
+        })
       })
     })
   </script>

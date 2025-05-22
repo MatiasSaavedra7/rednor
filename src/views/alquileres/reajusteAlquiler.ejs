@@ -44,6 +44,11 @@
                       <% } %>
                     </div>
 
+                    <div class="form-group">
+                      <label for="precio">Precio</label>
+                      <input type="number" name="precio" id="precio" step="any" class="form-control" value="<%= locals.old && old.precio ? old.precio : alquiler.precio %>">
+                    </div>
+
                     <input type="submit" class="btn btn-block btn-primary mt-4">
                   </form>
                 </div>
@@ -56,5 +61,28 @@
   </div>
 
   <%- include('../partials/AdminLTEScripts.ejs') %>
+  <!-- Script precio -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const inputPrecio = document.getElementById("precio");
+      const inputMinimoCopias = document.getElementById("minimo_copias");
+      const inputPrecioCopias = document.getElementById("precio_copias");
+
+      function calcularPrecio() {
+        const minimoCopias = parseInt(inputMinimoCopias.value) || 0;
+        const precioCopias = parseFloat(inputPrecioCopias.value) || 0;
+
+        // Calcular el precio final
+        const precioFinal = minimoCopias * precioCopias;
+
+        // Actualizar el valor del input del precio
+        inputPrecio.value = precioFinal;
+      }
+
+      // Agregar Event Listeners a los inputs 
+      inputMinimoCopias.addEventListener("input", calcularPrecio);
+      inputPrecioCopias.addEventListener("input", calcularPrecio);
+    })
+  </script>
 </body>
 </html>

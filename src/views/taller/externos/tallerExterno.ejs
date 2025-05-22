@@ -17,7 +17,19 @@
        <%- include('../../partials/controlSidebar.ejs') %>
       <!-- MAIN -->
       <main class="content-wrapper">
-        <section class="content mt-3">
+        <!-- Header -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <h1 class="m-0">Taller</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenido Principal -->
+        <section class="content">
           <div class="container-fluid">
             <div class="row">
               <div class="col-12">
@@ -40,98 +52,107 @@
                     <div class="card-body">
                       <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                          <table id="ingresosEnTaller" class="table table-bordered table-hover">
-                            <thead>
-                              <tr>
-                                <th>Nombre</th>
-                                <th>Equipo</th>
-                                <th>Ingreso</th>
-                                <th>Estado</th>
-                                <th>Detalles</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <% ingresosEnTaller.forEach(ingresoEnTaller => { %>
-                              <tr>
-                                <td><%= ingresoEnTaller.nombre_cliente %></td>
-                                <td>
-                                  <%= ingresoEnTaller.equipo.marca %>
-                                  <%= ingresoEnTaller.equipo.modelo %>
-                                  <%= ingresoEnTaller.equipo.numero_serie %>
-                                </td>
-                                <td>
-                                  <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-ES", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                    // hour: "2-digit",
-                                    // minute: "2-digit",
-                                    // hour12: false,
-                                  }) %>
-                                </td>
-                                <td><%= ingresoEnTaller.estado.nombre %></td>
-                                <td>
-                                  <a href="/taller/externos/detalle/<%= ingresoEnTaller.id %>">Detalles</a>
-                                </td>
-                              </tr>
-                              <% }); %>
-                            </tbody>
-                          </table>
-                        </div>
-                        
-                        <div class="tab-pane" id="tab_2">
-                          <table id="ingresosHistorial" class="table table-bordered table-hover">
-                            <thead>
-                              <tr>
-                                <th>Cliente</th>
-                                <th>Equipo</th>
-                                <th>Ingreso</th>
-                                <th>Egreso</th>
-                                <th>Estado</th>
-                                <th>Detalles</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <% ingresosHistorial.forEach(ingresoHistorial => { %>
-                              <tr>
-                                <td><%= ingresoHistorial.nombre_cliente %></td>
-                                <td>
-                                  <%= ingresoHistorial.equipo.marca %>
-                                  <%= ingresoHistorial.equipo.modelo %>
-                                  <%= ingresoHistorial.equipo.numero_serie %>
-                                </td>
-                                <td>
-                                  <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-ES", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                    // hour: "2-digit",
-                                    // minute: "2-digit",
-                                    // hour12: false,
-                                  }) %>
-                                </td>
-                                <td>
-                                  <% if (ingresoHistorial.egreso) { %>
-                                    <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-ES", {
+                          <div class="table-responsive">
+                            <table id="ingresosEnTaller" class="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Cliente</th>
+                                  <th>Equipo</th>
+                                  <th>Ingreso</th>
+                                  <th>Estado</th>
+                                  <!-- <th>Detalles</th> -->
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% ingresosEnTaller.forEach(ingresoEnTaller => { %>
+                                <tr class="clickable-row" data-href="/taller/externos/detalle/<%= ingresoEnTaller.id %>">
+                                  <td><%= ingresoEnTaller.nombre_cliente %></td>
+                                  <td>
+                                    <%= ingresoEnTaller.equipo.marca %> <%= ingresoEnTaller.equipo.modelo %> <%= ingresoEnTaller.equipo.numero_serie %>
+                                  </td>
+                                  <td>
+                                    <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-ES", {
                                       day: "2-digit",
                                       month: "2-digit",
                                       year: "numeric",
-                                      // hour: "2-digit",
-                                      // minute: "2-digit",
-                                      // hour12: false,
                                     }) %>
-                                  <% } else { %>
-                                    -
-                                  <% } %>
-                                </td>
-                                <td><%= ingresoHistorial.estado.nombre %></td>
-                                <td>
-                                  <a href="/taller/externos/detalle/<%= ingresoHistorial.id %>">Detalles</a>
-                                </td>
-                              </tr>
-                              <% }); %>
-                            </tbody>
-                          </table>
+                                  </td>
+                                  <td class="h5">
+                                    <span class="badge 
+                                      <%= ingresoEnTaller.id_estado == 1 ? "badge-info" : 
+                                      ingresoEnTaller.id_estado == 2 ? "badge-warning" : 
+                                      ingresoEnTaller.id_estado == 3 ? "badge-success" : "" %>
+                                     ">
+                                      <%= ingresoEnTaller.estado.nombre.toUpperCase() %>
+                                    </span>
+                                  </td>
+                                  <!-- <td> -->
+                                    <!-- <a href="/taller/externos/detalle/<%# ingresoEnTaller.id %>">Detalles</a> -->
+                                  <!-- </td> -->
+                                </tr>
+                                <% }); %>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab_2">
+                          <div class="table-responsive">
+                            <table id="ingresosHistorial" class="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Cliente</th>
+                                  <th>Equipo</th>
+                                  <th>Ingreso</th>
+                                  <th>Egreso</th>
+                                  <th>Estado</th>
+                                  <!-- <th>Detalles</th> -->
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% ingresosHistorial.forEach(ingresoHistorial => { %>
+                                <tr class="clickable-row" data-href="/taller/externos/detalle/<%= ingresoHistorial.id %>">
+                                  <!-- Cliente -->
+                                  <td><%= ingresoHistorial.nombre_cliente %></td>
+                                  <!-- Equipo -->
+                                  <td>
+                                    <%= ingresoHistorial.equipo.marca %> <%= ingresoHistorial.equipo.modelo %> <%= ingresoHistorial.equipo.numero_serie %>
+                                  </td>
+                                  <!-- Ingreso -->
+                                  <td>
+                                    <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-ES", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    }) %>
+                                  </td>
+                                  <!-- Egreso -->
+                                  <td>
+                                    <% if (ingresoHistorial.egreso) { %>
+                                      <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-ES", {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                      }) %>
+                                    <% } else { %>
+                                      -
+                                    <% } %>
+                                  </td>
+                                  <!-- Estado -->
+                                  <td class="h5">
+                                    <span class="badge <%= ingresoHistorial.id_estado == 6 ? "badge-danger" : "badge-info" %>">
+                                      <%= ingresoHistorial.estado.nombre.toUpperCase() %>
+                                    </span>
+                                  </td>
+                                  <!-- Detalles -> Ir a la pagina del detalle -->
+                                  <!-- <td> -->
+                                    <!-- <a href="/taller/externos/detalle/<%# ingresoHistorial.id %>">Detalles</a> -->
+                                  <!-- </td> -->
+                                </tr>
+                                <% }); %>
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                         <!-- /.tab-pane -->
                       </div>
@@ -151,21 +172,28 @@
     <script>
       $(function () {
         $("#ingresosEnTaller").DataTable({
-          "responsive": true, "lengthChange": false, "autoWidth": false,
+          "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50,
           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#ingresosEnTaller_wrapper .col-md-6:eq(0)');
       });
-      // $(function () {
-      //   $("#ingresosEnEspera").DataTable({
-      //     "responsive": true, "lengthChange": false, "autoWidth": false,
-      //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      //   }).buttons().container().appendTo('#ingresosEnEspera_wrapper .col-md-6:eq(0)');
-      // });
+
       $(function () {
         $("#ingresosHistorial").DataTable({
-          "responsive": true, "lengthChange": false, "autoWidth": false,
+          "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50,
           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#ingresosHistorial_wrapper .col-md-6:eq(0)');
+      });
+    </script>
+
+    <!-- Script para ir al detalle clickeando la fila -->
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.clickable-row').forEach(row => {
+          row.style.cursor = "pointer";
+          row.addEventListener('click', () => {
+            window.location.href = row.getAttribute('data-href');
+          });
+        });
       });
     </script>
   </body>

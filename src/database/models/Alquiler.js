@@ -10,11 +10,11 @@ module.exports = (sequelize, dataTypes) => {
     },
     id_cliente: {
       type: dataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     id_equipo: {
       type: dataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     minimo_copias: {
       type: dataTypes.INTEGER,
@@ -28,9 +28,9 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.DECIMAL,
       allowNull: false,
     },
-    firma: {
-      type: dataTypes.STRING,
-      allowNull: false,
+    id_firma: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
     },
     numero_facturacion: {
       type: dataTypes.INTEGER,
@@ -71,11 +71,19 @@ module.exports = (sequelize, dataTypes) => {
     Alquiler.belongsTo(models.Equipo, {
       as: "equipo",
       foreignKey: "id_equipo",
+      onDelete: "SET NULL", //  Si un equipo es eliminado, el campo id_equipo de la tabla alquiler queda en NULL
+
     });
 
     Alquiler.hasMany(models.Reajuste, {
       as: "reajuste",
       foreignKey: "id_alquiler",
+    });
+
+    Alquiler.belongsTo(models.Firma, {
+      as: "firma",
+      foreignKey: "id_firma",
+      onDelete: "SET NULL",
     });
   };
   return Alquiler;

@@ -119,8 +119,14 @@ module.exports = {
       if (usuario) {
         const checkPassword = await bcryptjs.compare(password, usuario.password);
         if (checkPassword && usuario.verified) {
+          // Elimino la contraseña por motivos seguridad
+          usuario.password = null;
+          delete usuario.password;
+
+          // Guardo la informacion del usuario en session
           req.session.userLogged = usuario;
-          res.cookie("usuario", usuario);
+
+          // Redireccionar al usuario a la pagina de inicio
           return res.redirect("/");
         } else if (!usuario.verified) {
           return res.status(401).render("usuarios/loginUsuario", {
@@ -147,8 +153,12 @@ module.exports = {
 
   cerrarSesion: async (req, res) => {
     try {
-      req.session.destroy();
+      // Destruir la sesion del usuario
+      req.session.destroy(); 
+      // Limpiar las cookies
       res.clearCookie("rednorCookieSession");
+      res.clearCookie("firma");
+      // Redirigir al usuario a la pagina de login
       res.redirect("/usuarios/login") ;
     } catch (error) {
       console.log(error);

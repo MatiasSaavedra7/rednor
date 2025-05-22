@@ -37,44 +37,52 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <table id="equipos" class="table table-head-fixed table-bordered table-hover">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Serie</th>
-                        <th>Tipo</th>
-                        <th>Estado</th>
-                        <!-- <th>Detalles</th> -->
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% equipos.forEach(equipo=> { %>
-                        <tr class="clickable-row" data-href="/equipos/detalle/<%= equipo.id %>">
-                          <td>
-                            <%= equipo.id %>
-                          </td>
-                          <td>
-                            <%= equipo.marca %>
-                          </td>
-                          <td>
-                            <%= equipo.modelo %>
-                          </td>
-                          <td>
-                            <%= equipo.numero_serie %>
-                          </td>
-                          <td>
-                            <%= equipo.tipo.nombre %>
-                          </td>
-                          <td>
-                            <%= equipo.estado.nombre %>
-                          </td>
-                          <!-- <td><a href="/equipos/detalle/<%# equipo.id %>">Ver más</a></td> -->
+                  <div class="table-responsive">
+                    <table id="equipos" class="table table-head-fixed table-bordered table-hover table-striped">
+                      <thead>
+                        <tr>
+                          <!-- <th>ID</th> -->
+                          <th>Marca</th>
+                          <th>Modelo</th>
+                          <th>Serie</th>
+                          <th>Tipo</th>
+                          <th>Estado</th>
+                          <!-- <th>Detalles</th> -->
                         </tr>
-                        <% }) %>
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        <% equipos.forEach(equipo=> { %>
+                          <tr class="clickable-row" data-href="/equipos/detalle/<%= equipo.id %>">
+                            <!-- <td><%# equipo.id %></td> -->
+                            <td>
+                              <%= equipo.marca %>
+                            </td>
+                            <td>
+                              <%= equipo.modelo %>
+                            </td>
+                            <td>
+                              <%= equipo.numero_serie %>
+                            </td>
+                            <td>
+                              <%= equipo.tipo.nombre %>
+                            </td>
+                            <td class="h5">
+                              <span class="badge <%= 
+                                equipo.id_estado == 1 ? "badge-success" : 
+                                equipo.id_estado == 2 ? "badge-success" :
+                                equipo.id_estado == 3 ? "badge-info" :
+                                equipo.id_estado == 4 ? "badge-warning" :
+                                equipo.id_estado == 5 ? "badge-danger" : "badge-info"
+                                %>">
+                                <%= equipo.estado.nombre.toUpperCase() %>
+                              </span>
+                            </td>
+                            <!-- <td><a href="/equipos/detalle/<%# equipo.id %>">Ver más</a></td> -->
+                          </tr>
+                          <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,7 +97,7 @@
   <script>
     $(function () {
       $("#equipos").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+        "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#equipos_wrapper .col-md-6:eq(0)');
     });

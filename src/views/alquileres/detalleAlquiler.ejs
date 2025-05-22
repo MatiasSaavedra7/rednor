@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <%- include('../partials/Select2Head.ejs') %>
   <%- include('../partials/AdminLTEHead.ejs') %>
   <%- include('../partials/AdminLTEHeadTables') %>
   <title>REDNOR - Detalle del Alquiler <%= alquiler.id %></title>
@@ -37,6 +38,7 @@
                 </div>
                 <div class="card-body">
                   <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <!-- Informacion del Alquiler -->
                     <div class="tab-pane fade show active" id="custom-tabs-one-contrato" role="tabpanel" aria-labelledby="custom-tabs-one-contrato-tab">
                       <dl>
                         <dt>Minimo de Copias</dt>
@@ -55,7 +57,7 @@
                         <dd><%= alquiler.departamento %></dd>
 
                         <dt>Firma</dt>
-                        <dd><%= alquiler.firma %></dd>
+                        <dd><%= alquiler.firma.nombre %></dd>
 
                         <dt>Fecha de Alta del Contrato</dt>
                         <dd><%= alquiler.fecha_alta.toLocaleString('es-ES', {hour12: false}) %></dd>
@@ -70,9 +72,12 @@
                           <dd><%= alquiler.fecha_reajuste.toLocaleString('es-ES', {hour12: false}) %></dd>
                         <% } %>
 
+                        <!-- Boton para editar informacion -->
                         <a href="/alquileres/editar/<%= alquiler.id %>" class="btn btn-block btn-outline-primary mt-3">Editar Info</a>
                       </dl>
                     </div>
+
+                    <!-- Informacion del Cliente -->
                     <div class="tab-pane fade" id="custom-tabs-one-cliente" role="tabpanel" aria-labelledby="custom-tabs-one-cliente-tab">
                       <dl>
                         <!-- Nombre del Cliente -->
@@ -94,26 +99,37 @@
                         <dd><%= cliente.email %></dd>
                       </dl>
                     </div>
+
+                    <!-- Informacion del Equipo -->
                     <div class="tab-pane fade" id="custom-tabs-one-equipo" role="tabpanel" aria-labelledby="custom-tabs-one-equipo-tab">
                       <dl>
-                        <!-- Numero de Serie -->
-                        <dt>Numero de Serie</dt>
-                        <dd>
-                          <a href="/equipos/detalle/<%= equipo.id %>" target="_blank"><%= equipo.numero_serie %> <i class="fas fa-external-link-alt"></i></a>
-                        </dd>
-  
-                        <!-- Marca -->
-                        <dt>Marca</dt>
-                        <dd><%= equipo.marca %></dd>
-  
-                        <!-- Modelo -->
-                        <dt>Modelo</dt>
-                        <dd><%= equipo.modelo %></dd>
+                        <% if (equipo != null) { %>
+                          <!-- Numero de Serie -->
+                          <dt>Numero de Serie</dt>
+                          <dd>
+                            <a href="/equipos/detalle/<%= equipo.id %>" target="_blank"><%= equipo.numero_serie %> <i class="fas fa-external-link-alt"></i></a>
+                          </dd>
+    
+                          <!-- Marca -->
+                          <dt>Marca</dt>
+                          <dd><%= equipo.marca %></dd>
+    
+                          <!-- Modelo -->
+                          <dt>Modelo</dt>
+                          <dd><%= equipo.modelo %></dd>
+
+                          <!-- Boton modal cambiar el equipo -->
+                          <a href="#" id="button-modal-cambiar-equipo" class="btn btn-block btn-outline-success mt-3" data-toggle="modal" data-target="#modal-cambiar-equipo">Cambiar Equipo</a>
+                          
+                          <% } else { %>
+                            <dd>No hay un equipo asignado</dd>
+                            <a href="#" id="button-modal-cambiar-equipo" class="btn btn-block btn-outline-success mt-3" data-toggle="modal" data-target="#modal-cambiar-equipo">Asignar Equipo</a>
+                        <% } %>
+
                       </dl>
                     </div>
                   </div>
                 </div>
-                <!-- /.card -->
               </div>
             </div>
 
@@ -140,7 +156,7 @@
                   </div>
                   </div>
                 <div class="card-body">
-                  <table id="alquiler" class="table table-bordered table-hover">
+                  <table id="alquiler" class="table table-bordered table-hover table-striped">
                     <thead>
                       <tr>
                         <th>Fecha de Reajuste</th>
@@ -164,6 +180,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Modal Finalizar Contrato -->
           <div class="modal fade" id="modal-default">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -189,6 +207,36 @@
             </div>
             <!-- /.modal-dialog -->
           </div>
+
+          <!-- Modal Cambiar Equipo -->
+           <div class="modal fade" id="modal-cambiar-equipo">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Cambiar Equipo</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <!-- Body -->
+                <div class="modal-body">
+                  <!-- <p>Cambiar el equipo</p> -->
+
+                  <div class="form-group">
+                    <label for="id_equipo">Equipo</label>
+                    <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%; padding: 2px;">
+                    </select>
+                  </div>
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-primary" id="button-cambiar-equipo">Cambiar Equipo</button>
+                </div>
+              </div>
+            </div>
+           </div>
         </div>
       </section>
     </main>
@@ -197,6 +245,9 @@
 
   <%- include('../partials/AdminLTEScripts.ejs') %>
   <%- include('../partials/AdminLTEScriptsTables') %>
+  <%- include('../partials/Select2Scripts.ejs') %>
+
+  <!-- Script para las tablas -->
   <script>
     $(function () {
       $("#alquiler").DataTable({
@@ -205,6 +256,8 @@
       }).buttons().container().appendTo('#alquiler_wrapper .col-md-6:eq(0)');
     });
   </script>
+
+  <!-- Script para formatear los precios -->
   <script>
     document.addEventListener('DOMContentLoaded', function(){
       const precios = document.querySelectorAll(".precios");
@@ -214,6 +267,104 @@
         precio.textContent = "$" + formatearPrecio(valor);
       })
     });
+  </script>
+
+  <!-- Script cambiar el equipo de un alquiler -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      console.info("Script para cambiar el equipo de un alquiler conectado...");
+      const idAlquiler = "<%= alquiler.id %>";
+
+      console.log("ID Alquiler: ", idAlquiler);
+      
+      // Capturar el button del modal donde se mostraran los equipos
+      const buttonModalCambiarEquipo = document.getElementById("button-modal-cambiar-equipo");
+
+      // Agregar evento fetch que trae los equipos disponibles al abrir el modal
+      buttonModalCambiarEquipo.addEventListener("click", async () => {
+        //  Traer los equipos disponibles
+        const data = await fetchEquiposDisponibles();
+
+        //  Capturar el select del modal
+        const selectEquipo = document.getElementById("id_equipo");
+
+        if (data) {
+          // Limpiar el select antes de agregar nuevas opciones
+          selectEquipo.innerHTML = "";
+
+          // Agregar opcion por defecto
+          const defaultOption = document.createElement("option");
+          defaultOption.text = "Seleccione un equipo";
+          defaultOption.value = "";
+          defaultOption.disabled = true;
+          defaultOption.selected = true;
+          selectEquipo.add(defaultOption);
+
+          // Iterar sobre los datos y agregar las opciones al select
+          data.forEach(equipo => {
+            const option = document.createElement("option");
+            option.value = equipo.id;
+            option.text = `${equipo.marca} ${equipo.modelo} - ${equipo.numero_serie}`;
+            selectEquipo.add(option);
+          });
+        } else {
+          // Mostrar mensaje de error si no se obtienen los datos
+          selectEquipo.innerHTML = "<option>Error al cargar los equipos</option>";
+        }
+
+        console.log("Equipos disponibles: ", data);
+      })
+
+      const buttonCambiarEquipo = document.getElementById("button-cambiar-equipo");
+
+      buttonCambiarEquipo.addEventListener("click", fetchCambiarEquipo);
+
+      //  Funcion Fetch para traer todos los equipos disponibles
+      async function fetchEquiposDisponibles() {
+        try {
+          const response = await fetch("/equipos/disponibles");
+
+          if (!response.ok) {
+            throw new Error("[Fetch]: Error al traer los equipos disponibles")
+          };
+
+          return await response.json();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      //  Funcion Fetch para realizar el cambio de equipo
+      async function fetchCambiarEquipo() {
+        const selectEquipo = document.getElementById("id_equipo");
+        const idEquipoSeleccionado = selectEquipo.value;
+
+        if (!idEquipoSeleccionado) {
+          alert("Seleccione un equipo antes de continuar.");
+          return;   //  No ejecutar la funcion si no se ha seleccionado un equipo
+        }
+        try {
+          const response = await fetch(`/alquileres/cambiar-equipo/${idAlquiler}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id_equipo: idEquipoSeleccionado })
+          });
+
+          if (!response.ok) {
+            throw new Error("[Fetch]: Error al cambiar el equipo");
+          };
+
+          const data = await response.json();
+          alert(data.message);
+          window.location.href = `/alquileres/detalles/${idAlquiler}`;
+        } catch (error) {
+          console.log(error);
+          alert("Error al cambiar el equipo", error.message);          
+        }
+      }
+    })
   </script>
 </body>
 </html>

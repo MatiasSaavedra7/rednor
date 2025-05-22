@@ -34,28 +34,30 @@
                     </div>
                   </div>
                   <div class="card-body">
-                    <table id="clientes" class="table table-bordered table-hover">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Nombre</th>
-                          <th>Tipo</th>
-                          <th>Email</th>
-                          <th>Detalles</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% clientes.forEach(cliente => { %>
-                          <tr style="user-select: none;" class="clickable-row" data-href="/clientes/detalle/<%= cliente.id %>">
-                            <td><%= cliente.id %></td>
-                            <td><%= cliente.nombre %></td>
-                            <td><%= cliente.tipo ? cliente.tipo.nombre : "-"  %></td>
-                            <td><%= cliente.email %></td>
-                            <td><a href='/clientes/detalle/<%= cliente.id %>'>Ver más</a></td>
+                    <div class="table-responsive">
+                      <table id="clientes" class="table table-bordered table-hover table-striped">
+                        <thead>
+                          <tr>
+                            <!-- <th>ID</th> -->
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Email</th>
+                            <!-- <th>Detalles</th> -->
                           </tr>
-                          <% }); %>
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          <% clientes.forEach(cliente => { %>
+                            <tr style="user-select: none;" class="clickable-row" data-href="/clientes/detalle/<%= cliente.id %>">
+                              <!-- <td><%# cliente.id %></td> -->
+                              <td><%= cliente.nombre %></td>
+                              <td><%= cliente.tipo ? cliente.tipo.nombre : "-"  %></td>
+                              <td><%= cliente.email %></td>
+                              <!-- <td><a href='/clientes/detalle/<%# cliente.id %>'>Ver más</a></td> -->
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -69,7 +71,7 @@
     <script>
       $(function () {
         $("#clientes").DataTable({
-          "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+          "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50,
           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#clientes_wrapper .col-md-6:eq(0)');
       });

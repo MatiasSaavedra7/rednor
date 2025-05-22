@@ -17,6 +17,7 @@ const externos = require('./taller.externo.routes.js');
 const gastos = require('./gastos.routes.js');
 const archivosPagos = require("./archivosPagos.routes.js");
 const archivosGastos = require("./archivosGastos.routes.js");
+const firmasRoutes = require("./firmas.routes.js");
 
 const notificaciones = require("./notificaciones.routes.js");
 
@@ -81,6 +82,9 @@ router.use("/archivos-gastos", archivosGastos);
 
 // Notificaciones
 router.use("/notificaciones", notificaciones);
+
+// Firmas
+router.use("/firmas", firmasRoutes);
 
 // Pruebas routes
 router.use("/pruebas", pruebas);

@@ -4,6 +4,7 @@ const egresosService = require("../database/services/egresosService");
 const informesService = require("../database/services/informesService");
 const insumosService = require("../database/services/insumosService");
 const historialEstadosService = require("../database/services/historialEstadosService");
+const alquileresService = require("../database/services/alquileresService");
 
 /* 
   Estados del Equipo
@@ -27,10 +28,15 @@ module.exports = {
       let ingresos = await ingresosService.getAll();
 
       // Filtrar aquellos ingresos cuyo estado sea 1, 2 o 3 (Disponibles)
-      let ingresosEnTaller = ingresos.filter((ingreso) => ingreso.id_estado == 1 || ingreso.id_estado == 2 || ingreso.id_estado == 3);
+      let ingresosEnTaller = ingresos
+        .filter((ingreso) => [1, 2, 3].includes(ingreso.id_estado))
+        .sort((a, b) => new Date(b.fecha_ingreso) - new Date(a.fecha_ingreso))  //  Orden descendente
 
       // Filtrar aquellos ingresos cuyo estado sea 4, 5, 6 o 7 (Historial)
-      let ingresosHistorial = ingresos.filter((ingreso) => ingreso.id_estado == 4 || ingreso.id_estado == 5 || ingreso.id_estado == 6 || ingreso.id_estado == 7);
+      let ingresosHistorial = ingresos
+        .filter((ingreso) => [4, 5, 6, 7].includes(ingreso.id_estado))
+        .sort((a, b) => new Date(b.fecha_ingreso) - new Date(a.fecha_ingreso)); //  Orden descendente
+        
       res.render("taller/internos/taller", {
         ingresos,
         ingresosEnTaller,
@@ -44,10 +50,7 @@ module.exports = {
   detalle: async (req, res) => {
     try {
       let ingreso = await ingresosService.getOneByPK(req.params.id);
-      // console.log(ingreso.toJSON());
       let egreso = await egresosService.getOneByIdIngreso(ingreso.id);
-      // console.log(egreso.toJSON());
-      
       let informes = await informesService.getAllByIdIngreso(ingreso.id);
       let insumos = await insumosService.getAllByIdIngreso(ingreso.id);
 
@@ -103,19 +106,24 @@ module.exports = {
       // Socket.IO
       const io = getIo();
 
+      // Traer el Equipo
       const equipo = await equiposService.getOneByPK(req.params.id);
 
+      // Consultar si esta Alquilado
+      const alquiler = equipo.id_estado == 3 ? await alquileresService.getByIdEquipo(equipo.id) : null;
+
+      // Crear un Objeto con la informacion para almacenar el Ingreso
       const data = {
         ...req.body,
         id_equipo: equipo.id,
+        id_cliente: alquiler ? alquiler.id_cliente : null,
+        departamento: alquiler ? alquiler.departamento : null,
         id_estado: 1,
-        // fecha_ingreso: new Date(),
         id_usuario: user.id,
       };
 
       // Almacenar en base de datos
       const ingreso = await ingresosService.create(data);
-
       
       if (ingreso) {
         // Registrar el cambio del Estado en el Historial de Estados
@@ -215,6 +223,9 @@ module.exports = {
       // Equipo
       const equipo = await equiposService.getOneByPK(ingreso.id_equipo);
 
+      // Alquiler
+      const alquiler = await alquileresService.getByIdEquipo(equipo.id);
+
       // Crear un Objeto con la informacion para almacenar el Egreso
       const data = {
         ...req.body,
@@ -225,81 +236,65 @@ module.exports = {
 
       const egreso = await egresosService.create(data);
 
-      // Obtener el Historial de Estados, donde el Estado anterior es "Alquilado" y el nuevo (o actual) es "Taller"
-      // const historial = await historialEstadosService.getOneWhere(equipo.id, 3, 4);
-
-      const historial = await historialEstadosService.findLastEstadoById(equipo.id);
-      console.log("Historial de Estados");
-      console.log("Ultimo Historial: ", historial);
-
       if (egreso) {
-        let estadoAnterior = equipo.id_estado;
-        let estadoNuevo;
         // Titulo y mensaje de la notificacion
         let titulo, mensaje;
 
         // Analizo el estado seleccionado desde los radio inputs
+
+        // Si el Equipo no tiene arreglo
         if (req.body.estado == "Sin arreglo") {
-          const historial = await historialEstadosService
           // Actualizo el estado del Ingreso a 'Sin arreglo'
           await ingresosService.updateByPK(ingreso.id, { id_estado: 6});
 
           // Actualizo el estado del Equipo a 'Sin Arreglo'
-          // await equiposService.updateByPK({ id_estado: 5}, ingreso.id_equipo);
-          estadoNuevo = 5;
+          await equiposService.updateByPK({ id_estado: 5}, ingreso.id_equipo);
+
+          // Si el Equipo esta asociado a un Alquiler, desvincular del mismo y dejar el campo id_equipo: null
+          if (alquiler && alquiler.id_equipo == ingreso.id_equipo) {
+            await alquileresService.updateByPK({ id_equipo: null }, alquiler.id);
+          }
 
           // Notificacion
           titulo = "Equipo sin arreglo";
           mensaje = `${user.nombre} ${user.apellido} informa que el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) no tiene arreglo`;
         };
 
+        // Si el equipo fue arreglado con exito y tiene alguna observacion
         if (req.body.estado == "Disponible" && req.body.observacion != "") {
-          // Actualizo el estado del Ingreso a 'Disponible c/ obs.'
+          // Actualizo el estado del Ingreso a 'Reparado c/ obs.'
           await ingresosService.updateByPK(ingreso.id, { id_estado: 7});
 
-          // Actualizo el estado del Equipo a 'Disponible c/ obs.'
-          // await equiposService.updateByPK({id_estado: 2}, ingreso.id_equipo);
-          estadoNuevo = 2;
+          // Si el Equipo esta asociado a un Alquiler, asignar id_estado: 3 al equipo.
+          if (alquiler && alquiler.id_equipo == ingreso.id_equipo) {
+            await equiposService.updateByPK({ id_estado: 3 }, alquiler.id_equipo);
+          } else {
+            // Actualizo el estado del Equipo a 'Disponible c/ obs.'
+            await equiposService.updateByPK({id_estado: 2}, ingreso.id_equipo);
+          }
 
           // Notificacion
           titulo = "Equipo disponible, con observaciones";
           mensaje = `${user.nombre} ${user.apellido} informa que el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) esta disponible, con observaciones`;
         };
 
+        // Si el equipo fue arreglado con exito y no tiene observaciones
         if (req.body.estado == "Disponible" && req.body.observacion == "") {
-          //  Actualizo el estado del Ingreso a 'Disponible'
+          //  Actualizo el estado del Ingreso a 'Reparado'
           await ingresosService.updateByPK(ingreso.id, { id_estado: 5 });
           
-          // Actualizo el estado del Equipo a 'Disponible'
-          // await equiposService.updateByPK({id_estado: 1}, ingreso.id_equipo);
-          estadoNuevo = 1;
+          // Si el Equipo esta asociado a un Alquiler, asignar id_estado: 3 al equipo.
+          if (alquiler && alquiler.id_equipo == ingreso.id_equipo) {
+            await equiposService.updateByPK({ id_estado: 3 }, alquiler.id_equipo);
+          } else {
+            // Actualizar el estado del Equipo a "Disponible" (id_estado: 1)
+            await equiposService.updateByPK({ id_estado: 1 }, ingreso.id_equipo);
+          }
 
           // Notificacion
           titulo = "Equipo disponible";
           mensaje = `${user.nombre} ${user.apellido} informa que el equipo ${equipo.marca} ${equipo.modelo} (numero de serie ${equipo.numero_serie}) esta disponible`
         };
-
-        // Actualizar el Estado del Equipo
-        if (historial.id_estado_anterior == 3 && (req.body.estado == "Disponible")) {
-          // Actualizar el Estado del Equipo a "Alquilado"
-          await equiposService.updateByPK({ id_estado: 3}, ingreso.id_equipo);
-        } else {
-          // Actualizar el Estado del Equipo al estado seleccionado por el usuario
-          await equiposService.updateByPK({ id_estado: estadoNuevo}, ingreso.id_equipo);
-        }
-
-        const dataHistorial = {
-          id_equipo: equipo.id,
-          id_estado_anterior: estadoAnterior,
-          id_estado_nuevo: estadoNuevo,
-          fecha: new Date(),
-        };
-
-        const nuevoHistorial = await historialEstadosService.create(dataHistorial);
-        console.log("Nuevo Historial");
-        console.log(nuevoHistorial);
-        
-
 
         const notificacion = {
           id_usuario: user.id,
@@ -625,11 +620,9 @@ module.exports = {
 
       // Revisar el Estado del Equipo
       const equipo = await equiposService.getOneByPK(ingreso.id_equipo);
-      console.log("Equipo: ", equipo);
       
       // Si el Equipo tiene el estado "En Taller"
-      if (equipo.id_estado == "4") {
-        console.log("equipo.id_estado = ", equipo.id_estado);
+      if (equipo.id_estado == 4) {
         // Actualizar a Disponible antes de eliminar el registro
         await equiposService.updateByPK({ id_estado: 1 }, ingreso.id_equipo);
       };

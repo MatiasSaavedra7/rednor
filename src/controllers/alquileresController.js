@@ -2,6 +2,7 @@ const alquileresService = require("../database/services/alquileresService");
 const clientesService = require("../database/services/clientesService");
 const equiposService = require("../database/services/equiposService");
 const firmasService = require("../database/services/firmasService");
+const historialEstadosService = require("../database/services/historialEstadosService");
 const reajustesService = require("../database/services/reajustesService");
 
 const { validationResult } = require("express-validator");
@@ -9,7 +10,12 @@ const { validationResult } = require("express-validator");
 module.exports = {
   alquileres: async (req, res) => {
     try {
-      let alquileres = await alquileresService.getAllActivos();
+      // Leer la firma seleccionada desde las cookies
+      const firma = req.cookies.firma;
+
+      // Traer todos los alquileres para la firma
+      let alquileres = await alquileresService.getAllActivos(firma);
+
       res.render("alquileres/alquileres", { alquileres });
     } catch (error) {
       console.log(error);
@@ -29,7 +35,10 @@ module.exports = {
     try {
       let alquiler = await alquileresService.getOneByPK(req.params.id);
       let cliente = await clientesService.getOneByPK(alquiler.cliente.id);
-      let equipo = await equiposService.getOneByPK(alquiler.equipo.id);
+      let equipo = null;
+      if (alquiler.id_equipo != null) {
+        equipo = await equiposService.getOneByPK(alquiler.equipo.id);
+      }
       let reajustes = await reajustesService.getAllByIdAlquiler(req.params.id)
       res.render("alquileres/detalleAlquiler", { alquiler, cliente, equipo, reajustes });
     } catch (error) {
@@ -177,11 +186,15 @@ module.exports = {
         await reajustesService.create(dataReajuste);
 
         // Luego, se procede a actualizar los datos del alquiler.
+        const minimo_copias = parseInt(req.body.minimo_copias) || 0;
+        const precio_copias = parseFloat(req.body.precio_copias) || 0;
+
+
         // Armo un objeto que sera pasado como argumento.
         let dataToUpdate = {
           ...req.body,
-          precio: req.body.minimo_copias * req.body.precio_copias,  //  Nuevo precio
-          fecha_reajuste: new Date(),                               //  Fecha actual
+          precio: req.body.precio ? req.body.precio : minimo_copias * precio_copias,
+          fecha_reajuste: new Date(),
         };
 
         // Actualizo los datos del alquiler en la base de datos
@@ -217,10 +230,6 @@ module.exports = {
     try {
       let errors = validationResult(req);
 
-      console.log(errors);
-      
-      console.log(req.body);
-
       if(errors.isEmpty()){
         const minimoCopias = parseInt(req.body.minimo_copias) || 0;
         const precioCopias = parseFloat(req.body.precio_copias) || 0;
@@ -246,6 +255,90 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  delete: async (req, res) => {
+    try {
+      // Capturo el ID del Alquiler
+      const idAlquiler = req.params.id;
+
+      // Buscar el Alquiler en la base de datos
+      const alquiler = await alquileresService.getOneByPK(idAlquiler);
+
+      // Verificar si el Alquiler existe
+      if (!alquiler) throw new Error("Alquiler no encontrado.");
+
+      // Buscar los Reajustes asociados al Alquiler
+      const reajustes = await reajustesService.getAllByIdAlquiler(idAlquiler);
+
+      // Eliminar todos los registros
+      for (const reajuste of reajustes) {
+        await reajustesService.deleteByPK(reajuste.id);
+      }
+
+      // Eliminar el Alquiler de la base de datos
+      await alquileresService.deleteByPK(idAlquiler);
+
+      // Actualizar el estado del equipo a "Disponible"
+      await equiposService.updateByPK({ id_estado: 1 }, alquiler.id_equipo);
+
+      // Redireccionar al listado de alquileres
+      res.redirect("/alquileres");
+    } catch (error) {
+      res.send("Ocurrio un error al intentar eliminar el alquiler: \n", error);
+    }
+  },
+
+  cambiarEquipo: async (req, res) => {
+    try {
+      // Capturar el ID del Alquiler
+      const idAlquiler = req.params.id;
+
+      // Capturar el ID del Equipo que reemplazara al actual
+      const { id_equipo } = req.body;
+
+      // Buscar el alquiler en la base de datos
+      const alquiler = await alquileresService.getOneByPK(idAlquiler);
+
+      // Buscar el Equipo del Alquiler antes de ser reemplazado
+      const equipo = await equiposService.getOneByPK(alquiler.id_equipo);
+
+      // Verificar si el alquiler existe
+      if (!alquiler) throw new Error("Alquiler no encontrado.");
+
+      // Actualizar el ID del nuevo Equipo en el Alquiler
+      await alquileresService.updateByPK({ id_equipo: id_equipo }, idAlquiler);
+
+      // Actualizar el estado del nuevo equipo a "Alquilado"
+      await equiposService.updateByPK({ id_estado: 3 }, id_equipo);
+
+      // Analizar el estado del Equipo actual
+      if (equipo && equipo.id_estado == 3) {
+        // Despues del cambio, actualizar a "Disponible"
+        await equiposService.updateByPK({ id_estado: 1 }, equipo.id);
+      }
+      
+      // Responder con un mensaje de exito
+      res.status(200).json({ message: "Equipo reemplazado correctamente." });
+    } catch (error) {
+      res.status(500).json({ message: `Ocurrio un error al intentar cambiar el equipo: ${error}` });
+    }
+  },
+
+  getCantidadTotalAlquileres: async function(req, res) {
+    try {
+      const firma = req.cookies.firma;
+
+      const alquileres = await alquileresService.getAllActivos(firma);
+
+      if (!alquileres) {
+        throw new Error("Ocurrio un error al obtener la cantidad total de alquileres.");
+      };
+
+      res.status(200).json({ total: alquileres.length });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   }
 };

@@ -27,7 +27,7 @@
                   <h3 class="card-title">Alquileres Activos</h3>
                 </div>
                 <div class="card-body table-responsive">
-                  <table class="table table-head-fixed table-bordered table-hover" id="alquileres">
+                  <table class="table table-head-fixed table-bordered table-hover table-striped" id="alquileres">
                     <thead>
                       <tr>
                         <th>Cliente</th>
@@ -36,27 +36,29 @@
                         <th>Firma</th>
                         <th>Precio</th>
                         <th>Vencimiento</th>
-                        <th>Detalles</th>
+                        <!-- <th>Detalles</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <% alquileres.forEach(alquiler => { %>
                         <tr class="clickable-row" data-href="/alquileres/detalles/<%= alquiler.id %>">
-                          <td>
-                            <%= alquiler.cliente.nombre %>
-                          </td>
+                          <!-- Cliente -->
+                          <td><%= alquiler.cliente.nombre %></td>
+                          <!-- Departamento -->
                           <td><%= alquiler.departamento %></td>
+                          <!-- Equipo -->
                           <td>
-                            <%= alquiler.equipo.marca %>
-                            <%= alquiler.equipo.modelo %>
-                            <%= alquiler.equipo.numero_serie %>
+                            <%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%= alquiler.equipo.numero_serie %>
                           </td>
+                          <!-- Firma -->
                           <td>
-                            <%= alquiler.firma %>
+                            <%= alquiler.firma.nombre %>
                           </td>
+                          <!-- Precio -->
                           <td class="precios">
                             <%= alquiler.precio %>
                           </td>
+                          <!-- Vencimiento -->
                           <td>
                             <% if (alquiler.fecha_baja !=null) { %>
                               <%= alquiler.fecha_baja.toLocaleString() %>
@@ -64,9 +66,10 @@
                                 -
                               <% } %>
                           </td>
-                          <td>
-                            <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
-                          </td>
+                          <!-- Detalles -> Ir a la pagina del detalle -->
+                          <!-- <td> -->
+                            <!-- <a href="/alquileres/detalles/<%# alquiler.id %>">Ver más</a> -->
+                          <!-- </td> -->
                         </tr>
                         <% }) %>
                     </tbody>
@@ -83,14 +86,17 @@
 
   <%- include('../partials/AdminLTEScripts.ejs') %>
   <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+  <!-- Script Tables AdminLTE -->
   <script>
     $(function () {
       $("#alquileres").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+        "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#alquileres_wrapper .col-md-6:eq(0)');
     });
   </script>
+
+  <!-- Script para formatear los precios -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const precios = document.querySelectorAll(".precios");
@@ -101,6 +107,8 @@
       });
     });
   </script>
+
+  <!-- Script para ir al detalle clickeando la fila -->
   <script>
     document.addEventListener('DOMContentLoaded', (event) => {
       document.querySelectorAll('.clickable-row').forEach(row => {
@@ -111,6 +119,12 @@
       });
     });
   </script>
-  
+
+  <!-- Script para mostrar los alquileres en la tabla -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      alert
+    })
+  </script>
 </body>
 </html>

@@ -22,25 +22,37 @@
             <div class="row">
               <div class="col-md-8 m-auto">
                 <div class="card">
+                  <!-- Header -->
                   <div class="card-header">
-                    <h3 class="card-title">Informacion del Equipo</h3>
-                    <div class="dropdown float-right">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <!-- <a href="#" class="dropdown-item">Nuevo Contrato</a> -->
-                        <%# if (equipo.id_estado == 1 || equipo.id_estado == 2) { %>
-                          <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
-                        <%# } %>
-                        <!-- <div class="dropdown-divider"></div> -->
-                        <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item btn" data-toggle="modal" data-target="#modal-eliminar">
-                          Eliminar Equipo
-                        </a>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h3 class="card-title">Informacion del Equipo</h3>
                       </div>
+
+                      <div class="dropdown">
+                        <a href="#" class=" btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Mas opciones </a>
+                        <div class="dropdown-menu dropdown-menu-right">
   
+                          <!-- <a href="#" class="dropdown-item">Nuevo Contrato</a> -->
+                          <!-- Taller -->
+                          <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
+  
+                          <!-- Editar -->
+                          <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
+                          
+                          <!-- Divisor -->
+                          <div class="dropdown-divider"></div>
+  
+                          <!-- Eliminar -->
+                          <a class="dropdown-item btn" data-toggle="modal" data-target="#modal-eliminar">
+                            Eliminar Equipo
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  <!-- Body -->
                   <div class="card-body">
                     <dl>
                       <dt>Marca</dt>
@@ -56,15 +68,35 @@
                       <dd><%= equipo.tipo.nombre %></dd>
 
                       <dt>Estado</dt>
-                      <dd>
-                        <% if (equipo.id_estado == 3) { %>
-                          <a href="/alquileres/detalles/<%= alquiler.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
-                        <% } else if (equipo.id_estado == 4) { %>
-                          <a href="/taller/detalle/<%= taller.id %>"><%= equipo.estado.nombre %> <i class="fas fa-external-link-alt"></i></a>
-                        <% } else { %>
-                          <%= equipo.estado.nombre %>
-                        <% } %>
+                      <dd class="h5">
+                        <span class="badge <%= 
+                            equipo.id_estado == 1 ? "badge-success" : 
+                            equipo.id_estado == 2 ? "badge-success" :
+                            equipo.id_estado == 3 ? "badge-info" :
+                            equipo.id_estado == 4 ? "badge-warning" :
+                            equipo.id_estado == 5 ? "badge-danger" : "badge-info"
+                          %>">
+
+                          <% if (equipo.id_estado == 3) { %>
+                            <a href="/alquileres/detalles/<%= alquiler.id %>" class="text-white"><%= equipo.estado.nombre.toUpperCase() %> <i class="fas fa-external-link-alt"></i></a>
+                          <% } else if (equipo.id_estado == 4) { %>
+                            <a href="/taller/detalle/<%= taller.id %>" class="text-dark"><%= equipo.estado.nombre.toUpperCase() %> <i class="fas fa-external-link-alt"></i></a>
+                          <% } else { %>
+                            <%= equipo.estado.nombre.toUpperCase() %>
+                          <% } %>
+                        </span>
                       </dd>
+
+                      <% if (equipo.id_estado == 4) { %>
+                        <% if (alquiler !== null) { %>
+                            <dt>Alquiler</dt>
+                            <dd>
+                              <a href="/alquileres/detalles/<%= alquiler.id %>">
+                                <%= alquiler.cliente.nombre %> - <%= alquiler.departamento %>
+                              </a>
+                            </dd>
+                       <% } %>
+                      <% } %>
 
                       <dt>Informes Taller</dt>
                       <dd>

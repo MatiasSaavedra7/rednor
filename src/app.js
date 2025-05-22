@@ -2,8 +2,10 @@ require("dotenv").config();
 // MODULOS
 const express = require("express");
 const session = require("express-session");
-const path = require("path");
+const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
+
+const path = require("path");
 
 // Modulo HTTP
 const http = require("http");
@@ -16,6 +18,8 @@ const userLogged = require("../src/middlewares/userLoggedMiddleware");
 const routes = require("./routes/index.routes");
 
 const app = express();
+
+app.use(cookieParser());  //  Middleware para manejar las Cookies
 
 // DEFINICION DEL PUERTO
 const PORT = process.env.PORT || 3000;

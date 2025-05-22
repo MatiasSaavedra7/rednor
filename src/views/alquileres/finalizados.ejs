@@ -26,7 +26,7 @@
                 <div class="card-header">
                   <h3 class="card-title">Alquileres Finalizados</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                   <table id="alquileres" class="table table-bordered table-hover">
                     <thead>
                       <tr>
@@ -36,31 +36,39 @@
                         <th>Firma</th>
                         <th>Precio</th>
                         <th>Vencimiento</th>
-                        <th>Detalles</th>
+                        <!-- <th>Detalles</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <% alquileres.forEach(alquiler => { %>
-                        <tr>
+                        <tr class="clickable-row" data-href="/alquileres/detalles/<%= alquiler.id %>">
+                          <!-- Cliente -->
                           <td><%= alquiler.cliente.nombre %></td>
+                          <!-- Departamento -->
                           <td><%= alquiler.departamento %></td>
+                          <!-- Equipo -->
                           <td>
-                            <%= alquiler.equipo.marca %>
-                            <%= alquiler.equipo.modelo %>
-                            <%= alquiler.equipo.numero_serie %>
+                            <%= alquiler.equipo.marca %> <%= alquiler.equipo.modelo %> <%= alquiler.equipo.numero_serie %>
                           </td>
-                          <td><%= alquiler.firma %></td>
+                          <!-- Firma -->
+                          <td><%= alquiler.firma.nombre %></td>
+                          <!-- Precio -->
                           <td class="precios"><%= alquiler.precio %></td>
+                          <!-- Vencimiento -->
                           <td>
                             <% if (alquiler.fecha_baja != null) { %>
-                              <%= alquiler.fecha_baja.toLocaleString() %>
+                              <%= alquiler.fecha_baja.toLocaleString("es-ES", {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric"
+                              }) %>
                             <% } else { %>
                               -
                             <% } %>
                           </td>
-                          <td>
-                            <a href="/alquileres/detalles/<%= alquiler.id %>">Ver más</a>
-                          </td>
+                          <!-- <td> -->
+                            <!-- <a href="/alquileres/detalles/<%# alquiler.id %>">Ver más</a> -->
+                          <!-- </td> -->
                         </tr>
                       <% }) %>
                     </tbody>
@@ -78,14 +86,17 @@
   <%- include('../partials/AdminLTEScripts.ejs') %>
   <%- include('../partials/AdminLTEScriptsTables.ejs') %>
 
+  <!-- Script para las tablas -->
   <script>
     $(function () {
       $("#alquileres").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength" : 50,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#alquileres_wrapper .col-md-6:eq(0)');
     });
   </script>
+
+  <!-- Script para formatear los precios -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const precios = document.querySelectorAll(".precios");
@@ -93,6 +104,18 @@
       precios.forEach(precio => {
         const valor = parseFloat(precio.textContent);
         precio.textContent = '$' + formatearPrecio(valor);
+      });
+    });
+  </script>
+
+  <!-- Script para ir al detalle clickeando la fila -->
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      document.querySelectorAll('.clickable-row').forEach(row => {
+        row.style.cursor = "pointer";
+        row.addEventListener('click', () => {
+          window.location.href = row.getAttribute('data-href');
+        });
       });
     });
   </script>

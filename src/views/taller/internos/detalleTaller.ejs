@@ -30,7 +30,6 @@
           </div>
         </div>
       </section>
-      <!-- / Content header -->
       
       <!-- Content -->
       <section class="content mt-2">
@@ -75,6 +74,17 @@
                     minute: "numeric",
                   }) %></dd>
 
+                  <!-- Estado del Ingreso -->
+                  <dt>Estado</dt>
+                  <dd class="h5">
+                    <span class="badge <%= ingreso.id_estado == 1 ? "badge-info" : 
+                    ingreso.id_estado == 2 ? "badge-warning"   :
+                    ingreso.id_estado == 5 || ingreso.id_estado == 7 ? "badge-success"  :
+                    ingreso.id_estado == 6 ? "badge-danger"   : "badge-info" %>">
+                      <%= ingreso.estado.nombre.toUpperCase() %>
+                    </span>
+                  </dd>
+
                   <!-- Motivo del Ingreso -->
                   <dt>Motivo de Ingreso</dt>
                   <dd><%= ingreso.motivo %></dd>
@@ -82,21 +92,23 @@
                   <!-- Detalle del Ingreso -->
                   <dt>Detalle</dt>
                   <dd><%= ingreso.detalle %></dd>
-                  
-                  <dt>Estado</dt>
-                  <dd><%= ingreso.estado.nombre %></dd>
-                  
-                  <!-- Informacion del Equipo -->
-                  <p class="lead mb-1">Informacion del Equipo</p>
 
-                  <dt>Marca</dt>
-                  <dd><%= ingreso.equipo.marca %></dd>
-
-                  <dt>Modelo</dt>
-                  <dd><%= ingreso.equipo.modelo %></dd>
-
-                  <dt>Numero de Serie</dt>
-                  <dd><%= ingreso.equipo.numero_serie %></dd>
+                  <!-- Info del Cliente -->
+                  <% if (ingreso.cliente != null) { %>
+                    <p class="lead mb-1">Informacion del Cliente</p>
+                    <dl>
+                      <dt>Cliente</dt>
+                      <dd>
+                        <a href="/clientes/detalle/<%= ingreso.cliente.id %>">
+                          <%= ingreso.cliente.nombre %>
+                          <i class="fas fa-external-link-alt"></i>
+                        </a>
+                      </dd>
+    
+                      <dt>Departamento</dt>
+                      <dd><%= ingreso.departamento%></dd>
+                    </dl>
+                  <% } %>
                   
                   <dt>Historial de Informes</dt>
                   <dd>

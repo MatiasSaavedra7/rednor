@@ -12,6 +12,7 @@ function IngresoExterno(data) {
   this.ciudad_cliente = data.ciudad_cliente;
   this.direccion_cliente = data.direccion_cliente;
   this.id_usuario = data.id_usuario;
+  this.fecha_retiro = data.fecha_retiro;
 }
 
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
     try {
       return await db.IngresoExterno.findAll({
         include: ["equipo", "egreso", "informe" ,"estado"],
+        order: [["id", "ASC"]],
       });
     } catch (error) {
       console.log(error);

@@ -8,6 +8,9 @@ module.exports = {
     try {
       return db.Equipo.findAll({
         include: ["estado", "tipo"],
+        where: {
+          id_estado: { [Op.ne]: 5 }
+        }
       });
     } catch (error) {
       console.log(error);
@@ -79,7 +82,7 @@ module.exports = {
       return db.Equipo.findAll({
         include: ["estado", "tipo", "ingreso"],
         where: {
-          id_estado: { [Op.eq]: 3 },
+          id_estado: 4,
         },
       });
     } catch (error) {

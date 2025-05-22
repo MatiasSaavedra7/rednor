@@ -49,7 +49,7 @@ module.exports = (sequelize, dataTypes) => {
       foreignKey: "id_tipo_equipo"
     })
 
-    Equipo.hasMany(models.Alquiler, {
+    Equipo.hasOne(models.Alquiler, {
       as: "alquiler",
       foreignKey: "id_equipo",
     });

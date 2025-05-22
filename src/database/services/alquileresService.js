@@ -20,7 +20,7 @@ module.exports = {
   getAll: async () => {
     try {
       return await db.Alquiler.findAll({
-        include: ["cliente", "equipo"],
+        include: ["cliente", "equipo", "firma"],
         order: [["activo", "DESC"]],
       });
     } catch (error) {
@@ -35,20 +35,21 @@ module.exports = {
           activo: true,
           fecha_baja: {[Op.ne]: null},
         },
-        include: ["cliente", "equipo"]
+        include: ["cliente", "equipo", "firma"]
       })
     } catch (error) {
       console.log(error);  
     }
   },
 
-  getAllActivos: async () => {
+  getAllActivos: async (firma) => {
     try {
       return await db.Alquiler.findAll({
         where: {
-          activo: true
+          activo: true,
+          id_firma: firma,
         },
-        include: ["cliente", "equipo"]
+        include: ["cliente", "equipo", "firma"]
       })
     } catch (error) {
       console.log(error);
@@ -61,7 +62,7 @@ module.exports = {
         where: {
           activo: false
         },
-        include: ["cliente", "equipo"]
+        include: ["cliente", "equipo", "firma"]
       })
     } catch (error) {
       console.log(error);
@@ -72,7 +73,7 @@ module.exports = {
     try {
       return await db.Alquiler.findOne({
         where: { id: id },
-        include: ["cliente", "equipo"],
+        include: ["cliente", "equipo", "firma"],
       });
     } catch (error) {
       console.log(error);
@@ -82,7 +83,7 @@ module.exports = {
   getByIdCliente: async (id) => {
     try {
       return await db.Alquiler.findAll({
-        include: ["cliente", "equipo"],
+        include: ["cliente", "equipo", "firma"],
         where: {
           id_cliente: id,
         },
@@ -95,7 +96,7 @@ module.exports = {
   getActiveByIdCliente: async (id) => {
     try {
       return await db.Alquiler.findAll({
-        include: ["cliente", "equipo"],
+        include: ["cliente", "equipo", "firma"],
         where: {
           id_cliente: id,
           activo: true,
@@ -109,7 +110,7 @@ module.exports = {
   getByIdEquipo: async (id) => {
     try {
       return await db.Alquiler.findOne({
-        include: ["cliente", "equipo"],
+        include: ["cliente", "equipo", "firma"],
         where: { 
           id_equipo: id,
           activo: true,
@@ -135,4 +136,12 @@ module.exports = {
       console.log(error);
     }
   },
+
+  deleteByPK: async (id) => {
+    try {
+      return await db.Alquiler.destroy({ where: { id: id } });
+    } catch (error) {
+      console.log(error)
+    }
+  }
 };

@@ -47,6 +47,10 @@ module.exports = (sequelize, dataTypes) => {
     id_usuario: {
       type: dataTypes.INTEGER,
       allowNull: true,
+    },
+    fecha_retiro: {
+      type: dataTypes.DATE,
+      allowNull: true,
     }
   };
 

@@ -31,6 +31,14 @@ module.exports = (sequelize, dataTypes) => {
     id_usuario: {
       type: dataTypes.INTEGER,
       allowNull: true,
+    },
+    id_cliente: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
+    },
+    departamento: {
+      type: dataTypes.STRING(50),
+      allowNull: true,
     }
   };
 
@@ -70,7 +78,12 @@ module.exports = (sequelize, dataTypes) => {
     Ingreso.belongsTo(models.Usuario, {
       as: "usuario",
       foreignKey: "id_usuario",
-    })
+    });
+
+    Ingreso.belongsTo(models.Cliente, {
+      as: "cliente",
+      foreignKey: "id_cliente",
+    });
   };
 
   return Ingreso;

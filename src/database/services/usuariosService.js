@@ -61,6 +61,18 @@ module.exports = {
     }
   },
 
+  update: async function(data, email) {
+    try {
+      return db.Usuario.update(data, {
+        where: {
+          email: email
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   deleteByPK: async (id) => {
     try {
       return db.Usuario.destroy({

@@ -145,3 +145,45 @@
     }
   })
 </script>
+
+<!-- Cookie dark mode -->
+<script>
+  document.addEventListener("DOMContentLoaded", function (){
+    // let darkMode = confirm("Hola Mundo");
+
+    // console.log("El valor de darkMode es: ", darkMode);
+
+    const body = document.querySelector("body");
+    const darkModeToggle = document.querySelector("#darkModeToggle i");
+
+    // Leer cookie
+    function getCookie(name) {
+      let matches = document.cookie.match(new RegExp(`(^| )${name}=([^;]*)`));
+      return matches ? matches[2] === "true" : false;
+    }
+
+    // Aplicar preferencia guardada
+    let darkMode = getCookie("darkMode");
+
+    if (darkMode) {
+      body.classList.add("dark-mode");
+      darkModeToggle.classList.replace("fa-moon", "fa-sun");
+    }
+
+    // Evento click al icono
+    darkModeToggle.addEventListener("click", function(e) {
+      e.preventDefault();
+      darkMode = !darkMode;
+
+      document.cookie = `darkMode=${darkMode}; path=/`;
+      body.classList.toggle("dark-mode");
+
+      // Cambiar icono al activar/desactivar el modo oscuro
+      if (darkMode) {
+        darkModeToggle.classList.replace("fa-moon", "fa-sun");
+      } else {
+        darkModeToggle.classList.replace("fa-sun", "fa-moon");
+      }
+    })
+  })
+</script>

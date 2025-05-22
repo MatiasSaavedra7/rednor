@@ -23,9 +23,11 @@
           <div class="row">
             <div class="col text-center">
               <h1>
-                <%= ingreso.marca %>
-                <%= ingreso.modelo %>
-                <%= ingreso.numero_serie %>
+                <a href="/equipos-externos/<%= ingreso.equipo.id %>/detalle">
+                  <%= ingreso.equipo.marca %>
+                  <%= ingreso.equipo.modelo %>
+                  <%= ingreso.equipo.numero_serie %>
+                </a>
               </h1>
             </div>
           </div>
@@ -34,7 +36,7 @@
       <!-- / Content header -->
 
       <!-- Content Body -->
-      <section class="content mt-3">
+      <section class="content mt-2">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-8 m-auto">
@@ -47,21 +49,33 @@
                       <h3 class="card-title">Detalles del Ingreso</h3>
                     </div>
 
-                    <div>
-                      <% if (ingreso.id_estado == 3) { %>
-                        <% if (!egreso.precio) { %>
-                         <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-definir-precio">
-                          Definir Precio
-                         </button>
-                        <% } else { %>
-                          <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modal-cobro">
-                            Informar Cobro
-                          </button>
+                    <div class="dropdown">
+                      <a href="#" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">Mas Opciones</a>
+                      <div class="dropdown-menu">
+                        <!-- Dropdown Menu -->
+
+                        <!-- Si el equipo esta listo para retirar -->
+                        <!-- Informar Retiro del Equipo -->
+                        <% if (ingreso.id_estado == 3) { %>
+                          <a href="#" class="dropdown-item" data-target="#modal-informar-retiro" data-toggle="modal">Informar Retiro</a>
                         <% } %>
-                      <% } %>
-                      <% if (ingreso.id_estado == 1 || ingreso.id_estado == 2) { %>
-                        <a href="/taller/externos/<%= ingreso.id %>/editar" class="btn btn-outline-primary btn-sm">Editar</a>
-                      <% } %>
+
+                        <!-- Defniri el Precio de la reparacion -->
+                        <% if (egreso) { %>
+                          <% if (egreso.precio == null) { %>
+                            <!-- Definir Precio -->
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modal-definir-precio">Definir Precio</a>
+                          <% } else { %>
+                            <!-- Informar Cobro -->
+                            <a href="#" class="dropdown-item <%= (egreso && egreso.precio == null) ? "disabled" : "" %>" data-toggle="modal" data-target="#modal-cobro">Informar Cobro</a>
+                          <% } %>
+                          <div class="dropdown-divider"></div>
+                        <% } %>
+
+                        
+                        <!-- Editar Ingreso -->
+                        <a href="/taller/externos/<%= ingreso.id %>/editar" class="dropdown-item">Editar Ingreso</a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -86,7 +100,15 @@
   
                     <!-- Estado -->
                     <dt>Estado</dt>
-                    <dd><%= ingreso.estado.nombre %></dd>
+                    <dd class="h5">
+                      <span class="badge <%=  ingreso.id_estado == 1 ? "badge-info"    : 
+                                              ingreso.id_estado == 2 ? "badge-warning" : 
+                                              ingreso.id_estado == 3 ? "badge-success" :
+                                              ingreso.id_estado == 6 ? "badge-danger"  : "badge-info" %>"
+                      >
+                        <%= ingreso.estado.nombre.toUpperCase() %>
+                      </span>
+                    </dd>
   
                     <!-- Motivo del Ingreso -->
                     <dt>Motivo</dt>
@@ -119,22 +141,22 @@
                   </dl>
 
                   <!-- Informacion del Equipo -->
-                  <p class="lead mb-1">
+                  <!-- <p class="lead mb-1">
                     <span>
                       Informacion del Equipo
                     </span>
-                    <a href="/equipos-externos/<%= ingreso.equipo.id %>/detalle" class="text-sm text-bold ml-1">Ver perfil <i class="fas fa-external-link-alt"></i> </a>
-                  </p>
+                    <a href="/equipos-externos/<%# ingreso.equipo.id %>/detalle" class="text-sm text-bold ml-1">Ver perfil <i class="fas fa-external-link-alt"></i> </a>
+                  </p> -->
 
                   <dl>
-                    <dt>Marca</dt>
-                    <dd><%= ingreso.equipo.marca %></dd>
+                    <!-- <dt>Marca</dt>
+                    <dd><%# ingreso.equipo.marca %></dd>
   
                     <dt>Modelo</dt>
-                    <dd><%= ingreso.equipo.modelo %></dd>
+                    <dd><%# ingreso.equipo.modelo %></dd>
   
                     <dt>Numero de Serie</dt>
-                    <dd><%= ingreso.equipo.numero_serie %></dd>
+                    <dd><%# ingreso.equipo.numero_serie %></dd> -->
 
                     <dt>Historial de Informes</dt>
                     <dd>
@@ -453,6 +475,26 @@
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="modal-informar-retiro">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Informar Retiro</h4>
+            </div>
+
+            <div class="modal-body">
+              <p>¿Estas seguro que deseas informar el retiro del equipo del taller?</p>
+            </div>
+
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+
+              <button type="button" class="btn btn-primary" id="informar-retiro">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -623,7 +665,7 @@
 
         if (ingresos.length == 0) {
           const li = document.createElement("li");
-          li.textContent = "No hay informes para mostrars";
+          li.textContent = "No hay informes para mostrar";
           ulHistorial.appendChild(li);
         };
 
@@ -856,6 +898,41 @@
       
       mostrarHistorial(data);
 
+    })
+  </script>
+
+  <!-- Script para informar el retiro de un equipo del taller -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("Script para informar el retiro de un equipo del taller conectado...");
+      const idIngreso = "<%= ingreso.id %>";
+      console.log(idIngreso);
+      
+      const buttonInformarRetiro = document.getElementById("informar-retiro");
+
+      buttonInformarRetiro.addEventListener("click", async () => {
+        try {
+          const response = await fetch(`/taller/externos/${idIngreso}/informar-retiro`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+          })
+
+          if (!response.ok) {
+            throw new Error("Error fetching data");
+          }
+
+          const data = await response.json();
+          console.log(data);
+          alert(data.message);
+          // Recargar la página
+          location.reload();
+        } catch (error) {
+          console.error(error);
+          alert(data.message)
+        }
+      })
     })
   </script>
 </body>

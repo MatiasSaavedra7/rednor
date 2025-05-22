@@ -56,4 +56,6 @@ router.put("/editar/:id",
   controller.update
 );
 
+router.get("/api/count", controller.getCantidadTotalClientes);
+
 module.exports = router;

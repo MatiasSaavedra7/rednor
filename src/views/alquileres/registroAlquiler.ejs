@@ -70,13 +70,13 @@
                   </div>
         
                   <div class="form-group">
-                    <label for="firma">Firma</label>
-                    <select name="firma" id="firma" class="form-control">
+                    <label for="id_firma">Firma</label>
+                    <select name="id_firma" id="id_firma" class="form-control">
                       <option value="" selected hidden disabled>
                         Elegir una opcion
                       </option>
                       <% firmas.forEach(firma => { %>
-                      <option value="<%= firma.nombre %>" <%= locals.old && old.firma == firma.nombre ? "selected" : "" %>>
+                      <option value="<%= firma.id %>" <%= locals.old && old.firma == firma.nombre ? "selected" : "" %>>
                         <%= firma.nombre %>
                       </option>
                       <% }) %>
@@ -169,7 +169,7 @@
         // Precio
         const precio = document.getElementById("precio").value || 0;
         // Firma
-        const firma = document.getElementById("firma").value;
+        const firma = document.getElementById("id_firma").value;
         // Fecha de vencimiento
         const fechaBaja = document.getElementById("fecha_baja").value;
         // Numero de facturacion
@@ -183,7 +183,7 @@
           minimo_copias: minimoCopias,
           precio_copias: precioCopias,
           precio: precio,
-          firma: firma,
+          id_firma: firma,
           numero_facturacion: numeroFacturacion,
           departamento: departamento,
         }

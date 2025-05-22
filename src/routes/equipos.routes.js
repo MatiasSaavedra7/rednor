@@ -32,4 +32,10 @@ router.get("/detalle/:id/historial-taller", controller.getHistorialTaller);
 // DETALLE DEL HISTORIAL DE TALLER
 router.get("/detalle-taller/:idIngreso", controller.getDetalleHistorialTaller);
 
+// EQUIPOS DISPONIBLES
+router.get("/disponibles", controller.equiposDisponibles);
+
+// Endpoint para obtener la cantidad total de equipos y cantidad de equipos en taller
+router.get("/api/count", controller.getCantidadTotalEquipos);
+
 module.exports = router;

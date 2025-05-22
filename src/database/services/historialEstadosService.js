@@ -68,7 +68,7 @@ module.exports = {
     }
   },
 
-  findLastEstadoById: async (id) => {
+  findLastEstadoByIdEquipo: async (id) => {
     try {
       return await db.HistorialEstado.findOne({
         where: {
@@ -77,7 +77,7 @@ module.exports = {
         order: [["fecha", "DESC"]],
       })
     } catch (error) {
-      
+     console.log(error); 
     }
   }
 }

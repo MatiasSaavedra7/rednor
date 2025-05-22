@@ -1,4 +1,6 @@
 const equiposService = require("../database/services/equiposService.js");
+const bcryptjs = require("bcryptjs");
+const usuariosService = require("../database/services/usuariosService.js");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -23,6 +25,20 @@ module.exports = {
         status: 500,
         message: "Error al obtener los equipos",
       });
+    }
+  },
+
+  newPassword: async function(req, res) {
+    try {
+      let newPassword = "Puma05"
+
+      const hash = await bcryptjs.hash(newPassword, 10);
+      
+      console.log(hash);
+
+      res.status(200).json({ message: "Nuevo hash creado", hash: hash });
+    } catch (error) {
+      res.status(500).json({ message: error.message })
     }
   }
 }

@@ -28,6 +28,7 @@ module.exports = {
 
       // Si el equipo esta alquilado, se busca el alquiler correspondiente
       let alquiler = await alquileresService.getByIdEquipo(equipo.id);
+      // console.log("Alquiler: ", alquiler);
 
       // Si el equipo esta en el taller, se busca el ingreso correspondiente
       let taller = await ingresosService.getOneByIdEquipo(equipo.id);
@@ -179,6 +180,38 @@ module.exports = {
       res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ message: "Error al buscar el ingreso" });
+    }
+  },
+
+  equiposDisponibles: async (req, res) => {
+    try {
+      const equipos = await equiposService.getAllDisponibles();
+
+      if (!equipos) {
+        res.status(404).json({ message: "No se encontraron equipos disponibles" });
+        
+      }
+
+      res.status(200).json(equipos);
+    } catch (error) {
+      res.status(500).json({ message: "Error al buscar los equipos disponibles" });
+      console.log(error);
+    }
+  },
+
+  getCantidadTotalEquipos: async function(req, res) {
+    try {
+      const disponibles = await equiposService.getAll();
+
+      const enTaller = await equiposService.getAllTaller();
+
+      if (!disponibles || !enTaller) {
+        throw new Error("Ocurrio un error al obtener la cantidad total de equipos.")
+      };
+
+      res.status(200).json({ totalDisponibles: disponibles.length, totalEnTaller: enTaller.length });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   },
     

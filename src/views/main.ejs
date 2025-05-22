@@ -6,6 +6,46 @@
   <title>Rednor</title>
   <%- include('./partials/AdminLTEHead.ejs') %>
 </head>
+<style>
+  /* Ocultar el radio button original */
+  input[type="radio"] {
+      display: none;
+  }
+
+  /* Estilo personalizado */
+  input[type="radio"] + label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+  }
+
+  /* Radio button no seleccionado */
+  input[type="radio"] + label {
+      background-color: #f0f0f0;
+      color: #333;
+  }
+
+  /* Radio button seleccionado */
+  input[type="radio"]:checked + label {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #388E3C;
+      box-shadow: 0 0 10px rgba(72, 175, 80, 0.5);
+  }
+
+  /* Efecto hover */
+  input[type="radio"] + label:hover {
+      background-color: #388E3C;
+      color: white;
+  }
+</style>
 <body class="hold-transition sidebar-mini dark-mode">
 <div class="wrapper">
 
@@ -26,12 +66,18 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Starter Page</h1>
+            <div class="d-flex align-items-end">
+              <h1 class="" id="titulo-inicio">
+                Inicio
+              </h1>
+              <a href="#" class="ml-2" data-toggle="modal" data-target="#modal-firma">Cambiar</a>
+            </div>
           </div>
         </div>
       </div>
@@ -40,6 +86,78 @@
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+
+        
+        <!-- Fila / Small boxes -->
+        <div class="row">
+
+          <!-- Columna Equipos -->
+          <div class="col-lg-3 col-6">
+            <!-- Small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3 id="totalEquipos">00</h3>
+
+                <p>Equipos</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="/equipos" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          
+          <!-- Columna Clientes -->
+          <div class="col-lg-3 col-6">
+            <!-- Small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3 id="totalClientes">00</h3>
+
+                <p>Clientes</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="/clientes" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+
+          <!-- Columna Alquileres -->
+          <div class="col-lg-3 col-6">
+            <!-- Small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3 id="totalAlquileres">00</h3>
+
+                <p>Alquileres</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="/alquileres" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+
+          <!-- Columna Equipos en Taller -->
+          <div class="col-lg-3 col-6">
+            <!-- Small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3 id="totalEquiposEnTaller">00</h3>
+
+                <p>Equipos en Taller</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="/taller" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Notificaciones -->
         <div class="row">
           <div class="col-lg-12">
             <div class="card" id="notificaciones-card">
@@ -143,10 +261,115 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal para seleccionar la firma (Rednor/Servishar) -->
+  <div class="modal fade" id="modal-firma">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Firmas</div>
+          <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+        </div>
+
+        <div class="modal-body">
+          <p style="font-size: 18px;">Seleccionar una firma: </p>
+          <div id="firmas-container" class="d-flex justify-content-around">
+            <!--  Aqui se generaran dinamicamente las opciones  -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 </div>
 
 <!-- REQUIRED SCRIPTS -->
 <%- include('./partials/AdminLTEScripts.ejs') %>
+
+<!-- Script para configurar la cookie de la firma -->
+<script>
+  document.addEventListener("DOMContentLoaded", async function() {
+    const firmasContainer = document.getElementById("firmas-container");
+    const modalFirma = document.getElementById("modal-firma");
+    const tituloInicio = document.getElementById("titulo-inicio");
+
+    // Función para obtener la cookie
+    function getCookie(name) {
+      let matches = document.cookie.match(new RegExp(`(^| )${name}=([^;]*)`));
+      return matches ? matches[2] : null;
+    }
+
+    // Función para establecer la cookie
+    function setCookie(name, value, hours) {
+      let expires = "";
+      if (hours) {
+        let date = new Date();
+        date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + value + "; path=/" + expires;
+    }
+
+    try {
+      // Obtener firmas desde el backend
+      const response = await fetch("/firmas");
+      const firmas = await response.json();
+
+      // Limpiar el contenedor antes de agregar opciones
+      firmasContainer.innerHTML = "";
+
+      const firmaSeleccionada = getCookie("firma");
+
+      // Crear opciones de selección dinámicamente
+      firmas.forEach(firma => {
+        const formGroup = document.createElement("div");
+        formGroup.classList.add("form-group");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "firma";
+        input.value = firma.id;
+        input.id = `firma-${firma.id}`;
+        input.cursor = "pointer";
+
+
+        // Preseleccionar la firma guardada
+        if (firmaSeleccionada && firmaSeleccionada == firma.id) {
+          input.checked = true;
+        }
+
+        const label = document.createElement("label");
+        label.setAttribute("for", `firma-${firma.id}`);
+        // label.style.fontSize = "28px";
+        label.style.cursor = "pointer";
+        label.textContent = `✔${firma.nombre}`;
+
+        // Guardar selección y actualizar título
+        input.addEventListener("change", function() {
+          setCookie("firma", firma.id, 1); // Expira en 1 hora
+          tituloInicio.textContent = firma.nombre;
+          $("#modal-firma").modal("hide");
+        });
+
+        formGroup.appendChild(input);
+        formGroup.appendChild(label);
+        firmasContainer.appendChild(formGroup);
+      });
+
+      // Mostrar modal solo si no hay firma guardada
+      if (!firmaSeleccionada) {
+        $("#modal-firma").modal("show");
+      } else {
+        tituloInicio.textContent = firmas.find(f => f.id == firmaSeleccionada)?.nombre || "Firma desconocida";
+      }
+    } catch (error) {
+      console.error("Error al cargar las firmas:", error);
+    }
+  });
+</script>
+
 <!-- Script Notificaciones -->
 <script>
   document.addEventListener("DOMContentLoaded", async () => {
@@ -212,7 +435,7 @@
     const cargarNotificaciones = async () => {
       const offset = (currentPage - 1) * limit;
       const data = await fetchNotificaciones(limit, offset);
-      console.log("Notificaciones: ", data);
+      // console.log("Notificaciones: ", data);
       if (data) {
         // Si no hay notificaciones, mostrar un mensaje
         if (data.notifications.length == 0) {
@@ -266,6 +489,82 @@
     volverAtrasBtn.addEventListener("click", async () => {
       await cargarPaginaAnterior();
     })
+  })
+</script>
+
+<!-- Script para mostrar informacion en los Small Boxes -->
+<script>
+  document.addEventListener("DOMContentLoaded", async function() {
+    // Small Boxes
+    const totalEquiposBox = document.getElementById("totalEquipos");
+    const totalClientesBox = document.getElementById("totalClientes");
+    const totalAlquileresBox = document.getElementById("totalAlquileres");
+    const totalEquiposEnTallerBox = document.getElementById("totalEquiposEnTaller");
+
+    const totalClientes = await fetchTotalClientes();
+    console.log(totalClientes);
+    totalClientesBox.textContent = totalClientes.total;
+    
+    const totalEquipos = await fetchEquipos();
+    console.log(totalEquipos);
+    totalEquiposBox.textContent = totalEquipos.totalDisponibles;
+    totalEquiposEnTallerBox.textContent = totalEquipos.totalEnTaller;
+
+    const totalAlquileres = await fetchAlquileres();
+    console.log(totalAlquileres)
+    totalAlquileresBox.textContent = totalAlquileres.total;
+    
+
+    // Fetch Clientes
+    async function fetchTotalClientes() {
+      try {
+        const response = await fetch("/clientes/api/count");
+
+        if (!response.ok) {
+          throw new Error("Error fetching data clientes");
+        };
+        
+        const data = await response.json();
+
+        return data;
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    // Fetch Equipos
+    async function fetchEquipos() {
+      try {
+        const response = await fetch("/equipos/api/count");
+
+        if (!response.ok) {
+          throw new Error("Error fetching data equipos");
+        };
+
+        const data = await response.json();
+
+        return data;
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    // Fetch Alquileres
+    async function fetchAlquileres() {
+      try {
+        const response = await fetch("/alquileres/api/count");
+        
+        if (!response.ok) {
+          throw new Error("Error fetching data alquileres");
+        }
+
+        const data = await response.json();
+
+        return data;
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
   })
 </script>
 </body>

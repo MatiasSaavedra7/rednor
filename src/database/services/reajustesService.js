@@ -48,5 +48,15 @@ module.exports = {
       console.log(error);
       return [];
     }
+  },
+
+  deleteByPK: async (id) => {
+    try {
+      return db.Reajuste.destroy({
+        where: { id: id },
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
 };

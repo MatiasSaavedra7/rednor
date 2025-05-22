@@ -1,3 +1,6 @@
+// TALLER EXTERNO ROUTES
+// EMPIEZA CON /taller/externos
+
 const { Router } = require("express");
 const router = Router();
 
@@ -64,6 +67,9 @@ router.get("/detalle-taller/:idIngreso", controller.getDetalleTaller);
 
 // Eliminar Ingreso + Informes + Insumos + Egreso de un Equipo
 router.delete("/:id/eliminar-registro", controller.eliminarRegistro);
+
+// INFORMAR RETIRO DE UN EQUIPO
+router.put("/:id/informar-retiro", controller.informarRetiro);
 
 
 module.exports = router;

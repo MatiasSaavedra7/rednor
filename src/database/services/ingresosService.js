@@ -8,14 +8,21 @@ function Ingreso(data) {
   this.detalle = data.detalle;
   this.id_estado = data.id_estado;
   this.id_usuario = data.id_usuario;
+  this.id_cliente = data.id_cliente;
+  this.departamento = data.departamento;
 };
 
 module.exports = {
   getAll: async () => {
     try {
       return await db.Ingreso.findAll({
-        include: ["equipo", "egreso", "estado", "informes", "insumos"],
-        order: [["fecha_ingreso", "DESC"]],
+        include: [
+          { model: db.Equipo, as: "equipo" },
+          { model: db.EstadoTaller, as: "estado" },
+          { model: db.Egreso, as: "egreso" },
+          { model: db.Cliente, as: "cliente", attributes: ["id", "nombre"] }
+
+        ],
       });
     } catch (error) {
       console.log(error);
@@ -26,7 +33,12 @@ module.exports = {
     try {
       return await db.Ingreso.findOne({
         where: { id: id },
-        include: ["equipo", "estado", "usuario"/*, "egreso", "informes", "insumos"*/],
+        include: [
+          { model: db.Equipo, as: "equipo" },
+          { model: db.EstadoTaller, as: "estado" },
+          { model: db.Usuario, as: "usuario" },
+          { model: db.Cliente, as: "cliente", attributes: ["id", "nombre"] },
+        ]
       });
     } catch (error) {
       console.log(error);
@@ -111,7 +123,6 @@ module.exports = {
     try {
       return db.Ingreso.findOne({
         where: { id: id },
-        // include: ["estado", "equipo", "usuario"],
         include: [
           { model: db.EstadoTaller, as: "estado" },
           { model: db.Equipo, as: "equipo" },

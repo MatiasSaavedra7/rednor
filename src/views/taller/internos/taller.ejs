@@ -17,7 +17,19 @@
       <%- include('../../partials/controlSidebar.ejs') %>
     <!-- MAIN -->
     <main class="content-wrapper">
-      <section class="content mt-3">
+      <!-- Header -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row ">
+            <div class="col-sm-6">
+              <h1 class="m-0">Taller</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido Principal -->
+      <section class="content">
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
@@ -32,46 +44,54 @@
                   <div class="tab-content">
                     <div class="tab-pane active p-0" id="tab_1">
                       <div class="table-responsive">
-                        <table id="ingresosEnTaller" class="table table-bordered table-hover">
+                        <table id="ingresosEnTaller" class="table table-bordered table-hover table-striped">
                           <thead>
                             <tr>
-                              <!-- <th>ID</th> -->
+                              <th>Cliente</th>
                               <th>Equipo</th>
                               <th>Ingreso</th>
-                              <!-- <th>Egreso</th> -->
                               <th>Estado</th>
-                              <th>Detalles</th>
+                              <!-- <th>Detalles</th> -->
                             </tr>
                           </thead>
                           <tbody>
                             <% ingresosEnTaller.forEach(ingresoEnTaller => { %>
-                              <tr>
-                                <!-- <td><%# ingresoEnTaller.id %></td> -->
+                              <tr class="clickable-row" data-href="/taller/detalle/<%= ingresoEnTaller.id %>">
+                                <!-- Cliente -->
                                 <td>
-                                  <%= ingresoEnTaller.equipo.marca %>
-                                  <%= ingresoEnTaller.equipo.modelo %>
-                                  <%= ingresoEnTaller.equipo.numero_serie %>
+                                  <% if (ingresoEnTaller.cliente != null) { %>
+                                    <%= ingresoEnTaller.cliente.nombre %> - <%= ingresoEnTaller.departamento %>
+                                  <% } else { %>
+                                    -
+                                  <% } %>
                                 </td>
+                                <!-- Equipo -->
+                                <td>
+                                  <%= ingresoEnTaller.equipo.marca %> <%= ingresoEnTaller.equipo.modelo %> <%= ingresoEnTaller.equipo.numero_serie %>
+                                </td>
+                                <!-- Ingreso -->
                                 <td>
                                   <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-ES", {
                                     year: "numeric",
                                     month: "numeric",
                                     day: "numeric",
-                                    // hour: "numeric",
-                                    // minute: "numeric",
                                   }) %>
                                 </td>
-                                <!-- <td>
-                                  <%# if (ingresoEnTaller.egreso) { %>
-                                    <%# ingresoEnTaller.egreso.fecha_egreso.toLocaleString() %>
-                                  <%# } else { %>
-                                    -
-                                  <%# } %>
-                                </td> -->
-                                <td><%= ingresoEnTaller.estado.nombre %></td>
-                                <td>
-                                  <a href="/taller/detalle/<%= ingresoEnTaller.id %>">Ver más...</a>
+                                <!-- Estado -->
+                                <td class="h5">
+                                  <span class="badge 
+                                    <%= ingresoEnTaller.id_estado == 1 ? "badge-info" : 
+                                    ingresoEnTaller.id_estado == 2 ? "badge-warning" : 
+                                    ingresoEnTaller.id_estado == 3 ? "badge-success" : 
+                                    ingresoEnTaller.id_estado == 6 ? "badge-danger" : "" %>
+                                  ">
+                                    <%= ingresoEnTaller.estado.nombre.toUpperCase() %>
+                                  </span>
                                 </td>
+                                <!-- Detalles -> Ir a la pagina del detalle -->
+                                <!-- <td> -->
+                                  <!-- <a href="/taller/detalle/<%# ingresoEnTaller.id %>">Ver más...</a> -->
+                                <!-- </td> -->
                               </tr>
                             <% }); %>
                           </tbody>
@@ -81,52 +101,62 @@
                     
                     <div class="tab-pane p-0" id="tab_2">
                       <div class="table-responsive">
-                        <table id="ingresosEntregados" class="table table-bordered table-hover">
+                        <table id="ingresosEntregados" class="table table-bordered table-hover table-striped">
                           <thead>
                             <tr>
-                              <!-- <th>ID</th> -->
+                              <th>Cliente</th>
                               <th>Equipo</th>
                               <th>Ingreso</th>
                               <th>Egreso</th>
                               <th>Estado</th>
-                              <th>Detalles</th>
                             </tr>
                           </thead>
                           <tbody>
                             <% ingresosHistorial.forEach(ingresoHistorial => { %>
-                              <tr>
-                                <!-- <td><%# ingresoHistorial.id %></td> -->
+                              <tr class="clickable-row" data-href="/taller/detalle/<%= ingresoHistorial.id %>">
+                                <!-- Cliente -->
                                 <td>
-                                  <%= ingresoHistorial.equipo.marca %>
-                                  <%= ingresoHistorial.equipo.modelo %>
-                                  <%= ingresoHistorial.equipo.numero_serie %>
+                                  <% if (ingresoHistorial.cliente) { %>
+                                    <%= ingresoHistorial.cliente.nombre %> - <%= ingresoHistorial.departamento %>
+                                  <% } else { %>
+                                    -
+                                  <% } %>
                                 </td>
+                                <!-- Equipos -->
+                                <td>
+                                  <%= ingresoHistorial.equipo.marca %> <%= ingresoHistorial.equipo.modelo %> <%= ingresoHistorial.equipo.numero_serie %>
+                                </td>
+                                <!-- Ingreso -->
                                 <td>
                                   <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-ES", {
                                     year: "numeric",
                                     month: "numeric",
                                     day: "numeric",
-                                    // hour: "numeric",
-                                    // minute: "numeric",
                                   }) %>
                                 </td>
+                                <!-- Egreso -->
                                 <td>
                                   <% if (ingresoHistorial.egreso) { %>
                                     <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-ES", {
                                        year: "numeric",
                                        month: "numeric",
                                        day: "numeric",
-                                      //  hour: "numeric",
-                                      //  minute: "numeric",
                                     }) %>
                                   <% } else { %>
                                     -
                                   <% } %>
                                 </td>
-                                <td><%= ingresoHistorial.estado.nombre %></td>
-                                <td>
-                                  <a href="/taller/detalle/<%= ingresoHistorial.id %>">Ver más...</a>
+                                <!-- Estado -->
+                                <td class="h5">
+                                  <span class="badge 
+                                    <%= ingresoHistorial.id_estado == 6 ? "badge-danger" : 
+                                        (ingresoHistorial.id_estado == 5 || ingresoHistorial.id_estado == 7)  ? "badge-success" : "badge-info" %>">
+                                    <%= ingresoHistorial.estado.nombre.toUpperCase() %>
+                                  </span>
                                 </td>
+                                <!-- <td> -->
+                                  <!-- <a href="/taller/detalle/<%# ingresoHistorial.id %>">Ver más...</a> -->
+                                <!-- </td> -->
                               </tr>
                             <% }); %>
                           </tbody>
@@ -137,6 +167,7 @@
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>
@@ -149,17 +180,29 @@
   <script>
     $(function () {
       $("#ingresosEnTaller").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50, "order": [],
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#ingresosEnTaller_wrapper .col-md-6:eq(0)');
     });
 
     $(function () {
       $("#ingresosEntregados").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50, "order": [],
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#ingresosEntregados_wrapper .col-md-6:eq(0)');
     });
+  </script>
+
+  <!-- Script para ir al detalle de un Ingreso clickeando en la fila de la tabla -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function (e) {
+      document.querySelectorAll(".clickable-row").forEach(row => {
+        row.style.cursor = "pointer";
+        row.addEventListener("click", () => {
+          window.location.href = row.getAttribute("data-href");
+        })
+      })
+    })
   </script>
 </body>
 </html>

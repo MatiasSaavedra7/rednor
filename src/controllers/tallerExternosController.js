@@ -57,21 +57,15 @@ module.exports = {
       let ingresos = await ingresosExternosService.getAll();
 
       // Filtrar los ingresos según el estado
-      let ingresosEnTaller = ingresos.filter(
-        (ingreso) =>
-          ingreso.id_estado === 1 ||
-          ingreso.id_estado === 2 ||
-          ingreso.id_estado === 3
-      );
-      // let ingresosEnEspera = ingresos.filter(ingreso => ingreso.id_estado === 2);
-      let ingresosHistorial = ingresos.filter(
-        (ingreso) => ingreso.id_estado === 4 || ingreso.id_estado == 6
-      );
+      let ingresosEnTaller = ingresos.filter((ingreso) =>[1, 2, 3].includes(ingreso.id_estado));
+
+      
+      let ingresosHistorial = ingresos.filter((ingreso) => [4, 5, 6, 7, 8].includes(ingreso.id_estado));
 
       res.render("taller/externos/tallerExterno", {
         ingresos,
         ingresosEnTaller,
-        /* ingresosEnEspera,*/ ingresosHistorial,
+        ingresosHistorial,
       });
     } catch (error) {
       console.log(error);
@@ -626,6 +620,30 @@ module.exports = {
       res.status(200).json({ message: "Registro eliminado correctamente." });
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  informarRetiro: async (req, res) => {
+    try {
+      // Capturar el ID del Ingreso
+      const idIngreso = req.params.id;
+
+      // Traer la informacion del Alquiler
+      const ingreso = await ingresosExternosService.getOneByPK(idIngreso);
+
+      // Validar que exista el Alquiler
+      if (!ingreso) {
+        return res.status(404).json({ message: "No se encontró el ingreso" });
+      }
+
+      // Actualizar el estado del Ingreso a "Retirado" y la Fecha de Retiro
+      await ingresosExternosService.updateByPK(idIngreso, { id_estado: 8});
+
+      // Retornar un mensaje de exito
+      res.status(200).json({ message: "El equipo ha sido retirado." });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
     }
   }
 };
