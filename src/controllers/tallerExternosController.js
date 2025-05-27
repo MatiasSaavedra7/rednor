@@ -637,7 +637,12 @@ module.exports = {
       }
 
       // Actualizar el estado del Ingreso a "Retirado" y la Fecha de Retiro
-      await ingresosExternosService.updateByPK(idIngreso, { id_estado: 8});
+      const dataToUpdate = {
+        id_estado: 8,
+        fecha_retiro: new Date(),
+      };
+
+      await ingresosExternosService.updateByPK(idIngreso, dataToUpdate);
 
       // Retornar un mensaje de exito
       res.status(200).json({ message: "El equipo ha sido retirado." });

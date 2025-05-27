@@ -89,7 +89,7 @@
 
                     <dt>Fecha de Ingreso</dt>
                     <dd>
-                      <%= ingreso.fecha_ingreso.toLocaleString("es-ES", {
+                      <%= ingreso.fecha_ingreso.toLocaleString("es-AR", {
                         year: "numeric",
                         month: "numeric",
                         day: "numeric",
@@ -176,14 +176,17 @@
                 <div class="row">
                   <div class="col">
                     <div class="timeline">
-                      <div class="time-label">
-                        <span class="bg-red">
-                          <%= ingreso.fecha_ingreso.toLocaleDateString() %>
-                        </span>
-                      </div>
                       
                       <!-- Recorremos los datos combinados -->
-                      <% combinedData.forEach(item => { %>
+                      <% combinedData.forEach((item, index) => { %>
+                        <% if (index == 0) { %>
+                          <div class="time-label">
+                            <span class="bg-red">
+                              <%= ingreso.fecha_ingreso.toLocaleDateString("es-AR") %>
+                            </span>
+                          </div>
+                        <% } %>
+
                         <div>
                           <% if (item.type === "informe") { %>
                             <i class="fas fa-file-alt bg-yellow"></i>
@@ -192,7 +195,7 @@
                           <% } %>
                           <div class="timeline-item">
                             <span class="time"><i class="fas fa-clock"></i> 
-                              <%= new Date(item.fecha).toLocaleString() %>
+                              <%= new Date(item.fecha).toLocaleString("es-AR") %>
                             </span>
                             <% if (item.type === 'informe') { %>
                               <h3 class="timeline-header"><a href="#"><%= item.nombre_usuario %></a> hizo un informe</h3>
@@ -250,7 +253,7 @@
                     <!-- Fecha de Egreso -->
                     <dt>Fecha de Egreso</dt>
                     <dd>
-                      <%= egreso.fecha_egreso.toLocaleString("es-ES", {
+                      <%= egreso.fecha_egreso.toLocaleString("es-AR", {
                         year: "numeric",
                         month: "numeric",
                         day: "numeric",
@@ -285,7 +288,7 @@
                     <% if (egreso.fecha_cobro) { %>
                       <dt>Fecha de Cobro</dt>
                       <dd>
-                        <%= egreso.fecha_cobro.toLocaleString("es-ES", {
+                        <%= egreso.fecha_cobro.toLocaleString("es-AR", {
                           year: "numeric",
                           month: "numeric",
                           day: "numeric",
@@ -344,7 +347,7 @@
 
                   <!-- FECHA DE COBRO -->
                   <div class="form-group">
-                    <p>Fecha: <%= new Date().toLocaleDateString() %></p>
+                    <p>Fecha: <%= new Date().toLocaleDateString("es-AR") %></p>
                   </div> 
 
                   <!-- PRECIO -->
@@ -674,7 +677,7 @@
           const li = document.createElement("li");
           const a = document.createElement("a");
 
-          a.textContent = `${new Date(ingreso.fecha_ingreso).toLocaleDateString()} - ${ingreso.motivo}`;
+          a.textContent = `${new Date(ingreso.fecha_ingreso).toLocaleDateString("es-AR")} - ${ingreso.motivo}`;
           a.classList.add("linkIngreso")
           a.href = "#detalle-taller";
 
@@ -704,7 +707,7 @@
   
               dlIngreso.innerHTML = `
                 <dt>Fecha de Ingreso</dt>
-                <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-ES", {
+                <dd>${new Date(data.ingreso.fecha_ingreso).toLocaleString("es-AR", {
                   year: "numeric",
                   month: "numeric",
                   day: "numeric",
@@ -772,7 +775,7 @@
 
               const spanBgRed = document.createElement("span");
               spanBgRed.classList.add("bg-red");
-              spanBgRed.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleDateString();
+              spanBgRed.textContent = new Date(data.ingreso.fecha_ingreso).toLocaleDateString("es-AR");
               divTimeLabel.appendChild(spanBgRed);
 
               // Recorrer el vector dataCombined
@@ -786,7 +789,7 @@
                   divInforme.innerHTML = `
                     <i class="fas fa-file-alt bg-yellow"></i>
                     <div class="timeline-item">
-                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-ES", {
+                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-AR", {
                         year: "numeric",
                         month: "numeric",
                         day: "numeric",
@@ -809,7 +812,7 @@
                   divInsumo.innerHTML = `
                     <i class="fas fa-box bg-green"></i>
                     <div class="timeline-item">
-                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-ES", {
+                      <span class="time"><i class="fas fa-clock"></i>${new Date(item.fecha).toLocaleString("es-AR", {
                         year: "numeric",
                         month: "numeric",
                         day: "numeric",
@@ -845,7 +848,7 @@
   
               dlEgreso.innerHTML = `
                 <dt>Fecha de Egreso</dt>
-                <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-ES", {
+                <dd>${new Date(data.egreso.fecha_egreso).toLocaleString("es-AR", {
                   year: "numeric",
                   month: "numeric",
                   day: "numeric",
@@ -873,7 +876,7 @@
               if (data.egreso.fecha_cobro) {
                 dlEgreso.innerHTML += `
                 <dt>Fecha de Cobro</dt>
-                <dd>${new Date(data.egreso.fecha_cobro).toLocaleString("es-ES", {
+                <dd>${new Date(data.egreso.fecha_cobro).toLocaleString("es-AR", {
                   year: "numeric",
                   month: "numeric",
                   day: "numeric",

@@ -1,13 +1,28 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Cliente } = require("../utils/objects");
+function Cliente(data) {
+  this.nombre = data.nombre;
+  this.id_tipo_cliente = data.id_tipo_cliente;
+  this.email = data.email;
+  this.telefono = data.telefono;
+  this.ciudad = data.ciudad;
+  this.direccion = data.direccion;
+  this.inscripcion_afip = data.inscripcion_afip;
+  this.condicion_afip = data.condicion_afip;
+  this.formulario_005 = data.formulario_005;
+  this.razon_social = data.razon_social;
+  this.domicilio_comercial = data.domicilio_comercial;
+  this.DocTipo = data.DocTipo;
+  this.DocNro = data.DocNro;
+  this.id_firma = data.id_firma;
+}
 
 module.exports = {
   getAll: async () => {
     try {
       return await db.Cliente.findAll({
-        include: ["tipo"],
+        include: ["tipo", "firma"],
       });
     } catch (error) {
       console.log(error.message);
@@ -19,7 +34,7 @@ module.exports = {
     try {
       return await db.Cliente.findOne({
         where: { id: id },
-        include: ["tipo"],
+        include: ["tipo", "firma"],
       });
     } catch (error) {
       console.log(error.message);

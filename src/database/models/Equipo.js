@@ -29,6 +29,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.INTEGER,
       allowNull: false,
     },
+    id_firma: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
+    }
   };
 
   let config = {
@@ -62,7 +66,12 @@ module.exports = (sequelize, dataTypes) => {
     Equipo.hasMany(models.HistorialEstado, {
       as: "historial",
       foreignKey: "id_equipo",
-    })
+    });
+
+    Equipo.belongsTo(models.Firma, {
+      as: "firma",
+      foreignKey: "id_firma",
+    });
   };
 
   return Equipo;

@@ -84,6 +84,16 @@
                         <p class="text-danger"><%= errors.id_tipo_equipo.msg %></p>
                       <% } %>
                     </div>
+
+                    <div class="form-group">
+                      <label for="id_firma">Firma</label>
+                      <select name="id_firma" id="id_firma" class="form-control">
+                        <option value="" selected disabled hidden>Seleccione una firma</option>
+                        <% firmas.forEach(firma => { %>
+                          <option value="<%= firma.id %>"><%= firma.nombre %></option>
+                        <% }) %>
+                      </select>
+                    </div>
             
                     <br />
                     <input type="submit" class="btn btn-primary w-100" />

@@ -118,6 +118,16 @@
                       </div>
 
                       <div class="form-group">
+                        <label for="id_firma">Firma</label>
+                        <select name="id_firma" id="id_firma" class="form-control">
+                          <option value="" selected disabled hidden>Seleccione una firma</option>
+                          <% firmas.forEach(firma => { %>
+                           <option value="<%= firma.id %>"><%= firma.nombre %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
                         <label for="condicion_afip">Condicion AFIP</label>
                         <select name="condicion_afip" id="condicion" class="form-control">
                           <option value="" selected disabled hidden>Elegir una opcion...</option>

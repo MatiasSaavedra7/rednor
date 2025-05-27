@@ -71,7 +71,7 @@
                                     <%= ingresoEnTaller.equipo.marca %> <%= ingresoEnTaller.equipo.modelo %> <%= ingresoEnTaller.equipo.numero_serie %>
                                   </td>
                                   <td>
-                                    <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-ES", {
+                                    <%= new Date(ingresoEnTaller.fecha_ingreso).toLocaleString("es-AR", {
                                       day: "2-digit",
                                       month: "2-digit",
                                       year: "numeric",
@@ -120,7 +120,7 @@
                                   </td>
                                   <!-- Ingreso -->
                                   <td>
-                                    <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-ES", {
+                                    <%= new Date(ingresoHistorial.fecha_ingreso).toLocaleString("es-AR", {
                                       day: "2-digit",
                                       month: "2-digit",
                                       year: "numeric",
@@ -129,7 +129,7 @@
                                   <!-- Egreso -->
                                   <td>
                                     <% if (ingresoHistorial.egreso) { %>
-                                      <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-ES", {
+                                      <%= new Date(ingresoHistorial.egreso.fecha_egreso).toLocaleString("es-AR", {
                                         day: "2-digit",
                                         month: "2-digit",
                                         year: "numeric",

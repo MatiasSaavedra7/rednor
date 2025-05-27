@@ -154,7 +154,6 @@
               <a href="/taller" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-
         </div>
 
         <!-- Notificaciones -->
@@ -291,9 +290,18 @@
 <!-- Script para configurar la cookie de la firma -->
 <script>
   document.addEventListener("DOMContentLoaded", async function() {
+    // Titulo de la Pagina Principal
+    const tituloInicio = document.getElementById("titulo-inicio");
+
+    // Modal Firma
     const firmasContainer = document.getElementById("firmas-container");
     const modalFirma = document.getElementById("modal-firma");
-    const tituloInicio = document.getElementById("titulo-inicio");
+    
+    // Small Boxes
+    const totalEquiposBox = document.getElementById("totalEquipos");
+    const totalClientesBox = document.getElementById("totalClientes");
+    const totalAlquileresBox = document.getElementById("totalAlquileres");
+    const totalEquiposEnTaller = document.getElementById("totalEquiposEnTaller");
 
     // Función para obtener la cookie
     function getCookie(name) {
@@ -310,6 +318,46 @@
         expires = "; expires=" + date.toUTCString();
       }
       document.cookie = name + "=" + value + "; path=/" + expires;
+    }
+
+    // Función Fetch
+    async function fetchData(url) {
+      try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error("Error fetching data");
+        };
+
+        const data = await response.json();
+
+        return data;
+      } catch (error) {
+        console.error("Error fetching data: ", error.message);
+        
+        return null;
+      }
+    }
+
+    async function updateSmallBoxes() {
+      const totalClientes = await fetchData("/clientes/api/count");
+
+      if (totalClientes) {
+        totalClientesBox.textContent = totalClientes.total;
+      };
+
+      const totalEquipos = await fetchData("/equipos/api/count");
+
+      if (totalEquipos) {
+        totalEquiposBox.textContent = totalEquipos.totalDisponibles;
+        totalEquiposEnTaller.textContent = totalEquipos.totalEnTaller;
+      };
+
+      const totalAlquileres = await fetchData("/alquileres/api/count");
+
+      if (totalAlquileres) {
+        totalAlquileresBox.textContent = totalAlquileres.total;
+      };
     }
 
     try {
@@ -347,10 +395,11 @@
         label.textContent = `✔${firma.nombre}`;
 
         // Guardar selección y actualizar título
-        input.addEventListener("change", function() {
+        input.addEventListener("change", async function() {
           setCookie("firma", firma.id, 1); // Expira en 1 hora
           tituloInicio.textContent = firma.nombre;
           $("#modal-firma").modal("hide");
+          await updateSmallBoxes();
         });
 
         formGroup.appendChild(input);
@@ -361,8 +410,10 @@
       // Mostrar modal solo si no hay firma guardada
       if (!firmaSeleccionada) {
         $("#modal-firma").modal("show");
+        await updateSmallBoxes();
       } else {
         tituloInicio.textContent = firmas.find(f => f.id == firmaSeleccionada)?.nombre || "Firma desconocida";
+        await updateSmallBoxes();
       }
     } catch (error) {
       console.error("Error al cargar las firmas:", error);
@@ -489,82 +540,6 @@
     volverAtrasBtn.addEventListener("click", async () => {
       await cargarPaginaAnterior();
     })
-  })
-</script>
-
-<!-- Script para mostrar informacion en los Small Boxes -->
-<script>
-  document.addEventListener("DOMContentLoaded", async function() {
-    // Small Boxes
-    const totalEquiposBox = document.getElementById("totalEquipos");
-    const totalClientesBox = document.getElementById("totalClientes");
-    const totalAlquileresBox = document.getElementById("totalAlquileres");
-    const totalEquiposEnTallerBox = document.getElementById("totalEquiposEnTaller");
-
-    const totalClientes = await fetchTotalClientes();
-    console.log(totalClientes);
-    totalClientesBox.textContent = totalClientes.total;
-    
-    const totalEquipos = await fetchEquipos();
-    console.log(totalEquipos);
-    totalEquiposBox.textContent = totalEquipos.totalDisponibles;
-    totalEquiposEnTallerBox.textContent = totalEquipos.totalEnTaller;
-
-    const totalAlquileres = await fetchAlquileres();
-    console.log(totalAlquileres)
-    totalAlquileresBox.textContent = totalAlquileres.total;
-    
-
-    // Fetch Clientes
-    async function fetchTotalClientes() {
-      try {
-        const response = await fetch("/clientes/api/count");
-
-        if (!response.ok) {
-          throw new Error("Error fetching data clientes");
-        };
-        
-        const data = await response.json();
-
-        return data;
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
-
-    // Fetch Equipos
-    async function fetchEquipos() {
-      try {
-        const response = await fetch("/equipos/api/count");
-
-        if (!response.ok) {
-          throw new Error("Error fetching data equipos");
-        };
-
-        const data = await response.json();
-
-        return data;
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
-
-    // Fetch Alquileres
-    async function fetchAlquileres() {
-      try {
-        const response = await fetch("/alquileres/api/count");
-        
-        if (!response.ok) {
-          throw new Error("Error fetching data alquileres");
-        }
-
-        const data = await response.json();
-
-        return data;
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
   })
 </script>
 </body>

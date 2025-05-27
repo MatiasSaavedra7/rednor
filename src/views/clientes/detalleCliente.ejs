@@ -89,7 +89,9 @@
                     <dd>
                       <%= cliente.DocNro ? cliente.DocNro : "-" %>
                     </dd>
-                    
+
+                    <dt>Firma</dt>
+                    <dd><%= cliente.id_firma ? cliente.firma.nombre : "-" %></dd>
 
                     <dt>Condicion AFIP</dt>
                     <dd><%= cliente.condicion_afip ? cliente.condicion_afip : "-" %></dd>

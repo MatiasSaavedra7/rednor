@@ -10,6 +10,7 @@ const informesService = require("../database/services/informesService");
 const insumosService = require("../database/services/insumosService");
 
 const { validationResult } = require("express-validator");
+const firmasService = require("../database/services/firmasService");
 
 module.exports = {
   // METODO PARA LEER TODOS LOS EQUIPOS ALMACENADOS EN LA BASE DE DATOS
@@ -46,7 +47,9 @@ module.exports = {
     try {
       let marcas = await marcasService.getAll();
       let tipos = await tiposEquiposService.getAll();
-      res.render("equipos/registroEquipo", { marcas, tipos });
+      let firmas = await firmasService.getAll();
+
+      res.render("equipos/registroEquipo", { marcas, tipos, firmas });
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +88,9 @@ module.exports = {
       let equipo = await equiposService.getOneByPK(req.params.id);
       let marcas = await marcasService.getAll();
       let tipos = await tiposEquiposService.getAll();
-      res.render("equipos/editarEquipo", { equipo, marcas, tipos });
+      let firmas = await firmasService.getAll();
+
+      res.render("equipos/editarEquipo", { equipo, marcas, tipos, firmas });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);

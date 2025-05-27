@@ -1,7 +1,14 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { Equipo } = require("../utils/objects");
+function Equipo(data) {
+  this.marca = data.marca;
+  this.modelo = data.modelo;
+  this.numero_serie = data.numero_serie;
+  this.id_tipo_equipo = data.id_tipo_equipo;
+  this.id_estado = data.id_estado;
+  this.id_firma = data.id_firma;
+}
 
 module.exports = {
   getAll: async () => {

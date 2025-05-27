@@ -5,6 +5,7 @@ const clientesService = require("../database/services/clientesService");
 const tiposClientesService = require("../database/services/tiposClientesService");
 const alquileresService = require("../database/services/alquileresService");
 const habilitadosService = require("../database/services/habilitadosService");
+const firmasService = require("../database/services/firmasService");
 
 const { validationResult } = require("express-validator");
 
@@ -33,7 +34,9 @@ module.exports = {
   create: async (req, res) => {
     try {
       const tipos = await tiposClientesService.getAll();
-      res.render("clientes/registroCliente", { tipos });
+      const firmas = await firmasService.getAll();
+
+      res.render("clientes/registroCliente", { tipos, firmas });
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +78,9 @@ module.exports = {
     try {
       const cliente = await clientesService.getOneByPK(req.params.id);
       const tipos = await tiposClientesService.getAll();
-      res.render("clientes/editarCliente", { cliente, tipos });
+      const firmas = await firmasService.getAll();
+
+      res.render("clientes/editarCliente", { cliente, tipos, firmas });
     } catch (error) {
       console.log(error);
     }
@@ -89,13 +94,11 @@ module.exports = {
         let cliente = await clientesService.getOneByPK(req.params.id);
 
         let inscripcion_name = req.files["inscripcion_afip"] ? req.files["inscripcion_afip"][0].filename : cliente.inscripcion_afip;
-        // let condicion_name = req.files["condicion_afip"] ? req.files["condicion_afip"][0].filename : cliente.condicion_afip;
         let formulario_name = req.files["formulario_005"] ? req.files["formulario_005"][0].filename : cliente.formulario_005;
         
         let data = {
           ...req.body,
           inscripcion_afip: inscripcion_name,
-          // condicion_afip: condicion_name,
           formulario_005: formulario_name,
         }
         

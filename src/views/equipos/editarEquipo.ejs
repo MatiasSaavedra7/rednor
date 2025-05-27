@@ -83,8 +83,20 @@
                         <p class="feedback-errors"><%= errors.id_tipo_equipo.msg %></p>
                       <% } %>
                     </div>
-                    <input type="submit" value="Editar" class="btn btn-primary w-100" />
-                    <a href="/equipos/detalle/<%= equipo.id %>" class="btn btn-outline-secondary mt-3">Volver Atras</a>
+
+                    <div class="form-group">
+                      <label for="id_firma">Firma</label>
+                      <select name="id_firma" id="id_firma" class="form-control">
+                        <option value="" selected disabled hidden>Seleccione una firma</option>
+                        <% firmas.forEach(firma => { %>
+                          <option value="<%= firma.id %>"><%= firma.nombre %></option>
+                        <% }) %>
+                      </select>
+                    </div>
+
+                    <input type="submit" value="Editar" class="btn btn-block btn-primary" />
+
+                    <a href="/equipos/detalle/<%= equipo.id %>" class="btn btn-block btn-outline-secondary mt-3">Volver Atras</a>
                   </form>
                 </div>
               </div>

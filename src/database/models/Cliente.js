@@ -44,7 +44,6 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING,
       allowNull: true,
     },
-    // Modificaciones 03/02/2025
     razon_social: {
       type: dataTypes.STRING,
       allowNull: true,
@@ -61,6 +60,10 @@ module.exports = (sequelize, dataTypes) => {
       type: dataTypes.STRING(13),
       allowNull: true,
     },
+    id_firma: {
+      type: dataTypes.INTEGER,
+      allowNull: true,
+    }
   };
 
   let config = {
@@ -90,6 +93,12 @@ module.exports = (sequelize, dataTypes) => {
       as: "ingresos",
       foreignKey: "id_cliente",
     });
+
+    Cliente.belongsTo(models.Firma, {
+      as: "firma",
+      foreignKey: "id_firma",
+      onDelete: "SET NULL",
+    })
   };
 
   return Cliente;
