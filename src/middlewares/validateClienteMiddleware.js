@@ -10,9 +10,9 @@ module.exports = [
   // check("domicilio_comercial")
   //   .notEmpty()
   //   .withMessage("Debes ingresar el domicilio comercial"),
-  check("id_tipo_cliente")
-    .notEmpty()
-    .withMessage("Selecciona una opcion"),
+  // check("id_tipo_cliente")
+  //   .notEmpty()
+  //   .withMessage("Selecciona una opcion"),
   // check("email")
   //   .notEmpty()
   //   .withMessage("Debes ingresar un correo")

@@ -1,6 +1,10 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
+function Marca(data) {
+  this.nombre = data.nombre;
+}
+
 module.exports = {
   getAll: async () => {
     try {
@@ -19,4 +23,12 @@ module.exports = {
       console.log(error);
     }
   },
+
+  create: async (data) => {
+    try {
+      return await db.Marca.create(new Marca(data));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

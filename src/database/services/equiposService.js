@@ -14,7 +14,7 @@ module.exports = {
   getAll: async () => {
     try {
       return db.Equipo.findAll({
-        include: ["estado", "tipo"],
+        include: ["estado", "tipo", "firma"],
         where: {
           id_estado: { [Op.ne]: 5 }
         }
@@ -117,7 +117,7 @@ module.exports = {
     try {
       return db.Equipo.findOne({
         where: { id: id },
-        include: ["estado", "tipo"],
+        include: ["estado", "tipo", "firma"],
       });
     } catch (error) {
       console.log(error);

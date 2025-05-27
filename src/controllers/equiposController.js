@@ -59,12 +59,39 @@ module.exports = {
     try {
       let errors = validationResult(req);
       if (errors.isEmpty()) {
-        let data = {
-          ...req.body,
+        // Mostrar por consola
+        console.log(req.body);
+
+        // Capturar la informacion del body del formulario
+        const { marca, nueva_marca, modelo, numero_serie, id_tipo_equipo, nuevo_tipo_equipo, id_firma } = req.body;
+
+        // Objeto con informacion del nuevo equipo
+        const data = {
+          marca: marca,
+          modelo: modelo,
+          numero_serie: numero_serie,
+          id_tipo_equipo: id_tipo_equipo,
+          id_firma: id_firma,
           id_estado: 1,
+        }
+
+        // Si el usuario ingreso una nueva marca
+        if (marca == "Otro" && nueva_marca !== "") {
+          await marcasService.create({ nombre: nueva_marca });
+          data.marca = nueva_marca;
         };
-        let equipo = await equiposService.create(data);
-        //  Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado
+
+        // Si el usuario ingreso un nuevo tipo de equipo
+        if (id_tipo_equipo == "Otro" && nuevo_tipo_equipo !== "") {
+          await tiposEquiposService.create({ nombre: nuevo_tipo_equipo });
+          const tipoEquipo = await tiposEquiposService.getByName(nuevo_tipo_equipo);
+          data.id_tipo_equipo = tipoEquipo.id;
+        };
+
+        // Guardar el nuevo equipo en base de datos
+        const equipo = await equiposService.create(data);
+
+        // Redireccionar al usuario al detalle del cliente
         if (equipo) {
           res.redirect(`/equipos/detalle/${equipo.id}`);
         }

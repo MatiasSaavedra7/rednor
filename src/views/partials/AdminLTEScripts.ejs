@@ -149,12 +149,8 @@
 <!-- Cookie dark mode -->
 <script>
   document.addEventListener("DOMContentLoaded", function (){
-    // let darkMode = confirm("Hola Mundo");
-
-    // console.log("El valor de darkMode es: ", darkMode);
-
     const body = document.querySelector("body");
-    const darkModeToggle = document.querySelector("#darkModeToggle i");
+    const darkModeToggle = document.querySelector("#darkModeToggle");
 
     // Leer cookie
     function getCookie(name) {
@@ -167,7 +163,7 @@
 
     if (darkMode) {
       body.classList.add("dark-mode");
-      darkModeToggle.classList.replace("fa-moon", "fa-sun");
+      darkModeToggle.querySelector("i").classList.replace("fa-moon", "fa-sun");
     }
 
     // Evento click al icono
@@ -180,9 +176,9 @@
 
       // Cambiar icono al activar/desactivar el modo oscuro
       if (darkMode) {
-        darkModeToggle.classList.replace("fa-moon", "fa-sun");
+        darkModeToggle.querySelector("i").classList.replace("fa-moon", "fa-sun");
       } else {
-        darkModeToggle.classList.replace("fa-sun", "fa-moon");
+        darkModeToggle.querySelector("i").classList.replace("fa-sun", "fa-moon");
       }
     })
   })

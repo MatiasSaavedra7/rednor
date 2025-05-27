@@ -14,23 +14,23 @@ module.exports = (sequelize, dataTypes) => {
     },
     id_tipo_cliente: {
       type: dataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     telefono: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     ciudad: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     direccion: {
       type: dataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     inscripcion_afip: {
       type: dataTypes.STRING,

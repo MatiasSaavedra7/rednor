@@ -48,13 +48,11 @@ module.exports = {
 
       if (errors.isEmpty()) {
         let inscripcion_name = req.files["inscripcion_afip"] ? req.files["inscripcion_afip"][0].filename : null;
-        // let condicion_name = req.files["condicion_afip"] ? req.files["condicion_afip"][0].filename : null;
         let formulario_name = req.files["formulario_005"] ? req.files["formulario_005"][0].filename : null;
 
         let data = {
           ...req.body,
           inscripcion_afip: inscripcion_name,
-          // condicion_afip: condicion_name,
           formulario_005: formulario_name,
         }
         let cliente = await clientesService.create(data);
