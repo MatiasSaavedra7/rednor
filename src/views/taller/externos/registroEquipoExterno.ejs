@@ -37,10 +37,17 @@
                         <% marcas.forEach(marca => { %>
                         <option value="<%= marca.nombre %>"><%= marca.nombre %></option>
                         <% }) %>
+                        <option value="Otro">Otro</option>
                       </select>
                       <% if (locals.errors && errors.marca) { %>
                         <p class="text-danger"><%= errors.marca.msg %></p>
                       <% } %>
+                    </div>
+
+                    <!-- Input para ingresar nueva marca -->
+                    <div class="form-group" id="nuevaMarca" style="display: none;">
+                      <label for="nueva_marca">Nueva Marca</label>
+                      <input type="text" name="nueva_marca" id="nueva_marca" placeholder="Ingresar nueva marca..." class="form-control">
                     </div>
             
                     <div class="form-group">
@@ -78,14 +85,21 @@
                         <% tipos.forEach(tipo => { %>
                         <option value="<%= tipo.id %>"><%= tipo.nombre %></option>
                         <% }) %>
+                        <option value="Otro">Otro</option>
                       </select>
                       <% if (locals.errors && errors.id_tipo_equipo) { %>
                         <p class="text-danger"><%= errors.id_tipo_equipo.msg %></p>
                       <% } %>
                     </div>
+
+                    <div class="form-group" id="nuevoTipoEquipo" style="display: none;">
+                      <label for="nuevo_tipo_equipo">Nuevo tipo de equipo</label>
+                      <input type="text" name="nuevo_tipo_equipo" id="nuevo_tipo_equipo" placeholder="Ingresar nuevo tipo de equipo..." class="form-control"></input>
+                    </div>
             
                     <br />
-                    <input type="submit" class="btn btn-primary w-100" />
+
+                    <input type="submit" class="btn btn-block btn-primary" />
                   </form>
                   <a href="/taller/externos/ingresos" class="btn btn-block btn-outline-secondary mt-3">Volver Atrás</a>
                 </div>
@@ -99,5 +113,28 @@
   </div>
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const marca = document.getElementById("marca");
+
+      marca.addEventListener("change", function() {
+        if (marca.value == "Otro") {
+          document.getElementById("nuevaMarca").style.display = "block";
+        } else {
+          document.getElementById("nuevaMarca").style.display = "none";
+        };
+
+        const tipoEquipo = document.getElementById("id_tipo_equipo");
+
+        tipoEquipo.addEventListener("change", function() {
+          if (tipoEquipo.value == "Otro") {
+            document.getElementById("nuevoTipoEquipo").style.display = "block";
+          } else {
+            document.getElementById("nuevoTipoEquipo").style.display = "none";
+          }
+        })
+      })
+    })
+  </script>
 </body>
 </html>

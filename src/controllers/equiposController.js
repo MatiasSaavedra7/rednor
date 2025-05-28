@@ -66,7 +66,7 @@ module.exports = {
         const { marca, nueva_marca, modelo, numero_serie, id_tipo_equipo, nuevo_tipo_equipo, id_firma } = req.body;
 
         // Objeto con informacion del nuevo equipo
-        const data = {
+        let data = {
           marca: marca,
           modelo: modelo,
           numero_serie: numero_serie,

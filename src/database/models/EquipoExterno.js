@@ -9,20 +9,20 @@ module.exports = (sequelize, dataTypes) => {
       allowNull: false,
     },
     marca: {
-      type: dataTypes.STRING,
+      type: dataTypes.STRING(30),
       allowNull: false,
     },
     modelo: {
-      type: dataTypes.STRING,
+      type: dataTypes.STRING(30),
       allowNull: false,
     },
     numero_serie: {
-      type: dataTypes.STRING,
+      type: dataTypes.STRING(50),
       unique: true,
       allowNull: false,
     },
     id_tipo_equipo: {
-      type: dataTypes.STRING,
+      type: dataTypes.INTEGER,
       allowNull: false,
     },
   };

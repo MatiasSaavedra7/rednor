@@ -16,6 +16,7 @@ const notificacionesUsuariosService = require("../database/services/notificacion
 const { getIo } = require("../socket");
 
 const { validationResult } = require("express-validator");
+const tiposEquiposService = require("../database/services/tiposEquiposService");
 
 module.exports = {
   crearEquipo: async (req, res) => {
@@ -32,7 +33,29 @@ module.exports = {
     try {
       let errors = validationResult(req);
       if (errors.isEmpty()) {
-        let equipoExterno = await equiposExternosService.create(req.body);
+        // Capturar la informacion del body del formulario
+        const { marca, nueva_marca, modelo, numero_serie, id_tipo_equipo, nuevo_tipo_equipo } = req.body;
+
+        let data = {
+          marca: marca,
+          modelo: modelo,
+          numero_serie: numero_serie,
+          id_tipo_equipo: id_tipo_equipo,
+        };
+
+        if (marca == "Otro" && nueva_marca !== "") {
+          await marcasService.create({ nombre: nueva_marca });
+          data.marca = nueva_marca;
+        };
+
+        if (id_tipo_equipo == "Otro" && nuevo_tipo_equipo !== "") {
+          await tiposEquiposService.create({ nombre: nuevo_tipo_equipo });
+          const tipoEquipo = await tiposEquiposService.getByName(nuevo_tipo_equipo);
+          data.id_tipo_equipo = tipoEquipo.id;
+        };
+
+        const equipoExterno = await equiposExternosService.create(data);
+
         //  Este bloque de codigo redirecciona directamente a la pagina de detalle del cliente recien creado
         if (equipoExterno) {
           res.redirect(`/taller/externos/ingresos?equipo-externo=${equipoExterno.id}`);

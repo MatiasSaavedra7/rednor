@@ -1,7 +1,12 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 
-const { EquipoExterno } = require("../utils/objects");
+function EquipoExterno(data) {
+  this.marca = data.marca;
+  this.modelo = data.modelo;
+  this.numero_serie = data.numero_serie;
+  this.id_tipo_equipo = data.id_tipo_equipo;
+}
 
 module.exports = {
   getOneByPK: async (id) => {
@@ -31,8 +36,7 @@ module.exports = {
     try {
       return await db.EquipoExterno.create(new EquipoExterno(data));
     } catch (error) {
-      let message = `\n\n[ERROR] No se pudo crear el equipo externo: ${error}\n\n`;
-      console.log(message);
+      console.log(error);
     }
   },
 

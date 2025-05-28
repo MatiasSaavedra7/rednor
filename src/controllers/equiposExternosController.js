@@ -49,14 +49,29 @@ module.exports = {
 
   store: async (req, res) => {
     try {
-      const { marca, modelo, numero_serie, id_tipo_equipo } = req.body;
+      // Capturar la informacion del body del formulario
+      const { marca, nueva_marca, modelo, numero_serie, id_tipo_equipo, nuevo_tipo_equipo } = req.body;
 
-      const data = {
-        marca,
-        modelo,
-        numero_serie,
-        id_tipo_equipo,
+      // Objeto con la informacion del equipo
+      let data = {
+        marca: marca,
+        modelo: modelo,
+        numero_serie: numero_serie,
+        id_tipo_equipo: id_tipo_equipo,
       };
+
+      // Si el usuario ingreso una nueva marca
+      if (marca == "Otro" && nueva_marca !== "") {
+        await marcasService.create({ nombre: nueva_marca });
+        data.marca = nueva_marca;
+      }
+
+      // Si el usuario ingreso un nuevo tipo de equipo
+      if (id_tipo_equipo == "Otro" && nuevo_tipo_equipo !== "") {
+        await tiposEquiposService.create({ nombre: nuevo_tipo_equipo });
+        const tipoEquipo = await tiposEquiposService.getByName(nuevo_tipo_equipo);
+        data.id_tipo_equipo = tipoEquipo.id;
+      }
 
       const equipoExterno = await equiposExternosService.create(data);
 

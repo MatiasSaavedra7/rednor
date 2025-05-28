@@ -23,17 +23,8 @@ function Cartucho(data) {
   this.id_categoria_cartucho = data.categoria;
 }
 
-
-function EquipoExterno(data) {
-  this.marca = data.marca;
-  this.modelo = data.modelo;
-  this.numero_serie = data.numero_serie;
-  this.id_tipo_equipo = data.id_tipo_equipo;
-}
-
 module.exports = {
   Habilitado,
   Reajuste,
   Cartucho,
-  EquipoExterno,
 };
