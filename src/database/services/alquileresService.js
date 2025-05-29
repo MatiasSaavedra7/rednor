@@ -56,6 +56,19 @@ module.exports = {
     }
   },
 
+  countAllActivos: async (firma) => {
+    try {
+      return await db.Alquiler.count({
+        where: {
+          activo: true,
+          id_firma: firma,
+        },
+      });
+    } catch (error) {
+      console.log(error);  
+    }
+  },
+
   getAllInactivos: async () => {
     try {
       return await db.Alquiler.findAll({

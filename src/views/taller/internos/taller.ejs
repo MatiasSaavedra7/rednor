@@ -32,6 +32,63 @@
       <!-- Contenido Principal -->
       <section class="content">
         <div class="container-fluid">
+
+          <!-- Info boxes -->
+          <div class="row">
+            <div class="col-lg-3 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-info">
+                  <i class="fas fa-tools"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">En Taller</span>
+                  <span class="info-box-number" id="boxEnTaller">00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-warning">
+                  <i class="fas fa-toolbox"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Espera de insumos</span>
+                  <span class="info-box-number" id="boxEnEspera">00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-success">
+                  <i class="fas fa-check"></i>
+                </span>
+                
+                <div class="info-box-content">
+                  <span class="info-box-text">Reparados</span>
+                  <span class="info-box-number" id="boxReparados">00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-danger">
+                  <i class="fas fa-times"></i>
+                </span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Sin arreglo</span>
+                  <span class="info-box-number" id="boxSinArreglo">00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Taller -->
           <div class="row">
             <div class="col-12">
               <div class="card">
@@ -304,6 +361,45 @@
           return [];
         }
       };
+    })
+  </script>
+
+  <!-- Script info boxes -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async function() {
+      const boxEnTaller = document.getElementById("boxEnTaller");
+      const boxEnEspera = document.getElementById("boxEnEspera");
+      const boxReparados = document.getElementById("boxReparados");
+      const boxSinArreglo = document.getElementById("boxSinArreglo");
+
+      const info = await fetchInfoIngresos();
+
+      if (info) {
+        boxEnTaller.innerText = info.total_taller;
+        boxEnEspera.innerText = info.total_espera;
+        boxReparados.innerText = info.total_reparados;
+        boxSinArreglo.innerText = info.total_sin_arreglo;
+      } else {
+        console.error("Ocurrio un error intentando obtener la informacion de los ingresos")
+      }
+      
+      async function fetchInfoIngresos() {
+        try {
+          const response = await fetch("/taller/info-ingresos");
+
+          if (!response.ok) {
+            throw new Error("Error fetching data");
+          }
+
+          const data = await response.json();
+
+          console.log(data);  
+
+          return data;
+        } catch (error) {
+          console.error(error.message)
+        }
+      }
     })
   </script>
 </body>

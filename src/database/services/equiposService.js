@@ -13,7 +13,7 @@ function Equipo(data) {
 module.exports = {
   getAll: async () => {
     try {
-      return db.Equipo.findAll({
+      return await db.Equipo.findAll({
         include: ["estado", "tipo", "firma"],
         where: {
           id_estado: { [Op.ne]: 5 }
@@ -25,10 +25,22 @@ module.exports = {
     }
   },
 
+  countAll: async () => {
+    try {
+      return await db.Equipo.count({
+        where: {
+          id_estado: { [Op.ne]: 5 }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   // Metodo para traer aquellos equipos disponibles para ingreso al taller (id_estado: 1, 2, 3)
   getAllDisponibles: async () => {
     try {
-      return db.Equipo.findAll({
+      return await db.Equipo.findAll({
         include: ["estado", "tipo"],
         where: {
           id_estado: { [Op.in]: [1, 2, 3] },
@@ -42,7 +54,7 @@ module.exports = {
 
   getOneDisponible: async (id) => {
     try {
-      return db.Equipo.findOne({
+      return await db.Equipo.findOne({
         include: ["estado", "tipo", "ingreso"],
         where: {
           id: id,
@@ -57,7 +69,7 @@ module.exports = {
 
   getAllAlquilado: async () => {
     try {
-      return db.Equipo.findAll({
+      return await db.Equipo.findAll({
         include: ["estado", "tipo"],
         where: {
           id_estado: { [Op.eq]: 2 },
@@ -71,7 +83,7 @@ module.exports = {
 
   getOneAlquilado: async (id) => {
     try {
-      return db.Equipo.findOne({
+      return await db.Equipo.findOne({
         include: ["estado", "tipo", "ingreso"],
         where: {
           id: id,
@@ -86,7 +98,7 @@ module.exports = {
 
   getAllTaller: async () => {
     try {
-      return db.Equipo.findAll({
+      return await db.Equipo.findAll({
         include: ["estado", "tipo", "ingreso"],
         where: {
           id_estado: 4,
@@ -98,9 +110,21 @@ module.exports = {
     }
   },
 
+  countAllTaller: async () => {
+    try {
+      return await db.Equipo.count({
+        where: {
+          id_estado: 4,
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   getOneTaller: async (id) => {
     try {
-      return db.Equipo.findOne({
+      return await db.Equipo.findOne({
         include: ["ingreso", "tipo", "estado"],
         where: {
           id: id,
@@ -115,7 +139,7 @@ module.exports = {
 
   getOneByPK: async (id) => {
     try {
-      return db.Equipo.findOne({
+      return await db.Equipo.findOne({
         where: { id: id },
         include: ["estado", "tipo", "firma"],
       });
@@ -127,7 +151,7 @@ module.exports = {
 
   create: async (data) => {
     try {
-      return db.Equipo.create(new Equipo(data));
+      return await db.Equipo.create(new Equipo(data));
     } catch (error) {
       console.log(error);
       return [];
@@ -136,7 +160,7 @@ module.exports = {
 
   deleteByPK: async (id) => {
     try {
-      return db.Equipo.destroy({where: {id : id}})
+      return await db.Equipo.destroy({where: {id : id}})
     } catch (error) {
       console.log(error);
     }
@@ -144,7 +168,7 @@ module.exports = {
   
   updateByPK: async (data, id) => {
     try {
-      return db.Equipo.update(data, { where: { id: id } })
+      return await db.Equipo.update(data, { where: { id: id } })
     } catch (error) {
       console.log(error);
     }

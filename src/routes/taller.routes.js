@@ -57,4 +57,6 @@ router.get("/detalle-taller/:idIngreso", controller.getDetalleTaller);
 // Eliminar Ingreso + Informes + Insumos + Egreso
 router.delete("/:id/eliminar-registro", controller.eliminarRegistro);
 
+router.get("/info-ingresos", controller.getInfoIngresos);
+
 module.exports = router;

@@ -234,15 +234,15 @@ module.exports = {
 
   getCantidadTotalEquipos: async function(req, res) {
     try {
-      const disponibles = await equiposService.getAll();
+      const disponibles = await equiposService.countAll();
 
-      const enTaller = await equiposService.getAllTaller();
+      const enTaller = await equiposService.countAllTaller();
 
       if (!disponibles || !enTaller) {
         throw new Error("Ocurrio un error al obtener la cantidad total de equipos.")
       };
 
-      res.status(200).json({ totalDisponibles: disponibles.length, totalEnTaller: enTaller.length });
+      res.status(200).json({ totalDisponibles: disponibles, totalEnTaller: enTaller });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

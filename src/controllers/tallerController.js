@@ -594,7 +594,7 @@ module.exports = {
       // Traer el array de Informes
       const informes = await informesService.getAllByIdIngreso(id);
 
-      if (informes.length > 0) {
+      if (informes > 0) {
         for (const informe of informes) {
           // Traer los insumos de cada informe, si es que tiene
           const insumo = await insumosService.getOneByIdInforme(informe.id);
@@ -633,6 +633,27 @@ module.exports = {
       return res.status(200).json({ message: "Registro eliminado correctamente" });
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  getInfoIngresos: async (req, res) => {
+    try {
+      let data = {};
+
+      const total_taller = await ingresosService.getAllWhereEstado(1);
+      const total_espera = await ingresosService.getAllWhereEstado(2);
+      const total_reparados = await ingresosService.getAllWhereEstado(5);
+      const total_reparados_obs = await ingresosService.getAllWhereEstado(7);
+      const total_sin_arreglo = await ingresosService.getAllWhereEstado(6);
+      
+      data.total_taller = total_taller;
+      data.total_espera = total_espera;
+      data.total_reparados = total_reparados + total_reparados_obs;
+      data.total_sin_arreglo = total_sin_arreglo;
+
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
   }
 };

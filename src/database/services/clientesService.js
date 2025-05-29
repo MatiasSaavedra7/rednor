@@ -30,6 +30,14 @@ module.exports = {
     }
   },
 
+  countAll: async () => {
+    try {
+      return await db.Cliente.count();  
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   getOneByPK: async (id) => {
     try {
       return await db.Cliente.findOne({

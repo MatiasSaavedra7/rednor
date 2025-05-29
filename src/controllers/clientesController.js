@@ -256,13 +256,13 @@ module.exports = {
 
   getCantidadTotalClientes: async function(req, res) {
     try {
-      const clientes = await clientesService.getAll();
+      const clientes = await clientesService.countAll();
 
       if (!clientes) {
         throw new Error("Ocurrio un error al obtener la cantidad total de clientes.")
       };
 
-      res.status(200).json({ total: clientes.length });
+      res.status(200).json({ total: clientes });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

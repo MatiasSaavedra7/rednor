@@ -330,13 +330,13 @@ module.exports = {
     try {
       const firma = req.cookies.firma;
 
-      const alquileres = await alquileresService.getAllActivos(firma);
+      const alquileres = await alquileresService.countAllActivos(firma);
 
       if (!alquileres) {
         throw new Error("Ocurrio un error al obtener la cantidad total de alquileres.");
       };
 
-      res.status(200).json({ total: alquileres.length });
+      res.status(200).json({ total: alquileres });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
