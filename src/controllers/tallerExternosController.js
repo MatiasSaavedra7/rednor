@@ -673,5 +673,26 @@ module.exports = {
       console.log(error);
       res.status(500).json({ message: error.message });
     }
+  },
+
+  // API
+  getInfoIngresos: async (req, res) => {
+    try {
+      let data = {};
+
+      const enTaller            = await ingresosExternosService.getAllWhereEstado(1);
+      const enEspera            = await ingresosExternosService.getAllWhereEstado(2);
+      const listoParaRetirar    = await ingresosExternosService.getAllWhereEstado(3);
+      const retirados           = await ingresosExternosService.getAllWhereEstado(8);
+
+      data.total_taller = enTaller;
+      data.total_espera = enEspera;
+      data.total_listos = listoParaRetirar;
+      data.total_retirados = retirados;
+
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
   }
 };

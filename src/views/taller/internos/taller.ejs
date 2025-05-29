@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <%- include('../../partials/Select2Head.ejs') %>
   <%- include('../../partials/AdminLTEHead.ejs') %>
   <%- include('../../partials/AdminLTEHeadTables.ejs') %>
   <title>REDNOR</title>
@@ -199,17 +200,18 @@
             </div>
 
             <div class="modal-body">
-              <!-- Aqui se muestran los equipos -->
               <div class="form-group">
                 <label for="id_equipo">Equipo</label>
                 <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%; padding: 2px;">
+                  <option value="" selected disabled hidden>Seleccione un equipo</option>
+                  <!-- Todos los equipos disponibles para ingresar al taller -->
                 </select>
               </div>
             </div>
 
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary">Seguir</button>
+              <button type="button" class="btn btn-primary" id="seguirButton">Seguir</button>
             </div>
           </div>
         </div>
@@ -221,6 +223,8 @@
 
   <%- include('../../partials/AdminLTEScripts.ejs') %>
   <%- include('../../partials/AdminLTEScriptsTables') %>
+  <%- include('../../partials/Select2Scripts.ejs') %>
+
   <script>
     $(function () {
       $("#ingresosEnTaller").DataTable({
@@ -246,6 +250,60 @@
           window.location.href = row.getAttribute("data-href");
         })
       })
+    })
+  </script>
+
+  <!-- Script para traer los equipos disponibles para ingreso al taller -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async function() {
+      // Capturar el elemento Select
+      const selectEquipo = document.getElementById("id_equipo");
+
+      // Seguir Button
+      const seguirButton = document.getElementById("seguirButton");
+
+      const equipos = await fetchEquipos();
+
+      if (equipos) {
+        // Limpiar el select
+        selectEquipo.innerHTML = "";
+
+        // Agregar un placeholder
+        selectEquipo.innerHTML = "<option value='' selected disabled hidden>Seleccione un equipo</option>";
+
+        // Agregar las opciones de equipos
+        equipos.forEach(equipo => {
+          const option = document.createElement("option");
+          option.text = `${equipo.marca} ${equipo.modelo} ${equipo.numero_serie}`;
+          option.value = equipo.id;
+          selectEquipo.appendChild(option);
+        });
+      };
+
+      seguirButton.addEventListener("click", function() {
+        const equipoSeleccionado = selectEquipo.value;
+
+        if (!equipoSeleccionado) {
+          // Mostrar un mensaje de error
+          alert("Debe seleccionar un equipo para ingresar al taller");
+        } else {
+          window.location.href = `/taller/ingreso/${equipoSeleccionado}`;
+        }
+      })
+
+      // Funcion fetch para traer los equipos aptos para ingresar al taller
+      async function fetchEquipos() {
+        try {
+          const response = await fetch("/equipos/disponibles");
+
+          const data = await response.json();
+
+          return data;
+        } catch (error) {
+          console.error(error.message);
+          return [];
+        }
+      };
     })
   </script>
 </body>

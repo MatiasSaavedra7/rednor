@@ -35,7 +35,9 @@
   
                           <!-- <a href="#" class="dropdown-item">Nuevo Contrato</a> -->
                           <!-- Taller -->
-                          <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
+                          <% if (equipo.id_estado !== 4) { %>
+                           <a href="/taller/ingreso/<%= equipo.id %>" class="dropdown-item">Enviar al Taller</a>
+                          <% } %>
   
                           <!-- Editar -->
                           <a href="/equipos/editar/<%= equipo.id %>" class="dropdown-item">Editar Informacion</a>
@@ -238,10 +240,7 @@
             const response = await fetch(`/equipos/detalle-taller/${idIngreso}`);
             const data = await response.json();
 
-            console.log(data);
-
             mostrarModalDetalleHistorial(data);
-
           } catch (error) {
             console.error(error.message);
           }

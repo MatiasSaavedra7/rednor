@@ -215,6 +215,7 @@ module.exports = {
     }
   },
 
+  // Metodo para traer equipos disponibles para ingreso al taller (id_estado: 1, 2, 3)
   equiposDisponibles: async (req, res) => {
     try {
       const equipos = await equiposService.getAllDisponibles();
@@ -246,5 +247,14 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+
+  // Metodo para enviar equipos disponibles para ingreso al taller
+  getEquiposDisponibles: async function(req, res) {
+    try {
+      // const equipos = 
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  }
     
 };

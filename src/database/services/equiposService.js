@@ -25,13 +25,13 @@ module.exports = {
     }
   },
 
-  //   Metodo para traer aquellos equipos cuyo estado sea Disponible (id_estado = 1)
+  // Metodo para traer aquellos equipos disponibles para ingreso al taller (id_estado: 1, 2, 3)
   getAllDisponibles: async () => {
     try {
       return db.Equipo.findAll({
         include: ["estado", "tipo"],
         where: {
-          id_estado: { [Op.in]: [1, 2] },
+          id_estado: { [Op.in]: [1, 2, 3] },
         },
       });
     } catch (error) {

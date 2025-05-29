@@ -31,6 +31,62 @@
         <!-- Contenido Principal -->
         <section class="content">
           <div class="container-fluid">
+
+            <!-- Info boxes -->
+            <div class="row">
+              <div class="col-lg-3 col-12">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info">
+                    <i class="fas fa-tools"></i>
+                  </span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">En Taller</span>
+                    <span class="info-box-number" id="boxEnTaller">00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-12">
+                <div class="info-box">
+                  <span class="info-box-icon bg-warning">
+                    <i class="fas fa-toolbox"></i>
+                  </span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">Espera de insumos</span>
+                    <span class="info-box-number" id="boxEnEspera">00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-12">
+                <div class="info-box">
+                  <span class="info-box-icon bg-success">
+                    <i class="fas fa-print"></i>
+                  </span>
+                  
+                  <div class="info-box-content">
+                    <span class="info-box-text">Listos para retirar</span>
+                    <span class="info-box-number" id="boxListo">00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-12">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info">
+                    <i class="fas fa-check"></i>
+                  </span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">Retirados</span>
+                    <span class="info-box-number" id="boxRetirados">00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="row">
               <div class="col-12">
                 <div class="card">
@@ -195,6 +251,41 @@
           });
         });
       });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async function() {
+        const boxEnTaller = document.getElementById("boxEnTaller");
+        const boxEnEspera = document.getElementById("boxEnEspera");
+        const boxListo = document.getElementById("boxListo");
+        const boxRetirados = document.getElementById("boxRetirados");
+
+        const info = await fetchInfoIngresos();
+
+        if (info) {
+          boxEnTaller.innerText = info.total_taller;
+          boxEnEspera.innerText = info.total_espera;
+          boxListo.innerText = info.total_listos;
+          boxRetirados.innerText = info.total_retirados;
+        } else {
+          console.error("Ocurrio un error intentando obtener la informacion de los ingresos")
+        }
+        
+        async function fetchInfoIngresos() {
+          try {
+            const response = await fetch("/taller/externos/info-taller");
+
+            if (!response.ok) {
+              throw new Error("Error fetching data");
+            }
+            const data = await response.json();
+
+            return data;
+          } catch (error) {
+            console.error(error.message);
+          }
+        }
+      })
     </script>
   </body>
 </html>

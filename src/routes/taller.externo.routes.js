@@ -71,5 +71,6 @@ router.delete("/:id/eliminar-registro", controller.eliminarRegistro);
 // INFORMAR RETIRO DE UN EQUIPO
 router.put("/:id/informar-retiro", controller.informarRetiro);
 
+router.get("/info-taller", controller.getInfoIngresos);
 
 module.exports = router;

@@ -115,5 +115,16 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getAllWhereEstado: async (id) => {
+    try {
+      return await db.IngresoExterno.count({
+        where: { id_estado: id }
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
   }
 };

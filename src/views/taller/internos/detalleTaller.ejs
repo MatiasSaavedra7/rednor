@@ -684,10 +684,8 @@
       console.log("Script para eliminar un registro de ingreso conectado.");
 
       const id = "<%= ingreso.id %>";
-      console.log("ID Ingreso: ", id);
 
       const btnModalEliminarIngreso = document.getElementById("btn-modal-eliminar-ingreso");
-      console.log(btnModalEliminarIngreso);
 
       btnModalEliminarIngreso.addEventListener("click", async () => {
         const data = await fetchEliminarIngreso(id);
