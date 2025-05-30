@@ -32,7 +32,7 @@
                       <label for="id_equipo">Equipo</label>
                       <select name="id_equipo" id="id_equipo" class="form-control select2" style="width: 100%;">
                         <option value="" selected hidden disabled>
-                          Elegir una opcion
+                          Buscar por numero de serie
                         </option>
                         <% equipos.forEach(equipo => { %>
                           <option value="<%= equipo.id %>"><%= equipo.marca %> <%= equipo.modelo %> <%= equipo.numero_serie %></option>
@@ -40,12 +40,11 @@
                       </select>
                       <p class="mt-1">¿No encuentra el equipo? Registrarlo <a href="/taller/externos/equipos/crear">aquí.</a></p>
                     </div>
-                    
                     <p class="lead">Informacion del Cliente</p>
                     <hr>
                     
                     <div class="form-group">
-                      <label for="nombre_cliente">Nombre y Apellido</label>
+                      <label for="nombre_cliente">Nombre</label>
                       <input type="text" name="nombre_cliente" id="nombre_cliente" class="form-control">
                     </div>
 
@@ -127,8 +126,6 @@
 
       // Crear el formato adecuado
       let fechaFormateada = `${year}-${month}-${day}T${hours}:${minutes}`
-
-      console.log("Fecha formateada: ", fechaFormateada);
 
       // Asignar la fecha al input
       fechaIngreso.value = fechaFormateada;
