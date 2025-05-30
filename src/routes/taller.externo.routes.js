@@ -73,4 +73,6 @@ router.put("/:id/informar-retiro", controller.informarRetiro);
 
 router.get("/info-taller", controller.getInfoIngresos);
 
+router.get("/count", controller.getCantidadEquiposTaller);
+
 module.exports = router;

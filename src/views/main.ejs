@@ -144,9 +144,10 @@
             <!-- Small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3 id="totalEquiposEnTaller">00</h3>
+                <h6 id="totalEquiposEnTallerInternos">00</h6>
+                <h6 id="totalEquiposEnTallerExternos">00 <sub>Externos</sub></h6>
 
-                <p>Equipos en Taller</p>
+                <p class="p-0">Equipos en Taller</p>
               </div>
               <div class="icon">
                 <i class="fas fa-tools"></i>
@@ -301,7 +302,8 @@
     const totalEquiposBox = document.getElementById("totalEquipos");
     const totalClientesBox = document.getElementById("totalClientes");
     const totalAlquileresBox = document.getElementById("totalAlquileres");
-    const totalEquiposEnTaller = document.getElementById("totalEquiposEnTaller");
+    const totalEquiposEnTallerInternos = document.getElementById("totalEquiposEnTallerInternos");
+    const totalEquiposEnTallerExternos = document.getElementById("totalEquiposEnTallerExternos");
 
     // Función para obtener la cookie
     function getCookie(name) {
@@ -350,8 +352,16 @@
 
       if (totalEquipos) {
         totalEquiposBox.textContent = totalEquipos.totalDisponibles;
-        totalEquiposEnTaller.textContent = totalEquipos.totalEnTaller;
+        totalEquiposEnTallerInternos.innerHTML = `${totalEquipos.totalEnTaller} Internos`;
       };
+      
+      const totalTallerExterno = await fetchData("/taller/externos/count");
+
+      console.log(totalTallerExterno);
+      
+      if (totalTallerExterno) {
+        totalEquiposEnTallerExternos.innerHTML = `${totalTallerExterno.data.total} Externos`;
+      }
 
       const totalAlquileres = await fetchData("/alquileres/api/count");
 
