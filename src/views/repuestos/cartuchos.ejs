@@ -1,57 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/tables.css">
-    <link rel="stylesheet" href="/css/cartuchos.css">
-    <script src="/js/cartuchos.js"></script>
-    <title>REDNOR - Cartuchos</title>
+    <%- include('../partials/AdminLTEHead') %>
+    <%- include('../partials/AdminLTEHeadTables.ejs') %>
+    <title>REDNOR - Repuestos</title>
   </head>
-  <body>
-    <%- include('../partials/header.ejs') %>
-    <!-- MAIN -->
-    <main class="main-container">
-      <!-- ASIDE -->
-      <%- include('../partials/aside.ejs') %>
-      <!-- FIN ASIDE -->
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../partials/navbar.ejs') %>
 
-      <!-- CONTENIDO -->
-      <section class="main-content">
-        <div class="title">
-          <h1>Listado de Cartuchos</h1>
-      </div>
+      <!-- Main Sidebar -->
+      <%- include('../partials/mainSidebar.ejs') %>
 
-      <div class="panel-control">
-          <input type="text" class="search-input" placeholder="Buscar...">
-          <a href="/repuestos/crear">+ CREAR</a>
-      </div>
-        <div class="table-container">
-          <table>
-              <thead>
-                  <tr>
-                      <th>Nombre</th>
-                      <th>Precio</th>
-                      <th>SKU</th>
-                      <th>Stock</th>
-                      <th>Detalles</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <% repuestos.forEach(repuesto => { %>
-                      <tr>
-                          <td><%= repuesto.name %></td>
-                          <td><%= repuesto.price %></td>
-                          <td><%= repuesto.sku %></td>
-                          <td><%= repuesto.stock_quantity %></td>
-                          <td><a href="<%= repuesto.permalink %>" target="_blank">Ver más...</a></td>
-                      </tr>
-                  <% }) %>
-              </tbody>
-          </table>
-      </div>
-      </section>
-      <!-- FIN CONTENIDO -->
-    </main>
-    <!-- FIN MAIN -->
+      <!-- Control Sidebar -->
+      <%- include('../partials/controlSidebar.ejs') %>
+
+      <main class="content-wrapper">
+        <div class="content pt-3">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Repuestos</h3>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table id="repuestos" class="table table-bordered table-hover table-striped">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>SKU</th>
+                            <th>Stock</th>
+                            <th>Detalles</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <% repuestos.forEach(repuesto => { %>
+                           <tr>
+                            <td><%= repuesto.name %></td>
+                            <td><%= repuesto.price %></td>
+                            <td><%= repuesto.sku %></td>
+                            <td><%= repuesto.stock_quantity %></td>
+                            <td><a href="<%= repuesto.permalink %>" target="_blank">Ver más...</a></td>
+                           </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <%- include('../partials/AdminLTEScripts.ejs') %>
+    <%- include('../partials/AdminLTEScriptsTables.ejs') %>
+
+    <script>
+      $(function () {
+        $("#repuestos").DataTable({
+          "responsive": false, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        }).buttons().container().appendTo('#repuestos_wrapper .col-md-6:eq(0)');
+      });
+  </script>
   </body>
 </html>
